@@ -5,15 +5,14 @@ Gauge::Gauge() {
 	position_			= SimpleMath::Vector3::Zero;
 	movement_decrease_	= 0.0f;
 	movement_recovery_	= 0.0f;
-	time_delta_			= 0.0f;
 	proportion_			= 0.0f;
 	gauge_				= 0.0f;
 	gauge_rect_x_		= 0.0f;
 }
 
 void Gauge::Initialize() {
-	movement_decrease_	= MAX_GAUGE / ORI_CONST.AMOUNT_OF_DECREASE;
-	movement_recovery_	= MAX_GAUGE / ORI_CONST.AMOUNT_OF_RECOVERY;
+	movement_decrease_	= MAX_GAUGE / GAME_CONST.AMOUNT_OF_DECREASE;
+	movement_recovery_	= MAX_GAUGE / GAME_CONST.AMOUNT_OF_RECOVERY;
 	proportion_			= 1.0f;
 	gauge_				= MAX_GAUGE;
 	gauge_rect_x_		= MAX_GAUGE;
@@ -25,11 +24,11 @@ void Gauge::LoadAssets() {
 	for (int _i = 0; _i < 3; ++_i)
 		sp_gauge_R_[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_GR[_i].c_str());
 
-	sp_flame_ = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Main\\_Gauge\\flame.png");
+	sp_flame_ = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Main\\_Player\\_Gauge\\flame.png");
 }
 
-void Gauge::Update(const float deltaTime) {
-	time_delta_		= deltaTime;
+void Gauge::Update(const float deltaTime, bool usedThrasher) {
+	usedThrasher ? IsDecrease(deltaTime) : IsRecovery(deltaTime);
 
 	proportion_		= std::min(std::max(0.1f, (gauge_ / MAX_GAUGE)), 1.0f);
 
@@ -52,10 +51,10 @@ void Gauge::Render() {
 	DX9::SpriteBatch->DrawSimple(sp_flame_			.Get(), SimpleMath::Vector3(position_.x, position_.y, -9997.0f), nullptr, DX9::Colors::RGBA(255, 255, 255, 255));  // GBÇ20Ç≠ÇÁÇ¢Ç…Ç∑ÇÈÇ∆ê‘îwåiÇ…Ç»ÇÈ
 }
 
-void Gauge::IsDecrease() {
-	gauge_ = std::max(0.0f, gauge_ - movement_decrease_ * time_delta_);
+void Gauge::IsDecrease(const float deltaTime) {
+	gauge_ = std::max(0.0f, gauge_ - movement_decrease_ * deltaTime);
 }
 
-void Gauge::IsRecovery() {
-	gauge_ = std::min(gauge_ + movement_recovery_ * time_delta_, MAX_GAUGE);
+void Gauge::IsRecovery(const float deltaTime) {
+	gauge_ = std::min(gauge_ + movement_recovery_ * deltaTime, MAX_GAUGE);
 }

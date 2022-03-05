@@ -28,6 +28,7 @@ public:
 	virtual void LoadAssets(DX9::MODEL model) {};
 	virtual void Update(const float deltaTime);
 	virtual void Render();
+	virtual void UIRender();
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
 

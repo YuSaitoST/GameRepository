@@ -18,6 +18,7 @@ public:
 	virtual void LoadAssets();
 	virtual void Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPlayer& player);
 	virtual void Update(const float deltaTime, ObjPlayer& player);
+	virtual void UIRender() {}
 
 	virtual bool Think(ObjPlayer& player);
 };

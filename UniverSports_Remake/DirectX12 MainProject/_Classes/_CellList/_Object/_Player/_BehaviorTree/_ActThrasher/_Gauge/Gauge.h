@@ -2,8 +2,8 @@
 
 #include "Base/pch.h"
 #include "Base/dxtk.h"
-#include "_Classes/ConstantStorages.h"
-#include "_Classes/Camera/MainCamera.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
+#include "_Classes/_MainCamera/MainCamera.h"
 
 using namespace DirectX;
 
@@ -14,32 +14,32 @@ public:
 
 	void Initialize();
 	void LoadAssets();
-	void Update(const float deltaTime);
+	void Update(const float deltaTime, bool usedThrasher);
 	void Render();
-
-	void IsDecrease();
-	void IsRecovery();
 
 	void SetPosition(SimpleMath::Vector3 position) { position_ = position; };
 
 	float GetProportion() const { return proportion_; };
 
 private:
+	void IsDecrease(const float deltaTime);
+	void IsRecovery(const float deltaTime);
+
 	const int	RECT_Y		= 15;
 	const float	MAX_GAUGE	= 71;
 	const float GtoO		= 0.5f;
 	const float OtoR		= 0.2f;
 
 	const std::wstring FILENAME_GL[3] = {
-		L"_Images\\_Main\\_Gauge\\_long\\g_green_long.png",
-		L"_Images\\_Main\\_Gauge\\_long\\g_orange_long.png",
-		L"_Images\\_Main\\_Gauge\\_long\\g_red_long.png"
+		L"_Images\\_Main\\_Player\\_Gauge\\_long\\g_green_long.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_long\\g_orange_long.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_long\\g_red_long.png"
 	};
 
 	const std::wstring FILENAME_GR[3] = {
-		L"_Images\\_Main\\_Gauge\\_tip\\g_green_tip.png",
-		L"_Images\\_Main\\_Gauge\\_tip\\g_orange_tip.png",
-		L"_Images\\_Main\\_Gauge\\_tip\\g_red_tip.png"
+		L"_Images\\_Main\\_Player\\_Gauge\\_tip\\g_green_tip.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_tip\\g_orange_tip.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_tip\\g_red_tip.png"
 	};
 
 	enum COLOR {
@@ -57,7 +57,6 @@ private:
 	float movement_decrease_;
 	float movement_recovery_;
 
-	float time_delta_;
 	float proportion_;
 	float gauge_;
 	float gauge_rect_x_;

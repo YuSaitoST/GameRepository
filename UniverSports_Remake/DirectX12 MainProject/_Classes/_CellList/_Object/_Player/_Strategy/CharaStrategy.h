@@ -22,6 +22,10 @@ public:
 	virtual void Initialize(int id, ObjPlayer* player) = 0;
 	virtual void LoadAssets() = 0;
 	virtual void Update(const float deltaTime) = 0;
+	virtual void UIRender() {
+		for (ActionBase* act : actList_)
+			act->UIRender();
+	}
 
 	virtual void SeekRotateX(const float deltaTime, int index) = 0;
 

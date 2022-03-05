@@ -12,7 +12,7 @@ public:
 	void LoadAssets();
 	void Update(const float deltaTime);
 	void RenderModels();
-	void RenderSprites();  // 現状使わないが、ゲージ等UIに必要
+	void RenderSprites();
 
 	void AddWorld(btDynamicsWorld* physics_world_);
 	void RemoveWorld(btDynamicsWorld* physics_world_);

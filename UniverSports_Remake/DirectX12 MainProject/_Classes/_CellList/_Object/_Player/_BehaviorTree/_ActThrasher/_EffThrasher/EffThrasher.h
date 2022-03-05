@@ -12,7 +12,8 @@ public:
 
 	void Update(const float deltaTime, float rotate_x, Vector3 position, Vector3 direction);
 
+	bool usedThrasher_;
+
 private:
 	OriTimer* timer_roop_;
-	bool usedThrasher_;
 };

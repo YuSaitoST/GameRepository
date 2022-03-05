@@ -5,6 +5,7 @@
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_CellList\_Object/_Player/_BehaviorTree/ActionBase.h"
 #include "_EffThrasher/EffThrasher.h"
+#include "_Gauge/Gauge.h"
 
 using namespace DirectX;
 
@@ -19,9 +20,11 @@ public:
 	virtual void LoadAssets();
 	virtual void Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPlayer& player);
 	virtual void Update(const float deltaTime, ObjPlayer& player);
+	virtual void UIRender();
 
 	virtual bool Think(ObjPlayer& player);
 
 private:
 	EffThrasher* effect_;
+	Gauge* gauge_;
 };

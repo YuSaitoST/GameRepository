@@ -27,6 +27,7 @@ public:
 	virtual void LoadAssets(DX9::MODEL model) = 0;
 	virtual void Update(const float deltaTime) = 0;
 	virtual void Render() = 0;
+	virtual void UIRender() = 0;
 
 	virtual ObjectBase* IsCollision(ObjectBase* m);  // Õ“Ë”»’è(Bounding‚ğ—p‚¢‚½‚à‚Ì)
 	virtual ObjectBase* IsCollision();  // Õ“Ë”»’è(l•ª–Ø’Tõ)

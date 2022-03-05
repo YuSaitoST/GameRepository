@@ -81,6 +81,10 @@ void ObjPlayer::Render() {
 	model_->Draw();
 }
 
+void ObjPlayer::UIRender() {
+	strategy_->UIRender();
+}
+
 void ObjPlayer::AnimReset() {
 	for (int i = 0; i < 6; i++)
 		model_->SetTrackEnable(i, false);

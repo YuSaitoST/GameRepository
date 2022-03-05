@@ -32,6 +32,11 @@ void ObjectManager::RenderModels() {
 		obj->Render();
 }
 
+void ObjectManager::RenderSprites() {
+	for (ObjectBase* obj : obj_player_)
+		obj->UIRender();
+}
+
 void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 	for (ObjectBase* obj : obj_player_)
 		physics_world_->addRigidBody(obj->myRigidbody());

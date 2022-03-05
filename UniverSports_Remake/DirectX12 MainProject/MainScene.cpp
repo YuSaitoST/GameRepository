@@ -149,7 +149,7 @@ void MainScene::Render()
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
 	field_->Render();
-
+	m_object_->RenderSprites();
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言

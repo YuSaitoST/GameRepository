@@ -23,6 +23,7 @@ public:
 	virtual void LoadAssets() = 0;
 	virtual void Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPlayer& player) = 0;  // 行動内容(Manual用)
 	virtual void Update(const float deltaTime, ObjPlayer& player) = 0;  // 行動内容(Computer用)
+	virtual void UIRender() = 0;
 
 	virtual bool Think(ObjPlayer& player) = 0;  // 行動条件を考慮する
 
