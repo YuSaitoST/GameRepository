@@ -46,9 +46,9 @@ void Gauge::Render() {
 	position_ = DXTK->Direct3D9->WorldToScreenPoint(position_, Camera.GetCamera());
 	position_ += SimpleMath::Vector3(-35.0f, -60.0f, 0.0f);
 
-	DX9::SpriteBatch->DrawSimple(sp_gauge_L_[color_].Get(), SimpleMath::Vector3(position_.x, position_.y, -9999.0f), RECT(0.0f, 0.0f, gauge_rect_x_, RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_gauge_R_[color_].Get(), SimpleMath::Vector3(position_.x - MAX_GAUGE + gauge_rect_x_, position_.y, -9998.0f));
-	DX9::SpriteBatch->DrawSimple(sp_flame_			.Get(), SimpleMath::Vector3(position_.x, position_.y, -9997.0f), nullptr, DX9::Colors::RGBA(255, 255, 255, 255));  // GBÇ20Ç≠ÇÁÇ¢Ç…Ç∑ÇÈÇ∆ê‘îwåiÇ…Ç»ÇÈ
+	DX9::SpriteBatch->DrawSimple(sp_gauge_L_[color_].Get(), SimpleMath::Vector3(position_.x, position_.y, -999.0f), RECT(0.0f, 0.0f, gauge_rect_x_, RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_gauge_R_[color_].Get(), SimpleMath::Vector3(position_.x - MAX_GAUGE + gauge_rect_x_, position_.y, -998.0f));
+	DX9::SpriteBatch->DrawSimple(sp_flame_			.Get(), SimpleMath::Vector3(position_.x, position_.y, -997.0f), nullptr, DX9::Colors::RGBA(255, 255, 255, 255));  // GBÇ20Ç≠ÇÁÇ¢Ç…Ç∑ÇÈÇ∆ê‘îwåiÇ…Ç»ÇÈ
 }
 
 void Gauge::IsDecrease(const float deltaTime) {

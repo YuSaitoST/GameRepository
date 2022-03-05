@@ -65,7 +65,8 @@ private:
 
 private:
 	enum POS_Z_2D {
-		HOLE_FLONT = -9999,
-		BACKGROUND = 999
+		PLAYER_UI  = -999,  // UI‚Í-90‘ä‚É‚·‚é‚Æ•ª‚©‚è‚â‚·‚¢
+		HOLE_FLONT = -980,
+		BACKGROUND =  999
 	};
 };
