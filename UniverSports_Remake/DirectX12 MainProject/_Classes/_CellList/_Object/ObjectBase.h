@@ -46,7 +46,7 @@ public:
 	Vector2			myRotate() { return rotate_; };
 	Vector2			myDirection() { return direction_; }
 	float			myRadian() { return r_; }
-	int				myPlayerID() { return id_player_; };
+	int				myPlayerID() { return id_my_; };
 
 	bool IsHit() { return isHit_; }
 
@@ -66,6 +66,6 @@ protected:
 	Vector2 rotate_;		// 回転
 	Vector2 direction_;     // 正面方向
 	float r_;               // 半径
-	int id_player_;			// プレイヤーのID
+	int id_my_;			    // プレイヤーのID
 	bool isHit_;			// 衝突フラグ
 };

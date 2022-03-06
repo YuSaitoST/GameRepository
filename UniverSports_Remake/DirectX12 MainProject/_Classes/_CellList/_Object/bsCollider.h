@@ -14,7 +14,7 @@ public:
 
 	void SetPosition(SimpleMath::Vector3 pos) { colli.Center = pos; };
 	void SetColli(BoundingSphere bound) { colli = bound; };
-	void SetColliScale(float scale) { colli.Radius* scale; };
+	void SetColliScale(float scale) { colli.Radius *= scale; };
 
 	BoundingSphere GetBounding() const { return colli; };
 

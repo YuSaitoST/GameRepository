@@ -24,6 +24,7 @@ public:
 
 private:
 	static ObjectBase* obj_player_[2];
+	static ObjectBase* obj_wire_[4];
 
 private:
 	const std::wstring PLAYER_FILENAME[4] = {

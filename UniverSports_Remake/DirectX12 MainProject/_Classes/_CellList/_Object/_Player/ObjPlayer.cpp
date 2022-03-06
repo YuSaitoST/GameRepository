@@ -32,7 +32,7 @@ ObjPlayer::~ObjPlayer() {
 void ObjPlayer::Initialize(int id) {
 	strategy_->Initialize(id, this);
 
-	id_player_ = id;
+	id_my_ = id;
 }
 
 void ObjPlayer::LoadAssets(std::wstring file_name) {

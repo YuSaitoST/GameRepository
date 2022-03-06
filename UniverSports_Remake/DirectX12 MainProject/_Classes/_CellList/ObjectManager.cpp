@@ -1,6 +1,7 @@
 #include "ObjectManager.h"
 
 ObjectBase* ObjectManager::obj_player_[2];
+ObjectBase* ObjectManager::obj_wire_[4];
 
 ObjectManager::ObjectManager() {
 	obj_player_[0] = new ObjPlayer(OPERATE_TYPE::MANUAL, POS_START[0], 1.0f);
