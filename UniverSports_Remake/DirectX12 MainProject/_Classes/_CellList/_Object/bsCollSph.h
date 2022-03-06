@@ -4,15 +4,13 @@
 
 using namespace DirectX;
 
-class bsCollider {
+class bsCollSph {
 public:
-	struct Sphere {
-
-	};
-	bsCollider() { colli = BoundingSphere{}; };
-	virtual ~bsCollider() = default;
+	bsCollSph() { colli = BoundingSphere{}; };
+	virtual ~bsCollSph() = default;
 
 	void SetPosition(SimpleMath::Vector3 pos) { colli.Center = pos; };
+
 	void SetColli(BoundingSphere bound) { colli = bound; };
 	void SetColliScale(float scale) { colli.Radius *= scale; };
 

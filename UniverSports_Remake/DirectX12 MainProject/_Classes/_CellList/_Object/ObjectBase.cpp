@@ -2,7 +2,7 @@
 #include "_Classes/_CellList/_Cell/Cell.h"
 
 ObjectBase::ObjectBase() {
-	SetMember(NONE, Vector3::Zero, 0.0f);
+	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 }
 
 ObjectBase::ObjectBase(OBJ_ID kind, Vector3 pos, float r) {
@@ -24,14 +24,14 @@ void ObjectBase::SetMember(OBJ_ID kind, Vector3 pos, float r) {
 	if (this->cp_ == nullptr)
 		this->cp_ = new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ğŠ„‚è“–‚Ä‚é‚½‚ß
 
-	collision_ = new bsCollider();
+	collision_ = new bsCollSph();
 	physics_ = new btObject(pos);
 }
 
 ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
 	if (collision_->GetBounding().Intersects(m->collision_->GetBounding()))
 		return m;
-	
+
 	return nullptr;
 }
 

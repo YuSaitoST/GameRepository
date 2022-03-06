@@ -2,7 +2,7 @@
 
 ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
-	SetMember(NONE, Vector3::Zero, 0.0f);
+	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
 	rotate_ = Vector2::Zero;
 	motion_ = STAND;

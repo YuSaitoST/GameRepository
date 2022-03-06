@@ -3,7 +3,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
-#include "bsCollider.h"
+#include "bsCollSph.h"
 #include "btObject.h"
 
 using namespace DirectX::SimpleMath;
@@ -13,7 +13,7 @@ enum OBJ_ID {
 	PLAYER,
 	BALL,
 	WIRE,
-	NONE
+	NONE_OBJ_ID
 };
 
 class ObjectBase {
@@ -59,7 +59,7 @@ protected:
 	static bool IsFieldOut(Vector2& pos, float size);
 
 	OBJ_ID obj_type_;		// オブジェクトの種類
-	bsCollider* collision_; // 当たり判定
+	bsCollSph* collision_;	// 当たり判定
 	btObject* physics_;		// 物理演算
 	Cell* cp_;				// 所属空間
 	Vector2 pos_;			// 座標
