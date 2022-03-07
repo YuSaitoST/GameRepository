@@ -11,8 +11,8 @@ void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position
 
 	Set_Position(position);  // これやらないと追尾しない
 
-	TimerCount(deltaTime);
 	Play();
+	TimerCount(deltaTime);
 
 	// 座標の更新
 	if (isOver()) {  // リスポーン時間はこれで確定でいいと思う(30fpsならこの値?)
@@ -27,13 +27,12 @@ void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position
 			timer_roop_->ResetCountTime();
 			Set_Position(position);
 		}
-		Move(-direction * GAME_CONST.JT_MOVEMENT_NOMAL);
+		Move(-direction * GAME_CONST.JT_MOVEMENT_ACCEL);
 	}
 	else
-		Move(-direction * GAME_CONST.JT_MOVEMENT_ACCEL);
+		Move(-direction * GAME_CONST.JT_MOVEMENT_NOMAL);
 
 	//const bool _isUsedJet = usedThrasher_ && (0.3 < gauge->GetProportion());
 	Set_Rotate(Vector3(0.0f, 35.0f, -rotate_x));
-	auto _scale = GAME_CONST.JT_SCALE[usedThrasher_];
 	Set_Scale(Vector3::One * GAME_CONST.JT_SCALE[usedThrasher_]);
 }

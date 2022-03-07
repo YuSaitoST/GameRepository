@@ -22,7 +22,7 @@ public:
 	ObjectBase(OBJ_ID kind, Vector3 pos, float r);
 	virtual ~ObjectBase();
 
-	virtual void Initialize(int id) = 0;
+	virtual void Initialize(const int id) = 0;
 	virtual void LoadAssets(std::wstring file_name) = 0;
 	virtual void LoadAssets(DX9::MODEL model) = 0;
 	virtual void Update(const float deltaTime) = 0;

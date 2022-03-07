@@ -8,7 +8,7 @@ public:
 	ObjWire(Vector3 pos, float r);
 	virtual ~ObjWire();
 
-	virtual void Initialize(int id);  // IDはゴールのIDとして利用
+	virtual void Initialize(const int id);  // IDはゴールのIDとして利用
 	virtual void LoadAssets(std::wstring file_name);  // FILE_NAMEは空文字でいい,読み込みはしないから
 	virtual void LoadAssets(DX9::MODEL model) {};  // モデルは使わない
 	virtual void Update(const float deltaTime);  // ゴールを用いるモードで判定をするため

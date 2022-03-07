@@ -40,6 +40,8 @@ MainScene::MainScene()
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
+	DXTK->SetFixedFrameRate(60);
+
 	DX12Effect.Initialize();
 	GAME_CONST.Initialize();
 	Camera.Initialize();
@@ -52,11 +54,18 @@ void MainScene::Initialize()
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 
 	m_object_->AddWorld(physics_world_);
+
+	// ˆê‰ž‚È‚­‚Ä‚à–â‘è‚Í‚È‚¢‚ªA‰½‚©‚ ‚Á‚½‚ç‚±‚ê‚ðˆ—‚·‚é
+	//EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
+	//DX12Effect.PlayOneShot("dummy");
+	//DX12Effect.Stop("dummy");
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
 void MainScene::LoadAssets()
 {
+	DX12Effect.SetCamera((DX12::CAMERA)Camera.GetCamera());
+
 	descriptorHeap_ = DX12::CreateDescriptorHeap(DXTK->Device, 1);
 
 	ResourceUploadBatch resourceUploadBatch(DXTK->Device);
@@ -75,6 +84,8 @@ void MainScene::LoadAssets()
 
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
+
+	DXTK->Direct3D9->SetRenderState(NormalizeNormals_Enable);
 
 	field_->LoadAsset(L"_Movies\\main.wmv", L"_Images\\_Main\\holeFlont.png");
 

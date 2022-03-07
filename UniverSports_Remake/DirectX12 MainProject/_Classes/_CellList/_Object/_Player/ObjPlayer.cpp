@@ -29,7 +29,7 @@ ObjPlayer::~ObjPlayer() {
 		delete strategy_;
 }
 
-void ObjPlayer::Initialize(int id) {
+void ObjPlayer::Initialize(const int id) {
 	strategy_->Initialize(id, this);
 
 	id_my_ = id;
@@ -71,9 +71,7 @@ void ObjPlayer::Update(const float deltaTime) {
 		model_->SetMaterial(mate);
 	}
 	else {
-		D3DMATERIAL9 mate{};
-		mate.Diffuse = DX9::Colors::Value(1.0f, 1.0f, 1.0f, 1.0f);
-		model_->SetMaterial(mate);
+		model_->SetMaterial(GetNomMaterial());
 	}
 }
 

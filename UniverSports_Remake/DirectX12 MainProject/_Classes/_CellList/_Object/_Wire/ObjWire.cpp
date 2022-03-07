@@ -19,7 +19,7 @@ ObjWire::~ObjWire() {
 
 }
 
-void ObjWire::Initialize(int id) {
+void ObjWire::Initialize(const int id) {
 	id_my_ = id;
 }
 

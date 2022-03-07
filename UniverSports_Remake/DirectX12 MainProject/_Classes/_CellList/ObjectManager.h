@@ -4,6 +4,24 @@
 #include "_Object/_Player/ObjPlayer.h"
 
 class ObjectManager {
+private:
+	const float POS_X = 13.0f;
+	const float POS_Y = 6.0f;
+
+	const Vector3 POS_START[4] = {
+		Vector3(-POS_X,	POS_Y, 0.0f),
+		Vector3(POS_X,	POS_Y, 0.0f),
+		Vector3(-POS_X, -POS_Y, 0.0f),
+		Vector3(POS_X,  -POS_Y, 0.0f)
+	};
+
+	const std::wstring PLAYER_FILENAME[4] = {
+		L"_Models\\Player\\player_g.X",
+		L"_Models\\Player\\player_p.X",
+		L"_Models\\Player\\player_r.X",
+		L"_Models\\Player\\player_y.X"
+	};
+
 public:
 	ObjectManager();
 	virtual ~ObjectManager();
@@ -25,19 +43,4 @@ public:
 private:
 	static ObjectBase* obj_player_[2];
 	static ObjectBase* obj_wire_[4];
-
-private:
-	const std::wstring PLAYER_FILENAME[4] = {
-		L"_Models\\Player\\player_g.X",
-		L"_Models\\Player\\player_p.X",
-		L"_Models\\Player\\player_r.X",
-		L"_Models\\Player\\player_y.X"
-	};
-
-	const Vector3 POS_START[4] = {
-		Vector3(-13.0f,	6.0f, 0.0f),
-		Vector3(13.0f,	6.0f, 0.0f),
-		Vector3(-13.0f, -6.0f, 0.0f),
-		Vector3(13.0f,  -6.0f, 0.0f)
-	};
 };

@@ -23,7 +23,7 @@ public:
 	ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r);
 	virtual ~ObjPlayer();
 
-	virtual void Initialize(int id);
+	virtual void Initialize(const int id);
 	virtual void LoadAssets(std::wstring file_name);
 	virtual void LoadAssets(DX9::MODEL model) {};
 	virtual void Update(const float deltaTime);
