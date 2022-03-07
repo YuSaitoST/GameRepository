@@ -27,8 +27,8 @@ void GameField::Update() {
 }
 
 void GameField::Render() {
-	for (DX9::SPRITE sp : sprite_)
-		DX9::SpriteBatch->DrawSimple(sp.Get(), SimpleMath::Vector3(0.0f, 0.0f, -981.0f));
+	//for (DX9::SPRITE sp : sprite_)
+	//	DX9::SpriteBatch->DrawSimple(sp.Get(), SimpleMath::Vector3(0.0f, 0.0f, -981.0f));
 
 	DX9::SpriteBatch->DrawSimple(
 		sp_hole_.Get(),

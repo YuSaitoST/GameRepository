@@ -27,6 +27,10 @@ public:
 		return SimpleMath::Vector2(vel.x, vel.y);
 	}
 
+	inline void SetLinerVelocity(SimpleMath::Vector3 position) {
+		bt_body_->setLinearVelocity(*(btVector3*)&position);
+	}
+
 private:
 	btCollisionShape*		bt_collision_;
 	btDefaultMotionState*	bt_state_;

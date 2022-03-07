@@ -13,6 +13,7 @@ void ActMove::LoadAssets() {
 void ActMove::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPlayer& player) {
 	const Vector2 power = direction * GAME_CONST.Move_FirSpeed * 0.25f * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
+	player.AssignPosition();
 }
 
 void ActMove::Update(const float deltaTime, ObjPlayer& player) {
@@ -22,6 +23,7 @@ void ActMove::Update(const float deltaTime, ObjPlayer& player) {
 
 	const Vector2 power = direction_ * GAME_CONST.Move_FirSpeed * 0.25f * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
+	player.AssignPosition();
 }
 
 bool ActMove::Think(ObjPlayer& my) {

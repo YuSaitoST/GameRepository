@@ -31,6 +31,9 @@ public:
 	virtual void UIRender();
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
+	void AssignPosition() {
+		pos_ = physics_->GetCenterOfMassPosition();
+	}
 
 	void AnimReset();
 	void AnimSet(MOTION motion, float deltaTime);

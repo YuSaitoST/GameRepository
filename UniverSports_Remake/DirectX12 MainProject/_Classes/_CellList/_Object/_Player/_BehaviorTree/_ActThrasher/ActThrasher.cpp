@@ -24,11 +24,10 @@ void ActThrasher::LoadAssets() {
 
 void ActThrasher::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPlayer& player) {
 	const Vector2 _pos = player.myPosition();
-	const Vector2 _dir = direction;
 	const bool _isUsed = Input.StateCharaKey('B');
 
 	effect_->usedThrasher_ = _isUsed && (0.1f < gauge_->GetProportion());
-	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(_dir.x, _dir.y, 0.0f));
+	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(direction.x, direction.y, 0.0f));
 
 	gauge_->SetPosition(Vector3(_pos.x, _pos.y, 0.0f));
 	gauge_->Update(deltaTime, effect_->usedThrasher_);

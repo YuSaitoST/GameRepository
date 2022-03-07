@@ -55,7 +55,7 @@ void ObjPlayer::Update(const float deltaTime) {
 	strategy_->Update(deltaTime);
 
 
-	pos_	= physics_->GetCenterOfMassPosition();
+	AssignPosition();
 	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
 
 	ClampLoop(pos_);
