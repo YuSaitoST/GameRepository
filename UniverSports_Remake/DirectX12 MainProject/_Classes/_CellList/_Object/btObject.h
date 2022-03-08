@@ -27,8 +27,13 @@ public:
 		return SimpleMath::Vector2(vel.x, vel.y);
 	}
 
-	inline void SetLinerVelocity(SimpleMath::Vector3 position) {
-		bt_body_->setLinearVelocity(*(btVector3*)&position);
+	inline void SetCenterOfMassTransform(SimpleMath::Vector3 position, SimpleMath::Vector3 rotate) {
+		btTransform transform = btTransform(*(btQuaternion*)&rotate, *(btVector3*)&position);
+		bt_body_->setCenterOfMassTransform(transform);
+	}
+
+	inline void SetLinerVelocity(SimpleMath::Vector3 forward) {
+		bt_body_->setLinearVelocity(*(btVector3*)&forward);
 	}
 
 private:

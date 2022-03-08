@@ -1,14 +1,19 @@
 #include "ObjectManager.h"
 
 ObjectBase* ObjectManager::obj_player_[2];
+ObjectBase* ObjectManager::obj_ball_[1];
 ObjectBase* ObjectManager::obj_wire_[4];
 
 ObjectManager::ObjectManager() {
 	obj_player_[0] = new ObjPlayer(OPERATE_TYPE::MANUAL, POS_START[0], 1.0f);
 	obj_player_[1] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[1], 1.0f);
+
+	obj_ball_[0] = new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f);
 }
 
 ObjectManager::~ObjectManager() {
+	delete obj_ball_[0];
+	
 	delete obj_player_[1];
 	delete obj_player_[0];
 }
@@ -16,21 +21,33 @@ ObjectManager::~ObjectManager() {
 void ObjectManager::Initialize() {
 	for (int _i = 0; _i < 2; _i++)
 		obj_player_[_i]->Initialize(_i);
+
+	obj_ball_[0]->Initialize(0);
 }
 
 void ObjectManager::LoadAssets() {
+	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models\\_Ball\\ball.X");
+	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
+	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
+
 	for (int _i = 0; _i < 2; _i++)
 		obj_player_[_i]->LoadAssets(PLAYER_FILENAME[_i]);
+
+	obj_ball_[0]->LoadAssets(mod_ball_);
 }
 
 void ObjectManager::Update(const float deltaTime) {
 	for (ObjectBase* obj : obj_player_)
 		obj->Update(deltaTime);
+
+	obj_ball_[0]->Update(deltaTime);
 }
 
 void ObjectManager::RenderModels() {
 	for (ObjectBase* obj : obj_player_)
 		obj->Render();
+
+	obj_ball_[0]->Render(mod_ball_);
 }
 
 void ObjectManager::RenderSprites() {

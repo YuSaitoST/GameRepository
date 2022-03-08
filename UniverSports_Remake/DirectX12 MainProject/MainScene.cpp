@@ -102,6 +102,7 @@ void MainScene::Terminate()
 
 	m_object_->RemoveWorld(physics_world_);
 
+
 	delete m_object_;
 
 	delete field_;
@@ -161,6 +162,7 @@ void MainScene::Render()
 
 	field_->Render();
 	m_object_->RenderSprites();
+
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言

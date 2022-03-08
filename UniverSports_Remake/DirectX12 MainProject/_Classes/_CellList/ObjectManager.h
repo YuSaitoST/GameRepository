@@ -2,6 +2,7 @@
 
 #include "_Object/ObjectBase.h"
 #include "_Object/_Player/ObjPlayer.h"
+#include "_Object/_Ball/ObjBall.h"
 
 class ObjectManager {
 private:
@@ -16,10 +17,10 @@ private:
 	};
 
 	const std::wstring PLAYER_FILENAME[4] = {
-		L"_Models\\Player\\player_g.X",
-		L"_Models\\Player\\player_p.X",
-		L"_Models\\Player\\player_r.X",
-		L"_Models\\Player\\player_y.X"
+		L"_Models\\_Player\\player_g.X",
+		L"_Models\\_Player\\player_p.X",
+		L"_Models\\_Player\\player_r.X",
+		L"_Models\\_Player\\player_y.X"
 	};
 
 public:
@@ -42,5 +43,8 @@ public:
 
 private:
 	static ObjectBase* obj_player_[2];
+	static ObjectBase* obj_ball_[1];
 	static ObjectBase* obj_wire_[4];
+
+	DX9::MODEL mod_ball_;
 };

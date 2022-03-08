@@ -24,15 +24,16 @@ public:
 
 	virtual void Initialize(const int id) = 0;
 	virtual void LoadAssets(std::wstring file_name) = 0;
-	virtual void LoadAssets(DX9::MODEL model) = 0;
+	virtual void LoadAssets(DX9::MODEL& model) = 0;
 	virtual void Update(const float deltaTime) = 0;
 	virtual void Render() = 0;
+	virtual void Render(DX9::MODEL& model) = 0;
 	virtual void UIRender() = 0;
 
 	virtual ObjectBase* IsCollision(ObjectBase* m);  // 衝突判定(Boundingを用いたもの)
 	virtual ObjectBase* IsCollision();  // 衝突判定(四分木探索)
 
-	inline D3DMATERIAL9 GetNomMaterial() {
+	static D3DMATERIAL9 GetNomMaterial() {
 		D3DMATERIAL9 _mate{};
 		_mate.Diffuse = DX9::Colors::Value(0.3f, 0.3f, 0.3f, 1.0f);
 		_mate.Ambient = DX9::Colors::Value(0.7f, 0.7f, 0.7f, 1.0f);
@@ -44,19 +45,18 @@ public:
 	btRigidBody*	myRigidbody() { return physics_->Get_RigidBody(); }
 	Vector2&		myPosition() { return pos_; }
 	Vector2			myRotate() { return rotate_; };
-	Vector2			myDirection() { return direction_; }
+	Vector2&		myDirection() { return direction_; }
 	float			myRadian() { return r_; }
 	int				myPlayerID() { return id_my_; };
 
 	bool IsHit() { return isHit_; }
-
-	static void ClampLoop(Vector2& pos);
+	static bool IsFieldOut(Vector2& pos, float size);
 
 protected:
 	virtual void SetMember(OBJ_ID kind, Vector3 pos, float r);  // メンバ設定
 	
 	void Update();
-	static bool IsFieldOut(Vector2& pos, float size);
+	static void ClampLoop(Vector2& pos);
 
 	OBJ_ID obj_type_;		// オブジェクトの種類
 	bsCollSph* collision_;	// 当たり判定
