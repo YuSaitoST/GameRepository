@@ -1,24 +1,27 @@
 #pragma once
 
+#include "Base/pch.h"
+#include "Base/dxtk.h"
+
+using namespace DirectX;
+
 class ObjBall;
 
 class BallState {
 public:
-	BallState() {}
-	virtual ~BallState() {}
+	BallState() = default;
+	virtual ~BallState() = default;
 
 	virtual void Initialize() = 0;
-	virtual void Update(const float deltaTime, ObjBall* ball) = 0;
+	virtual void Update(ObjBall* ball) = 0;
+
+	virtual void SetPosition(SimpleMath::Vector2 pos)	  { position_ = pos; };
+	virtual void SetForward (SimpleMath::Vector2 forward) { forward_  = forward; };
+
+	virtual SimpleMath::Vector2 GetPosition	() const { return position_; };
+	virtual SimpleMath::Vector2 GetForward	() const { return forward_; };
+
+protected:
+	SimpleMath::Vector2 position_;
+	SimpleMath::Vector2 forward_;
 };
-
-/*
-	[状態の種類]
-
-	<共通項目>
-
-	<相違項目>
-	・浮遊 : ランダムな{座標,方向}の確定、
-			 決めた位置をball->pos_に代入(ObjBall.Renderでセットされる)
-	・捕獲 : 
-	・投球 : 
-*/

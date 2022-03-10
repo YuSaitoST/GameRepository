@@ -45,18 +45,18 @@ public:
 	btRigidBody*	myRigidbody() { return physics_->Get_RigidBody(); }
 	Vector2&		myPosition() { return pos_; }
 	Vector2			myRotate() { return rotate_; };
-	Vector2&		myDirection() { return direction_; }
+	Vector2&		myDirection() { return forward_; }
 	float			myRadian() { return r_; }
 	int				myPlayerID() { return id_my_; };
 
 	bool IsHit() { return isHit_; }
 	static bool IsFieldOut(Vector2& pos, float size);
+	static void ClampLoop(Vector2& pos);
 
 protected:
 	virtual void SetMember(OBJ_ID kind, Vector3 pos, float r);  // メンバ設定
 	
 	void Update();
-	static void ClampLoop(Vector2& pos);
 
 	OBJ_ID obj_type_;		// オブジェクトの種類
 	bsCollSph* collision_;	// 当たり判定
@@ -64,7 +64,7 @@ protected:
 	Cell* cp_;				// 所属空間
 	Vector2 pos_;			// 座標
 	Vector2 rotate_;		// 回転
-	Vector2 direction_;     // 正面方向
+	Vector2 forward_;     // 正面方向
 	float r_;               // 半径
 	int id_my_;			    // プレイヤーのID
 	bool isHit_;			// 衝突フラグ

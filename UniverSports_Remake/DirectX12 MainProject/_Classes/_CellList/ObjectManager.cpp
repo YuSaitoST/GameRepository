@@ -58,6 +58,8 @@ void ObjectManager::RenderSprites() {
 void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 	for (ObjectBase* obj : obj_player_)
 		physics_world_->addRigidBody(obj->myRigidbody());
+
+	physics_world_->addRigidBody(obj_ball_[0]->myRigidbody());
 }
 
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {

@@ -23,6 +23,10 @@ public:
 	void AssignPosition() {
 		pos_ = physics_->GetCenterOfMassPosition();
 	}
+	void AssignTransform(Vector2 position, Vector2 forward) {
+		pos_ = position;
+		forward_ = forward;
+	}
 
 private:
 	void SetTransforms();
