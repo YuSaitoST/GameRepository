@@ -14,6 +14,11 @@ void StFloat::Initialize() {
 }
 
 void StFloat::Update(ObjBall* ball) {
+	if (ball->IsInPlayerHands()) {
+		ball->SwitchState(ball->STATE::CAUTCH);
+		return;
+	}
+
 	if (DontDestroy->GameMode_ != 3)
 		CheckFieldOut(ball);
 	else

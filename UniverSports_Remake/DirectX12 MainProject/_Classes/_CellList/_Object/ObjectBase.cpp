@@ -35,19 +35,14 @@ ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
 	return nullptr;
 }
 
-// たどるとこれが1番最初に呼ばれるCollision()になるみたい
-ObjectBase* ObjectBase::IsCollision() {
-	ObjectBase* _cm = cp_->IsCollision();  // この中で、上方、同レベル、下方の3方向を調べる
-	return _cm;
-}
-
-void ObjectBase::Update() {
+void ObjectBase::UpdateToMorton() {
 	// 存在するなら、所属空間の更新をする
 	if (cp_ != nullptr)
 		cp_->UpdateToMorton();
+}
 
-	// 接触判定
-	isHit_ = (IsCollision() != nullptr);
+ObjectBase* ObjectBase::IsHitObject() {
+	return cp_->IsCollision();  // 上方、同レベル、下方の3方向を調べる(四分木探索)
 }
 
 void ObjectBase::ClampLoop(Vector2& pos) {

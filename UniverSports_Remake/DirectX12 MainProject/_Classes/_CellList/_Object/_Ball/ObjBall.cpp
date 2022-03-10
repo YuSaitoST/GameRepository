@@ -7,15 +7,18 @@ ObjBall::ObjBall() {
 	state_ = nullptr;
 	rotate_ = Vector2::Zero;
 	pos_z_ = 0.0f;
+	isInPlayerHands_ = false;
 }
 
 ObjBall::ObjBall(Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(BALL, pos, r);
 
-	state_ = new StFloat();
+	SwitchState(FLOAT);
+
 	rotate_ = Vector2::Zero;
 	pos_z_ = 0.0f;
+	isInPlayerHands_ = false;
 }
 
 ObjBall::~ObjBall() {
@@ -46,7 +49,12 @@ void ObjBall::Update(const float deltaTime) {
 	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
 
-	ObjectBase::Update();
+	UpdateToMorton();
+
+	ObjectBase* _obj = IsHitObject();
+	if (_obj->myObjectID() == OBJ_ID::PLAYER) {
+		isInPlayerHands_ = true;
+	}
 }
 
 void ObjBall::Render(DX9::MODEL& model) {
@@ -56,15 +64,23 @@ void ObjBall::Render(DX9::MODEL& model) {
 	model->Draw();
 }
 
+void ObjBall::SwitchState(STATE state) {
+	switch (state) {
+		case FLOAT	: state_ = new StFloat();		 break;
+		case CAUTCH	: state_ = new StCautch();		 break;
+		default		: assert(!"ObjBall_•s³‚Èó‘Ô"); break;
+	}
+}
+
 void ObjBall::AddPower(Vector3 forward, float speed) {
 	physics_->SetLinerVelocity(forward * speed);
-	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, 0.0f), Vector3(0.0f, 0.0f, 0.0f));
+	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 
 	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
 }
 
 void ObjBall::SetTransforms() {
-	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
-	physics_->SetTransform(Vector3(pos_.x, pos_.y, 0.0f), Vector3(rotate_.x, rotate_.y, 0.0f));
+	collision_->SetPosition(Vector3(pos_.x, pos_.y, pos_z_));
+	physics_->SetTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3(rotate_.x, rotate_.y, 0.0f));
 }

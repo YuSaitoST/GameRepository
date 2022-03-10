@@ -17,7 +17,7 @@ void ManualChara::Update(const float deltaTime) {
 	for (int _i = 0; _i < actList_.size(); _i++)
 		actList_[_i]->Update(deltaTime, Input.StateDirection(), *player_);
 
-	SeekRotateX(deltaTime, player_->myPlayerID());
+	SeekRotateX(deltaTime, player_->myObjectID());
 }
 
 void ManualChara::SeekRotateX(const float deltaTime, int index) {

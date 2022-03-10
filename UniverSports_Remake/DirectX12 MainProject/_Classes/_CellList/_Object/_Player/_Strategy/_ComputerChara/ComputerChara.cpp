@@ -19,7 +19,7 @@ void ComputerChara::Update(const float deltaTime) {
 		if (actList_[_i]->Think(*player_))
 			actList_[_i]->Update(deltaTime, *player_);
 
-	SeekRotateX(deltaTime, player_->myPlayerID());
+	SeekRotateX(deltaTime, player_->myObjectID());
 }
 
 void ComputerChara::SeekRotateX(const float deltaTime, int index) {

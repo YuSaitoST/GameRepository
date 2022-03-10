@@ -3,8 +3,18 @@
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_State/BallState.h"
 #include "_State/_Float/StFloat.h"
+#include "_State/_Cautch/StCautch.h"
 
 class ObjBall final : public ObjectBase {
+public:
+	enum STATE {
+		FLOAT,
+		CAUTCH,
+		SHOT,
+		GOAL,
+		NONE_STATE
+	};
+
 public:
 	ObjBall();
 	ObjBall(Vector3 pos, float r);
@@ -18,6 +28,7 @@ public:
 	virtual void Render(DX9::MODEL& model);
 	virtual void UIRender() {};
 
+	void SwitchState(STATE state);
 	void Moving(Vector3 power) { physics_->Moving(power); };
 	void AddPower(Vector3 forward, float speed);
 	void AssignPosition() {
@@ -28,10 +39,13 @@ public:
 		forward_ = forward;
 	}
 
+	bool IsInPlayerHands() const { return isInPlayerHands_; }
+
 private:
 	void SetTransforms();
 
 	BallState* state_;
 	DX9::MODEL model_;
 	float pos_z_;  // “Š‚°‚éÛ‚É“®‚©‚·(—\’èA‘½•ª‚»‚¤‚µ‚½•û‚ªŒ©‰h‚¦‚¢‚¢)
+	bool isInPlayerHands_;
 };

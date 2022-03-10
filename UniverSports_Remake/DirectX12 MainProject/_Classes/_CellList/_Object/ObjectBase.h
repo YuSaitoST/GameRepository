@@ -31,7 +31,6 @@ public:
 	virtual void UIRender() = 0;
 
 	virtual ObjectBase* IsCollision(ObjectBase* m);  // 衝突判定(Boundingを用いたもの)
-	virtual ObjectBase* IsCollision();  // 衝突判定(四分木探索)
 
 	static D3DMATERIAL9 GetNomMaterial() {
 		D3DMATERIAL9 _mate{};
@@ -47,7 +46,7 @@ public:
 	Vector2			myRotate() { return rotate_; };
 	Vector2&		myDirection() { return forward_; }
 	float			myRadian() { return r_; }
-	int				myPlayerID() { return id_my_; };
+	int				myObjectID() { return id_my_; };
 
 	bool IsHit() { return isHit_; }
 	static bool IsFieldOut(Vector2& pos, float size);
@@ -56,7 +55,8 @@ public:
 protected:
 	virtual void SetMember(OBJ_ID kind, Vector3 pos, float r);  // メンバ設定
 	
-	void Update();
+	void UpdateToMorton();
+	ObjectBase* IsHitObject();
 
 	OBJ_ID obj_type_;		// オブジェクトの種類
 	bsCollSph* collision_;	// 当たり判定
@@ -64,8 +64,8 @@ protected:
 	Cell* cp_;				// 所属空間
 	Vector2 pos_;			// 座標
 	Vector2 rotate_;		// 回転
-	Vector2 forward_;     // 正面方向
+	Vector2 forward_;       // 正面方向
 	float r_;               // 半径
-	int id_my_;			    // プレイヤーのID
+	int id_my_;			    // 自分のID
 	bool isHit_;			// 衝突フラグ
 };

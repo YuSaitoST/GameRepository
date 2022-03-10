@@ -39,10 +39,17 @@ public:
 	void AnimReset();
 	void AnimSet(MOTION motion, float deltaTime);
 
+	Vector3 Get_HandPos() const {
+		//return (pos_ + move->Get_PrevForward() * Vector3(POS_HAND.x, POS_HAND.y, 0.0f));
+	};
+
 private:
 	void SetTransforms();
+
+	const SimpleMath::Vector2 POS_HAND = { 2.75f, 2.5 };
 
 	CharaStrategy* strategy_;
 	MOTION motion_;
 	DX9::SKINNEDMODEL model_;
+	bool hasBall_;
 };

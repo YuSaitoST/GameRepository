@@ -5,8 +5,10 @@ ObjPlayer::ObjPlayer() {
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
 	rotate_ = Vector2::Zero;
+	forward_ = Vector2::Zero;
 	motion_ = STAND;
 	strategy_ = nullptr;
+	hasBall_ = false;
 }
 
 ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
@@ -14,7 +16,9 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	SetMember(PLAYER, pos, r);
 
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
+	forward_ = Vector2::Zero;
 	motion_ = STAND;
+	hasBall_ = false;
 
 	if (strategy == OPERATE_TYPE::MANUAL)
 		strategy_ = new ManualChara();
@@ -62,9 +66,15 @@ void ObjPlayer::Update(const float deltaTime) {
 
 	SetTransforms();
 
-	ObjectBase::Update();
+	UpdateToMorton();
 
 	/*“–‚½‚Á‚½‚ç‚â‚éˆ—‚Í‚±‚±‚É‘‚­‚Æ—Ç‚³‚»‚¤*/
+
+	ObjectBase* _obj = IsHitObject();
+	if (_obj->myObjectID() == OBJ_ID::BALL) {
+		hasBall_ = true;
+	}
+
 	if (isHit_) {
 		D3DMATERIAL9 mate{};
 		mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
