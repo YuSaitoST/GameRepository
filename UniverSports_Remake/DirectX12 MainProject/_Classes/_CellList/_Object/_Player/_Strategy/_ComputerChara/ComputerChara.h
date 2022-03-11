@@ -12,5 +12,5 @@ public:
 	virtual void LoadAssets();
 	virtual void Update(const float deltaTime);
 
-	virtual void SeekRotateX(const float deltaTime, int index);
+	virtual void SeekRotate(const float deltaTime, int index);
 };

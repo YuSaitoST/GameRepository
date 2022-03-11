@@ -4,9 +4,11 @@ ObjBall::ObjBall() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
+	colorType_ = NOMAL_COLOR;
 	state_ = nullptr;
 	rotate_ = Vector2::Zero;
 	pos_z_ = 0.0f;
+	id_owner_ = -1;
 	isInPlayerHands_ = false;
 }
 
@@ -16,8 +18,10 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 
 	SwitchState(FLOAT);
 
+	colorType_ = NOMAL_COLOR;
 	rotate_ = Vector2::Zero;
 	pos_z_ = 0.0f;
+	id_owner_ = -1;
 	isInPlayerHands_ = false;
 }
 
@@ -52,15 +56,17 @@ void ObjBall::Update(const float deltaTime) {
 	UpdateToMorton();
 
 	ObjectBase* _obj = IsHitObject();
-	if (_obj->myObjectID() == OBJ_ID::PLAYER) {
-		isInPlayerHands_ = true;
+	if (_obj != nullptr) {
+		if (_obj->myObjectType() == OBJ_TYPE::PLAYER) {
+			isInPlayerHands_ = true;
+		}
 	}
 }
 
 void ObjBall::Render(DX9::MODEL& model) {
 	model->SetPosition(Vector3(pos_.x, pos_.y, pos_z_));
 	model->SetRotation(Vector3(rotate_.x, rotate_.y, 0.0f));
-	/*model->SetMaterial()*/
+	model->SetMaterial(ChangeMaterial(colorType_));
 	model->Draw();
 }
 
@@ -70,6 +76,31 @@ void ObjBall::SwitchState(STATE state) {
 		case CAUTCH	: state_ = new StCautch();		 break;
 		default		: assert(!"ObjBall_不正な状態"); break;
 	}
+}
+
+void ObjBall::SwitchColor(COLOR_TYPE colorType) {
+	colorType_ = colorType;
+}
+
+D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
+	D3DMATERIAL9 _mat{};
+
+	switch (colorType) {
+		case NOMAL_COLOR:
+			_mat = GetNomMaterial(); 
+			break;
+		case PLAYER_COLOR:
+			_mat.Diffuse = P_DIFFUSE[id_owner_];
+			_mat.Ambient = P_AMBIENT;
+			break;
+		case TEAM_COLOR:
+			break;
+		default:
+			assert(!"ObjBall : 不正な色指定"); 
+			break;
+	}
+
+	return _mat;
 }
 
 void ObjBall::AddPower(Vector3 forward, float speed) {

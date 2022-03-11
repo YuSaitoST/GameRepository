@@ -19,10 +19,10 @@ void ComputerChara::Update(const float deltaTime) {
 		if (actList_[_i]->Think(*player_))
 			actList_[_i]->Update(deltaTime, *player_);
 
-	SeekRotateX(deltaTime, player_->myObjectID());
+	SeekRotate(deltaTime, player_->myObjectID());
 }
 
-void ComputerChara::SeekRotateX(const float deltaTime, int index) {
+void ComputerChara::SeekRotate(const float deltaTime, int index) {
 	const SimpleMath::Vector2 _pad = actList_[0]->GetDirection();
 
 	direction_.x = _pad.x * std::sqrtf(1.0f - 0.5f * _pad.x * _pad.y);

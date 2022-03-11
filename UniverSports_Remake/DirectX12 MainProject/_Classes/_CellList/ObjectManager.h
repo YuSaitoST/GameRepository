@@ -6,8 +6,11 @@
 
 class ObjectManager {
 private:
-	const float POS_X = 13.0f;
-	const float POS_Y = 6.0f;
+	const int N_PLAYER	= 2;
+	const int N_BALL	= 1;
+
+	const float POS_X	= 13.0f;
+	const float POS_Y	= 6.0f;
 
 	const Vector3 POS_START[4] = {
 		Vector3(-POS_X,	POS_Y, 0.0f),
@@ -36,14 +39,16 @@ public:
 	void AddWorld(btDynamicsWorld* physics_world_);
 	void RemoveWorld(btDynamicsWorld* physics_world_);
 
+	static Vector2 PlayerHandsPos(int index);
+
 	// 自分から一番近いプレイヤーの方向を返す
 	static Vector2 TheClosestPlayerPos(Vector2 pos);
 	// 自分から一番近いボールの方向を返す
 	static Vector2 TheClosestBallPos(Vector2 pos);
 
 private:
-	static ObjectBase* obj_player_[2];
-	static ObjectBase* obj_ball_[1];
+	static ObjPlayer* obj_player_[2];
+	static ObjBall* obj_ball_[1];
 	static ObjectBase* obj_wire_[4];
 
 	DX9::MODEL mod_ball_;

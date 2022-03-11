@@ -1,7 +1,7 @@
 #include "ObjectManager.h"
 
-ObjectBase* ObjectManager::obj_player_[2];
-ObjectBase* ObjectManager::obj_ball_[1];
+ObjPlayer* ObjectManager::obj_player_[2];
+ObjBall* ObjectManager::obj_ball_[1];
 ObjectBase* ObjectManager::obj_wire_[4];
 
 ObjectManager::ObjectManager() {
@@ -12,17 +12,19 @@ ObjectManager::ObjectManager() {
 }
 
 ObjectManager::~ObjectManager() {
-	delete obj_ball_[0];
+	for (int _i = N_BALL - 1; 0 <= _i; _i--)
+		delete obj_ball_[_i];
 	
-	delete obj_player_[1];
-	delete obj_player_[0];
+	for (int _i = N_PLAYER - 1; 0 <= _i; _i--)
+		delete obj_player_[_i];
 }
 
 void ObjectManager::Initialize() {
-	for (int _i = 0; _i < 2; _i++)
+	for (int _i = 0; _i < N_PLAYER; _i++)
 		obj_player_[_i]->Initialize(_i);
 
-	obj_ball_[0]->Initialize(0);
+	for (int _i = 0; _i < N_BALL; _i++)
+		obj_ball_[_i]->Initialize(_i);
 }
 
 void ObjectManager::LoadAssets() {
@@ -30,24 +32,27 @@ void ObjectManager::LoadAssets() {
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
 
-	for (int _i = 0; _i < 2; _i++)
+	for (int _i = 0; _i < N_PLAYER; _i++)
 		obj_player_[_i]->LoadAssets(PLAYER_FILENAME[_i]);
 
-	obj_ball_[0]->LoadAssets(mod_ball_);
+	for (ObjectBase* obj : obj_ball_)
+		obj->LoadAssets(mod_ball_);
 }
 
 void ObjectManager::Update(const float deltaTime) {
 	for (ObjectBase* obj : obj_player_)
 		obj->Update(deltaTime);
 
-	obj_ball_[0]->Update(deltaTime);
+	for (ObjectBase* obj : obj_ball_)
+		obj->Update(deltaTime);
 }
 
 void ObjectManager::RenderModels() {
 	for (ObjectBase* obj : obj_player_)
 		obj->Render();
 
-	obj_ball_[0]->Render(mod_ball_);
+	for (ObjectBase* obj : obj_ball_)
+		obj->Render(mod_ball_);
 }
 
 void ObjectManager::RenderSprites() {
@@ -65,6 +70,10 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
 	for (int _i = 1; 0 <= _i; _i--)
 		physics_world_->removeRigidBody(obj_player_[_i]->myRigidbody());
+}
+
+Vector2 ObjectManager::PlayerHandsPos(int index) {
+	return obj_player_[index]->Get_HandPos();
 }
 
 Vector2 ObjectManager::TheClosestPlayerPos(Vector2 pos) {

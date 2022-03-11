@@ -7,6 +7,8 @@
 #include "_Strategy/_ManualChara/ManualChara.h"
 #include "_Strategy/_ComputerChara/ComputerChara.h"
 
+#include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
+
 class ObjPlayer final : public ObjectBase {
 private:
 	enum MOTION {
@@ -36,20 +38,20 @@ public:
 		pos_ = physics_->GetCenterOfMassPosition();
 	}
 
-	void AnimReset();
-	void AnimSet(MOTION motion, float deltaTime);
-
-	Vector3 Get_HandPos() const {
-		//return (pos_ + move->Get_PrevForward() * Vector3(POS_HAND.x, POS_HAND.y, 0.0f));
+	Vector2 Get_HandPos() const {
+		return (pos_ + strategy_->GetForward() * Vector2(POS_HAND.x, POS_HAND.y));
 	};
 
 private:
 	void SetTransforms();
+	void AnimReset();
+	void AnimSet(MOTION motion, float deltaTime);
+	MOTION AnimChange();
 
-	const SimpleMath::Vector2 POS_HAND = { 2.75f, 2.5 };
+	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
 	CharaStrategy* strategy_;
-	MOTION motion_;
+	ObjBall* myBall_;
 	DX9::SKINNEDMODEL model_;
 	bool hasBall_;
 };

@@ -9,7 +9,7 @@
 using namespace DirectX::SimpleMath;
 class Cell;
 
-enum OBJ_ID {
+enum OBJ_TYPE {
 	PLAYER,
 	BALL,
 	WIRE,
@@ -19,7 +19,7 @@ enum OBJ_ID {
 class ObjectBase {
 public:
 	ObjectBase();
-	ObjectBase(OBJ_ID kind, Vector3 pos, float r);
+	ObjectBase(OBJ_TYPE kind, Vector3 pos, float r);
 	virtual ~ObjectBase();
 
 	virtual void Initialize(const int id) = 0;
@@ -40,7 +40,7 @@ public:
 		return _mate;
 	}
 
-	OBJ_ID			myObjectType() { return obj_type_; }
+	OBJ_TYPE		myObjectType() { return obj_type_; }
 	btRigidBody*	myRigidbody() { return physics_->Get_RigidBody(); }
 	Vector2&		myPosition() { return pos_; }
 	Vector2			myRotate() { return rotate_; };
@@ -53,12 +53,12 @@ public:
 	static void ClampLoop(Vector2& pos);
 
 protected:
-	virtual void SetMember(OBJ_ID kind, Vector3 pos, float r);  // メンバ設定
+	virtual void SetMember(OBJ_TYPE kind, Vector3 pos, float r);  // メンバ設定
 	
 	void UpdateToMorton();
 	ObjectBase* IsHitObject();
 
-	OBJ_ID obj_type_;		// オブジェクトの種類
+	OBJ_TYPE obj_type_;		// オブジェクトの種類
 	bsCollSph* collision_;	// 当たり判定
 	btObject* physics_;		// 物理演算
 	Cell* cp_;				// 所属空間

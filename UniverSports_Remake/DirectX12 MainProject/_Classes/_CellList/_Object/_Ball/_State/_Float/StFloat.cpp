@@ -15,7 +15,9 @@ void StFloat::Initialize() {
 
 void StFloat::Update(ObjBall* ball) {
 	if (ball->IsInPlayerHands()) {
+		ball->ResetVelocity();
 		ball->SwitchState(ball->STATE::CAUTCH);
+		ball->SwitchColor(ball->COLOR_TYPE::PLAYER_COLOR);
 		return;
 	}
 

@@ -1,4 +1,5 @@
 #include "ObjPlayer.h"
+#include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
 ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
@@ -6,8 +7,8 @@ ObjPlayer::ObjPlayer() {
 
 	rotate_ = Vector2::Zero;
 	forward_ = Vector2::Zero;
-	motion_ = STAND;
 	strategy_ = nullptr;
+	myBall_ = nullptr;
 	hasBall_ = false;
 }
 
@@ -17,7 +18,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	forward_ = Vector2::Zero;
-	motion_ = STAND;
+	myBall_ = nullptr;
 	hasBall_ = false;
 
 	if (strategy == OPERATE_TYPE::MANUAL)
@@ -54,7 +55,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 
 void ObjPlayer::Update(const float deltaTime) {
 	AnimReset();
-	AnimSet(motion_, deltaTime);
+	AnimSet(AnimChange(), deltaTime);
 
 	strategy_->Update(deltaTime);
 
@@ -68,11 +69,22 @@ void ObjPlayer::Update(const float deltaTime) {
 
 	UpdateToMorton();
 
-	/*“–‚½‚Á‚½‚ç‚â‚éˆ—‚Í‚±‚±‚É‘‚­‚Æ—Ç‚³‚»‚¤*/
-
 	ObjectBase* _obj = IsHitObject();
-	if (_obj->myObjectID() == OBJ_ID::BALL) {
-		hasBall_ = true;
+	if (_obj != nullptr) {
+		if (_obj->myObjectType() == OBJ_TYPE::BALL) {
+			if (myBall_ != nullptr)
+				return;
+
+			myBall_ = dynamic_cast<ObjBall*>(_obj);
+
+			if (myBall_->GetOwnerID() != -1) {
+				myBall_ = nullptr;
+				return;
+			}
+
+			myBall_->SetOwnerID(id_my_);
+			hasBall_ = true;
+		}
 	}
 
 	if (isHit_) {
@@ -93,6 +105,13 @@ void ObjPlayer::UIRender() {
 	strategy_->UIRender();
 }
 
+void ObjPlayer::SetTransforms() {
+	model_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
+	model_->SetRotation(Vector3(rotate_.x, rotate_.y, 0.0f));
+	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
+	physics_->SetTransform(Vector3(pos_.x, pos_.y, 0.0f), Vector3(rotate_.x, rotate_.y, 0.0f));
+}
+
 void ObjPlayer::AnimReset() {
 	for (int i = 0; i < 6; i++)
 		model_->SetTrackEnable(i, false);
@@ -103,9 +122,9 @@ void ObjPlayer::AnimSet(MOTION motion, float deltaTime) {
 	model_->AdvanceTime(deltaTime);
 }
 
-void ObjPlayer::SetTransforms() {
-	model_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
-	model_->SetRotation(Vector3(rotate_.x, rotate_.y, 0.0f));
-	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
-	physics_->SetTransform(Vector3(pos_.x, pos_.y, 0.0f), Vector3(rotate_.x, rotate_.y, 0.0f));
+ObjPlayer::MOTION ObjPlayer::AnimChange() {
+	if (hasBall_)
+		return MOTION::HAND;
+	else
+		return MOTION::STAND;
 }

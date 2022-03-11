@@ -35,5 +35,5 @@ void ObjWire::Update(const float deltaTime) {
 	if (DontDestroy->GameMode_ != 3)  // ゴールを用いないモードならはじく
 		return;
 
-	ObjectBase::Update();
+	UpdateToMorton();
 }

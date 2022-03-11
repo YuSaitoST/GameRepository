@@ -27,9 +27,10 @@ public:
 			act->UIRender();
 	}
 
-	virtual void SeekRotateX(const float deltaTime, int index) = 0;
+	virtual void SeekRotate(const float deltaTime, int index) = 0;
 
 	inline float GetRotateX() const { return rotate_x_; };
+	inline SimpleMath::Vector2 GetForward() const { return SimpleMath::Vector2(prevForward_.x, prevForward_.y); };
 
 protected:
 	ObjPlayer* player_;

@@ -36,6 +36,12 @@ public:
 		bt_body_->setLinearVelocity(*(btVector3*)&forward);
 	}
 
+	inline void ResetVelocity() {
+		btVector3 _vec(0.0f, 0.0f, 0.0f);
+		bt_body_->setLinearVelocity(_vec);
+		bt_body_->setAngularVelocity(_vec);
+	}
+
 private:
 	btCollisionShape*		bt_collision_;
 	btDefaultMotionState*	bt_state_;

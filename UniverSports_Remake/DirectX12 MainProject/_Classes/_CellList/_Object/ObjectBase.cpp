@@ -5,7 +5,7 @@ ObjectBase::ObjectBase() {
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 }
 
-ObjectBase::ObjectBase(OBJ_ID kind, Vector3 pos, float r) {
+ObjectBase::ObjectBase(OBJ_TYPE kind, Vector3 pos, float r) {
 	SetMember(kind, pos, r);
 }
 
@@ -16,7 +16,7 @@ ObjectBase::~ObjectBase() {
 	}
 }
 
-void ObjectBase::SetMember(OBJ_ID kind, Vector3 pos, float r) {
+void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
 	this->obj_type_ = kind;
 	this->pos_.x = pos.x;
 	this->pos_.y = pos.y;
