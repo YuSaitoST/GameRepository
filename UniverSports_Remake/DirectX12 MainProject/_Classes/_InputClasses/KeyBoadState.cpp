@@ -1,12 +1,8 @@
-#include "InputKeyState.h"
+#include "KeyBoadState.h"
 
-void InputKeyState::Initialize() {
-	ResetMember();
-}
-
-void InputKeyState::Accepts() {
-	// Œ…ã‚ª‚è–h~A•ûŒü•Û‚Ì–h~
-	ResetMember();
+void KeyBoadState::Accepts() {
+	// Œ…ã‚ª‚è–h~
+	flag_ = 0;
 
 	/*
 		Šebit‚É“ü—Íó‘Ô‚ğ“ü‚ê‚é

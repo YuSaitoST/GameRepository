@@ -1,12 +1,8 @@
-#include "InputKeyEvent.h"
+#include "KeyBoadEvent.h"
 
-void InputKeyEvent::Initialize() {
-	ResetMember();
-}
-
-void InputKeyEvent::Accepts() {
-	// Œ…ã‚ª‚è–h~A•ûŒü•Û‚Ì–h~
-	ResetMember();
+void KeyBoadEvent::Accepts() {
+	// Œ…ã‚ª‚è–h~
+	flag_ = 0;
 
 	/*
 		Šebit‚É“ü—Íó‘Ô‚ğ“ü‚ê‚é
