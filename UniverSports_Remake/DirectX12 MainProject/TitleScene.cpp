@@ -116,7 +116,7 @@ NextScene TitleScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
-	Input.Accepts();
+	Press.Accepts();
 
 	time_start_->Update(deltaTime);
 
@@ -128,7 +128,7 @@ NextScene TitleScene::Update(const float deltaTime)
 
 	mv_demo_->Update(deltaTime);
 
-	if (Input.EventAnyKey()) {
+	if (Press.AnyKey()) {
 		mv_demo_->ResetTime();
 		if (mv_demo_->IsDisplay())
 			return NextScene::Continue;
@@ -142,7 +142,7 @@ NextScene TitleScene::Update(const float deltaTime)
 	cursor_->Update();
 
 	if (cursor_->SelectNum() == 0) {
-		choices_->Update(Input.EventArrowKey(LEFT), Input.EventArrowKey(RIGHT));
+		choices_->Update(Press.LeftKey(), Press.RightKey());
 		ChooseMode();
 	}
 
@@ -154,7 +154,7 @@ NextScene TitleScene::Update(const float deltaTime)
 			nowText_[_t][choices_->SelectNum()].GetBigger(deltaTime) :
 			nowText_[_t][choices_->SelectNum()].GetSmaller(deltaTime);
 
-	if (Input.EventCharaKey('B')) {
+	if (Press.DecisionKey()) {
 		se_decision_->PlayOneShot();
 		const int _select = cursor_->SelectNum();
 
@@ -210,8 +210,8 @@ void TitleScene::Render()
 }
 
 void TitleScene::ChooseMode() {
-	const bool _inRight = Input.EventArrowKey(RIGHT);
-	const bool _inLeft	= Input.EventArrowKey(LEFT);
+	const bool _inRight = Press.RightKey();
+	const bool _inLeft	= Press.LeftKey();
 
 	INPUT_SELECT _input = _inRight ? AL_RIGHT : _inLeft ? AL_LEFT : ui_arrows_->NowState();
 	ui_arrows_->SetAnimation(_input);

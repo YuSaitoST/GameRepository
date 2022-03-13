@@ -24,7 +24,7 @@ void ActThrasher::LoadAssets() {
 
 void ActThrasher::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPlayer& player) {
 	const Vector2 _pos = player.myPosition();
-	const bool _isUsed = Input.StateCharaKey('B');
+	const bool _isUsed = Press.ThrasherKey(player.myObjectID());
 
 	gauge_->SetPosition(Vector3(_pos.x, _pos.y, 0.0f));
 	gauge_->Update(deltaTime, effect_->usedThrasher_);

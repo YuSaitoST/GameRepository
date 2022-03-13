@@ -2,14 +2,6 @@
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 #include "_Classes/_CellList/ObjectManager.h"
 
-void ActMove::Initialize(int id) {
-
-}
-
-void ActMove::LoadAssets() {
-
-}
-
 void ActMove::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPlayer& player) {
 	const Vector2 power = direction * GAME_CONST.Move_FirSpeed * 0.25f * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));

@@ -34,6 +34,5 @@ void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position
 
 	//const bool _isUsedJet = usedThrasher_ && (0.3 < gauge->GetProportion());
 	Set_Rotate(Vector3(0.0f, 35.0f, -rotate_x));
-	auto _scale = GAME_CONST.JT_SCALE[usedThrasher_];
 	Set_Scale(Vector3::One * GAME_CONST.JT_SCALE[usedThrasher_]);
 }

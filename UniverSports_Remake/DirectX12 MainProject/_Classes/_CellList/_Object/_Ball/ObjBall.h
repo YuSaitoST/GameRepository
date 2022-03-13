@@ -47,9 +47,7 @@ public:
 	void SwitchColor(COLOR_TYPE colorType);
 	void Moving(Vector3 power) { physics_->Moving(power); };
 	void AddPower(Vector3 forward, float speed);
-	void AssignPosition() {
-		pos_ = physics_->GetCenterOfMassPosition();
-	}
+	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 	void AssignTransform(Vector2 position, Vector2 forward) {
 		pos_ = position;
 		forward_ = forward;
@@ -58,18 +56,18 @@ public:
 		AssignTransform(position, Vector2::Zero);
 		physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, 0.0f), Vector3::Zero);
 	}
-	void ResetVelocity() {
-		physics_->ResetVelocity();
-	}
+	void ResetVelocity() { physics_->ResetVelocity(); }
 	void SetOwnerID(int id_player) { id_owner_ = id_player; };
 	int GetOwnerID() const { return id_owner_; };
 	bool IsInPlayerHands() const { return isInPlayerHands_; }
+	STATE NowState() const { return nowState_; }
 
 private:
 	void SetTransforms();
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);
 
 	BallState* state_;
+	STATE nowState_;
 	COLOR_TYPE colorType_;
 	DX9::MODEL model_;
 	float pos_z_;  // “Š‚°‚éÛ‚É“®‚©‚·(—\’èA‘½•ª‚»‚¤‚µ‚½•û‚ªŒ©‰h‚¦‚¢‚¢)

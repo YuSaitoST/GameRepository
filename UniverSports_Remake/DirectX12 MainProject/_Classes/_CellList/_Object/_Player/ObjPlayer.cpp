@@ -72,10 +72,16 @@ void ObjPlayer::Update(const float deltaTime) {
 	ObjectBase* _obj = IsHitObject();
 	if (_obj != nullptr) {
 		if (_obj->myObjectType() == OBJ_TYPE::BALL) {
+			ObjBall* _ball = dynamic_cast<ObjBall*>(_obj);
+
+			if (_ball->NowState() == _ball->STATE::SHOT) {
+				return;
+			}
+
 			if (myBall_ != nullptr)
 				return;
 
-			myBall_ = dynamic_cast<ObjBall*>(_obj);
+			myBall_ = _ball;
 
 			if (myBall_->GetOwnerID() != -1) {
 				myBall_ = nullptr;
@@ -85,15 +91,6 @@ void ObjPlayer::Update(const float deltaTime) {
 			myBall_->SetOwnerID(id_my_);
 			hasBall_ = true;
 		}
-	}
-
-	if (isHit_) {
-		D3DMATERIAL9 mate{};
-		mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
-		model_->SetMaterial(mate);
-	}
-	else {
-		model_->SetMaterial(GetNomMaterial());
 	}
 }
 

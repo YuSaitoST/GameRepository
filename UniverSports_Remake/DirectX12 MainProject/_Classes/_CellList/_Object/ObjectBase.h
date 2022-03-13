@@ -48,7 +48,6 @@ public:
 	float			myRadian() { return r_; }
 	int				myObjectID() { return id_my_; };
 
-	bool IsHit() { return isHit_; }
 	static bool IsFieldOut(Vector2& pos, float size);
 	static void ClampLoop(Vector2& pos);
 
@@ -67,5 +66,4 @@ protected:
 	Vector2 forward_;       // ³–Ê•ûŒü
 	float r_;               // ”¼Œa
 	int id_my_;			    // ©•ª‚ÌID
-	bool isHit_;			// Õ“Ëƒtƒ‰ƒO
 };

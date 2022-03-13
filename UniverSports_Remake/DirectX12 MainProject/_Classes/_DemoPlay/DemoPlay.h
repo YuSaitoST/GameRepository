@@ -1,6 +1,6 @@
 #pragma once
 
-#include "_Classes/_InputClasses/InputChecker.h"
+#include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_MoviePlayer/MoviePlayer.h"
 #include "_Classes/_UI/_OriTimer/OriTimer.h"
 

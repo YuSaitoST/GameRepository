@@ -47,6 +47,8 @@ public:
 	static Vector2 TheClosestBallPos(Vector2 pos);
 
 private:
+	static Vector2 TheClosestPos(ObjectBase* targetObj, Vector2 pos);
+
 	static ObjPlayer* obj_player_[2];
 	static ObjBall* obj_ball_[1];
 	static ObjectBase* obj_wire_[4];

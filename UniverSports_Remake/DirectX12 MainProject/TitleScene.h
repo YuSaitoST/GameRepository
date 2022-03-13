@@ -7,7 +7,7 @@
 #include "Scene.h"
 #include "DontDestroyOnLoad.h"
 
-#include "_Classes/_InputClasses/InputChecker.h"
+#include "_Classes/_InputClasses/UseKeyCheck.h"
 
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
 #include "_Classes/_MoviePlayer/MoviePlayer.h"

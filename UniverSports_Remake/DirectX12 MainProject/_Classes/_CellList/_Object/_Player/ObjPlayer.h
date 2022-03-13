@@ -38,6 +38,7 @@ public:
 		pos_ = physics_->GetCenterOfMassPosition();
 	}
 
+	bool HasBall() const { return hasBall_; }
 	Vector2 Get_HandPos() const {
 		return (pos_ + strategy_->GetForward() * Vector2(POS_HAND.x, POS_HAND.y));
 	};

@@ -1,18 +1,11 @@
 #pragma once
 
-#include "Base/pch.h"
-#include "Base/dxtk.h"
-#include "_Classes/_ConstStrages/ConstStorages.h"
-#include "_Classes/_CellList\_Object/_Player/_BehaviorTree/ActionBase.h"
+#include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_Classes/_CellList/_Object/_Player/_BehaviorTree/ActionBase.h"
 
-using namespace DirectX;
-
-class ObjPlayer;
-
-class ActMove : public ActionBase {
-public:
-	ActMove() {};
-	virtual ~ActMove() {};
+class ActShot final : public ActionBase {
+	ActShot() {};
+	virtual ~ActShot() {};
 
 	virtual void Initialize(int id) {}
 	virtual void LoadAssets() {}

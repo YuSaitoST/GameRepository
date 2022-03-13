@@ -4,6 +4,7 @@ ObjBall::ObjBall() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
+	nowState_ = NONE_STATE;
 	colorType_ = NOMAL_COLOR;
 	state_ = nullptr;
 	rotate_ = Vector2::Zero;
@@ -76,6 +77,8 @@ void ObjBall::SwitchState(STATE state) {
 		case CAUTCH	: state_ = new StCautch();		 break;
 		default		: assert(!"ObjBall_ïsê≥Ç»èÛë‘"); break;
 	}
+
+	nowState_ = state;
 }
 
 void ObjBall::SwitchColor(COLOR_TYPE colorType) {

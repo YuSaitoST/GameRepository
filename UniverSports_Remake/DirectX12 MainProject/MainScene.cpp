@@ -137,7 +137,7 @@ NextScene MainScene::Update(const float deltaTime)
 	physics_world_->stepSimulation(deltaTime, 10);  // —^‚¦‚½’l‚ð10•ªŠ„‚·‚é(”»’è‚ª×‚©‚­‚Å‚«‚é)
 
 	DX12Effect.Update(deltaTime);
-	Input.Accepts();
+	Press.Accepts();
 
 	field_->Update();
 

@@ -20,7 +20,6 @@ void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
 	this->obj_type_ = kind;
 	this->pos_.x = pos.x;
 	this->pos_.y = pos.y;
-	this->isHit_ = false;
 	if (this->cp_ == nullptr)
 		this->cp_ = new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ðŠ„‚è“–‚Ä‚é‚½‚ß
 
