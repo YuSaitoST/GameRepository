@@ -37,21 +37,23 @@ public:
 	void SwitchState(STATE state);
 	void SwitchColor(COLOR_TYPE colorType);
 
-	void Moving(Vector3 power) { physics_->Moving(power); };
+	void Moving(Vector3 power) { physics_->Moving(power); }
 	void Shoting(Vector2 forward);
 	void AddPower(Vector3 forward, float speed);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
-	void AssignTransform(Vector2 position, Vector2 forward) {
-		pos_ = position;
+	void AssignTransform(Vector3 position, Vector2 forward) {
+		pos_ = Vector2(position.x, position.y);
+		pos_z_ = position.z;
 		forward_ = forward;
 	}
-	void PhysicsControll(Vector2 position) {
+	void PhysicsControll(Vector3 position) {
 		AssignTransform(position, Vector2::Zero);
-		physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, 0.0f), Vector3::Zero);
+		physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 	}
 	void ResetVelocity() { physics_->ResetVelocity(); }
 	void SetOwnerID(int id_player) { id_owner_ = id_player; };
-	int GetOwnerID() const { return id_owner_; };
+	int GetOwnerID() const { return id_owner_; }
+	float myPosZ() const { return pos_z_; }
 	bool IsInPlayerHands() const { return isInPlayerHands_; }
 	STATE NowState() const { return nowState_; }
 

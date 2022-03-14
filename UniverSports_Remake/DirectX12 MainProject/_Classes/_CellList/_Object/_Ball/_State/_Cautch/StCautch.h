@@ -9,4 +9,7 @@ public:
 
 	virtual void Initialize();
 	virtual void Update(ObjBall* ball);
+
+private:
+	const float Z_MIN = -1.45f - 1.86f;
 };

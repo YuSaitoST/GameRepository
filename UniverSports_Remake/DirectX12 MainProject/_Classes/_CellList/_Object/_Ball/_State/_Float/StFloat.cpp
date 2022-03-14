@@ -69,7 +69,7 @@ SimpleMath::Vector2 StFloat::RandomForward(SimpleMath::Vector2 position) {
 void StFloat::CheckFieldOut(ObjBall* ball) {
 	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
 		ReSpone();
-		ball->AssignTransform(position_, forward_);
+		ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward_);
 		ball->AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
 	}
 }

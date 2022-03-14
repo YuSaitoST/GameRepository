@@ -31,7 +31,7 @@ void ObjectManager::LoadAssets() {
 	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models\\_Ball\\ball.X");
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
-
+	
 	for (int _i = 0; _i < N_PLAYER; _i++)
 		obj_player_[_i]->LoadAssets(PLAYER_FILENAME[_i]);
 

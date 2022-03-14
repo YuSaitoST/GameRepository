@@ -9,7 +9,7 @@ void StCautch::Initialize() {
 
 void StCautch::Update(ObjBall* ball) {
 	position_ = ObjectManager::PlayerHandsPos(ball->GetOwnerID());
-	ball->PhysicsControll(position_);
+	ball->PhysicsControll(Vector3(position_.x, position_.y, Z_MIN));
 
 	if (!ball->IsInPlayerHands())
 		ball->SwitchState(ball->STATE::SHOT);

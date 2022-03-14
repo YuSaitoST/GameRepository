@@ -3,6 +3,8 @@
 #include "DontDestroyOnLoad.h"
 
 void StShot::Update(ObjBall* ball) {
+	//pos_z_ = std::min(0.0f, ball->myPosZ() + 0.016f);
+	//ball->AssignTransform(Vector3(position_.x, position_.y, pos_z_), forward_);
 
 	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
 		ball->SetOwnerID(-1);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "_Classes/_CellList/_Object/ObjectBase.h"
+#include "_Classes/_CellList/_Object/_Player/_MyLife/MyLife.h"
 
 #include "_State/CharaState.h"
 #include "_Strategy/CharaStrategy.h"
@@ -51,6 +52,7 @@ private:
 
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
+	MyLife* life_;
 	CharaStrategy* strategy_;
 	ObjBall* myBall_;
 	DX9::SKINNEDMODEL model_;

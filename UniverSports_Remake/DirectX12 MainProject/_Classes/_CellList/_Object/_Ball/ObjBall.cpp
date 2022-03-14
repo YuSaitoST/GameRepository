@@ -8,7 +8,6 @@ ObjBall::ObjBall() {
 	nowState_ = NONE_STATE;
 	colorType_ = NOMAL_COLOR;
 	state_ = nullptr;
-	rotate_ = Vector2::Zero;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
 	isInPlayerHands_ = false;
@@ -21,7 +20,6 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	SwitchState(FLOAT);
 
 	colorType_ = NOMAL_COLOR;
-	rotate_ = Vector2::Zero;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
 	isInPlayerHands_ = false;

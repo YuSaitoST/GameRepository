@@ -5,8 +5,7 @@ ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
-	rotate_ = Vector2::Zero;
-	forward_ = Vector2::Zero;
+	life_ = nullptr;
 	strategy_ = nullptr;
 	myBall_ = nullptr;
 	hasBall_ = false;
@@ -17,9 +16,10 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	SetMember(PLAYER, pos, r);
 
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
-	forward_ = Vector2::Zero;
 	myBall_ = nullptr;
 	hasBall_ = false;
+
+	life_ = new MyLife(3);
 
 	if (strategy == OPERATE_TYPE::MANUAL)
 		strategy_ = new ManualChara();
@@ -46,7 +46,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
 	model_->SetScale(0.018f);
 	model_->SetMaterial(GetNomMaterial());
-
+	
 	collision_->SetColli(model_->GetBoundingSphere());
 	collision_->SetColliScale(1.2f);
 
@@ -54,6 +54,9 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 }
 
 void ObjPlayer::Update(const float deltaTime) {
+	if (life_->NowLifePoint() <= 0)
+		return;
+
 	AnimReset();
 	AnimSet(AnimChange(), deltaTime);
 
@@ -71,6 +74,10 @@ void ObjPlayer::Update(const float deltaTime) {
 
 			// ‚â‚ç‚êˆ—
 			if (_ball->NowState() == _ball->STATE::SHOT) {
+				if (_ball->GetOwnerID() == id_my_)
+					return;
+
+				life_->TakeDamage();
 				return;
 			}
 			// ƒLƒƒƒbƒ`ˆ—
@@ -93,10 +100,16 @@ void ObjPlayer::Update(const float deltaTime) {
 }
 
 void ObjPlayer::Render() {
+	if (life_->NowLifePoint() <= 0)
+		return;
+
 	model_->Draw();
 }
 
 void ObjPlayer::UIRender() {
+	if (life_->NowLifePoint() <= 0)
+		return;
+
 	strategy_->UIRender();
 }
 

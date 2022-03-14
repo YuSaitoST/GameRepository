@@ -3,6 +3,7 @@
 void GamePadEvent::Accepts(int index) {
 	// Œ…ã‚ª‚è–h~
 	flag_ = 0;
+	direct_ = Vector2::Zero;
 
 	/*
 		Šebit‚É“ü—Íó‘Ô‚ğ“ü‚ê‚é

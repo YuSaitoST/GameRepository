@@ -23,6 +23,8 @@ void ObjectBase::SetMember(OBJ_TYPE kind, Vector3 pos, float r) {
 	if (this->cp_ == nullptr)
 		this->cp_ = new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ğŠ„‚è“–‚Ä‚é‚½‚ß
 
+	rotate_ = Vector2::Zero;
+	forward_ = Vector2::Zero;
 	collision_ = new bsCollSph();
 	physics_ = new btObject(pos);
 }
