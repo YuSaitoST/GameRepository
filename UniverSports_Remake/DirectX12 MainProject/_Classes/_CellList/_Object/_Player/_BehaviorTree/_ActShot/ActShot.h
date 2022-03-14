@@ -4,8 +4,9 @@
 #include "_Classes/_CellList/_Object/_Player/_BehaviorTree/ActionBase.h"
 
 class ActShot final : public ActionBase {
-	ActShot() {};
-	virtual ~ActShot() {};
+public:
+	ActShot() : isShot_(false) {}
+	virtual ~ActShot() {}
 
 	virtual void Initialize(int id) {}
 	virtual void LoadAssets() {}
@@ -14,4 +15,7 @@ class ActShot final : public ActionBase {
 	virtual void UIRender() {}
 
 	virtual bool Think(ObjPlayer& player);
+
+private:
+	bool isShot_;
 };

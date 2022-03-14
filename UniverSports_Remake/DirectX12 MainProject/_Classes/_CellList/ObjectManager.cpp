@@ -83,11 +83,13 @@ Vector2 ObjectManager::TheClosestPos(ObjectBase* targetObj, Vector2 pos) {
 	//float _new_comparison;  // Œ»İ’²‚×‚Ä‚¢‚é‹——£
 	//float _min_comparison = 99.0f;  // ˆê”Ô‹ß‚¢‹——£
 
+	//ObjPlayer* obj = (ObjPlayer*)targetObj;
+
 	//for (int _i = 0; _i < _size;_i++) {
-	//	if ((targetObj[_i].myPosition().x == pos.x) && (targetObj[_i].myPosition().y == pos.y))
+	//	if ((obj[_i].myPosition().x == pos.x) && (obj[_i].myPosition().y == pos.y))
 	//		continue;
 
-	//	_target = targetObj[_i].myPosition();
+	//	_target = obj[_i].myPosition();
 	//	_new_comparison = std::sqrtf(
 	//		std::powf(pos.x - _target.x, 2) +
 	//		std::powf(pos.y - _target.y, 2)
@@ -104,7 +106,6 @@ Vector2 ObjectManager::TheClosestPos(ObjectBase* targetObj, Vector2 pos) {
 
 Vector2 ObjectManager::TheClosestPlayerPos(Vector2 pos) {
 	//auto dpoin = &obj_player_;
-	//auto base = (ObjectBase*)dpoin;
 	//return TheClosestPos(*(*dpoin), pos);
 	Vector2 _position = Vector2(99.0f, 99.0f);  // ˆê”Ô‹ß‚¢À•W
 	Vector2 _target;  // Œ»İ’²‚×‚Ä‚¢‚éÀ•W

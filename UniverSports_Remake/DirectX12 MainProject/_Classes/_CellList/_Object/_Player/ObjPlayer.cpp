@@ -60,11 +60,6 @@ void ObjPlayer::Update(const float deltaTime) {
 	strategy_->Update(deltaTime);
 
 
-	AssignPosition();
-	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
-
-	ClampLoop(pos_);
-
 	SetTransforms();
 
 	UpdateToMorton();
@@ -74,22 +69,25 @@ void ObjPlayer::Update(const float deltaTime) {
 		if (_obj->myObjectType() == OBJ_TYPE::BALL) {
 			ObjBall* _ball = dynamic_cast<ObjBall*>(_obj);
 
+			// ‚â‚ç‚êˆ—
 			if (_ball->NowState() == _ball->STATE::SHOT) {
 				return;
 			}
+			// ƒLƒƒƒbƒ`ˆ—
+			else if(_ball->NowState()==_ball->STATE::FLOAT) {
+				if (myBall_ != nullptr)
+					return;
 
-			if (myBall_ != nullptr)
-				return;
+				myBall_ = _ball;
 
-			myBall_ = _ball;
+				if (myBall_->GetOwnerID() != -1) {
+					myBall_ = nullptr;
+					return;
+				}
 
-			if (myBall_->GetOwnerID() != -1) {
-				myBall_ = nullptr;
-				return;
+				myBall_->SetOwnerID(id_my_);
+				hasBall_ = true;
 			}
-
-			myBall_->SetOwnerID(id_my_);
-			hasBall_ = true;
 		}
 	}
 }
@@ -103,6 +101,12 @@ void ObjPlayer::UIRender() {
 }
 
 void ObjPlayer::SetTransforms() {
+	AssignPosition();
+	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
+	forward_ = strategy_->GetForward();
+
+	ClampLoop(pos_);
+
 	model_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
 	model_->SetRotation(Vector3(rotate_.x, rotate_.y, 0.0f));
 	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
@@ -124,4 +128,10 @@ ObjPlayer::MOTION ObjPlayer::AnimChange() {
 		return MOTION::HAND;
 	else
 		return MOTION::STAND;
+}
+
+void ObjPlayer::Shoting(ObjBall* ball) {
+	hasBall_ = false;
+	myBall_->Shoting(forward_);
+	myBall_ = nullptr;
 }

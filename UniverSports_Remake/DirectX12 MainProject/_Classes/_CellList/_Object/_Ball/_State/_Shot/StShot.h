@@ -4,9 +4,9 @@
 
 class StShot : public BallState {
 public:
-	StShot() = default;
-	virtual ~StShot() = default;
+	StShot() {};
+	virtual ~StShot() {};
 
-	virtual void Initialize();
+	virtual void Initialize() {}
 	virtual void Update(ObjBall* ball);
 };

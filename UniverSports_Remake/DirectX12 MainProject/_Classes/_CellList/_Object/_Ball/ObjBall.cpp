@@ -1,4 +1,5 @@
 #include "ObjBall.h"
+#include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 
 ObjBall::ObjBall() {
 	cp_ = nullptr;
@@ -31,6 +32,10 @@ ObjBall::~ObjBall() {
 }
 
 void ObjBall::Initialize(const int id) {
+	st_float_.Initialize();
+	st_cautch_.Initialize();
+	st_shot_.Initialize();
+
 	state_->Initialize();
 
 	pos_		= state_->GetPosition();
@@ -51,7 +56,6 @@ void ObjBall::LoadAssets(DX9::MODEL& model) {
 void ObjBall::Update(const float deltaTime) {
 	state_->Update(this);
 
-	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
 
 	UpdateToMorton();
@@ -59,7 +63,9 @@ void ObjBall::Update(const float deltaTime) {
 	ObjectBase* _obj = IsHitObject();
 	if (_obj != nullptr) {
 		if (_obj->myObjectType() == OBJ_TYPE::PLAYER) {
-			isInPlayerHands_ = true;
+			ObjPlayer* _player = dynamic_cast<ObjPlayer*>(_obj);
+			if (nowState_ == FLOAT)
+				isInPlayerHands_ = true;
 		}
 	}
 }
@@ -73,8 +79,9 @@ void ObjBall::Render(DX9::MODEL& model) {
 
 void ObjBall::SwitchState(STATE state) {
 	switch (state) {
-		case FLOAT	: state_ = new StFloat();		 break;
-		case CAUTCH	: state_ = new StCautch();		 break;
+		case FLOAT	: state_ = &st_float_;			 break;
+		case SHOT	: state_ = &st_shot_;			 break;
+		case CAUTCH	: state_ = &st_cautch_;			 break;
 		default		: assert(!"ObjBall_不正な状態"); break;
 	}
 
@@ -89,18 +96,10 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	D3DMATERIAL9 _mat{};
 
 	switch (colorType) {
-		case NOMAL_COLOR:
-			_mat = GetNomMaterial(); 
-			break;
-		case PLAYER_COLOR:
-			_mat.Diffuse = P_DIFFUSE[id_owner_];
-			_mat.Ambient = P_AMBIENT;
-			break;
-		case TEAM_COLOR:
-			break;
-		default:
-			assert(!"ObjBall : 不正な色指定"); 
-			break;
+		case NOMAL_COLOR : _mat = GetNomMaterial(); break;
+		case PLAYER_COLOR : _mat.Diffuse = P_DIFFUSE[id_owner_]; _mat.Ambient = P_AMBIENT; break;
+		case TEAM_COLOR : break;
+		default : assert(!"ObjBall : 不正な色指定"); break;
 	}
 
 	return _mat;
@@ -110,11 +109,18 @@ void ObjBall::AddPower(Vector3 forward, float speed) {
 	physics_->SetLinerVelocity(forward * speed);
 	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 
-	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
 }
 
 void ObjBall::SetTransforms() {
+	pos_ = physics_->GetCenterOfMassPosition();
+
 	collision_->SetPosition(Vector3(pos_.x, pos_.y, pos_z_));
 	physics_->SetTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3(rotate_.x, rotate_.y, 0.0f));
+}
+
+void ObjBall::Shoting(Vector2 forward) {
+	isInPlayerHands_ = false;
+	forward_ = forward;
+	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_SHOT);
 }

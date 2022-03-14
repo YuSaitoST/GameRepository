@@ -11,6 +11,8 @@ void StCautch::Update(ObjBall* ball) {
 	position_ = ObjectManager::PlayerHandsPos(ball->GetOwnerID());
 	ball->PhysicsControll(position_);
 
+	if (!ball->IsInPlayerHands())
+		ball->SwitchState(ball->STATE::SHOT);
 
 	//if (ball->IsHit()) {
 	//	ball->SwitchState(ball->STATE::FLOAT);

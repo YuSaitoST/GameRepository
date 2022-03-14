@@ -34,14 +34,14 @@ public:
 	virtual void UIRender();
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
+	void Shoting(ObjBall* ball);
 	void AssignPosition() {
 		pos_ = physics_->GetCenterOfMassPosition();
 	}
 
 	bool HasBall() const { return hasBall_; }
-	Vector2 Get_HandPos() const {
-		return (pos_ + strategy_->GetForward() * Vector2(POS_HAND.x, POS_HAND.y));
-	};
+	Vector2 Get_HandPos() const { return (pos_ + strategy_->GetForward() * POS_HAND); }
+	ObjBall* MyBall() const { return myBall_; }
 
 private:
 	void SetTransforms();

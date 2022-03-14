@@ -13,7 +13,7 @@ class ObjPlayer;
 
 class CharaStrategy {
 public:
-	CharaStrategy() : rotate_x_(0.0f) { actList_ = { new ActMove(), new ActThrasher() }; }
+	CharaStrategy() : rotate_x_(0.0f) { actList_ = { new ActMove(), new ActThrasher(), new ActShot() }; }
 	virtual ~CharaStrategy() {}
 
 	virtual void Initialize(int id, ObjPlayer* player) = 0;
@@ -24,12 +24,13 @@ public:
 	virtual void SeekRotate(const float deltaTime, int index) = 0;
 
 	inline float GetRotateX() const { return rotate_x_; }
-	inline SimpleMath::Vector2 GetForward() const { return SimpleMath::Vector2(prevForward_.x, prevForward_.y); }
+	inline SimpleMath::Vector2 GetForward() const { return forward_; }
 
 protected:
 	ObjPlayer* player_;
 	std::vector<ActionBase*> actList_;
 	SimpleMath::Vector3 direction_;
 	SimpleMath::Vector3 prevForward_;
+	SimpleMath::Vector2 forward_;
 	float rotate_x_;
 };

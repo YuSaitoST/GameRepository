@@ -29,4 +29,7 @@ void ManualChara::SeekRotate(const float deltaTime, int index) {
 
 	prevForward_ = Vector3::Lerp(prevForward_, direction_, deltaTime * 1.0f);
 	rotate_x_ = atan2f(prevForward_.y, prevForward_.x);
+
+	forward_ = (prevForward_ != SimpleMath::Vector3::Zero) ? SimpleMath::Vector2(prevForward_.x, prevForward_.y) : forward_;
+	//forward_ = SimpleMath::Vector2(prevForward_.x, prevForward_.y);
 }

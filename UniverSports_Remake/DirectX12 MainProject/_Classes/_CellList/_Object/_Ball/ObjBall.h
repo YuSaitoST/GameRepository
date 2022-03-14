@@ -4,6 +4,7 @@
 #include "_State/BallState.h"
 #include "_State/_Float/StFloat.h"
 #include "_State/_Cautch/StCautch.h"
+#include "_State/_Shot/StShot.h"
 
 class ObjBall final : public ObjectBase {
 private:
@@ -17,18 +18,8 @@ private:
 	const D3DCOLORVALUE P_AMBIENT = D3DCOLORVALUE(0.35f, 0.35f, 0.35f, 1.0f);
 
 public:
-	enum STATE {
-		FLOAT,
-		CAUTCH,
-		SHOT,
-		GOAL,
-		NONE_STATE
-	};
-	enum COLOR_TYPE {
-		NOMAL_COLOR,
-		PLAYER_COLOR,
-		TEAM_COLOR
-	};
+	enum STATE { FLOAT, CAUTCH, SHOT, GOAL, NONE_STATE };
+	enum COLOR_TYPE { NOMAL_COLOR, PLAYER_COLOR, TEAM_COLOR };
 
 public:
 	ObjBall();
@@ -45,7 +36,9 @@ public:
 
 	void SwitchState(STATE state);
 	void SwitchColor(COLOR_TYPE colorType);
+
 	void Moving(Vector3 power) { physics_->Moving(power); };
+	void Shoting(Vector2 forward);
 	void AddPower(Vector3 forward, float speed);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 	void AssignTransform(Vector2 position, Vector2 forward) {
@@ -67,10 +60,14 @@ private:
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);
 
 	BallState* state_;
+	StFloat st_float_;
+	StCautch st_cautch_;
+	StShot st_shot_;
+
 	STATE nowState_;
 	COLOR_TYPE colorType_;
 	DX9::MODEL model_;
-	float pos_z_;  // “Š‚°‚éÛ‚É“®‚©‚·(—\’èA‘½•ª‚»‚¤‚µ‚½•û‚ªŒ©‰h‚¦‚¢‚¢)
+	float pos_z_;
 	int id_owner_;
 	bool isInPlayerHands_;
 };
