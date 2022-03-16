@@ -3,7 +3,7 @@
 
 void ManualChara::Initialize(int id, ObjPlayer* player) {
 	player_ = player;
-
+	
 	for (ActionBase* act : actList_)
 		act->Initialize(id);
 }

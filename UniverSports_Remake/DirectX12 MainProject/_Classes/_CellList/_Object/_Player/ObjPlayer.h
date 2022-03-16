@@ -45,6 +45,9 @@ public:
 	ObjBall* MyBall() const { return myBall_; }
 
 private:
+	void Playing(const float deltaTime);
+	void Beaten(const float deltaTime);
+
 	void SetTransforms();
 	void AnimReset();
 	void AnimSet(MOTION motion, float deltaTime);
@@ -53,8 +56,10 @@ private:
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
 	MyLife* life_;
+	OriTimer* ti_respone_;
 	CharaStrategy* strategy_;
 	ObjBall* myBall_;
 	DX9::SKINNEDMODEL model_;
 	bool hasBall_;
+	bool isDown_;
 };

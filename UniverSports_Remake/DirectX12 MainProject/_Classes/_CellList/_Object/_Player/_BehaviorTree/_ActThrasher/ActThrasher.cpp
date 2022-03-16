@@ -30,12 +30,16 @@ void ActThrasher::Update(const float deltaTime, SimpleMath::Vector2 direction, O
 	gauge_->Update(deltaTime, effect_->usedThrasher_);
 
 	effect_->usedThrasher_ = _isUsed && (0.1f < gauge_->GetProportion());
-	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(direction.x, direction.y, 0.0f));
+	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(direction.x, direction.y, 0.0f), gauge_->GetProportion());
 }
 
 void ActThrasher::Update(const float deltaTime, ObjPlayer& player) {
 	const Vector2 _pos = player.myPosition();
-	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(direction_.x, direction_.y, 0.0f));
+
+	gauge_->SetPosition(Vector3(_pos.x, _pos.y, 0.0f));
+	gauge_->Update(deltaTime, effect_->usedThrasher_);
+
+	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(direction_.x, direction_.y, 0.0f), gauge_->GetProportion());
 }
 
 void ActThrasher::UIRender() {

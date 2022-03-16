@@ -49,6 +49,9 @@ public:
 	
 	const int MODE_1_TIME = 120;
 
+	const float PL_POS_X = 13.0f;
+	const float PL_POS_Y = 6.0f;
+
 	const int Move_FirSpeed = 30;		// * 0.01f必要  ,  速度補正、これないと操作重い
 	
 	const int Player_MAX = 4;

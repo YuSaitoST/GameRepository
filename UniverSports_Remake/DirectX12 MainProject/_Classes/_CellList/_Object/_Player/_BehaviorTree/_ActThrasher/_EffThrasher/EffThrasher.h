@@ -9,8 +9,8 @@ class EffThrasher final : public EffectBase {
 public:
 	EffThrasher();
 	virtual ~EffThrasher() {};
-
-	void Update(const float deltaTime, float rotate_x, Vector3 position, Vector3 direction);
+	
+	void Update(const float deltaTime, float rotate_x, Vector3 position, Vector3 direction, float proportion);
 
 	bool usedThrasher_;
 

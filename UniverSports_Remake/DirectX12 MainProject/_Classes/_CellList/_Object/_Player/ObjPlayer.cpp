@@ -6,9 +6,11 @@ ObjPlayer::ObjPlayer() {
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
 	life_ = nullptr;
+	ti_respone_ = nullptr;
 	strategy_ = nullptr;
 	myBall_ = nullptr;
 	hasBall_ = false;
+	isDown_ = false;
 }
 
 ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
@@ -18,8 +20,10 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	myBall_ = nullptr;
 	hasBall_ = false;
+	isDown_ = false;
 
 	life_ = new MyLife(3);
+	ti_respone_ = new OriTimer(GAME_CONST.PL_ReSponeTime);
 
 	if (strategy == OPERATE_TYPE::MANUAL)
 		strategy_ = new ManualChara();
@@ -57,46 +61,10 @@ void ObjPlayer::Update(const float deltaTime) {
 	if (life_->NowLifePoint() <= 0)
 		return;
 
-	AnimReset();
-	AnimSet(AnimChange(), deltaTime);
-
-	strategy_->Update(deltaTime);
-
-
-	SetTransforms();
-
-	UpdateToMorton();
-
-	ObjectBase* _obj = IsHitObject();
-	if (_obj != nullptr) {
-		if (_obj->myObjectType() == OBJ_TYPE::BALL) {
-			ObjBall* _ball = dynamic_cast<ObjBall*>(_obj);
-
-			// やられ処理
-			if (_ball->NowState() == _ball->STATE::SHOT) {
-				if (_ball->GetOwnerID() == id_my_)
-					return;
-
-				life_->TakeDamage();
-				return;
-			}
-			// キャッチ処理
-			else if(_ball->NowState()==_ball->STATE::FLOAT) {
-				if (myBall_ != nullptr)
-					return;
-
-				myBall_ = _ball;
-
-				if (myBall_->GetOwnerID() != -1) {
-					myBall_ = nullptr;
-					return;
-				}
-
-				myBall_->SetOwnerID(id_my_);
-				hasBall_ = true;
-			}
-		}
-	}
+	if (isDown_)
+		Beaten(deltaTime);
+	else
+		Playing(deltaTime);
 }
 
 void ObjPlayer::Render() {
@@ -147,4 +115,63 @@ void ObjPlayer::Shoting(ObjBall* ball) {
 	hasBall_ = false;
 	myBall_->Shoting(forward_);
 	myBall_ = nullptr;
+}
+
+
+/*
+* stateパターンにした方が良さそうな部分
+*/
+
+void ObjPlayer::Playing(const float deltaTime) {
+	AnimReset();
+	AnimSet(AnimChange(), deltaTime);
+
+	strategy_->Update(deltaTime);
+
+
+	SetTransforms();
+
+	UpdateToMorton();
+
+	ObjectBase* _obj = IsHitObject();
+	if (_obj != nullptr) {
+		if (_obj->myObjectType() == OBJ_TYPE::BALL) {
+			ObjBall* _ball = dynamic_cast<ObjBall*>(_obj);
+
+			// やられ処理
+			if (_ball->NowState() == _ball->STATE::SHOT) {
+				if (_ball->GetOwnerID() == id_my_)
+					return;
+
+				life_->TakeDamage();
+				return;
+			}
+			// キャッチ処理
+			else if (_ball->NowState() == _ball->STATE::FLOAT) {
+				if (myBall_ != nullptr)
+					return;
+
+				myBall_ = _ball;
+
+				if (myBall_->GetOwnerID() != -1) {
+					myBall_ = nullptr;
+					return;
+				}
+
+				myBall_->SetOwnerID(id_my_);
+				hasBall_ = true;
+			}
+		}
+	}
+}
+
+void ObjPlayer::Beaten(const float deltaTime) {
+	ti_respone_->Update(deltaTime);
+
+	isDown_ = !(ti_respone_->TimeOut());
+
+	if (!isDown_) {
+		
+		AssignPosition();
+	}
 }

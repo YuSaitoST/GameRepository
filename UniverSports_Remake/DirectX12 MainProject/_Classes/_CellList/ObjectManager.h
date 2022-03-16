@@ -1,5 +1,6 @@
 #pragma once
 
+#include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Object/ObjectBase.h"
 #include "_Object/_Player/ObjPlayer.h"
 #include "_Object/_Ball/ObjBall.h"
@@ -9,14 +10,11 @@ private:
 	const int N_PLAYER	= 2;
 	const int N_BALL	= 1;
 
-	const float POS_X	= 13.0f;
-	const float POS_Y	= 6.0f;
-
 	const Vector3 POS_START[4] = {
-		Vector3(-POS_X,	POS_Y, 0.0f),
-		Vector3(POS_X,	POS_Y, 0.0f),
-		Vector3(-POS_X, -POS_Y, 0.0f),
-		Vector3(POS_X,  -POS_Y, 0.0f)
+		Vector3(-GAME_CONST.PL_POS_X, GAME_CONST.PL_POS_Y, 0.0f),
+		Vector3(GAME_CONST.PL_POS_X,	GAME_CONST.PL_POS_Y, 0.0f),
+		Vector3(-GAME_CONST.PL_POS_X, -GAME_CONST.PL_POS_Y, 0.0f),
+		Vector3(GAME_CONST.PL_POS_X,  -GAME_CONST.PL_POS_Y, 0.0f)
 	};
 
 	const std::wstring PLAYER_FILENAME[4] = {
