@@ -52,6 +52,9 @@ public:
 	const float PL_POS_X = 13.0f;
 	const float PL_POS_Y = 6.0f;
 
+	const float PL_AIMING_DISTANCE = 25.0f;  // 射程距離
+	const float PL_AIMING_CORRECTION = 1.5f;  // 敵の移動予想分
+
 	const int Move_FirSpeed = 30;		// * 0.01f必要  ,  速度補正、これないと操作重い
 	
 	const int Player_MAX = 4;

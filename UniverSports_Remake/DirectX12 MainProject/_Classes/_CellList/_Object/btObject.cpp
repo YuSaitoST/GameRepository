@@ -40,7 +40,7 @@ void btObject::Moving(SimpleMath::Vector3 power) {
 void btObject::LimitSpeed() {
 	velocity_ = (XMFLOAT3)bt_body_->getLinearVelocity();
 
-	// í èÌë¨ìxêßå¿
+	// ë¨ìxêßå¿
 	if (GAME_CONST.PL_SPEED_MAX < velocity_.Length()) {
 		velocity_.Normalize();
 		velocity_ *= GAME_CONST.PL_SPEED_MAX;

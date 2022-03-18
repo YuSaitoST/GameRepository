@@ -62,7 +62,7 @@ void ObjBall::Update(const float deltaTime) {
 	if (_obj != nullptr) {
 		if (_obj->myObjectType() == OBJ_TYPE::PLAYER) {
 			ObjPlayer* _player = dynamic_cast<ObjPlayer*>(_obj);
-			if (nowState_ == FLOAT)
+			if (id_owner_ != -1)
 				isInPlayerHands_ = true;
 		}
 	}
@@ -78,8 +78,8 @@ void ObjBall::Render(DX9::MODEL& model) {
 void ObjBall::SwitchState(STATE state) {
 	switch (state) {
 		case FLOAT	: state_ = &st_float_;			 break;
-		case SHOT	: state_ = &st_shot_;			 break;
 		case CAUTCH	: state_ = &st_cautch_;			 break;
+		case SHOT	: state_ = &st_shot_;			 break;
 		default		: assert(!"ObjBall_ïsê≥Ç»èÛë‘"); break;
 	}
 

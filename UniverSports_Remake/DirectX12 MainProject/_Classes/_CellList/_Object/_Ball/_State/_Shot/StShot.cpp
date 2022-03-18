@@ -3,11 +3,13 @@
 #include "DontDestroyOnLoad.h"
 
 void StShot::Update(ObjBall* ball) {
-	//pos_z_ = std::min(0.0f, ball->myPosZ() + 0.016f);
-	//ball->AssignTransform(Vector3(position_.x, position_.y, pos_z_), forward_);
+	pos_z_ = std::min(0.0f, ball->myPosZ() + 0.016f);
+	const auto &_pos = ball->myPosition();
+	ball->AssignTransform(Vector3(_pos.x, _pos.y, pos_z_), forward_);
 
 	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
 		ball->SetOwnerID(-1);
+		ball->ResetHandPos();
 		ball->SwitchState(ball->STATE::FLOAT);
 		ball->SwitchColor(ball->COLOR_TYPE::NOMAL_COLOR);
 	}

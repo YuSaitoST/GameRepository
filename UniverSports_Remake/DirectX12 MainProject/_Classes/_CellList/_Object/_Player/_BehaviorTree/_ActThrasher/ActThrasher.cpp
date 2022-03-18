@@ -50,7 +50,8 @@ bool ActThrasher::Think(ObjPlayer& my) {
 	// 他のObjectBaseクラスを参照できるようにしたい
 
 	// これを利用して、加速するかを検討する...かな?
-	const SimpleMath::Vector2 _closestPlayerPos = ObjectManager::TheClosestPlayerPos(my.myPosition());
+	float n;
+	const SimpleMath::Vector2 _closestPlayerPos = ObjectManager::TheClosestPlayerPosition(my.myPosition(), n);
 	direction_ = _closestPlayerPos - my.myPosition();
 	direction_.Normalize();
 

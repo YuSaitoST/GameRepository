@@ -2,10 +2,11 @@
 
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_CellList/_Object/_Player/_BehaviorTree/ActionBase.h"
+#include "_Classes/_UI/_OriTimer/OriTimer.h"
 
 class ActShot final : public ActionBase {
 public:
-	ActShot() : isShot_(false) {}
+	ActShot() { timer_ = new OriTimer(0.5f);}
 	virtual ~ActShot() {}
 
 	virtual void Initialize(int id) {}
@@ -17,5 +18,5 @@ public:
 	virtual bool Think(ObjPlayer& player);
 
 private:
-	bool isShot_;
+	OriTimer* timer_;
 };

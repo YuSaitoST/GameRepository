@@ -10,12 +10,13 @@ void ActShot::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPl
 }
 
 void ActShot::Update(const float deltaTime, ObjPlayer& player) {
-	player.Shoting(player.MyBall());
+	timer_->Update(deltaTime);
+	if (timer_->TimeOut()) {
+		player.Shoting(player.MyBall());
+		timer_->ResetCountTime();
+	}
 }
 
 bool ActShot::ActShot::Think(ObjPlayer& player) {
-	if (!player.HasBall())
-		return false;
-
-	return true;
+	return player.HasBall();
 }

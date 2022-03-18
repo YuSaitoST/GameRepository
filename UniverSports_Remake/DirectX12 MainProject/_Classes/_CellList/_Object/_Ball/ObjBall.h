@@ -51,7 +51,8 @@ public:
 		physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 	}
 	void ResetVelocity() { physics_->ResetVelocity(); }
-	void SetOwnerID(int id_player) { id_owner_ = id_player; };
+	void SetOwnerID(int id_player) { id_owner_ = id_player; }
+	void ResetHandPos() { isInPlayerHands_ = false; }
 	int GetOwnerID() const { return id_owner_; }
 	float myPosZ() const { return pos_z_; }
 	bool IsInPlayerHands() const { return isInPlayerHands_; }
