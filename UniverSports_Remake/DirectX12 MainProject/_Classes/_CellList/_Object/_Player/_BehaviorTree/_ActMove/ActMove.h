@@ -11,8 +11,8 @@ class ObjPlayer;
 
 class ActMove : public ActionBase {
 public:
-	ActMove() {};
-	virtual ~ActMove() {};
+	ActMove() { target_pos_old_ = Vector2::Zero; }
+	virtual ~ActMove() {}
 
 	virtual void Initialize(int id) {}
 	virtual void LoadAssets() {}
@@ -26,6 +26,9 @@ private:
 	float GetVectorLenght(Vector2 v);  // í∑Ç≥
 	float DotProduct(Vector2 v1, Vector2 v2);  // ì‡êœ
 	float AngleOf2Vector(Vector2 a, Vector2 b);  // Ç»Ç∑äpÉ∆
+
+	bool ChangeForward(ObjPlayer& my);
+	bool CheckBalls();
 
 	Vector2 target_pos_new_;
 	Vector2 target_pos_old_;

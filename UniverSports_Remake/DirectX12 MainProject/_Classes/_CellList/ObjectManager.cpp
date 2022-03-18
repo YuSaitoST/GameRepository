@@ -105,8 +105,8 @@ Vector2 ObjectManager::TheClosestPos(ObjectBase* targetObj, Vector2 pos) {
 }
 
 
-Vector2 ObjectManager::TheClosestPlayerPosition(const Vector2 pos, float& comparison) {
-	Vector2 _position = Vector2(99.0f, 99.0f);  // 一番近い座標
+ObjectBase* ObjectManager::TheClosestPlayer(const Vector2 pos, float& comparison) {
+	ObjectBase* _obj;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
 	float _new_comparison;  // 現在調べている距離
 	float _min_comparison = 99.0f;  // 一番近い距離
@@ -123,13 +123,13 @@ Vector2 ObjectManager::TheClosestPlayerPosition(const Vector2 pos, float& compar
 
 		if (_new_comparison < _min_comparison) {
 			_min_comparison = _new_comparison;
-			_position = _target;
+			_obj = obj;
 		}
 	}
 
 	comparison = _min_comparison;
 
-	return _position;
+	return _obj;
 }
 
 Vector2 ObjectManager::TheClosestPlayerPos(const Vector2 pos) {

@@ -16,33 +16,29 @@ void ActMove::Update(const float deltaTime, ObjPlayer& player) {
 
 bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
-	
-	if (!my.HasBall()) {
-		target_pos_new_ = ObjectManager::TheClosestBallPos(my.myPosition());
-		const float _angle = AngleOf2Vector((target_pos_new_ - my.myPosition()), (target_pos_old_ - my.myPosition()));
-		if (std::fabsf(_angle) < 0.13f)
-			return false;
-		direction_ = target_pos_new_ - my.myPosition();
+
+	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myPosition(), _comparison);
+	if (((ObjPlayer*)_targetPlayer)->HasBall()) {
+		target_pos_new_ = _targetPlayer->myPosition();
+		const Vector2 _target_direction = _targetPlayer->myDirection();
+		direction_ = Vector2(-_target_direction.y, _target_direction.x);
+
+		const bool _ImOnTop = (0.0f < direction_.y) && (_target_direction.y < 0.0f);
+		const bool _TargetOnTop = (direction_.y < 0.0f) && (0.0f < _target_direction.y);
+		direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
 		direction_.Normalize();
+		target_pos_old_ = target_pos_new_;
 		return true;
 	}
-	else if (my.HasBall()) {
-		target_pos_new_ = ObjectManager::TheClosestPlayerPosition(my.myPosition(), _comparison);
-		const float _angle = AngleOf2Vector((target_pos_new_ - my.myPosition()), (target_pos_old_ - my.myPosition()));
-		if (std::fabsf(_angle) < 0.13f)
-			return false;
-		if (_comparison <= GAME_CONST.PL_AIMING_DISTANCE) {
-			direction_ = target_pos_new_ - my.myPosition();
-			direction_.Normalize();
-			return true;
-		}
+	else {
+		if (!my.HasBall())
+			target_pos_new_ = ObjectManager::TheClosestBallPos(my.myPosition());
+		else
+			target_pos_new_ = ObjectManager::TheClosestPlayer(my.myPosition(), _comparison)->myPosition();
+		
+		//target_pos_old_ = target_pos_new_;
+		return ChangeForward(my);
 	}
-	//else {
-	//	target_pos_new_ = ObjectManager::TheClosestPlayerPosition(my.myPosition(), _comparison);
-	//	direction_ = target_pos_new_ - my.myPosition();
-	//	direction_.Normalize();
-	//	return true;
-	//}
 }
 
 float ActMove::GetVectorLenght(Vector2 v) {
@@ -61,4 +57,18 @@ float ActMove::AngleOf2Vector(Vector2 a, Vector2 b) {
 
 	return  std::acosf(_cos_sita);  // ラジアン
 	// return (_sita * (180.0f / XM_PI));  // 弧度法
+}
+
+bool ActMove::ChangeForward(ObjPlayer& my) {
+	if (0.517f < std::fabsf(AngleOf2Vector((target_pos_new_ - my.myPosition()), (target_pos_old_ - my.myPosition())))) {
+		direction_ = target_pos_new_ - my.myPosition();
+		direction_.Normalize();
+		return true;
+	}
+	else
+		return false;
+}
+
+bool ActMove::CheckBalls() {
+	return false;
 }

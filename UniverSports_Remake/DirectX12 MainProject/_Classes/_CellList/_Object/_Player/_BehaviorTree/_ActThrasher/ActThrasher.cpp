@@ -51,7 +51,7 @@ bool ActThrasher::Think(ObjPlayer& my) {
 
 	// ‚±‚ê‚ð—˜—p‚µ‚ÄA‰Á‘¬‚·‚é‚©‚ðŒŸ“¢‚·‚é...‚©‚È?
 	float n;
-	const SimpleMath::Vector2 _closestPlayerPos = ObjectManager::TheClosestPlayerPosition(my.myPosition(), n);
+	const SimpleMath::Vector2 _closestPlayerPos = ObjectManager::TheClosestPlayer(my.myPosition(), n)->myPosition();
 	direction_ = _closestPlayerPos - my.myPosition();
 	direction_.Normalize();
 

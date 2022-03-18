@@ -39,11 +39,11 @@ public:
 
 	static Vector2 PlayerHandsPos(int index);
 
-	static Vector2 TheClosestPlayerPosition(const Vector2 pos, float& comparison);
+	static ObjectBase* TheClosestPlayer(const Vector2 pos, float& comparison);
 
-	// 自分から一番近いプレイヤーの方向を返す
+	// 自分から一番近いプレイヤーを返す
 	static Vector2 TheClosestPlayerPos(const Vector2 pos);
-	// 自分から一番近いボールの方向を返す
+	// 自分から一番近いボールを返す
 	static Vector2 TheClosestBallPos(const Vector2 pos);
 
 private:
