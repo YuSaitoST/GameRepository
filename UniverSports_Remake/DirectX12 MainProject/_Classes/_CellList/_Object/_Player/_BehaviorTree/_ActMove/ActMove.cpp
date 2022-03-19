@@ -18,6 +18,8 @@ bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
 
 	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myPosition(), _comparison);
+	ObjectBase* _targetBall = ObjectManager::TheClosestBall(my.myPosition(), _comparison);
+
 	if (((ObjPlayer*)_targetPlayer)->HasBall()) {
 		target_pos_new_ = _targetPlayer->myPosition();
 		const Vector2 _target_direction = _targetPlayer->myDirection();
@@ -30,15 +32,28 @@ bool ActMove::Think(ObjPlayer& my) {
 		target_pos_old_ = target_pos_new_;
 		return true;
 	}
+	else if (((ObjBall*)_targetBall)->GetOwnerID() != -1) {
+		target_pos_new_ = _targetBall->myPosition();
+		const Vector2 _target_direction = _targetBall->myDirection();
+		direction_ = Vector2(-_target_direction.y, _target_direction.x);
+
+		const bool _ImOnTop = (0.0f < direction_.y) && (_target_direction.y < 0.0f);
+		const bool _TargetOnTop = (direction_.y < 0.0f) && (0.0f < _target_direction.y);
+		direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
+		direction_.Normalize();
+		target_pos_old_ = target_pos_new_;
+		return true;
+	}
 	else {
 		if (!my.HasBall())
-			target_pos_new_ = ObjectManager::TheClosestBallPos(my.myPosition());
+			target_pos_new_ = _targetBall->myPosition();
 		else
-			target_pos_new_ = ObjectManager::TheClosestPlayer(my.myPosition(), _comparison)->myPosition();
+			target_pos_new_ = _targetPlayer->myPosition();
 		
-		//target_pos_old_ = target_pos_new_;
 		return ChangeForward(my);
 	}
+
+	target_pos_old_ = target_pos_new_;
 }
 
 float ActMove::GetVectorLenght(Vector2 v) {
@@ -60,7 +75,11 @@ float ActMove::AngleOf2Vector(Vector2 a, Vector2 b) {
 }
 
 bool ActMove::ChangeForward(ObjPlayer& my) {
-	if (0.517f < std::fabsf(AngleOf2Vector((target_pos_new_ - my.myPosition()), (target_pos_old_ - my.myPosition())))) {
+	if (my.myDirection() == Vector2::Zero)
+		my.AssignDirection(Vector2(1.0f, 0.0f));
+
+	const float sita = std::fabsf(AngleOf2Vector((target_pos_new_ - my.myPosition()), (target_pos_old_ - my.myPosition())));
+	if (0.261f < sita || sita < 6.091f) {
 		direction_ = target_pos_new_ - my.myPosition();
 		direction_.Normalize();
 		return true;

@@ -7,6 +7,7 @@ ObjPlayer::ObjPlayer() {
 
 	life_ = nullptr;
 	ti_respone_ = nullptr;
+	eff_down_ = nullptr;
 	strategy_ = nullptr;
 	myBall_ = nullptr;
 	hasBall_ = false;
@@ -24,6 +25,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 
 	life_ = new MyLife(3);
 	ti_respone_ = new OriTimer(GAME_CONST.PL_ReSponeTime);
+	eff_down_ = new EffDown();
 
 	if (strategy == OPERATE_TYPE::MANUAL)
 		strategy_ = new ManualChara();
@@ -36,16 +38,23 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 ObjPlayer::~ObjPlayer() {
 	if (strategy_ != nullptr)
 		delete strategy_;
+
+	delete eff_down_;
+	delete ti_respone_;
+	delete life_;
+	delete myBall_;
 }
 
 void ObjPlayer::Initialize(const int id) {
 	strategy_->Initialize(id, this);
+	eff_down_->Initialize("Down" + std::to_string(id));
 
 	id_my_ = id;
 }
 
 void ObjPlayer::LoadAssets(std::wstring file_name) {
 	strategy_->LoadAssets();
+	eff_down_->LoadAsset(L"_Down\\HITeffect.efk");
 
 	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
 	model_->SetScale(0.018f);
@@ -54,7 +63,13 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	collision_->SetColli(model_->GetBoundingSphere());
 	collision_->SetColliScale(1.2f);
 
-	SetTransforms();
+	AssignPosition();
+	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
+	forward_ = strategy_->GetForward();
+
+	ClampLoop(pos_);
+
+	SetTransforms(pos_, rotate_);
 }
 
 void ObjPlayer::Update(const float deltaTime) {
@@ -81,17 +96,11 @@ void ObjPlayer::UIRender() {
 	strategy_->UIRender();
 }
 
-void ObjPlayer::SetTransforms() {
-	AssignPosition();
-	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
-	forward_ = strategy_->GetForward();
-
-	ClampLoop(pos_);
-
-	model_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
-	model_->SetRotation(Vector3(rotate_.x, rotate_.y, 0.0f));
-	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
-	physics_->SetTransform(Vector3(pos_.x, pos_.y, 0.0f), Vector3(rotate_.x, rotate_.y, 0.0f));
+void ObjPlayer::SetTransforms(const Vector2 pos, const Vector2 rotate) {
+	model_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
+	model_->SetRotation(Vector3(rotate.x, rotate.y, 0.0f));
+	collision_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
+	physics_->SetTransform(Vector3(pos.x, pos.y, 0.0f), Vector3(rotate.x, rotate.y, 0.0f));
 }
 
 void ObjPlayer::AnimReset() {
@@ -128,8 +137,13 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 	strategy_->Update(deltaTime);
 
+	AssignPosition();
+	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
+	forward_ = strategy_->GetForward();
 
-	SetTransforms();
+	ClampLoop(pos_);
+
+	SetTransforms(pos_, rotate_);
 
 	UpdateToMorton();
 
@@ -144,6 +158,12 @@ void ObjPlayer::Playing(const float deltaTime) {
 					return;
 
 				life_->TakeDamage();
+				eff_down_->PlayOneShot();
+				isDown_ = true;
+
+				SetTransforms(Vector2(99.0f, 99.0f), rotate_);
+				pos_ = Vector2::Zero;
+
 				return;
 			}
 			// ƒLƒƒƒbƒ`ˆ—
@@ -171,7 +191,7 @@ void ObjPlayer::Beaten(const float deltaTime) {
 	isDown_ = !(ti_respone_->TimeOut());
 
 	if (!isDown_) {
-		
+		SetTransforms(pos_, rotate_);
 		AssignPosition();
 	}
 }

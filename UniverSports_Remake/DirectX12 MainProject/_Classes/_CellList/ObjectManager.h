@@ -40,14 +40,10 @@ public:
 	static Vector2 PlayerHandsPos(int index);
 
 	static ObjectBase* TheClosestPlayer(const Vector2 pos, float& comparison);
-
-	// 自分から一番近いプレイヤーを返す
-	static Vector2 TheClosestPlayerPos(const Vector2 pos);
-	// 自分から一番近いボールを返す
-	static Vector2 TheClosestBallPos(const Vector2 pos);
+	static ObjectBase* TheClosestBall(const Vector2 pos, float& comparison);
 
 private:
-	static Vector2 TheClosestPos(ObjectBase* targetObj, Vector2 pos);
+	static float Comparison2Vector(const Vector2 p1, const Vector2 p2);
 
 	static ObjPlayer* obj_player_[2];
 	static ObjBall* obj_ball_[1];

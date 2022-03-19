@@ -76,35 +76,6 @@ Vector2 ObjectManager::PlayerHandsPos(int index) {
 	return obj_player_[index]->Get_HandPos();
 }
 
-Vector2 ObjectManager::TheClosestPos(ObjectBase* targetObj, Vector2 pos) {
-	//const int _size = sizeof(targetObj) / sizeof(ObjectBase);
-	Vector2 _position = Vector2(99.0f, 99.0f);  // 一番近い座標
-	//Vector2 _target;  // 現在調べている座標
-	//float _new_comparison;  // 現在調べている距離
-	//float _min_comparison = 99.0f;  // 一番近い距離
-
-	//ObjPlayer* obj = (ObjPlayer*)targetObj;
-
-	//for (int _i = 0; _i < _size;_i++) {
-	//	if ((obj[_i].myPosition().x == pos.x) && (obj[_i].myPosition().y == pos.y))
-	//		continue;
-
-	//	_target = obj[_i].myPosition();
-	//	_new_comparison = std::sqrtf(
-	//		std::powf(pos.x - _target.x, 2) +
-	//		std::powf(pos.y - _target.y, 2)
-	//	);
-
-	//	if (_new_comparison < _min_comparison) {
-	//		_min_comparison = _new_comparison;
-	//		_position = _target;
-	//	}
-	//}
-
-	return _position;
-}
-
-
 ObjectBase* ObjectManager::TheClosestPlayer(const Vector2 pos, float& comparison) {
 	ObjectBase* _obj;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
@@ -112,14 +83,13 @@ ObjectBase* ObjectManager::TheClosestPlayer(const Vector2 pos, float& comparison
 	float _min_comparison = 99.0f;  // 一番近い距離
 
 	for (ObjectBase* obj : obj_player_) {
+		if ((90.0f <= obj->myPosition().x) && (90.0f <= obj->myPosition().y))
+			continue;
+
 		if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
 			continue;
 
-		_target = obj->myPosition();
-		_new_comparison = std::sqrtf(
-			std::powf(pos.x - _target.x, 2) +
-			std::powf(pos.y - _target.y, 2)
-		);
+		_new_comparison = _new_comparison = Comparison2Vector(pos, obj->myPosition());
 
 		if (_new_comparison < _min_comparison) {
 			_min_comparison = _new_comparison;
@@ -132,36 +102,8 @@ ObjectBase* ObjectManager::TheClosestPlayer(const Vector2 pos, float& comparison
 	return _obj;
 }
 
-Vector2 ObjectManager::TheClosestPlayerPos(const Vector2 pos) {
-	//auto dpoin = &obj_player_;
-	//return TheClosestPos(*(*dpoin), pos);
-	Vector2 _position = Vector2(99.0f, 99.0f);  // 一番近い座標
-	Vector2 _target;  // 現在調べている座標
-	float _new_comparison;  // 現在調べている距離
-	float _min_comparison = 99.0f;  // 一番近い距離
-
-	for (ObjectBase* obj : obj_player_) {
-		// 自分だったら次調べる
-		if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
-			continue;
-
-		_target = obj->myPosition();
-		_new_comparison = std::sqrtf(
-			std::powf(pos.x - _target.x, 2) + 
-			std::powf(pos.y - _target.y, 2)
-		);
-
-		if (_new_comparison < _min_comparison) {
-			_min_comparison = _new_comparison;
-			_position = _target;
-		}
-	}
-
-	return _position;
-}
-
-Vector2 ObjectManager::TheClosestBallPos(const Vector2 pos) {
-	Vector2 _position = Vector2(99.0f, 99.0f);  // 一番近い座標
+ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) {
+	ObjectBase* _obj;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
 	float _new_comparison;  // 現在調べている距離
 	float _min_comparison = 99.0f;  // 一番近い距離
@@ -170,17 +112,19 @@ Vector2 ObjectManager::TheClosestBallPos(const Vector2 pos) {
 		if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
 			continue;
 
-		_target = obj->myPosition();
-		_new_comparison = std::sqrtf(
-			std::powf(pos.x - _target.x, 2) +
-			std::powf(pos.y - _target.y, 2)
-		);
+		_new_comparison = Comparison2Vector(pos, obj->myPosition());
 
 		if (_new_comparison < _min_comparison) {
 			_min_comparison = _new_comparison;
-			_position = _target;
+			_obj = obj;
 		}
 	}
 
-	return _position;
+	comparison = _min_comparison;
+
+	return _obj;
+}
+
+float ObjectManager::Comparison2Vector(const Vector2 p1, const Vector2 p2) {
+	return std::sqrtf(std::powf(p1.x - p2.x, 2) + std::powf(p1.y - p2.y, 2));
 }
