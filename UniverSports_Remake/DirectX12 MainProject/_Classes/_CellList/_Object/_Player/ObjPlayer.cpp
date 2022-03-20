@@ -10,6 +10,7 @@ ObjPlayer::ObjPlayer() {
 	eff_down_ = nullptr;
 	strategy_ = nullptr;
 	myBall_ = nullptr;
+	targetObj_ = nullptr;
 	hasBall_ = false;
 	isDown_ = false;
 }
@@ -20,6 +21,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	myBall_ = nullptr;
+	targetObj_ = nullptr;
 	hasBall_ = false;
 	isDown_ = false;
 
@@ -53,7 +55,7 @@ void ObjPlayer::Initialize(const int id) {
 
 void ObjPlayer::LoadAssets(std::wstring file_name) {
 	strategy_->LoadAssets();
-	eff_down_->LoadAsset(L"_Down\\HITeffect.efk");
+	eff_down_->LoadAsset(L"_Effects\\_Down\\HITeffect.efk");
 
 	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
 	model_->SetScale(0.018f);
@@ -146,6 +148,9 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 	UpdateToMorton();
 
+	if (id_my_ == 0 && myBall_ != nullptr)
+		return;
+
 	ObjectBase* _obj = IsHitObject();
 	if (_obj != nullptr) {
 		if (_obj->myObjectType() == OBJ_TYPE::BALL) {
@@ -157,6 +162,8 @@ void ObjPlayer::Playing(const float deltaTime) {
 					return;
 
 				life_->TakeDamage();
+				eff_down_->PlayOneShot();
+				eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
 				isDown_ = true;
 
 				SetTransforms(Vector2(99.0f, 99.0f), rotate_);
@@ -185,12 +192,11 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 void ObjPlayer::Beaten(const float deltaTime) {
 	ti_respone_->Update(deltaTime);
-	eff_down_->PlayOneShot();
 
-	isDown_ = ti_respone_->TimeOut();
-
-	if (!isDown_) {
+	if (ti_respone_->TimeOut()) {
+		ti_respone_->ResetCountTime();
 		SetTransforms(pos_, rotate_);
 		AssignPosition();
+		isDown_ = false;
 	}
 }

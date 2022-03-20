@@ -40,6 +40,7 @@ public:
 	void Shoting(ObjBall* ball);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 	void AssignDirection(Vector2 dir) { forward_ = dir; }
+	void SetTarget(ObjectBase* target) { targetObj_ = target; }
 
 	bool HasBall() const { return hasBall_; }
 	Vector2 Get_HandPos() const { return (pos_ + strategy_->GetForward() * POS_HAND); }
@@ -61,6 +62,7 @@ private:
 	EffDown* eff_down_;
 	CharaStrategy* strategy_;
 	ObjBall* myBall_;
+	ObjectBase* targetObj_;
 	DX9::SKINNEDMODEL model_;
 	bool hasBall_;
 	bool isDown_;

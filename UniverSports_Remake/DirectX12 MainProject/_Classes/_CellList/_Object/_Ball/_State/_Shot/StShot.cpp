@@ -7,11 +7,12 @@ void StShot::Update(ObjBall* ball) {
 	const auto &_pos = ball->myPosition();
 	ball->AssignTransform(Vector3(_pos.x, _pos.y, pos_z_), forward_);
 
-	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
+	const bool _isFieldOut = ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE);
+	const bool _isGotStuck = std::abs(position_.x) == GAME_CONST.FieldSide_X;
+	if (_isFieldOut || _isGotStuck || ball->IsBreaked()) {
 		ball->SetOwnerID(-1);
-		ball->ResetHandPos();
 		ball->SwitchState(ball->STATE::FLOAT);
-		ball->SwitchColor(ball->COLOR_TYPE::NOMAL_COLOR);
+		ball->SwitchColor(ball->COLOR_TYPE::DEFAULT_COLOR);
 	}
 
 	//if (DontDestroy->GameMode_ != 3) {

@@ -6,11 +6,12 @@ ObjBall::ObjBall() {
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
 	nowState_ = NONE_STATE;
-	colorType_ = NOMAL_COLOR;
+	colorType_ = DEFAULT_COLOR;
 	state_ = nullptr;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
 	isInPlayerHands_ = false;
+	isBreak_ = false;
 }
 
 ObjBall::ObjBall(Vector3 pos, float r) {
@@ -19,10 +20,11 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 
 	SwitchState(FLOAT);
 
-	colorType_ = NOMAL_COLOR;
+	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
 	isInPlayerHands_ = false;
+	isBreak_ = false;
 }
 
 ObjBall::~ObjBall() {
@@ -54,6 +56,7 @@ void ObjBall::LoadAssets(DX9::MODEL& model) {
 void ObjBall::Update(const float deltaTime) {
 	state_->Update(this);
 
+	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
 
 	UpdateToMorton();
@@ -62,8 +65,13 @@ void ObjBall::Update(const float deltaTime) {
 	if (_obj != nullptr) {
 		if (_obj->myObjectType() == OBJ_TYPE::PLAYER) {
 			ObjPlayer* _player = dynamic_cast<ObjPlayer*>(_obj);
-			if (id_owner_ != -1)
+			if (nowState_ == STATE::FLOAT)
 				isInPlayerHands_ = true;
+			else if (nowState_ == STATE::SHOT) {
+				if (id_owner_ == _player->myObjectID())
+					return;
+				isBreak_ = true;
+			}
 		}
 	}
 }
@@ -94,10 +102,10 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	D3DMATERIAL9 _mat{};
 
 	switch (colorType) {
-		case NOMAL_COLOR : _mat = GetNomMaterial(); break;
-		case PLAYER_COLOR : _mat.Diffuse = P_DIFFUSE[id_owner_]; _mat.Ambient = P_AMBIENT; break;
-		case TEAM_COLOR : break;
-		default : assert(!"ObjBall : 不正な色指定"); break;
+		case DEFAULT_COLOR : _mat = GetNomMaterial(); break;
+		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[id_owner_]; _mat.Ambient = P_AMBIENT; break;
+		case TEAM_COLOR    : break;
+		default			   : assert(!"ObjBall_assert : 不正な色指定"); break;
 	}
 
 	return _mat;
@@ -107,12 +115,11 @@ void ObjBall::AddPower(Vector3 forward, float speed) {
 	physics_->SetLinerVelocity(forward * speed);
 	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 
+	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
 }
 
 void ObjBall::SetTransforms() {
-	pos_ = physics_->GetCenterOfMassPosition();
-
 	collision_->SetPosition(Vector3(pos_.x, pos_.y, pos_z_));
 	physics_->SetTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3(rotate_.x, rotate_.y, 0.0f));
 }

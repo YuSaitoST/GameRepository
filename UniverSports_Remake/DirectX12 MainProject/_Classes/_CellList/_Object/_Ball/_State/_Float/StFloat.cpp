@@ -10,14 +10,19 @@ void StFloat::Initialize() {
 	limit_direct_x	= DIRECT_X[DontDestroy->GameMode_ / 3];
 	limit_direct_y	= DIRECT_Y[DontDestroy->GameMode_ / 3];
 
-	ReSpone();
+	SetTransform();
 }
 
 void StFloat::Update(ObjBall* ball) {
+	if (ball->IsBreaked()) {
+		ball->FlagResets();
+		ReSpone(ball);
+	}
+
 	if (ball->IsInPlayerHands()) {
 		ball->ResetVelocity();
 		ball->SwitchState(ball->STATE::CAUTCH);
-		ball->SwitchColor(ball->COLOR_TYPE::PLAYER_COLOR);
+		ball->SwitchColor(ball->COLOR_TYPE::PLAYERS_COLOR);
 		return;
 	}
 
@@ -27,9 +32,15 @@ void StFloat::Update(ObjBall* ball) {
 		LoopPos(ball);
 }
 
-void StFloat::ReSpone() {
+void StFloat::SetTransform() {
 	position_	= RandomPosition();
 	forward_	= RandomForward(position_);
+}
+
+void StFloat::ReSpone(ObjBall* ball) {
+	SetTransform();
+	ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward_);
+	ball->AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
 }
 
 SimpleMath::Vector2 StFloat::RandomPosition() {
@@ -50,16 +61,14 @@ SimpleMath::Vector2 StFloat::RandomPosition() {
 	return Vector2(_random_x, _random_y);
 }
 
-SimpleMath::Vector2 StFloat::RandomForward(SimpleMath::Vector2 position) {
-	direct_x		= std::uniform_real_distribution<float>(-limit_direct_x, limit_direct_x);
-	direct_y		= std::uniform_real_distribution<float>(-limit_direct_y, limit_direct_y);
-	auto _direct_x	= direct_x(randomEngine);
-	auto _direct_y	= direct_y(randomEngine);
-	auto _forward	= SimpleMath::Vector2(_direct_x, _direct_y);
+SimpleMath::Vector2 StFloat::RandomForward(const SimpleMath::Vector2 position) {
+	direct_x					 = std::uniform_real_distribution<float>(-limit_direct_x, limit_direct_x);
+	direct_y					 = std::uniform_real_distribution<float>(-limit_direct_y, limit_direct_y);
+	const float _direct_x		 = direct_x(randomEngine);
+	const float _direct_y		 = direct_y(randomEngine);
+	SimpleMath::Vector2 _forward = SimpleMath::Vector2(_direct_x, _direct_y);
 
-	auto _start		= position;
-	auto _end		= _forward;
-	_forward		= _end - _start;
+	_forward					 = _forward - position;
 	_forward.Normalize();
 
 	return _forward;
@@ -67,11 +76,8 @@ SimpleMath::Vector2 StFloat::RandomForward(SimpleMath::Vector2 position) {
 
 
 void StFloat::CheckFieldOut(ObjBall* ball) {
-	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
-		ReSpone();
-		ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward_);
-		ball->AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
-	}
+	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X))
+		ReSpone(ball);
 }
 
 void StFloat::LoopPos(ObjBall* ball) {

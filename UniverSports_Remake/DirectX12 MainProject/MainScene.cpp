@@ -21,6 +21,8 @@ CellList cellList = CellList{};
 // Initialize member variables.
 MainScene::MainScene()
 {
+	GAME_CONST.Initialize();
+
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;
 
@@ -43,7 +45,6 @@ void MainScene::Initialize()
 	DXTK->SetFixedFrameRate(60);
 
 	DX12Effect.Initialize();
-	GAME_CONST.Initialize();
 	Camera.Initialize();
 	Light.Initialize();
 	Light.Set();
@@ -56,7 +57,7 @@ void MainScene::Initialize()
 	m_object_->AddWorld(physics_world_);
 
 	// ˆê‰ž‚È‚­‚Ä‚à–â‘è‚Í‚È‚¢‚ªA‰½‚©‚ ‚Á‚½‚ç‚±‚ê‚ðˆ—‚·‚é
-	//EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
+	EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
 	//DX12Effect.PlayOneShot("dummy");
 	//DX12Effect.Stop("dummy");
 }
@@ -139,6 +140,8 @@ NextScene MainScene::Update(const float deltaTime)
 	DX12Effect.Update(deltaTime);
 	Press.Accepts();
 
+	DX12Effect.PlayOneShot("dummy");
+
 	field_->Update();
 
 	m_object_->Update(deltaTime);
@@ -176,7 +179,6 @@ void MainScene::Render()
 	DXTK->CommandList->SetDescriptorHeaps(1, &heapes);
 
 	spriteBatch_->Begin(DXTK->CommandList);
-
 	spriteBatch_->Draw(
 		dx9GpuDescriptor_,
 		XMUINT2(1280, 720),   // HD

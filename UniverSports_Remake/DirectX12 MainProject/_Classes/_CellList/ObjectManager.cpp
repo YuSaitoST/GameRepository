@@ -73,6 +73,7 @@ void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
 }
 
 Vector2 ObjectManager::PlayerHandsPos(int index) {
+	assert((0 <= index) && "ObjectManager::PlayerHandPos() : Žw’è‚µ‚½index‚ª•s³‚Å‚·(•‰‚Ì’l‚É‚È‚Á‚Ä‚¢‚é)");
 	return obj_player_[index]->Get_HandPos();
 }
 

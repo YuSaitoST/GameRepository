@@ -19,7 +19,7 @@ private:
 
 public:
 	enum STATE { FLOAT, CAUTCH, SHOT, GOAL, NONE_STATE };
-	enum COLOR_TYPE { NOMAL_COLOR, PLAYER_COLOR, TEAM_COLOR };
+	enum COLOR_TYPE { DEFAULT_COLOR, PLAYERS_COLOR, TEAM_COLOR };
 
 public:
 	ObjBall();
@@ -52,10 +52,11 @@ public:
 	}
 	void ResetVelocity() { physics_->ResetVelocity(); }
 	void SetOwnerID(int id_player) { id_owner_ = id_player; }
-	void ResetHandPos() { isInPlayerHands_ = false; }
+	void FlagResets() { isInPlayerHands_ = isBreak_ = false; }
 	int GetOwnerID() const { return id_owner_; }
 	float myPosZ() const { return pos_z_; }
 	bool IsInPlayerHands() const { return isInPlayerHands_; }
+	bool IsBreaked() const { return isBreak_; }
 	STATE NowState() const { return nowState_; }
 
 private:
@@ -73,4 +74,5 @@ private:
 	float pos_z_;
 	int id_owner_;
 	bool isInPlayerHands_;
+	bool isBreak_;
 };

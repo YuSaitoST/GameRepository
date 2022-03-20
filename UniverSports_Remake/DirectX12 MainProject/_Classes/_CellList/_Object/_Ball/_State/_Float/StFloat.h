@@ -14,8 +14,9 @@ public:
 
 private:
 	SimpleMath::Vector2 RandomPosition();
-	SimpleMath::Vector2 RandomForward(SimpleMath::Vector2 position);
-	void ReSpone();
+	SimpleMath::Vector2 RandomForward(const SimpleMath::Vector2 position);
+	void SetTransform();
+	void ReSpone(ObjBall* ball);
 
 	void CheckFieldOut(ObjBall* ball);
 	void LoopPos(ObjBall* ball);
