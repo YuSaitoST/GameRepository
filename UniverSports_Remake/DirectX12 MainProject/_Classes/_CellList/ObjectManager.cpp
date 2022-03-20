@@ -76,8 +76,8 @@ Vector2 ObjectManager::PlayerHandsPos(int index) {
 	return obj_player_[index]->Get_HandPos();
 }
 
-ObjectBase* ObjectManager::TheClosestPlayer(const Vector2 pos, float& comparison) {
-	ObjectBase* _obj;  // 一番近いオブジェクト
+ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, float& comparison) {
+	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
 	float _new_comparison;  // 現在調べている距離
 	float _min_comparison = 99.0f;  // 一番近い距離
@@ -86,7 +86,7 @@ ObjectBase* ObjectManager::TheClosestPlayer(const Vector2 pos, float& comparison
 		if ((90.0f <= obj->myPosition().x) && (90.0f <= obj->myPosition().y))
 			continue;
 
-		if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
+		if (obj->myObjectID() == id)
 			continue;
 
 		_new_comparison = _new_comparison = Comparison2Vector(pos, obj->myPosition());
@@ -103,7 +103,7 @@ ObjectBase* ObjectManager::TheClosestPlayer(const Vector2 pos, float& comparison
 }
 
 ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) {
-	ObjectBase* _obj;  // 一番近いオブジェクト
+	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
 	float _new_comparison;  // 現在調べている距離
 	float _min_comparison = 99.0f;  // 一番近い距離

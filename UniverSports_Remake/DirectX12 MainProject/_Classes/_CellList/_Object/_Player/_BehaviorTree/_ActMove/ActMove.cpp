@@ -17,10 +17,10 @@ void ActMove::Update(const float deltaTime, ObjPlayer& player) {
 bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
 
-	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myPosition(), _comparison);
+	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
 	ObjectBase* _targetBall = ObjectManager::TheClosestBall(my.myPosition(), _comparison);
 
-	if (((ObjPlayer*)_targetPlayer)->HasBall()) {
+	if ((_targetPlayer != nullptr) && ((ObjPlayer*)_targetPlayer)->HasBall()) {
 		target_pos_new_ = _targetPlayer->myPosition();
 		const Vector2 _target_direction = _targetPlayer->myDirection();
 		direction_ = Vector2(-_target_direction.y, _target_direction.x);
@@ -32,7 +32,7 @@ bool ActMove::Think(ObjPlayer& my) {
 		target_pos_old_ = target_pos_new_;
 		return true;
 	}
-	else if (((ObjBall*)_targetBall)->GetOwnerID() != -1) {
+	else if ((_targetBall != nullptr) && ((ObjBall*)_targetBall)->GetOwnerID() != -1) {
 		target_pos_new_ = _targetBall->myPosition();
 		const Vector2 _target_direction = _targetBall->myDirection();
 		direction_ = Vector2(-_target_direction.y, _target_direction.x);
@@ -45,10 +45,12 @@ bool ActMove::Think(ObjPlayer& my) {
 		return true;
 	}
 	else {
-		if (!my.HasBall())
+		if ((_targetBall != nullptr) && !my.HasBall())
 			target_pos_new_ = _targetBall->myPosition();
-		else
+		else if (_targetPlayer != nullptr)
 			target_pos_new_ = _targetPlayer->myPosition();
+		else
+			target_pos_new_ = target_pos_new_;;
 		
 		return ChangeForward(my);
 	}

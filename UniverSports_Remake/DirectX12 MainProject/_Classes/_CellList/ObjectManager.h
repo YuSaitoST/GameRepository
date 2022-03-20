@@ -39,7 +39,7 @@ public:
 
 	static Vector2 PlayerHandsPos(int index);
 
-	static ObjectBase* TheClosestPlayer(const Vector2 pos, float& comparison);
+	static ObjectBase* TheClosestPlayer(const int id, const Vector2 pos, float& comparison);
 	static ObjectBase* TheClosestBall(const Vector2 pos, float& comparison);
 
 private:

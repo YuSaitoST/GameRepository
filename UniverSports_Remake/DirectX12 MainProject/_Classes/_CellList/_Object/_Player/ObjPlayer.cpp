@@ -42,7 +42,6 @@ ObjPlayer::~ObjPlayer() {
 	delete eff_down_;
 	delete ti_respone_;
 	delete life_;
-	delete myBall_;
 }
 
 void ObjPlayer::Initialize(const int id) {
@@ -158,7 +157,6 @@ void ObjPlayer::Playing(const float deltaTime) {
 					return;
 
 				life_->TakeDamage();
-				eff_down_->PlayOneShot();
 				isDown_ = true;
 
 				SetTransforms(Vector2(99.0f, 99.0f), rotate_);
@@ -187,8 +185,9 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 void ObjPlayer::Beaten(const float deltaTime) {
 	ti_respone_->Update(deltaTime);
+	eff_down_->PlayOneShot();
 
-	isDown_ = !(ti_respone_->TimeOut());
+	isDown_ = ti_respone_->TimeOut();
 
 	if (!isDown_) {
 		SetTransforms(pos_, rotate_);
