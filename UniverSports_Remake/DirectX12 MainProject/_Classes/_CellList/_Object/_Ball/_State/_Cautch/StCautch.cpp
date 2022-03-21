@@ -4,16 +4,17 @@
 #include "DontDestroyOnLoad.h"
 
 void StCautch::Initialize() {
-	
+
 }
 
 void StCautch::Update(ObjBall* ball) {
 	position_ = ObjectManager::PlayerHandsPos(ball->GetOwnerID());
 	ball->PhysicsControll(Vector3(position_.x, position_.y, Z_MIN));
 
-	if (!ball->IsInPlayerHands())
+	if (!ball->IsInPlayerHands()) {
+		ball->AssignTransform(Vector3(position_.x, position_.y, ball->pos_z_smallest_), ball->myDirection());
 		ball->SwitchState(ball->STATE::SHOT);
-
+	}
 	//if (ball->IsHit()) {
 	//	ball->SwitchState(ball->STATE::FLOAT);
 	//	ball->SetMaterial();

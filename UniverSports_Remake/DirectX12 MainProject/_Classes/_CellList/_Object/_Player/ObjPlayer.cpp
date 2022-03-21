@@ -5,6 +5,7 @@ ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
 
+	handForward_ = Vector2::Zero;
 	life_ = nullptr;
 	ti_respone_ = nullptr;
 	eff_down_ = nullptr;
@@ -20,6 +21,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	SetMember(PLAYER, pos, r);
 
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
+	handForward_ = Vector2::Zero;
 	myBall_ = nullptr;
 	targetObj_ = nullptr;
 	hasBall_ = false;
@@ -28,13 +30,15 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	life_ = new MyLife(3);
 	ti_respone_ = new OriTimer(GAME_CONST.PL_ReSponeTime);
 	eff_down_ = new EffDown();
-
-	if (strategy == OPERATE_TYPE::MANUAL)
-		strategy_ = new ManualChara();
-	else if (strategy == OPERATE_TYPE::COMPUTER)
-		strategy_ = new ComputerChara();
-	else
-		strategy_ = nullptr;
+	
+	strategy_ = (strategy == OPERATE_TYPE::MANUAL)	 ? static_cast<CharaStrategy*>(new ManualChara())   : 
+				(strategy == OPERATE_TYPE::COMPUTER) ? static_cast<CharaStrategy*>(new ComputerChara()) : nullptr;
+	//if (strategy == OPERATE_TYPE::MANUAL)
+	//	strategy_ = new ManualChara();
+	//else if (strategy == OPERATE_TYPE::COMPUTER)
+	//	strategy_ = new ComputerChara();
+	//else
+	//	strategy_ = nullptr;
 }
 
 ObjPlayer::~ObjPlayer() {
@@ -67,6 +71,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	AssignPosition();
 	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
 	forward_ = strategy_->GetForward();
+	r_ = model_->GetBoundingSphere().Radius;
 
 	ClampLoop(pos_);
 
@@ -127,6 +132,14 @@ void ObjPlayer::Shoting(ObjBall* ball) {
 	myBall_ = nullptr;
 }
 
+Vector2 ObjPlayer::Get_HandPos() {
+	const Vector2 _dir = strategy_->GetForward();
+	const int _dir_x = std::roundf(_dir.x), _dir_y = std::roundf(_dir.y);
+
+	handForward_.x = std::cosf(6) * std::cosf(strategy_->GetRotateX()) - std::sinf(6) * std::sinf(strategy_->GetRotateX());
+	handForward_.y = std::sinf(6) * std::cosf(strategy_->GetRotateX()) + std::cosf(6) * std::sinf(strategy_->GetRotateX());
+	return (pos_ + handForward_ * POS_HAND);
+}
 
 /*
 * stateÉpÉ^Å[ÉìÇ…ÇµÇΩï˚Ç™ó«Ç≥ÇªÇ§Ç»ïîï™

@@ -1,6 +1,8 @@
 #include "ObjBall.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 
+float ObjBall::pos_z_smallest_;
+
 ObjBall::ObjBall() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
@@ -51,6 +53,8 @@ void ObjBall::LoadAssets(DX9::MODEL& model) {
 
 	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
+
+	r_ = model->GetBoundingSphere().Radius;
 }
 
 void ObjBall::Update(const float deltaTime) {

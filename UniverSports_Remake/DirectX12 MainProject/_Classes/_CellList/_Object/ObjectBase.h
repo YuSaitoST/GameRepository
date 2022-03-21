@@ -9,12 +9,7 @@
 using namespace DirectX::SimpleMath;
 class Cell;
 
-enum OBJ_TYPE {
-	PLAYER,
-	BALL,
-	WIRE,
-	NONE_OBJ_ID
-};
+enum OBJ_TYPE { PLAYER, BALL, WIRE, NONE_OBJ_ID };
 
 class ObjectBase {
 public:

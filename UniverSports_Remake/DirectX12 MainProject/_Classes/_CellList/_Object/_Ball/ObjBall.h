@@ -59,6 +59,8 @@ public:
 	bool IsBreaked() const { return isBreak_; }
 	STATE NowState() const { return nowState_; }
 
+	static float pos_z_smallest_;
+
 private:
 	void SetTransforms();
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);

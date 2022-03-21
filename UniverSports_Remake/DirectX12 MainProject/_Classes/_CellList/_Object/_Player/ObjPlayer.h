@@ -43,7 +43,7 @@ public:
 	void SetTarget(ObjectBase* target) { targetObj_ = target; }
 
 	bool HasBall() const { return hasBall_; }
-	Vector2 Get_HandPos() const { return (pos_ + strategy_->GetForward() * POS_HAND); }
+	Vector2 Get_HandPos();
 	ObjBall* MyBall() const { return myBall_; }
 
 private:
@@ -55,6 +55,7 @@ private:
 	void AnimSet(MOTION motion, float deltaTime);
 	MOTION AnimChange();
 
+	//const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
 	MyLife* life_;
@@ -64,6 +65,7 @@ private:
 	ObjBall* myBall_;
 	ObjectBase* targetObj_;
 	DX9::SKINNEDMODEL model_;
+	Vector2 handForward_;
 	bool hasBall_;
 	bool isDown_;
 };

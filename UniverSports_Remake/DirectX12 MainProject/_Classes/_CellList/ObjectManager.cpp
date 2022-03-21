@@ -37,6 +37,10 @@ void ObjectManager::LoadAssets() {
 
 	for (ObjectBase* obj : obj_ball_)
 		obj->LoadAssets(mod_ball_);
+
+	obj_ball_[0]->pos_z_smallest_ = obj_player_[0]->myRadian() + obj_ball_[0]->myRadian();
+	float r = obj_ball_[1]->pos_z_smallest_;
+	int i = 0;
 }
 
 void ObjectManager::Update(const float deltaTime) {
