@@ -3,8 +3,9 @@
 
 ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
-	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
+	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
+	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
 	handForward_ = Vector2::Zero;
 	life_ = nullptr;
 	ti_respone_ = nullptr;
@@ -18,8 +19,9 @@ ObjPlayer::ObjPlayer() {
 
 ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	cp_ = nullptr;
-	SetMember(PLAYER, pos, r);
+	SetMember(PLAYER, COLLI_TYPE::SPHRER, pos, r);
 
+	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	handForward_ = Vector2::Zero;
 	myBall_ = nullptr;
@@ -33,12 +35,6 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	
 	strategy_ = (strategy == OPERATE_TYPE::MANUAL)	 ? static_cast<CharaStrategy*>(new ManualChara())   : 
 				(strategy == OPERATE_TYPE::COMPUTER) ? static_cast<CharaStrategy*>(new ComputerChara()) : nullptr;
-	//if (strategy == OPERATE_TYPE::MANUAL)
-	//	strategy_ = new ManualChara();
-	//else if (strategy == OPERATE_TYPE::COMPUTER)
-	//	strategy_ = new ComputerChara();
-	//else
-	//	strategy_ = nullptr;
 }
 
 ObjPlayer::~ObjPlayer() {
@@ -53,6 +49,7 @@ ObjPlayer::~ObjPlayer() {
 void ObjPlayer::Initialize(const int id) {
 	strategy_->Initialize(id, this);
 	eff_down_->Initialize("Down" + std::to_string(id));
+	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
 	id_my_ = id;
 }
@@ -166,7 +163,13 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 	ObjectBase* _obj = IsHitObject();
 	if (_obj != nullptr) {
-		if (_obj->myObjectType() == OBJ_TYPE::BALL) {
+		if (_obj->myObjectType() == OBJ_TYPE::WIRE) {
+			D3DMATERIAL9 _mate{};
+			_mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+			_mate.Ambient = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+			model_->SetMaterial(_mate);
+		}
+		else if (_obj->myObjectType() == OBJ_TYPE::BALL) {
 			ObjBall* _ball = dynamic_cast<ObjBall*>(_obj);
 
 			// ‚â‚ç‚êˆ—
@@ -200,6 +203,9 @@ void ObjPlayer::Playing(const float deltaTime) {
 				hasBall_ = true;
 			}
 		}
+	}
+	else {
+		model_->SetMaterial(GetNomMaterial());
 	}
 }
 

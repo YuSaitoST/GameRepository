@@ -5,8 +5,9 @@ float ObjBall::pos_z_smallest_;
 
 ObjBall::ObjBall() {
 	cp_ = nullptr;
-	SetMember(NONE_OBJ_ID, Vector3::Zero, 0.0f);
+	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
+	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
 	nowState_ = NONE_STATE;
 	colorType_ = DEFAULT_COLOR;
 	state_ = nullptr;
@@ -18,10 +19,11 @@ ObjBall::ObjBall() {
 
 ObjBall::ObjBall(Vector3 pos, float r) {
 	cp_ = nullptr;
-	SetMember(BALL, pos, r);
+	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
 	SwitchState(FLOAT);
 
+	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
@@ -50,7 +52,7 @@ void ObjBall::LoadAssets(DX9::MODEL& model) {
 	collision_->SetColli(model->GetBoundingSphere());
 
 	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
-
+	
 	pos_ = physics_->GetCenterOfMassPosition();
 	SetTransforms();
 

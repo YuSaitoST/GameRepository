@@ -1,21 +1,18 @@
 #include "btObject.h"
 
-btObject::btObject(SimpleMath::Vector3 pos) {
-	bt_collision_ = new btSphereShape(0.8f);
-
+btObject::btObject(BULLET_TYPE type, SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass) {
+	bt_collision_ = (type == BT_SPHRER) ? (btCollisionShape*)(new btSphereShape(0.8f)) : (type == BOX) ? (btCollisionShape*)(new btBoxShape(btVector3(scale.x, scale.y, scale.z))) : nullptr;
+	
 	btVector3    _pos(pos.x, pos.y, 0.0f);
-	btQuaternion _rot(0.0f, 0.0f, 0.0f, 1.0f);
+	btQuaternion _rot(0.0f, 0.0f, rotZ, 1.0f);
 	bt_state_ = new btDefaultMotionState(btTransform(_rot, _pos));
 
-	btScalar	_mass = 1.0f;
+	btScalar	_mass = mass;
 	btVector3	_inertia(0.0f, 0.0f, 0.0f);
 	bt_body_ = new btRigidBody(_mass, bt_state_, bt_collision_, _inertia);
 
-	// スリープモードを解除（操作不可バグを直せる）
-	bt_body_->setActivationState(DISABLE_DEACTIVATION);
-
 	bt_body_->setRestitution(0.9f);
-
+	
 	velocity_ = SimpleMath::Vector3::Zero;
 }
 

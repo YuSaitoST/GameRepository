@@ -17,7 +17,7 @@ void GameField::LoadAsset(std::wstring m_file_name, std::wstring s_file_name) {
 		for (int _i = 0; _i < 4; ++_i)
 			sprite_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_WIRE[DontDestroy->ChoseColor_[_i]][_i].c_str()));
 
-	sp_hole_	= DX9::Sprite::CreateFromFile(DXTK->Device9, s_file_name.c_str());
+	sp_hole_ = DX9::Sprite::CreateFromFile(DXTK->Device9, s_file_name.c_str());
 	movie_->LoadAsset(m_file_name);
 	movie_->Play();
 }
@@ -27,13 +27,10 @@ void GameField::Update() {
 }
 
 void GameField::Render() {
-	//for (DX9::SPRITE sp : sprite_)
-	//	DX9::SpriteBatch->DrawSimple(sp.Get(), SimpleMath::Vector3(0.0f, 0.0f, -981.0f));
+	for (DX9::SPRITE sp : sprite_)
+		DX9::SpriteBatch->DrawSimple(sp.Get(), SimpleMath::Vector3(0.0f, 0.0f, -981.0f));
 
-	DX9::SpriteBatch->DrawSimple(
-		sp_hole_.Get(),
-		pos_
-	);
+	DX9::SpriteBatch->DrawSimple(sp_hole_.Get(), pos_);
 
 	movie_->Render();
 }

@@ -3,7 +3,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
-#include "bsCollSph.h"
+#include "bdCollision.h"
 #include "btObject.h"
 
 using namespace DirectX::SimpleMath;
@@ -14,7 +14,7 @@ enum OBJ_TYPE { PLAYER, BALL, WIRE, NONE_OBJ_ID };
 class ObjectBase {
 public:
 	ObjectBase();
-	ObjectBase(OBJ_TYPE kind, Vector3 pos, float r);
+	ObjectBase(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r);
 	virtual ~ObjectBase();
 
 	virtual void Initialize(const int id) = 0;
@@ -47,13 +47,13 @@ public:
 	static void ClampLoop(Vector2& pos);
 
 protected:
-	virtual void SetMember(OBJ_TYPE kind, Vector3 pos, float r);  // メンバ設定
+	virtual void SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r);
 	
 	void UpdateToMorton();
 	ObjectBase* IsHitObject();
 
 	OBJ_TYPE obj_type_;		// オブジェクトの種類
-	bsCollSph* collision_;	// 当たり判定
+	bdCollision* collision_;// 当たり判定
 	btObject* physics_;		// 物理演算
 	Cell* cp_;				// 所属空間
 	Vector2 pos_;			// 座標

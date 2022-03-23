@@ -2,16 +2,22 @@
 
 ObjPlayer* ObjectManager::obj_player_[2];
 ObjBall* ObjectManager::obj_ball_[1];
-ObjectBase* ObjectManager::obj_wire_[4];
+ObjWire* ObjectManager::obj_wire_[4];
 
 ObjectManager::ObjectManager() {
 	obj_player_[0] = new ObjPlayer(OPERATE_TYPE::MANUAL, POS_START[0], 1.0f);
 	obj_player_[1] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[1], 1.0f);
 
 	obj_ball_[0] = new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f);
+
+	for (int _i = 0; _i < 4; _i++)
+		obj_wire_[_i] = new ObjWire(POS_WIRE[_i], 1.0f);
 }
 
 ObjectManager::~ObjectManager() {
+	for (int _i = N_WIRE - 1; 0 <= _i; _i--)
+		delete obj_wire_[_i];
+
 	for (int _i = N_BALL - 1; 0 <= _i; _i--)
 		delete obj_ball_[_i];
 	
@@ -25,6 +31,9 @@ void ObjectManager::Initialize() {
 
 	for (int _i = 0; _i < N_BALL; _i++)
 		obj_ball_[_i]->Initialize(_i);
+
+	for (int _i = 0; _i < N_WIRE; _i++)
+		obj_wire_[_i]->Initialize(_i);
 }
 
 void ObjectManager::LoadAssets() {
@@ -38,9 +47,8 @@ void ObjectManager::LoadAssets() {
 	for (ObjectBase* obj : obj_ball_)
 		obj->LoadAssets(mod_ball_);
 
-	obj_ball_[0]->pos_z_smallest_ = obj_player_[0]->myRadian() + obj_ball_[0]->myRadian();
-	float r = obj_ball_[1]->pos_z_smallest_;
-	int i = 0;
+	for (ObjectBase* obj : obj_wire_)
+		obj->LoadAssets(L"");
 }
 
 void ObjectManager::Update(const float deltaTime) {
@@ -48,6 +56,9 @@ void ObjectManager::Update(const float deltaTime) {
 		obj->Update(deltaTime);
 
 	for (ObjectBase* obj : obj_ball_)
+		obj->Update(deltaTime);
+
+	for (ObjectBase* obj : obj_wire_)
 		obj->Update(deltaTime);
 }
 
@@ -69,10 +80,18 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 		physics_world_->addRigidBody(obj->myRigidbody());
 
 	physics_world_->addRigidBody(obj_ball_[0]->myRigidbody());
+
+	for (ObjectBase* obj : obj_wire_)
+		physics_world_->addRigidBody(obj->myRigidbody());
 }
 
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
-	for (int _i = 1; 0 <= _i; _i--)
+	for (int _i = 0; _i < N_WIRE; _i++)
+		physics_world_->removeRigidBody(obj_wire_[_i]->myRigidbody());
+	
+	physics_world_->removeRigidBody(obj_ball_[0]->myRigidbody());
+
+	for (int _i = 0; _i < N_PLAYER; _i++)
 		physics_world_->removeRigidBody(obj_player_[_i]->myRigidbody());
 }
 

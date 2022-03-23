@@ -29,8 +29,8 @@ void SelectArrows::Initialize(float x_right, float x_left, float y) {
 }
 
 void SelectArrows::LoadAssets() {
-	sp_right_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\arrow_right.png");
-	sp_left_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\arrow_left.png");
+	sp_right_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_right.png");
+	sp_left_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_left.png");
 }
 
 void SelectArrows::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
