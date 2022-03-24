@@ -39,21 +39,26 @@ ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
 	BoundingSphere sphere_2;
 	BoundingOrientedBox box;
 
+	// 自身のcollisionを用意
 	if (type_1 == SPHRER)
 		sphere_1 = collision_->GetBoundingSph();
 	else if (type_1 == ORIENTEDBOX)
 		box = collision_->GetBoundingBox();
 
+	// 相手のcollisionを用意
 	if (type_2 == SPHRER)
 		sphere_2 = m->collision_->GetBoundingSph();
 	else if (type_2 == ORIENTEDBOX)
 		box = m->collision_->GetBoundingBox();
 
+	// 衝突判定
 	if (type_1 == SPHRER && type_1 == type_2) {
+		// キャラtoキャラ or キャラtoボール or ボールtoキャラ or ボールtoボール
 		if (sphere_1.Intersects(sphere_2))
 			return m;
 	}
 	else if ((type_1 == SPHRER && type_2 == ORIENTEDBOX) || (type_1 == ORIENTEDBOX && type_2 == SPHRER))
+		// ワイヤーとキャラorボール
 		if (sphere_1.Intersects(box))
 			return m;
 

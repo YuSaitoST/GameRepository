@@ -25,6 +25,8 @@ public:
 	virtual void Render(DX9::MODEL& model) = 0;
 	virtual void UIRender() = 0;
 
+	virtual void HitAction(ObjectBase* hitObject) = 0;
+
 	virtual ObjectBase* IsCollision(ObjectBase* m);  // Õ“Ë”»’è(Bounding‚ğ—p‚¢‚½‚à‚Ì)
 
 	static D3DMATERIAL9 GetNomMaterial() {

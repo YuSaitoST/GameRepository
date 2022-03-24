@@ -12,11 +12,13 @@ public:
 	virtual void LoadAssets(std::wstring file_name);  // FILE_NAMEは空文字でいい,読み込みはしないから
 	virtual void Update(const float deltaTime);  // ゴールを用いるモードで判定をするため
 
+	virtual void HitAction(ObjectBase* hitObject);
+
 	// 空の実装
-	virtual void LoadAssets(DX9::MODEL& model) {};  // モデルは使わない
-	virtual void Render() {};  // モデルの描画はない
-	virtual void Render(DX9::MODEL& model) {};
-	virtual void UIRender() {};
+	virtual void LoadAssets(DX9::MODEL& model) {}  // モデルは使わない
+	virtual void Render() {}  // モデルの描画はない
+	virtual void Render(DX9::MODEL& model) {}
+	virtual void UIRender() {}
 
 private:
 	const SimpleMath::Vector3 SCALE = SimpleMath::Vector3(13.75f, 2.25f + 0.1f/* + 1.8f*/ , 0.0f);

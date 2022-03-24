@@ -2,17 +2,17 @@
 
 void GamePadEvent::Accepts(int index) {
 	// Œ…ã‚ª‚è–hŽ~
-	flag_ = 0;
+	flag_	= 0;
 	direct_ = Vector2::Zero;
 
 	/*
 		Šebit‚É“ü—Íó‘Ô‚ð“ü‚ê‚é
 		‘«‚·——R‚ÍA“¯Žž‰Ÿ‚µ‚ð”»’è‚Å‚«‚é‚æ‚¤‚É‚·‚é‚½‚ß
 	*/
-	flag_ += DXTK->GamePadEvent[index].a				? (1 << A			 ) : 0;
-	flag_ += DXTK->GamePadEvent[index].b				? (1 << B			 ) : 0;
-	flag_ += DXTK->GamePadEvent[index].x				? (1 << X			 ) : 0;
-	flag_ += DXTK->GamePadEvent[index].y				? (1 << Y			 ) : 0;
+	flag_ += DXTK->GamePadEvent[index].a				? (1 << P_A			 ) : 0;
+	flag_ += DXTK->GamePadEvent[index].b				? (1 << P_B			 ) : 0;
+	flag_ += DXTK->GamePadEvent[index].x				? (1 << P_X			 ) : 0;
+	flag_ += DXTK->GamePadEvent[index].y				? (1 << P_Y			 ) : 0;
 	flag_ += DXTK->GamePadEvent[index].dpadUp			? (1 << P_UP		 ) : 0;
 	flag_ += DXTK->GamePadEvent[index].dpadDown			? (1 << P_DOWN		 ) : 0;
 	flag_ += DXTK->GamePadEvent[index].dpadLeft			? (1 << P_LEFT		 ) : 0;

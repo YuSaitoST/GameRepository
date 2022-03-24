@@ -9,6 +9,9 @@ void StShot::Update(ObjBall* ball) {
 
 	const bool _isFieldOut = ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE);
 	const bool _isGotStuck = std::abs(position_.x) == GAME_CONST.FieldSide_X;
+	if (ball->IsBreaked()) {
+		pos_z_ = pos_z_;
+	}
 	if (_isFieldOut || _isGotStuck || ball->IsBreaked()) {
 		ball->SetOwnerID(-1);
 		ball->SwitchState(ball->STATE::FLOAT);

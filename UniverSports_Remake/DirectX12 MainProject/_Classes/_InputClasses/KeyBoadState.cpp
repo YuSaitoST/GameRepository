@@ -2,7 +2,7 @@
 
 void KeyBoadState::Accepts() {
 	// Œ…ã‚ª‚è–h~
-	flag_ = 0;
+	flag_	= 0;
 	direct_ = Vector2::Zero;
 
 	/*

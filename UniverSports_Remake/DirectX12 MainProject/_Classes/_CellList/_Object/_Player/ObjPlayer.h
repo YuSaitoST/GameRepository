@@ -30,11 +30,13 @@ public:
 
 	virtual void Initialize(const int id);
 	virtual void LoadAssets(std::wstring file_name);
-	virtual void LoadAssets(DX9::MODEL& model) {};
+	virtual void LoadAssets(DX9::MODEL& model) {}
 	virtual void Update(const float deltaTime);
 	virtual void Render();
-	virtual void Render(DX9::MODEL& model) {};
+	virtual void Render(DX9::MODEL& model) {}
 	virtual void UIRender();
+
+	virtual void HitAction(ObjectBase* hitObject);
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
 	void Shoting(ObjBall* ball);

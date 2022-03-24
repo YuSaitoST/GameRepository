@@ -19,7 +19,7 @@ void StFloat::Update(ObjBall* ball) {
 		ReSpone(ball);
 	}
 
-	if (ball->IsInPlayerHands()) {
+	if (ball->IsInPlayerHands() && ball->GetOwnerID() != -1) {
 		ball->ResetVelocity();
 		ball->SwitchState(ball->STATE::CAUTCH);
 		ball->SwitchColor(ball->COLOR_TYPE::PLAYERS_COLOR);
@@ -40,6 +40,7 @@ void StFloat::SetTransform() {
 void StFloat::ReSpone(ObjBall* ball) {
 	SetTransform();
 	ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward_);
+	const int power = GAME_CONST.BA_SPEED_FLOAT;
 	ball->AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
 }
 

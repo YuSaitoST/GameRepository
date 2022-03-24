@@ -67,19 +67,10 @@ void ObjBall::Update(const float deltaTime) {
 
 	UpdateToMorton();
 
-	ObjectBase* _obj = IsHitObject();
-	if (_obj != nullptr) {
-		if (_obj->myObjectType() == OBJ_TYPE::PLAYER) {
-			ObjPlayer* _player = dynamic_cast<ObjPlayer*>(_obj);
-			if (nowState_ == STATE::FLOAT)
-				isInPlayerHands_ = true;
-			else if (nowState_ == STATE::SHOT) {
-				if (id_owner_ == _player->myObjectID())
-					return;
-				isBreak_ = true;
-			}
-		}
-	}
+	HitAction(IsHitObject());
+
+	//isInPlayerHands_ = (nowState_ != STATE::FLOAT);
+	//id_owner_ = (nowState_ != STATE::FLOAT) ? id_owner_ : -1;
 }
 
 void ObjBall::Render(DX9::MODEL& model) {
@@ -87,6 +78,25 @@ void ObjBall::Render(DX9::MODEL& model) {
 	model->SetRotation(Vector3(rotate_.x, rotate_.y, 0.0f));
 	model->SetMaterial(ChangeMaterial(colorType_));
 	model->Draw();
+}
+
+void ObjBall::HitAction(ObjectBase* hitObject) {
+	if (hitObject == nullptr)
+		return;
+
+	const OBJ_TYPE _type = hitObject->myObjectType();
+
+	if (_type == PLAYER) {
+		if (hitObject->myObjectID() == id_my_)
+			return;
+
+		if (nowState_ == FLOAT) {
+			isInPlayerHands_ = true;
+		}
+		else if (nowState_ == SHOT) {
+			isBreak_ = true;
+		}
+	}
 }
 
 void ObjBall::SwitchState(STATE state) {

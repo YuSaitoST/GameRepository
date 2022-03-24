@@ -27,12 +27,14 @@ public:
 	virtual ~ObjBall();
 
 	virtual void Initialize(const int id);
-	virtual void LoadAssets(std::wstring file_name) {};
+	virtual void LoadAssets(std::wstring file_name) {}
 	virtual void LoadAssets(DX9::MODEL& model);
 	virtual void Update(const float deltaTime);
-	virtual void Render() {};
+	virtual void Render() {}
 	virtual void Render(DX9::MODEL& model);
-	virtual void UIRender() {};
+	virtual void UIRender() {}
+
+	virtual void HitAction(ObjectBase* hitObject);
 
 	void SwitchState(STATE state);
 	void SwitchColor(COLOR_TYPE colorType);

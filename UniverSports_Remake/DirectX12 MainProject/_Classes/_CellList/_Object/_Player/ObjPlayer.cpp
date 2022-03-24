@@ -92,6 +92,49 @@ void ObjPlayer::Render() {
 	model_->Draw();
 }
 
+void ObjPlayer::HitAction(ObjectBase* hitObject) {
+	if (hitObject == nullptr) {
+		model_->SetMaterial(GetNomMaterial());
+		return;
+	}
+
+	const OBJ_TYPE _type = hitObject->myObjectType();
+
+	if (_type == WIRE) {
+		D3DMATERIAL9 _mate{};
+		_mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+		_mate.Ambient = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+		model_->SetMaterial(_mate);
+	}
+	else if (_type == BALL) {
+		ObjBall* _ball = dynamic_cast<ObjBall*>(hitObject);  // ボールの状態を知るため
+
+		if (id_my_ == _ball->GetOwnerID())  // 自分が持つボールとの当たり判定は取る必要なし
+			return;
+
+		const ObjBall::STATE _baleState = _ball->NowState();
+
+		if (_baleState == _ball->STATE::SHOT) {  // やられ処理
+			life_->TakeDamage();
+			eff_down_->PlayOneShot();
+			eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
+
+			SetTransforms(Vector2(99.0f, 99.0f), rotate_);
+			pos_ = Vector2(13.0f, 6.0f);
+
+			isDown_ = true;
+		}
+		else if (_baleState == _ball->STATE::FLOAT) {  // キャッチ処理
+			assert(myBall_ == nullptr);
+
+			myBall_ = _ball;
+
+			myBall_->SetOwnerID(id_my_);
+			hasBall_ = true;
+		}
+	}
+}
+
 void ObjPlayer::UIRender() {
 	if (life_->NowLifePoint() <= 0)
 		return;
@@ -138,10 +181,6 @@ Vector2 ObjPlayer::Get_HandPos() {
 	return (pos_ + handForward_ * POS_HAND);
 }
 
-/*
-* stateパターンにした方が良さそうな部分
-*/
-
 void ObjPlayer::Playing(const float deltaTime) {
 	AnimReset();
 	AnimSet(AnimChange(), deltaTime);
@@ -158,55 +197,7 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 	UpdateToMorton();
 
-	if (id_my_ == 0 && myBall_ != nullptr)
-		return;
-
-	ObjectBase* _obj = IsHitObject();
-	if (_obj != nullptr) {
-		if (_obj->myObjectType() == OBJ_TYPE::WIRE) {
-			D3DMATERIAL9 _mate{};
-			_mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
-			_mate.Ambient = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
-			model_->SetMaterial(_mate);
-		}
-		else if (_obj->myObjectType() == OBJ_TYPE::BALL) {
-			ObjBall* _ball = dynamic_cast<ObjBall*>(_obj);
-
-			// やられ処理
-			if (_ball->NowState() == _ball->STATE::SHOT) {
-				if (_ball->GetOwnerID() == id_my_)
-					return;
-
-				life_->TakeDamage();
-				eff_down_->PlayOneShot();
-				eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
-				isDown_ = true;
-
-				SetTransforms(Vector2(99.0f, 99.0f), rotate_);
-				pos_ = Vector2::Zero;
-
-				return;
-			}
-			// キャッチ処理
-			else if (_ball->NowState() == _ball->STATE::FLOAT) {
-				if (myBall_ != nullptr)
-					return;
-
-				myBall_ = _ball;
-
-				if (myBall_->GetOwnerID() != -1) {
-					myBall_ = nullptr;
-					return;
-				}
-
-				myBall_->SetOwnerID(id_my_);
-				hasBall_ = true;
-			}
-		}
-	}
-	else {
-		model_->SetMaterial(GetNomMaterial());
-	}
+	HitAction(IsHitObject());
 }
 
 void ObjPlayer::Beaten(const float deltaTime) {

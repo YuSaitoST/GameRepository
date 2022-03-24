@@ -9,10 +9,19 @@ public:
 
 	virtual void Accepts(int index) override;
 
-	Vector2 LeftDirection() { return Vector2(n_Lx_, n_Ly_); }
-	Vector2 RightDirection() { return Vector2(n_Rx_, n_Ry_); }
-	float LeftTrigger() { return n_Ltrg_; }
-	float RightTrigger() { return n_Rtrg_; }
+	Vector2 LeftDirection() {
+		return Vector2(n_Lx_, n_Ly_);
+	}
+	Vector2 RightDirection() {
+		return Vector2(n_Rx_, n_Ry_); 
+	}
+
+	float LeftTrigger() { 
+		return n_Ltrg_; 
+	}
+	float RightTrigger() {
+		return n_Rtrg_;
+	}
 
 private:
 	float n_Lx_, n_Ly_;

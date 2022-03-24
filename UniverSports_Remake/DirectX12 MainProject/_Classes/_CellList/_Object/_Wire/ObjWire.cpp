@@ -29,4 +29,14 @@ void ObjWire::LoadAssets(std::wstring file_name) {
 
 void ObjWire::Update(const float deltaTime) {
 	UpdateToMorton();
+
+	if (DontDestroy->GameMode_ != 3)
+		return;
+
+	HitAction(IsHitObject());
+}
+
+void ObjWire::HitAction(ObjectBase* hitObject) {
+	if (hitObject == nullptr)
+		return;
 }
