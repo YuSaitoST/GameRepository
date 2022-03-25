@@ -4,7 +4,7 @@
 
 void StShot::Update(ObjBall* ball) {
 	pos_z_ = std::min(0.0f, ball->myPosZ() + 0.016f);
-	const auto &_pos = ball->myPosition();
+	const Vector2 &_pos = ball->myPosition();
 	ball->AssignTransform(Vector3(_pos.x, _pos.y, pos_z_), forward_);
 
 	const bool _isFieldOut = ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE);

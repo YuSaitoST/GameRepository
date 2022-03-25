@@ -87,14 +87,20 @@ void ObjBall::HitAction(ObjectBase* hitObject) {
 	const OBJ_TYPE _type = hitObject->myObjectType();
 
 	if (_type == PLAYER) {
-		if (hitObject->myObjectID() == id_my_)
-			return;
-
 		if (nowState_ == FLOAT) {
 			isInPlayerHands_ = true;
 		}
+		else if (nowState_ == CAUTCH) {
+			isBreak_ = isBreak_;  // ‚¢‚ç‚È‚¢•”•ª
+		}
 		else if (nowState_ == SHOT) {
+			if (hitObject->myObjectID() == id_owner_)
+				return;
+
 			isBreak_ = true;
+		}
+		else {
+			isBreak_ = isBreak_;  // ‚¢‚ç‚È‚¢•”•ª
 		}
 	}
 }

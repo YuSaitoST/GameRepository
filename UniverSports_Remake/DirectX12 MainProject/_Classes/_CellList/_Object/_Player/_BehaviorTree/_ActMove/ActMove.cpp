@@ -17,8 +17,6 @@ void ActMove::Update(const float deltaTime, ObjPlayer& player) {
 bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
 
-	return false;
-
 	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
 	ObjectBase* _targetBall = ObjectManager::TheClosestBall(my.myPosition(), _comparison);
 

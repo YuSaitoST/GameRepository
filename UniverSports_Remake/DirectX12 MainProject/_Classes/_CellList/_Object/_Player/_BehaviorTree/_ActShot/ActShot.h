@@ -6,7 +6,7 @@
 
 class ActShot final : public ActionBase {
 public:
-	ActShot() { timer_ = new OriTimer(0.5f);}
+	ActShot() { timer_ = new OriTimer(1.5f);}
 	virtual ~ActShot() {}
 
 	virtual void Initialize(int id) {}

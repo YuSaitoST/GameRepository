@@ -114,7 +114,18 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 
 		const ObjBall::STATE _baleState = _ball->NowState();
 
-		if (_baleState == _ball->STATE::SHOT) {  // やられ処理
+		if (_baleState == _ball->STATE::FLOAT) {  // キャッチ処理
+			assert(myBall_ == nullptr);
+
+			myBall_ = _ball;
+
+			myBall_->SetOwnerID(id_my_);
+			hasBall_ = true;
+		}
+		else if (_baleState == _ball->STATE::CAUTCH) {
+			myBall_ = myBall_;  // いらない部分
+		}
+		else if (_baleState == _ball->STATE::SHOT) {  // やられ処理
 			life_->TakeDamage();
 			eff_down_->PlayOneShot();
 			eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
@@ -123,14 +134,6 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			pos_ = Vector2(13.0f, 6.0f);
 
 			isDown_ = true;
-		}
-		else if (_baleState == _ball->STATE::FLOAT) {  // キャッチ処理
-			assert(myBall_ == nullptr);
-
-			myBall_ = _ball;
-
-			myBall_->SetOwnerID(id_my_);
-			hasBall_ = true;
 		}
 	}
 }
