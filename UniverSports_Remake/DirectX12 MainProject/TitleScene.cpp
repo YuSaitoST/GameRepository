@@ -154,6 +154,9 @@ NextScene TitleScene::Update(const float deltaTime)
 			nowText_[_t][choices_->SelectNum()].GetBigger(deltaTime) :
 			nowText_[_t][choices_->SelectNum()].GetSmaller(deltaTime);
 
+	/*
+		決定ボタンを押したら、選択した項目に合わせた処理を行う
+	*/
 	if (Press.DecisionKey()) {
 		se_decision_->PlayOneShot();
 		const int _select = cursor_->SelectNum();

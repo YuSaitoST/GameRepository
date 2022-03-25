@@ -122,9 +122,6 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			myBall_->SetOwnerID(id_my_);
 			hasBall_ = true;
 		}
-		else if (_baleState == _ball->STATE::CAUTCH) {
-			myBall_ = myBall_;  // ‚¢‚ç‚È‚¢•”•ª
-		}
 		else if (_baleState == _ball->STATE::SHOT) {  // ‚â‚ç‚êˆ—
 			life_->TakeDamage();
 			eff_down_->PlayOneShot();
@@ -134,6 +131,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			pos_ = Vector2(13.0f, 6.0f);
 
 			isDown_ = true;
+			_ball->SetBallBreak(true);
 		}
 	}
 }

@@ -54,6 +54,7 @@ public:
 	}
 	void ResetVelocity() { physics_->ResetVelocity(); }
 	void SetOwnerID(int id_player) { id_owner_ = id_player; }
+	void SetBallBreak(bool flag) { isBreak_ = flag; }
 	void FlagResets() { isInPlayerHands_ = isBreak_ = false; }
 	int GetOwnerID() const { return id_owner_; }
 	float myPosZ() const { return pos_z_; }

@@ -42,6 +42,8 @@ void ObjBall::Initialize(const int id) {
 
 	state_->Initialize();
 
+	physics_->SetActivationState(DISABLE_DEACTIVATION);
+
 	pos_		= state_->GetPosition();
 	forward_	= state_->GetForward();
 
@@ -90,17 +92,11 @@ void ObjBall::HitAction(ObjectBase* hitObject) {
 		if (nowState_ == FLOAT) {
 			isInPlayerHands_ = true;
 		}
-		else if (nowState_ == CAUTCH) {
-			isBreak_ = isBreak_;  // ‚¢‚ç‚È‚¢•”•ª
-		}
 		else if (nowState_ == SHOT) {
 			if (hitObject->myObjectID() == id_owner_)
 				return;
 
 			isBreak_ = true;
-		}
-		else {
-			isBreak_ = isBreak_;  // ‚¢‚ç‚È‚¢•”•ª
 		}
 	}
 }
