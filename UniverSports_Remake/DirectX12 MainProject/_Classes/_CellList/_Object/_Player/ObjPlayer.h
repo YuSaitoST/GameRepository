@@ -44,6 +44,7 @@ public:
 	void AssignDirection(Vector2 dir) { forward_ = dir; }
 	void SetTarget(ObjectBase* target) { targetObj_ = target; }
 
+	int myLife() const { return life_->NowLifePoint(); }
 	bool HasBall() const { return hasBall_; }
 	Vector2 Get_HandPos();
 	ObjBall* MyBall() const { return myBall_; }

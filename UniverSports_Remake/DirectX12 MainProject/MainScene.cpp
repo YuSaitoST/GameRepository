@@ -30,10 +30,9 @@ MainScene::MainScene()
 	collision_dispatcher_	= new btCollisionDispatcher(collision_config_);
 	broadphase_				= new btDbvtBroadphase();
 	solver_					= new btSequentialImpulseConstraintSolver();
-	physics_world_			= new btDiscreteDynamicsWorld(
-		collision_dispatcher_, broadphase_, solver_, collision_config_
-	);
+	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
+	icon_animator_			= new IconAnimator();
 	field_					= new GameField(Vector3(0.0f, 0.0f, BACKGROUND), HOLE_FLONT, 1.0f);
 
 	m_object_				= new ObjectManager();
@@ -50,10 +49,10 @@ void MainScene::Initialize()
 	Light.Set();
 	Light.Enable();
 
+	icon_animator_->Initialize();
 	m_object_->Initialize();
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
-
 	m_object_->AddWorld(physics_world_);
 
 	// 一応なくても問題はないが、何かあったらこれを処理する
@@ -74,10 +73,7 @@ void MainScene::LoadAssets()
 
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 	SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);
-	D3D12_VIEWPORT viewport = {
-		0.0f, 0.0f, 1280.0f, 720.0f,
-		D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-	};
+	D3D12_VIEWPORT viewport = { 0.0f, 0.0f, 1280.0f, 720.0f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 
 	spriteBatch_ = DX12::CreateSpriteBatch(DXTK->Device, resourceUploadBatch, pd, &viewport);
 
@@ -88,8 +84,8 @@ void MainScene::LoadAssets()
 
 	DXTK->Direct3D9->SetRenderState(NormalizeNormals_Enable);
 
+	icon_animator_->LoadAssets();
 	field_->LoadAsset(L"_Movies\\main.wmv", L"_Images\\_Main\\holeFlont.png");
-
 	m_object_->LoadAssets();
 }
 
@@ -103,10 +99,10 @@ void MainScene::Terminate()
 
 	m_object_->RemoveWorld(physics_world_);
 
-
 	delete m_object_;
 
 	delete field_;
+	delete icon_animator_;
 
 	delete physics_world_;
 	delete solver_;
@@ -142,6 +138,7 @@ NextScene MainScene::Update(const float deltaTime)
 
 	DX12Effect.PlayOneShot("dummy");
 
+	icon_animator_->Update(deltaTime);
 	field_->Update();
 
 	m_object_->Update(deltaTime);
@@ -163,6 +160,9 @@ void MainScene::Render()
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
+	for (int _i = 0; _i < 2; ++_i)
+		icon_animator_->Render(m_object_->PlayerLife(_i), _i);
+
 	field_->Render();
 	m_object_->RenderSprites();
 
@@ -179,11 +179,7 @@ void MainScene::Render()
 	DXTK->CommandList->SetDescriptorHeaps(1, &heapes);
 
 	spriteBatch_->Begin(DXTK->CommandList);
-	spriteBatch_->Draw(
-		dx9GpuDescriptor_,
-		XMUINT2(1280, 720),   // HD
-		SimpleMath::Vector2(0.0f, 0.0f)
-	);
+	spriteBatch_->Draw(dx9GpuDescriptor_, XMUINT2(1280, 720), SimpleMath::Vector2(0.0f, 0.0f));
 
 	spriteBatch_->End();
 

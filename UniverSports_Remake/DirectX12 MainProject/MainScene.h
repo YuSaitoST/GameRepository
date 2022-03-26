@@ -11,6 +11,7 @@
 
 #include "_Classes/_ConstStrages/ConstStorages.h"
 
+#include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_GameField/GameField.h"
 
 #include "_Classes/_MainCamera/MainCamera.h"
@@ -60,6 +61,7 @@ private:
 	btBroadphaseInterface*				broadphase_;
 	btConstraintSolver*					solver_;
 
+	IconAnimator*						icon_animator_;
 	GameField*							field_;
 	ObjectManager*						m_object_;
 

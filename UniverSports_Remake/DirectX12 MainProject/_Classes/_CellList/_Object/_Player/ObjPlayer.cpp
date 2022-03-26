@@ -1,5 +1,6 @@
 #include "ObjPlayer.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
+#include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 
 ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
@@ -132,6 +133,8 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 
 			isDown_ = true;
 			_ball->SetBallBreak(true);
+
+			IconAnimator::DisplayOn();
 		}
 	}
 }

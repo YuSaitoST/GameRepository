@@ -31,6 +31,10 @@ ObjectBase* CellList::IsCollision(int index, ObjectBase* m) {
 		_mp_opponent = m->IsCollision(_cp->mp_);
 
 		if (_mp_opponent != nullptr && m != _mp_opponent) {
+			// “¯‚¶Ží—Þ“¯Žm‚ÌÕ“Ë‚È‚ç–³Ž‹
+			if (m->myObjectType() == _cp->mp_->myObjectType())
+				continue;
+
 			return _mp_opponent;
 		}
 

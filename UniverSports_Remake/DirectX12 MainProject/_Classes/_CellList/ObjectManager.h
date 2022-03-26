@@ -8,9 +8,9 @@
 
 class ObjectManager {
 private:
-	const int N_PLAYER	= 2;
-	const int N_BALL	= 1;
-	const int N_WIRE	= 4;
+	static const int N_PLAYER	= 2;
+	static const int N_BALL		= 1;
+	static const int N_WIRE		= 4;
 
 	const Vector3 POS_START[4] = {
 		Vector3(-GAME_CONST.PL_POS_X, GAME_CONST.PL_POS_Y, 0.0f),
@@ -51,6 +51,8 @@ public:
 	void AddWorld(btDynamicsWorld* physics_world_);
 	void RemoveWorld(btDynamicsWorld* physics_world_);
 
+	static int PlayerLife(int index);
+
 	static Vector2 PlayerHandsPos(int index);
 
 	static ObjectBase* TheClosestPlayer(const int id, const Vector2 pos, float& comparison);
@@ -59,9 +61,9 @@ public:
 private:
 	static float Comparison2Vector(const Vector2 p1, const Vector2 p2);
 
-	static ObjPlayer* obj_player_[2];
-	static ObjBall* obj_ball_[1];
-	static ObjWire* obj_wire_[4];
+	static ObjPlayer* obj_player_[N_PLAYER];
+	static ObjBall* obj_ball_[N_BALL];
+	static ObjWire* obj_wire_[N_WIRE];
 
 	DX9::MODEL mod_ball_;
 };

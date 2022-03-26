@@ -10,29 +10,29 @@ ObjectManager::ObjectManager() {
 
 	obj_ball_[0] = new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f);
 
-	for (int _i = 0; _i < 4; _i++)
+	for (int _i = 0; _i < N_WIRE; ++_i)
 		obj_wire_[_i] = new ObjWire(POS_WIRE[_i], 1.0f);
 }
 
 ObjectManager::~ObjectManager() {
-	for (int _i = N_WIRE - 1; 0 <= _i; _i--)
+	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		delete obj_wire_[_i];
 
-	for (int _i = N_BALL - 1; 0 <= _i; _i--)
+	for (int _i = N_BALL - 1; 0 <= _i; --_i)
 		delete obj_ball_[_i];
 	
-	for (int _i = N_PLAYER - 1; 0 <= _i; _i--)
+	for (int _i = N_PLAYER - 1; 0 <= _i; --_i)
 		delete obj_player_[_i];
 }
 
 void ObjectManager::Initialize() {
-	for (int _i = 0; _i < N_PLAYER; _i++)
+	for (int _i = 0; _i < N_PLAYER; ++_i)
 		obj_player_[_i]->Initialize(_i);
 
-	for (int _i = 0; _i < N_BALL; _i++)
+	for (int _i = 0; _i < N_BALL; ++_i)
 		obj_ball_[_i]->Initialize(_i);
 
-	for (int _i = 0; _i < N_WIRE; _i++)
+	for (int _i = 0; _i < N_WIRE; ++_i)
 		obj_wire_[_i]->Initialize(_i);
 }
 
@@ -41,7 +41,7 @@ void ObjectManager::LoadAssets() {
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
 	
-	for (int _i = 0; _i < N_PLAYER; _i++)
+	for (int _i = 0; _i < N_PLAYER; ++_i)
 		obj_player_[_i]->LoadAssets(PLAYER_FILENAME[_i]);
 
 	for (ObjectBase* obj : obj_ball_)
@@ -86,13 +86,18 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 }
 
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
-	for (int _i = 0; _i < N_WIRE; _i++)
+	for (int _i = 0; _i < N_WIRE; ++_i)
 		physics_world_->removeRigidBody(obj_wire_[_i]->myRigidbody());
 	
 	physics_world_->removeRigidBody(obj_ball_[0]->myRigidbody());
 
-	for (int _i = 0; _i < N_PLAYER; _i++)
+	for (int _i = 0; _i < N_PLAYER; ++_i)
 		physics_world_->removeRigidBody(obj_player_[_i]->myRigidbody());
+}
+
+int ObjectManager::PlayerLife(int index) {
+	assert((0 <= index) && "ObjectManager::PlayerLife() : Žw’è‚µ‚½index‚ª•s³‚Å‚·(•‰‚Ì’l‚É‚È‚Á‚Ä‚¢‚é)");
+	return obj_player_[index]->myLife();
 }
 
 Vector2 ObjectManager::PlayerHandsPos(int index) {
