@@ -36,11 +36,16 @@ public:
 
 	virtual void HitAction(ObjectBase* hitObject);
 
+	void WasCaught(const int ownerID);  // HitInstructorクラスで呼ぶ、ビリヤードモードでは1つだけInitizalizeでこれ呼ぶ
+	void WasThrown(Vector2 forward);
+	void WasGuessed();
+
+	/* ここまで確定関数 */
+
 	void SwitchState(STATE state);
 	void SwitchColor(COLOR_TYPE colorType);
 
 	void Moving(Vector3 power) { physics_->Moving(power); }
-	void Shoting(Vector2 forward);
 	void AddPower(Vector3 forward, float speed);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 	void AssignTransform(Vector3 position, Vector2 forward) {

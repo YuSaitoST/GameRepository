@@ -1,5 +1,6 @@
 #include "ObjBall.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
+#include "DontDestroyOnLoad.h"
 
 float ObjBall::pos_z_smallest_;
 
@@ -32,7 +33,7 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 }
 
 ObjBall::~ObjBall() {
-
+	delete physics_;
 }
 
 void ObjBall::Initialize(const int id) {
@@ -69,7 +70,7 @@ void ObjBall::Update(const float deltaTime) {
 
 	UpdateToMorton();
 
-	HitAction(IsHitObject());
+	//HitAction(GetHitObject());
 
 	//isInPlayerHands_ = (nowState_ != STATE::FLOAT);
 	//id_owner_ = (nowState_ != STATE::FLOAT) ? id_owner_ : -1;
@@ -142,8 +143,22 @@ void ObjBall::SetTransforms() {
 	physics_->SetTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3(rotate_.x, rotate_.y, 0.0f));
 }
 
-void ObjBall::Shoting(Vector2 forward) {
-	isInPlayerHands_ = false;
+void ObjBall::WasCaught(const int ownerID) {
+	id_owner_ = ownerID;
+	isInPlayerHands_ = true;
+	ResetVelocity();
+	AssignTransform(Vector3(pos_.x, pos_.y, pos_z_smallest_), forward_);
+	SwitchColor(PLAYERS_COLOR);
+}
+
+void ObjBall::WasThrown(Vector2 forward) {
 	forward_ = forward;
+	isInPlayerHands_ = false;
 	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_SHOT);
+}
+
+void ObjBall::WasGuessed() {
+	isBreak_ = true;
+	DontDestroy->Score_[id_owner_] += 1;
+	AssignTransform(Vector3(GAME_CONST.FieldSide_X, GAME_CONST.FieldSide_Y, 0.0f), Vector2::Zero);
 }

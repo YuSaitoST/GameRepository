@@ -12,12 +12,14 @@ ObjWire::ObjWire(Vector3 pos, float r) {
 }
 
 ObjWire::~ObjWire() {
-
+	delete physics_;
 }
 
 void ObjWire::Initialize(const int id) {
 	id_my_ = id;
 	physics_ = new btObject(BOX, Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
+
+	UpdateToMorton();
 }
 
 void ObjWire::LoadAssets(std::wstring file_name) {
@@ -26,17 +28,3 @@ void ObjWire::LoadAssets(std::wstring file_name) {
 	collision_->SetColli(BoundingOrientedBox(Vector3(pos_.x, pos_.y, 0.0f), SCALE, _qua));
 	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
 }  // FILE_NAME‚Í‹ó•¶Žš‚Å‚¢‚¢,“Ç‚Ýž‚Ý‚Í‚µ‚È‚¢‚©‚ç
-
-void ObjWire::Update(const float deltaTime) {
-	UpdateToMorton();
-
-	if (DontDestroy->GameMode_ != 3)
-		return;
-
-	HitAction(IsHitObject());
-}
-
-void ObjWire::HitAction(ObjectBase* hitObject) {
-	if (hitObject == nullptr)
-		return;
-}

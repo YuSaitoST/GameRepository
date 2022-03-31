@@ -1,6 +1,8 @@
 #include "ObjPlayer.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
+#include "_Classes/_CellList/_HitInstructor/HitInstructor.h"
+#include "DontDestroyOnLoad.h"
 
 ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
@@ -12,8 +14,8 @@ ObjPlayer::ObjPlayer() {
 	ti_respone_ = nullptr;
 	eff_down_ = nullptr;
 	strategy_ = nullptr;
-	myBall_ = nullptr;
 	targetObj_ = nullptr;
+	myBallID_ = -1;
 	hasBall_ = false;
 	isDown_ = false;
 }
@@ -25,8 +27,8 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	handForward_ = Vector2::Zero;
-	myBall_ = nullptr;
 	targetObj_ = nullptr;
+	myBallID_ = -1;
 	hasBall_ = false;
 	isDown_ = false;
 
@@ -45,6 +47,7 @@ ObjPlayer::~ObjPlayer() {
 	delete eff_down_;
 	delete ti_respone_;
 	delete life_;
+	delete physics_;
 }
 
 void ObjPlayer::Initialize(const int id) {
@@ -95,19 +98,15 @@ void ObjPlayer::Render() {
 
 void ObjPlayer::HitAction(ObjectBase* hitObject) {
 	if (hitObject == nullptr) {
+#ifdef DEBUG
 		model_->SetMaterial(GetNomMaterial());
+#endif // DEBUG
 		return;
 	}
 
 	const OBJ_TYPE _type = hitObject->myObjectType();
 
-	if (_type == WIRE) {
-		D3DMATERIAL9 _mate{};
-		_mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
-		_mate.Ambient = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
-		model_->SetMaterial(_mate);
-	}
-	else if (_type == BALL) {
+	if (_type == BALL) {
 		ObjBall* _ball = dynamic_cast<ObjBall*>(hitObject);  // ボールの状態を知るため
 
 		if (id_my_ == _ball->GetOwnerID())  // 自分が持つボールとの当たり判定は取る必要なし
@@ -116,12 +115,12 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 		const ObjBall::STATE _baleState = _ball->NowState();
 
 		if (_baleState == _ball->STATE::FLOAT) {  // キャッチ処理
-			assert(myBall_ == nullptr);
+			if (hasBall_ && myBallID_ != -1)
+				return;
 
-			myBall_ = _ball;
-
-			myBall_->SetOwnerID(id_my_);
 			hasBall_ = true;
+			myBallID_ = _ball->myObjectID();
+			HitInstructor::BallCautch(id_my_, myBallID_);
 		}
 		else if (_baleState == _ball->STATE::SHOT) {  // やられ処理
 			life_->TakeDamage();
@@ -132,11 +131,19 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			pos_ = Vector2(13.0f, 6.0f);
 
 			isDown_ = true;
-			_ball->SetBallBreak(true);
 
 			IconAnimator::DisplayOn();
+			HitInstructor::BallBreak(_ball->myObjectID());
 		}
 	}
+#ifdef DEBUG
+	else if (_type == WIRE) {
+		D3DMATERIAL9 _mate{};
+		_mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+		_mate.Ambient = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
+		model_->SetMaterial(_mate);
+	}
+#endif // DEBUG
 }
 
 void ObjPlayer::UIRender() {
@@ -170,10 +177,10 @@ ObjPlayer::MOTION ObjPlayer::AnimChange() {
 		return MOTION::STAND;
 }
 
-void ObjPlayer::Shoting(ObjBall* ball) {
+void ObjPlayer::Shoting(const int ballID) {
 	hasBall_ = false;
-	myBall_->Shoting(forward_);
-	myBall_ = nullptr;
+	myBallID_ = -1;
+	HitInstructor::BallShot(ballID, forward_);
 }
 
 Vector2 ObjPlayer::Get_HandPos() {
@@ -201,7 +208,7 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 	UpdateToMorton();
 
-	HitAction(IsHitObject());
+	HitAction(GetHitObject());
 }
 
 void ObjPlayer::Beaten(const float deltaTime) {

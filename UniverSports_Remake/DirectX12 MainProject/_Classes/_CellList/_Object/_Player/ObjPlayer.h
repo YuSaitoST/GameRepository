@@ -39,7 +39,7 @@ public:
 	virtual void HitAction(ObjectBase* hitObject);
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
-	void Shoting(ObjBall* ball);
+	void Shoting(const int ballID);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 	void AssignDirection(Vector2 dir) { forward_ = dir; }
 	void SetTarget(ObjectBase* target) { targetObj_ = target; }
@@ -47,7 +47,7 @@ public:
 	int myLife() const { return life_->NowLifePoint(); }
 	bool HasBall() const { return hasBall_; }
 	Vector2 Get_HandPos();
-	ObjBall* MyBall() const { return myBall_; }
+	int MyBallID() const { return myBallID_; }
 
 private:
 	void Playing(const float deltaTime);
@@ -65,10 +65,10 @@ private:
 	OriTimer* ti_respone_;
 	EffDown* eff_down_;
 	CharaStrategy* strategy_;
-	ObjBall* myBall_;
 	ObjectBase* targetObj_;
 	DX9::SKINNEDMODEL model_;
 	Vector2 handForward_;
 	bool hasBall_;
 	bool isDown_;
+	int myBallID_;
 };

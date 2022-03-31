@@ -3,7 +3,9 @@
 //
 
 #include "TitleScene.h"
+#include "LobbyScene.h"
 #include "MainScene.h"
+#include "ResultScene.h"
 
 class SceneFactory final {
 public:
@@ -11,8 +13,10 @@ public:
 	{
 		std::unique_ptr<Scene> scene;
 		switch (nextScene) {
-		case NextScene::TitleScene:	scene = std::make_unique<TitleScene>();	break;
-		case NextScene::MainScene:	scene = std::make_unique<MainScene>();	break;
+		case NextScene::TitleScene : scene = std::make_unique<TitleScene>();  break;
+		case NextScene::LobbyScene : scene = std::make_unique<LobbyScene>();  break;
+		case NextScene::MainScene  : scene = std::make_unique<MainScene>();	  break;
+		case NextScene::ResultScene: scene = std::make_unique<ResultScene>(); break;
 		}
 		return scene;
 	}

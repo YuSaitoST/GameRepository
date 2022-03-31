@@ -20,6 +20,11 @@
 #include "_Classes/_CellList/CellList.h"
 #include "_Classes/_CellList/ObjectManager.h"
 
+#ifdef DEBUG
+#include "_Classes/_DebugRender/DebugRender.h"
+#endif // DEBUG
+
+
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
 using std::make_unique;

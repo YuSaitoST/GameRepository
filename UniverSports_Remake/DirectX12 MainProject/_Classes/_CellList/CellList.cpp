@@ -20,15 +20,16 @@ void CellList::PushList(Cell* cp) {
 }
 
 //衝突判定(指定されたインデックスの空間内にある物体と判定)
-ObjectBase* CellList::IsCollision(int index, ObjectBase* m) {
+ObjectBase* CellList::GetCollision(int index, ObjectBase* m) {
 	ObjectBase* _mp_opponent = nullptr;
 
 	// 指定したindexの空間内
 	for (Cell* _cp = cpList_[index].next_, *_np = nullptr;
-		_cp != &cpList_[index];) {
+		_cp != &cpList_[index];) 
+	{
 		_np = _cp->next_;
 
-		_mp_opponent = m->IsCollision(_cp->mp_);
+		_mp_opponent = m->GetCollision(_cp->mp_);
 
 		if (_mp_opponent != nullptr && m != _mp_opponent) {
 			// 同じ種類同士の衝突なら無視

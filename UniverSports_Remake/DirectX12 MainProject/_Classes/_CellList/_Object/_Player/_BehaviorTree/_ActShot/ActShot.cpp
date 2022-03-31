@@ -6,13 +6,13 @@ void ActShot::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPl
 		return;
 
 	if (Press.ShotKey(player.myObjectID()))
-		player.Shoting(player.MyBall());
+		player.Shoting(player.MyBallID());
 }
 
 void ActShot::Update(const float deltaTime, ObjPlayer& player) {
 	timer_->Update(deltaTime);
 	if (timer_->TimeOut()) {
-		player.Shoting(player.MyBall());
+		player.Shoting(player.MyBallID());
 		timer_->ResetCountTime();
 	}
 }

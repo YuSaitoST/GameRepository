@@ -12,7 +12,6 @@ void StCautch::Update(ObjBall* ball) {
 	ball->PhysicsControll(Vector3(position_.x, position_.y, Z_MIN));
 
 	if (!ball->IsInPlayerHands()) {
-		ball->AssignTransform(Vector3(position_.x, position_.y, ball->pos_z_smallest_), ball->myDirection());
 		ball->SwitchState(ball->STATE::SHOT);
 	}
 	//if (ball->IsHit()) {

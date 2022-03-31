@@ -28,7 +28,7 @@ void ObjectBase::SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, flo
 	collision_ = new bdCollision(collision);
 }
 
-ObjectBase* ObjectBase::IsCollision(ObjectBase* m) {
+ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
 	if (this->obj_type_ == m->myObjectType())
 		return nullptr;
 
@@ -71,8 +71,8 @@ void ObjectBase::UpdateToMorton() {
 		cp_->UpdateToMorton();
 }
 
-ObjectBase* ObjectBase::IsHitObject() {
-	return cp_->IsCollision();  // 上方、同レベル、下方の3方向を調べる(四分木探索)
+ObjectBase* ObjectBase::GetHitObject() {
+	return cp_->GetCollision();  // 上方、同レベル、下方の3方向を調べる(四分木探索)
 }
 
 void ObjectBase::ClampLoop(Vector2& pos) {

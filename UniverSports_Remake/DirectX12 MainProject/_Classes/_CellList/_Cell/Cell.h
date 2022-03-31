@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Base/pch.h"
-#include "Base/dxtk.h"
-
-using namespace DirectX::SimpleMath;
 class ObjectBase;
 
 // 空間クラス
@@ -17,7 +13,7 @@ public:
 
 	void UpdateToMorton();		// mp_に合わせてモートン符号を更新する
 	void Remove();				// 双方向リストから抜ける
-	ObjectBase* IsCollision();  // 衝突判定
+	ObjectBase* GetCollision();  // 衝突判定
 
 	// 双方向リスト(自分の前後の空間を入れる)
 	Cell* prev_;
@@ -33,9 +29,5 @@ private:
 	ObjectBase* UpperSearch();		  // 上位探索
 	ObjectBase* LowerSearch(int nr);  // 下位探索
 
-	static int BitSlide(int b);  // bitを1ずつずらす
-	static int PointToMorton(Vector2 pos);
 	static void MoverToMorton(ObjectBase& m, int& L, int& I, int& M);
-
-	static const int N_ = 2;
 };

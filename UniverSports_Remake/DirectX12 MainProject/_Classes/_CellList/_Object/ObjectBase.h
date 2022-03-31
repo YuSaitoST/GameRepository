@@ -27,7 +27,7 @@ public:
 
 	virtual void HitAction(ObjectBase* hitObject) = 0;
 
-	virtual ObjectBase* IsCollision(ObjectBase* m);  // 衝突判定(Boundingを用いたもの)
+	virtual ObjectBase* GetCollision(ObjectBase* m);  // 衝突判定(Boundingを用いたもの)
 
 	static D3DMATERIAL9 GetNomMaterial() {
 		D3DMATERIAL9 _mate{};
@@ -52,7 +52,7 @@ protected:
 	virtual void SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r);
 	
 	void UpdateToMorton();
-	ObjectBase* IsHitObject();
+	ObjectBase* GetHitObject();
 
 	OBJ_TYPE obj_type_;		// オブジェクトの種類
 	bdCollision* collision_;// 当たり判定

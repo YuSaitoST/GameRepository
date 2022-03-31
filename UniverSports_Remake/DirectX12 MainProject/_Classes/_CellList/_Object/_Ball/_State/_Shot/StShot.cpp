@@ -9,12 +9,9 @@ void StShot::Update(ObjBall* ball) {
 
 	const bool _isFieldOut = ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE);
 	const bool _isGotStuck = std::abs(position_.x) == GAME_CONST.FieldSide_X;
-	if (ball->IsBreaked() || ball->GetOwnerID() ==-1) {
-		pos_z_ = pos_z_;
-	}
+
 	if (_isFieldOut || _isGotStuck || ball->IsBreaked() || ball->GetOwnerID() == -1) {
 		ball->SetOwnerID(-1);
-		ball->AssignTransform(Vector3(GAME_CONST.FieldSide_X, GAME_CONST.FieldSide_Y, 0.0f), Vector2::Zero);
 		ball->SwitchState(ball->STATE::FLOAT);
 		ball->SwitchColor(ball->COLOR_TYPE::DEFAULT_COLOR);
 	}

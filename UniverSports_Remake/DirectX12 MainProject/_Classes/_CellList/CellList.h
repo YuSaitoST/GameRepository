@@ -10,7 +10,7 @@ public:
 	virtual ~CellList();
 
 	void PushList(Cell* cp);  // ƒŠƒXƒg‚É’Ç‰Á
-	ObjectBase* IsCollision(int index, ObjectBase* m);  // Õ“Ë”»’è	
+	ObjectBase* GetCollision(int index, ObjectBase* m);  // Õ“Ë”»’è	
 
 private:
 	const int N = 2;  // •ªŠ„ƒŒƒxƒ‹‚ÌÅ‘å

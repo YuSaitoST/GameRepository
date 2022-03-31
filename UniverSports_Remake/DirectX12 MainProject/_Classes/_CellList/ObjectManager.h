@@ -12,18 +12,18 @@ private:
 	static const int N_BALL		= 1;
 	static const int N_WIRE		= 4;
 
-	const Vector3 POS_START[4] = {
+	const Vector3 POS_START[N_PLAYER] = {
 		Vector3(-GAME_CONST.PL_POS_X, GAME_CONST.PL_POS_Y, 0.0f),
-		Vector3(GAME_CONST.PL_POS_X,	GAME_CONST.PL_POS_Y, 0.0f),
+		Vector3(GAME_CONST.PL_POS_X,	GAME_CONST.PL_POS_Y, 0.0f)/*,
 		Vector3(-GAME_CONST.PL_POS_X, -GAME_CONST.PL_POS_Y, 0.0f),
-		Vector3(GAME_CONST.PL_POS_X,  -GAME_CONST.PL_POS_Y, 0.0f)
+		Vector3(GAME_CONST.PL_POS_X,  -GAME_CONST.PL_POS_Y, 0.0f)*/
 	};
 
-	const std::wstring PLAYER_FILENAME[4] = {
+	const std::wstring PLAYER_FILENAME[N_PLAYER] = {
 		L"_Models\\_Player\\player_g.X",
-		L"_Models\\_Player\\player_p.X",
+		L"_Models\\_Player\\player_p.X"/*,
 		L"_Models\\_Player\\player_r.X",
-		L"_Models\\_Player\\player_y.X"
+		L"_Models\\_Player\\player_y.X"*/
 	};
 
 	const float FX = 32.0f;
@@ -31,7 +31,7 @@ private:
 	const float X = FX - 5.25f + 1.25f;
 	const float Y = FY - 4.75f + 1.25f;
 
-	const SimpleMath::Vector3 POS_WIRE[4] = {
+	const SimpleMath::Vector3 POS_WIRE[N_WIRE] = {
 		Vector3(-X, Y, 0.0f),
 		Vector3(X,Y,0.0f),
 		Vector3(X,-Y,0.0f),
@@ -57,6 +57,8 @@ public:
 
 	static ObjectBase* TheClosestPlayer(const int id, const Vector2 pos, float& comparison);
 	static ObjectBase* TheClosestBall(const Vector2 pos, float& comparison);
+
+	static ObjBall* GetBallObj(const int ballID) { return obj_ball_[ballID]; }
 
 private:
 	static float Comparison2Vector(const Vector2 p1, const Vector2 p2);

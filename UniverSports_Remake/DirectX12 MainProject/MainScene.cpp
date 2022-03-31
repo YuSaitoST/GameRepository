@@ -41,6 +41,10 @@ MainScene::MainScene()
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
+#ifdef DEBUG
+	omp_set_num_threads(4);
+#endif // DEBUG
+
 	DXTK->SetFixedFrameRate(60);
 
 	DX12Effect.Initialize();
@@ -55,10 +59,9 @@ void MainScene::Initialize()
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 	m_object_->AddWorld(physics_world_);
 
-	// 一応なくても問題はないが、何かあったらこれを処理する
-	EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
-	//DX12Effect.PlayOneShot("dummy");
-	//DX12Effect.Stop("dummy");
+#ifdef DEBUG
+	DebugList.PushList(L"Player1 Score : %i", DontDestroy->Score_[0]);
+#endif // DEBUG
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -87,6 +90,11 @@ void MainScene::LoadAssets()
 	icon_animator_->LoadAssets();
 	field_->LoadAsset(L"_Movies\\main.wmv", L"_Images\\_Main\\holeFlont.png");
 	m_object_->LoadAssets();
+
+	// 一応なくても問題はないが、何かあったらこれを処理する
+	EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
+	DX12Effect.PlayOneShot("dummy");
+	DX12Effect.Stop("dummy");
 }
 
 // Releasing resources required for termination.
@@ -136,7 +144,7 @@ NextScene MainScene::Update(const float deltaTime)
 	DX12Effect.Update(deltaTime);
 	Press.Accepts();
 
-	DX12Effect.PlayOneShot("dummy");
+	//DX12Effect.PlayOneShot("dummy");
 
 	icon_animator_->Update(deltaTime);
 	field_->Update();
@@ -166,6 +174,10 @@ void MainScene::Render()
 	field_->Render();
 	m_object_->RenderSprites();
 
+
+#ifdef DEBUG
+	DebugList.Render();
+#endif // DEBUG
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言

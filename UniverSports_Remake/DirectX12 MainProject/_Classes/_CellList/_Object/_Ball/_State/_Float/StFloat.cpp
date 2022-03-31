@@ -20,9 +20,7 @@ void StFloat::Update(ObjBall* ball) {
 	}
 
 	if (ball->IsInPlayerHands() && ball->GetOwnerID() != -1) {
-		ball->ResetVelocity();
 		ball->SwitchState(ball->STATE::CAUTCH);
-		ball->SwitchColor(ball->COLOR_TYPE::PLAYERS_COLOR);
 		return;
 	}
 
