@@ -29,6 +29,8 @@ void TitleScene::Initialize()
 {
 	omp_set_num_threads(4);
 
+	DXTK->SetFixedFrameRate(60);
+
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_title.wav", SOUND_TYPE::BGM);
 	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision_title.wav", SOUND_TYPE::SE, 2);
 
@@ -170,7 +172,7 @@ NextScene TitleScene::Update(const float deltaTime)
 				return NextScene::Continue;
 
 			DontDestroy->GameMode_ = choices_->SelectNum();
-			return NextScene::MainScene;
+			return NextScene::LobbyScene;
 		}
 	}
 

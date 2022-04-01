@@ -128,7 +128,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
 
 			SetTransforms(Vector2(99.0f, 99.0f), rotate_);
-			pos_ = Vector2(13.0f, 6.0f);
+			pos_ = Vector2(13.0f, 6.0f);  // ‰ŠúÀ•W‚ğ“ü‚ê‚½‚¢
 
 			isDown_ = true;
 

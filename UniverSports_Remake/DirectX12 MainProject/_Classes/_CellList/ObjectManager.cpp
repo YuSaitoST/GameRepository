@@ -15,6 +15,16 @@ ObjectManager::ObjectManager() {
 
 	for (int _i = 0; _i < N_WIRE; ++_i)
 		obj_wire_[_i] = new ObjWire(POS_WIRE[_i], 1.0f);
+
+#ifdef DEBUG
+	int size_p = sizeof(new ObjPlayer());
+	int size_p0 = sizeof(obj_player_[0]);
+	int size_b = sizeof(new ObjBall());
+	int size_b0 = sizeof(obj_ball_[0]);
+	int size_w = sizeof(new ObjWire());
+	int size_w0 = sizeof(obj_wire_[0]);
+#endif // DEBUG
+
 }
 
 ObjectManager::~ObjectManager() {

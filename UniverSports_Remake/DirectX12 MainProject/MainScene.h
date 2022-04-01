@@ -56,8 +56,8 @@ public:
 	void Render() override;
 
 private:
-	DX12::DESCRIPTORHEAP				descriptorHeap_;  // データを保存する
-	DX12::SPRITEBATCH					spriteBatch_;     // 並列処理の分だけ作る必要がある(メモより、分からん)
+	DX12::DESCRIPTORHEAP				descriptorHeap_;
+	DX12::SPRITEBATCH					spriteBatch_;
 	DX12::HGPUDESCRIPTOR				dx9GpuDescriptor_;
 
 	btDynamicsWorld*					physics_world_;

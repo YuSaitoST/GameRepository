@@ -34,16 +34,16 @@ public:
 	virtual void Render(DX9::MODEL& model);
 	virtual void UIRender() {}
 
-	virtual void HitAction(ObjectBase* hitObject);
+	virtual void HitAction(ObjectBase* hitObject) {}
 
 	void WasCaught(const int ownerID);  // HitInstructorクラスで呼ぶ、ビリヤードモードでは1つだけInitizalizeでこれ呼ぶ
 	void WasThrown(Vector2 forward);
 	void WasGuessed();
 
-	/* ここまで確定関数 */
-
 	void SwitchState(STATE state);
 	void SwitchColor(COLOR_TYPE colorType);
+
+	/* ここまで確定関数 */
 
 	void Moving(Vector3 power) { physics_->Moving(power); }
 	void AddPower(Vector3 forward, float speed);

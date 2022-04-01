@@ -15,19 +15,4 @@ void StShot::Update(ObjBall* ball) {
 		ball->SwitchState(ball->STATE::FLOAT);
 		ball->SwitchColor(ball->COLOR_TYPE::DEFAULT_COLOR);
 	}
-
-	//if (DontDestroy->GameMode_ != 3) {
-	//	if (ball->IsHit() || ball->IsFieldOut(position_)) {
-	//		ball->SetIsShot(false);
-	//		ball->SetIsHit(false);
-	//		ball->SetOwnerID(-1);
-	//		ball->SetBtPosition(SimpleMath::Vector3(99.0f, 99.0f, 0.0f));
-	//		ball->SwitchState(ball->STATE::FLOAT);
-	//		ball->SetMaterial();
-	//	}
-	//}
-	//else {
-	//	ball->SetOwnerID(-1);
-	//	ball->SwitchState(ball->STATE::FLOAT);
-	//}
 }
