@@ -54,10 +54,7 @@ void TitleScene::LoadAssets()
 
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 	SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);
-	D3D12_VIEWPORT viewport = {
-	0.0f, 0.0f, 1280.0f, 720.0f,
-	D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-	};
+	D3D12_VIEWPORT viewport = {0.0f, 0.0f, 1280.0f, 720.0f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH};
 
 	spriteBatch_ = DX12::CreateSpriteBatch(DXTK->Device, resourceUploadBatch, pd, &viewport);
 

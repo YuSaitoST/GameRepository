@@ -29,6 +29,13 @@ public:
 	}
 
 public:
+	enum GAMEMODE {
+		DODGE_BALL_NOMAL,
+		DODGE_BALL_2ON2,
+		HAND_BALL,
+		BILLIARDS
+	};
+
 	int GameMode_;
 	int ChoseColor_[4];
 	int Score_[4];

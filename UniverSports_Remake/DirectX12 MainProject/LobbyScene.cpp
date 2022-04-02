@@ -27,6 +27,9 @@ LobbyScene::LobbyScene()
 	broadphase_ = new btDbvtBroadphase();
 	solver_ = new btSequentialImpulseConstraintSolver();
 	physics_world_ = new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
+
+	for (int _i = 0; _i < 4; ++_i)
+		charaSelect_[_i] = new CharaSelect();
 }
 
 // Initialize a variable and audio resources.
@@ -37,6 +40,9 @@ void LobbyScene::Initialize()
 	Light.Initialize();
 	Light.Set();
 	Light.Enable();
+
+	for (CharaSelect* obj : charaSelect_)
+		obj->Initialize();
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -51,10 +57,7 @@ void LobbyScene::LoadAssets()
 
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 	SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);
-	D3D12_VIEWPORT viewport = {
-	0.0f, 0.0f, 1280.0f, 720.0f,
-	D3D12_MIN_DEPTH, D3D12_MAX_DEPTH
-	};
+	D3D12_VIEWPORT viewport = {0.0f, 0.0f, 1280.0f, 720.0f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH};
 
 	spriteBatch_ = DX12::CreateSpriteBatch(DXTK->Device, resourceUploadBatch, pd, &viewport);
 
@@ -63,7 +66,18 @@ void LobbyScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	// 一応なくても問題はないが、何かあったらこれを処理する
+	sp_bg = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\backGround.png");
+	sp_right = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_right.png");
+	sp_left = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_left.png");
+	sp_decision = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_decision.png");
+	sp_cancel = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_cancel.png");
+	sp_entry = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_entry.png");
+	sp_teamCol_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_a.png");
+	sp_teamCol_[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_b.png");
+
+	for (CharaSelect* obj : charaSelect_)
+		obj->LoadAssets(sp_right, sp_left);
+
 	EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
 	DX12Effect.PlayOneShot("dummy");
 	DX12Effect.Stop("dummy");
@@ -76,6 +90,9 @@ void LobbyScene::Terminate()
 	DXTK->WaitForGpu();
 
 	// TODO: Add your Termination logic here.
+
+	for (int _i = 3; 0 <= _i; --_i)
+		delete charaSelect_[_i];
 
 	delete physics_world_;
 	delete solver_;
@@ -109,7 +126,9 @@ NextScene LobbyScene::Update(const float deltaTime)
 	DX12Effect.Update(deltaTime);
 	Press.Accepts();
 
-	if (Press.AnyKey())
+	charaSelect_[0]->Update(deltaTime, 0);
+
+	if (Press.DecisionKey())
 		return NextScene::MainScene;
 
 	return NextScene::Continue;
@@ -125,7 +144,7 @@ void LobbyScene::Render()
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
-	
+	charaSelect_[0]->Render();
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言

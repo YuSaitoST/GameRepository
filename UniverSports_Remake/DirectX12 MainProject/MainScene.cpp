@@ -34,6 +34,7 @@ MainScene::MainScene()
 
 	icon_animator_			= new IconAnimator();
 	field_					= new GameField(Vector3(0.0f, 0.0f, BACKGROUND), HOLE_FLONT, 1.0f);
+	gameController_			= new GameController();
 
 	m_object_				= new ObjectManager();
 }
@@ -133,6 +134,8 @@ NextScene MainScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
+	gameController_->Update(deltaTime);
+
 	physics_world_->stepSimulation(deltaTime, 10);  // —^‚¦‚½’l‚ð10•ªŠ„‚·‚é(”»’è‚ª×‚©‚­‚Å‚«‚é)
 
 	DX12Effect.Update(deltaTime);
@@ -144,7 +147,7 @@ NextScene MainScene::Update(const float deltaTime)
 	m_object_->Update(deltaTime);
 
 
-	return NextScene::Continue;
+	return GameFined();
 }
 
 // Draws the scene.
@@ -191,4 +194,8 @@ void MainScene::Render()
 
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();
+}
+
+NextScene MainScene::GameFined() {
+	return gameController_->GameFined() ? NextScene::ResultScene : NextScene::Continue;
 }

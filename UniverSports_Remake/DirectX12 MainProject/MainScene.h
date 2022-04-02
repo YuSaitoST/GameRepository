@@ -13,6 +13,7 @@
 
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_GameField/GameField.h"
+#include "_Classes/_GameController/GameController.h"
 
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_MainLight/MainLight.h"
@@ -55,6 +56,8 @@ public:
 	NextScene Update(const float deltaTime) override;
 	void Render() override;
 
+	NextScene GameFined();
+
 private:
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
 	DX12::SPRITEBATCH					spriteBatch_;
@@ -68,6 +71,7 @@ private:
 
 	IconAnimator*						icon_animator_;
 	GameField*							field_;
+	GameController*						gameController_;
 	ObjectManager*						m_object_;
 
 private:

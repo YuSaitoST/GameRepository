@@ -12,6 +12,8 @@
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_MainLight/MainLight.h"
 
+#include "_Classes/_UI/_CharaSelect/CharaSelect.h"
+
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
 using std::make_unique;
@@ -41,14 +43,25 @@ public:
 	void Render() override;
 
 private:
-	DX12::DESCRIPTORHEAP	descriptorHeap_;
-	DX12::SPRITEBATCH		spriteBatch_;
-	DX12::HGPUDESCRIPTOR	dx9GpuDescriptor_;
+	DX12::DESCRIPTORHEAP				descriptorHeap_;
+	DX12::SPRITEBATCH					spriteBatch_;
+	DX12::HGPUDESCRIPTOR				dx9GpuDescriptor_;
 
-	btDynamicsWorld* physics_world_;
-	btDefaultCollisionConfiguration* collision_config_;
-	btCollisionDispatcher* collision_dispatcher_;
-	btBroadphaseInterface* broadphase_;
-	btConstraintSolver* solver_;
+	DX9::SPRITE							sp_bg;
+	DX9::SPRITE							sp_right;
+	DX9::SPRITE							sp_left;
+	DX9::SPRITE							sp_decision;
+	DX9::SPRITE							sp_cancel;
+	DX9::SPRITE							sp_entry;
+	DX9::SPRITE							sp_playerIcon[4];
+	DX9::SPRITE							sp_teamCol_[2];
+
+	btDynamicsWorld*					physics_world_;
+	btDefaultCollisionConfiguration*	collision_config_;
+	btCollisionDispatcher*				collision_dispatcher_;
+	btBroadphaseInterface*				broadphase_;
+	btConstraintSolver*					solver_;
+
+	CharaSelect*						charaSelect_[4];
 
 };
