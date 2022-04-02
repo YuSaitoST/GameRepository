@@ -31,6 +31,14 @@ bool UseKeyCheck::DecisionKey() {
 	return key_.EventOnOffKey(KEY::B) || pad_.EventOnOffKey(0, PAD::P_B);
 }
 
+bool UseKeyCheck::CancelKey() {
+	return key_.EventOnOffKey(KEY::A) || pad_.EventOnOffKey(0, PAD::P_A);
+}
+
+bool UseKeyCheck::AllSelectKey() {
+	return key_.EventOnOffKey(KEY::TAB);
+}
+
 bool UseKeyCheck::ThrasherKey(int index) {
 	return key_.EventOnOffKey(KEY::B) || pad_.StateOnOffKey(0, PAD::P_B);
 }

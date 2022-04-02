@@ -39,4 +39,5 @@ void KeyBoadState::Accepts() {
 	flag_ += DXTK->KeyState->Down  ? (1 << DOWN ) : 0;
 	flag_ += DXTK->KeyState->Left  ? (1 << LEFT ) : 0;
 	flag_ += DXTK->KeyState->Right ? (1 << RIGHT) : 0;
+	flag_ += DXTK->KeyState->Tab   ? (1 << TAB	) : 0;
 }

@@ -9,6 +9,8 @@
 #include <btBulletDynamicsCommon.h>
 
 #include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_Classes/_MoviePlayer/MoviePlayer.h"
+
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_MainLight/MainLight.h"
 
@@ -43,6 +45,18 @@ public:
 	void Render() override;
 
 private:
+	const int VIEW_X = 288;
+	const int VIEW_Y = 98;
+	const int VIEW_W = 720;
+	const int VIEW_H = 403;
+
+	const std::wstring FILENAME_ICON[4] = {
+		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_g.png",
+		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_p.png",
+		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_r.png",
+		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_y.png"
+	};
+
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
 	DX12::SPRITEBATCH					spriteBatch_;
 	DX12::HGPUDESCRIPTOR				dx9GpuDescriptor_;
@@ -50,8 +64,7 @@ private:
 	DX9::SPRITE							sp_bg;
 	DX9::SPRITE							sp_right;
 	DX9::SPRITE							sp_left;
-	DX9::SPRITE							sp_decision;
-	DX9::SPRITE							sp_cancel;
+	DX9::SPRITE							sp_decisions[2];
 	DX9::SPRITE							sp_entry;
 	DX9::SPRITE							sp_playerIcon[4];
 	DX9::SPRITE							sp_teamCol_[2];
@@ -61,6 +74,8 @@ private:
 	btCollisionDispatcher*				collision_dispatcher_;
 	btBroadphaseInterface*				broadphase_;
 	btConstraintSolver*					solver_;
+
+	MoviePlayer*						bg_movie_;
 
 	CharaSelect*						charaSelect_[4];
 

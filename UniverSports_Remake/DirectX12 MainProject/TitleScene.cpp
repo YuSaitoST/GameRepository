@@ -144,10 +144,9 @@ NextScene TitleScene::Update(const float deltaTime)
 
 	if (cursor_->SelectNum() == 0) {
 		choices_->Update(Press.LeftKey(), Press.RightKey());
-		ChooseMode();
+		ui_arrows_->Update();
 	}
 
-	ui_arrows_->Update();
 	text_ = &nowText_[cursor_->SelectNum()][choices_->SelectNum()];
 
 	for (int _t = 0; _t < CHOICES; ++_t)
@@ -202,23 +201,11 @@ void TitleScene::Render()
 	DXTK->CommandList->SetDescriptorHeaps(1, &heapes);
 
 	spriteBatch_->Begin(DXTK->CommandList);
-	spriteBatch_->Draw(
-		dx9GpuDescriptor_,
-		XMUINT2(1280, 720),   // HD
-		SimpleMath::Vector2(0.0f, 0.0f)
-	);
+	spriteBatch_->Draw(dx9GpuDescriptor_, XMUINT2(1280, 720), SimpleMath::Vector2(0.0f, 0.0f));
 	spriteBatch_->End();
 
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();
-}
-
-void TitleScene::ChooseMode() {
-	const bool _inRight = Press.RightKey();
-	const bool _inLeft	= Press.LeftKey();
-
-	INPUT_SELECT _input = _inRight ? AL_RIGHT : _inLeft ? AL_LEFT : ui_arrows_->NowState();
-	ui_arrows_->SetAnimation(_input);
 }
 
 void TitleScene::DefaultRender() {
@@ -229,7 +216,7 @@ void TitleScene::DefaultRender() {
 
 	mv_bg_->Render();
 	cursor_->Render(ui_alpha_->Alpha());
-	ui_arrows_->Render(ui_alpha_->Alpha());
+	ui_arrows_->Render(ui_alpha_->Alpha(), Vector3::Zero);
 	operate_->Render();
 
 	for (int _t = 0; _t < CHOICES; ++_t)

@@ -17,6 +17,8 @@ public:
 	bool LeftKey();
 	bool RightKey();
 	bool DecisionKey();
+	bool CancelKey();
+	bool AllSelectKey();
 
 	bool ThrasherKey(int index);
 	bool ShotKey(int index);

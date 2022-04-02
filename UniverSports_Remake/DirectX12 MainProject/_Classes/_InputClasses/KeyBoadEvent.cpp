@@ -39,4 +39,5 @@ void KeyBoadEvent::Accepts() {
 	flag_ += DXTK->KeyEvent->pressed.Down	? (1 << DOWN ) : 0;
 	flag_ += DXTK->KeyEvent->pressed.Left	? (1 << LEFT ) : 0;
 	flag_ += DXTK->KeyEvent->pressed.Right	? (1 << RIGHT) : 0;
+	flag_ += DXTK->KeyEvent->pressed.Tab	? (1 << TAB	 ) : 0;
 }

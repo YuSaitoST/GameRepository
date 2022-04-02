@@ -19,17 +19,19 @@
 // Initialize member variables.
 LobbyScene::LobbyScene()
 {
-	descriptorHeap_ = nullptr;
-	spriteBatch_ = nullptr;
+	descriptorHeap_			= nullptr;
+	spriteBatch_			= nullptr;
 
-	collision_config_ = new btDefaultCollisionConfiguration();
-	collision_dispatcher_ = new btCollisionDispatcher(collision_config_);
-	broadphase_ = new btDbvtBroadphase();
-	solver_ = new btSequentialImpulseConstraintSolver();
-	physics_world_ = new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
+	collision_config_		= new btDefaultCollisionConfiguration();
+	collision_dispatcher_	= new btCollisionDispatcher(collision_config_);
+	broadphase_				= new btDbvtBroadphase();
+	solver_					= new btSequentialImpulseConstraintSolver();
+	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
+
+	bg_movie_				= new MoviePlayer(SimpleMath::Vector3(288.0f, 96.0f, -50.0f), 0.5625f);
 
 	for (int _i = 0; _i < 4; ++_i)
-		charaSelect_[_i] = new CharaSelect();
+		charaSelect_[_i]	= new CharaSelect();
 }
 
 // Initialize a variable and audio resources.
@@ -57,7 +59,7 @@ void LobbyScene::LoadAssets()
 
 	RenderTargetState rtState(DXGI_FORMAT_B8G8R8A8_UNORM, DXGI_FORMAT_D32_FLOAT);
 	SpriteBatchPipelineStateDescription pd(rtState, &CommonStates::NonPremultiplied);
-	D3D12_VIEWPORT viewport = {0.0f, 0.0f, 1280.0f, 720.0f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH};
+	D3D12_VIEWPORT viewport = { 0.0f, 0.0f, 1280.0f, 720.0f, D3D12_MIN_DEPTH, D3D12_MAX_DEPTH };
 
 	spriteBatch_ = DX12::CreateSpriteBatch(DXTK->Device, resourceUploadBatch, pd, &viewport);
 
@@ -66,14 +68,22 @@ void LobbyScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	sp_bg = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\backGround.png");
-	sp_right = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_right.png");
-	sp_left = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_left.png");
-	sp_decision = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_decision.png");
-	sp_cancel = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_cancel.png");
-	sp_entry = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_entry.png");
-	sp_teamCol_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_a.png");
-	sp_teamCol_[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_b.png");
+	D3DVIEWPORT9 _view{ VIEW_X, VIEW_Y, VIEW_W, VIEW_H, 0.0f, 1.0f };
+	DXTK->Device9->SetViewport(&_view);
+
+	sp_bg			= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\backGround.png");
+	sp_right		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_right.png");
+	sp_left			= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_left.png");
+	sp_decisions[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_decision.png");
+	sp_decisions[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_cancel.png");
+	sp_entry		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_entry.png");
+	sp_teamCol_[0]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_a.png");
+	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_b.png");
+
+	for (int _i = 0; _i < 4; ++_i)
+		sp_playerIcon[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_ICON[_i].c_str());
+
+	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
 
 	for (CharaSelect* obj : charaSelect_)
 		obj->LoadAssets(sp_right, sp_left);
@@ -81,6 +91,8 @@ void LobbyScene::LoadAssets()
 	EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
 	DX12Effect.PlayOneShot("dummy");
 	DX12Effect.Stop("dummy");
+
+	bg_movie_->Play();
 }
 
 // Releasing resources required for termination.
@@ -93,6 +105,8 @@ void LobbyScene::Terminate()
 
 	for (int _i = 3; 0 <= _i; --_i)
 		delete charaSelect_[_i];
+
+	delete bg_movie_;
 
 	delete physics_world_;
 	delete solver_;
@@ -126,9 +140,11 @@ NextScene LobbyScene::Update(const float deltaTime)
 	DX12Effect.Update(deltaTime);
 	Press.Accepts();
 
+	bg_movie_->Update();
+
 	charaSelect_[0]->Update(deltaTime, 0);
 
-	if (Press.DecisionKey())
+	if (Press.UpKey())
 		return NextScene::MainScene;
 
 	return NextScene::Continue;
@@ -140,11 +156,26 @@ void LobbyScene::Render()
 	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 0, 255));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
 
+	D3DVIEWPORT9 _view{ VIEW_X,VIEW_Y,VIEW_W,VIEW_H, 0.0f,1.0f };
+	DXTK->Device9->SetViewport(&_view);
+
 	Camera.Render();
+
+	// モデルの描画
+
+	_view.X = 0.0f;
+	_view.Y = 0.0f;
+	_view.Width = DXTK->ScreenWidth;
+	_view.Height = DXTK->ScreenHeight;
+	_view.MinZ = 0.0f;
+	_view.MaxZ = 1.0f;
+	DXTK->Device9->SetViewport(&_view);
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
-	charaSelect_[0]->Render();
+	bg_movie_->Render();
+	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
+	charaSelect_[0]->Render(sp_playerIcon[DontDestroy->ChoseColor_[0]], sp_decisions[charaSelect_[0]->IsDecision()], sp_entry, Vector3::Zero);
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言
@@ -154,16 +185,11 @@ void LobbyScene::Render()
 	DXTK->ResetCommand();
 	DXTK->ClearRenderTarget(Colors::CornflowerBlue);
 
-
 	const auto heapes = descriptorHeap_->Heap();
 	DXTK->CommandList->SetDescriptorHeaps(1, &heapes);
 
 	spriteBatch_->Begin(DXTK->CommandList);
-	spriteBatch_->Draw(
-		dx9GpuDescriptor_,
-		XMUINT2(1280, 720),   // HD
-		SimpleMath::Vector2(0.0f, 0.0f)
-	);
+	spriteBatch_->Draw(dx9GpuDescriptor_, XMUINT2(1280, 720), SimpleMath::Vector2(0.0f, 0.0f));
 	spriteBatch_->End();
 
 	DX12Effect.Renderer();

@@ -16,8 +16,6 @@ void MoviePlayer::Update() {
 }
 
 void MoviePlayer::Render() const {
-	//DX9::SpriteBatch->ResetTransform();
-
 	DX9::SpriteBatch->Draw(
 		media_->Get(),
 		position_,
@@ -27,6 +25,5 @@ void MoviePlayer::Render() const {
 		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
 		SimpleMath::Vector2::One * scale_
 	);
-
-	//DX9::SpriteBatch->ResetTransform();
+	DX9::SpriteBatch->ResetTransform();
 }

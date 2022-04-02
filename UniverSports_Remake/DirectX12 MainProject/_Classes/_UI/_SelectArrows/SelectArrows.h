@@ -20,13 +20,10 @@ public:
 	void LoadAssets();
 	void LoadAssets(DX9::SPRITE right, DX9::SPRITE left);
 	void Update();
-	void Render(float alpha);
-
-	void SetAnimation(INPUT_SELECT direct);
-	INPUT_SELECT NowState() const { return input_; };
+	void Render(float alpha, SimpleMath::Vector3 adjustment);
 
 private:
-	void Animation(float& scale);
+	void Animations(float& scale);
 	void GetBigger(float& scale);
 	void GetSmaller(float& scale);
 

@@ -1,4 +1,5 @@
 #include "SelectArrows.h"
+#include "_Classes/_InputClasses/UseKeyCheck.h"
 
 SelectArrows::SelectArrows() {
 	input_			= AL_NONE;
@@ -39,22 +40,19 @@ void SelectArrows::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
 }
 
 void SelectArrows::Update() {
+	input_ = Press.RightKey() ? AL_RIGHT : Press.LeftKey() ? AL_LEFT : input_;
+
 	if (input_ == AL_NONE)
 		return;
 
-	(input_ == AL_RIGHT) ?
-		Animation(scale_right_) :
-		Animation(scale_left_);
-
-	(input_ == AL_RIGHT) ?
-		GetSmaller(scale_left_) :
-		GetSmaller(scale_right_);
+	(input_ == AL_RIGHT) ? Animations(scale_right_) : Animations(scale_left_);
+	(input_ == AL_RIGHT) ? GetSmaller(scale_left_)  : GetSmaller(scale_right_);
 }
 
-void SelectArrows::Render(float alpha) {
+void SelectArrows::Render(float alpha, SimpleMath::Vector3 adjustment) {
 	DX9::SpriteBatch->Draw(
 		sp_right_.Get(),
-		SimpleMath::Vector3(pos_right_x_, pos_y_, -30.0f),
+		SimpleMath::Vector3(pos_right_x_, pos_y_, -30.0f) + adjustment,
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
 		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
@@ -75,12 +73,7 @@ void SelectArrows::Render(float alpha) {
 	DX9::SpriteBatch->ResetTransform();
 }
 
-void SelectArrows::SetAnimation(INPUT_SELECT direct) {
-	input_ = direct;
-}
-
-void SelectArrows::Animation(float& scale) {
-	
+void SelectArrows::Animations(float& scale) {
 	isFinBigger		= isFinSmaller	? (scale == SCALE_MAX)	: true;
 	isFinSmaller	= isFinBigger	? (scale == 1.0f)		: true;
 
