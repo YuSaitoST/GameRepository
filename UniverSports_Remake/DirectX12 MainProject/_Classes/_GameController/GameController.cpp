@@ -3,15 +3,34 @@
 #include <cassert>
 
 GameController::GameController() {
-	timer_ = new OriTimer(TIME_LIMIT[DontDestroy->GameMode_]);
+	startTime_	= TIME_LIMIT[DontDestroy->GameMode_] + TIME_COUNT;
+	timer_		= new OriTimer(startTime_);
+	countDown_	= new CountDownUI();
 }
 
 GameController::~GameController() {
+	delete countDown_;
 	delete timer_;
+}
+
+void GameController::Initialize() {
+	countDown_->Initialize();
+}
+
+void GameController::LoadAssets() {
+	countDown_->LoadAssets();
 }
 
 void GameController::Update(const float deltaTime) {
 	timer_->Update(deltaTime);
+	countDown_->Update(deltaTime, (TIME_COUNT - std::max(0.0f, (startTime_ - timer_->NowTime()))));
+}
+
+void GameController::Render() {
+	if (timer_->NowTime() < TIME_LIMIT[DontDestroy->GameMode_])
+		return;
+
+	countDown_->Render((TIME_COUNT - std::max(0.0f, (startTime_ - timer_->NowTime()))));
 }
 
 bool GameController::GameFined() {

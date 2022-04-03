@@ -54,6 +54,7 @@ void MainScene::Initialize()
 	Light.Enable();
 
 	icon_animator_->Initialize();
+	gameController_->Initialize();
 	m_object_->Initialize();
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
@@ -89,6 +90,7 @@ void MainScene::LoadAssets()
 
 	icon_animator_->LoadAssets();
 	field_->LoadAsset(L"_Movies\\main.wmv", L"_Images\\_Main\\holeFlont.png");
+	gameController_->LoadAssets();
 	m_object_->LoadAssets();
 }
 
@@ -167,6 +169,7 @@ void MainScene::Render()
 		icon_animator_->Render(m_object_->PlayerLife(_i), _i);
 
 	field_->Render();
+	gameController_->Render();
 	m_object_->RenderSprites();
 
 

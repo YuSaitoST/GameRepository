@@ -52,7 +52,7 @@ void ObjectManager::Initialize() {
 
 void ObjectManager::LoadAssets() {
 	for (int _i = 0; _i < 4; ++_i) {
-		mod_player_[_i] = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i].c_str());
+		mod_player_[_i] = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, USFN::MOD_PLAYER[_i].c_str());
 		mod_player_[_i]->SetScale(0.018f);
 		mod_player_[_i]->SetMaterial(ObjectBase::GetNomMaterial());
 	}
