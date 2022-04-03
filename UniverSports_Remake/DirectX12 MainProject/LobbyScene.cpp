@@ -5,6 +5,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes/FileNames.h"
 
 #ifndef _DEBUG
 #pragma comment (lib, "BulletDynamics.lib")
@@ -30,6 +31,8 @@ LobbyScene::LobbyScene()
 
 	bg_movie_				= new MoviePlayer(SimpleMath::Vector3(288.0f, 96.0f, -50.0f), 0.5625f);
 
+	player_[0]				= new ObjPlayer(OPERATE_TYPE::MANUAL, SimpleMath::Vector3(-13.0f, 6.0f, 0.0f), 1.0f);
+
 	for (int _i = 0; _i < 4; ++_i)
 		charaSelect_[_i]	= new CharaSelect();
 }
@@ -43,8 +46,10 @@ void LobbyScene::Initialize()
 	Light.Set();
 	Light.Enable();
 
-	for (CharaSelect* obj : charaSelect_)
-		obj->Initialize();
+	player_[0]->Initialize(0);
+
+	for (int _i = 0; _i < 4; ++_i)
+		charaSelect_[_i]->Initialize(_i);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -81,9 +86,16 @@ void LobbyScene::LoadAssets()
 	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_b.png");
 
 	for (int _i = 0; _i < 4; ++_i)
-		sp_playerIcon[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_ICON[_i].c_str());
+		sp_playerIcon[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i] .c_str());
+
+	for (int _i = 0; _i < 4; ++_i)
+		mod_player_[_i] = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, USFN::MOD_PLAYER[_i].c_str());
 
 	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
+
+	player_[0]->LoadAssets(USFN::MOD_PLAYER[0]);
+	for (ObjPlayer* obj : player_)
+		physics_world_->addRigidBody(obj->myRigidbody());
 
 	for (CharaSelect* obj : charaSelect_)
 		obj->LoadAssets(sp_right, sp_left);
@@ -102,6 +114,9 @@ void LobbyScene::Terminate()
 	DXTK->WaitForGpu();
 
 	// TODO: Add your Termination logic here.
+
+	for (int _i = 0; 0 <= _i; --_i)
+		physics_world_->removeRigidBody(player_[_i]->myRigidbody());
 
 	for (int _i = 3; 0 <= _i; --_i)
 		delete charaSelect_[_i];
@@ -142,7 +157,8 @@ NextScene LobbyScene::Update(const float deltaTime)
 
 	bg_movie_->Update();
 
-	charaSelect_[0]->Update(deltaTime, 0);
+	for (int _i = 0; _i < 1; ++_i)
+		charaSelect_[_i]->Update(deltaTime, _i);
 
 	if (Press.UpKey())
 		return NextScene::MainScene;
@@ -175,7 +191,9 @@ void LobbyScene::Render()
 
 	bg_movie_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
-	charaSelect_[0]->Render(sp_playerIcon[DontDestroy->ChoseColor_[0]], sp_decisions[charaSelect_[0]->IsDecision()], sp_entry, Vector3::Zero);
+
+	for (int _i = 0; _i < 4; ++_i)
+		charaSelect_[_i]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i]], sp_decisions[charaSelect_[_i]->IsDecision()], sp_entry, _i);
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言

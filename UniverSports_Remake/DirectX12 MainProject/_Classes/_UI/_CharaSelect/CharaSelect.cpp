@@ -12,8 +12,8 @@ CharaSelect::~CharaSelect() {
 	delete choices_;
 }
 
-void CharaSelect::Initialize() {
-	ui_arrows_->Initialize(283.0f, 100.0f, ARROW_Y);
+void CharaSelect::Initialize(int index) {
+	ui_arrows_->Initialize(ARROW_R_X[index], ARROW_L_X[index], ARROW_Y);
 }
 
 void CharaSelect::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
@@ -30,14 +30,15 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 	ui_arrows_->Update();
 
 	isDecision_ = Press.DecisionKey();
+	//if(isDecision_)
 	DontDestroy->ChoseColor_[index] = choices_->SelectNum();
 }
 
-void CharaSelect::Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE entry, SimpleMath::Vector3 adjustment) {
-	ui_arrows_->Render(255, adjustment);
-	DX9::SpriteBatch->DrawSimple(icon.Get(), SimpleMath::Vector3(103.0f,PICON_Y,0.0f) + adjustment);
-	DX9::SpriteBatch->DrawSimple(decisions.Get(), SimpleMath::Vector3(140.0f, INPUT_Y, -100) + adjustment);
+void CharaSelect::Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE entry, int index) {
+	ui_arrows_->Render(255);
+	DX9::SpriteBatch->DrawSimple(icon.Get(), SimpleMath::Vector3(PICON_X[index], PICON_Y, 0.0f));
+	DX9::SpriteBatch->DrawSimple(decisions.Get(), SimpleMath::Vector3(INPUT_X[index], INPUT_Y, -100));
 
 	if (isDecision_)
-		DX9::SpriteBatch->DrawSimple(entry.Get(), SimpleMath::Vector3(108.0f, ENTRY_Y, -90) + adjustment);
+		DX9::SpriteBatch->DrawSimple(entry.Get(), SimpleMath::Vector3(ENTRY_X[index], ENTRY_Y, -90));
 }

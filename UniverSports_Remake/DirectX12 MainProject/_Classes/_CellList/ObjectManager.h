@@ -19,13 +19,6 @@ private:
 		Vector3(GAME_CONST.PL_POS_X,  -GAME_CONST.PL_POS_Y, 0.0f)*/
 	};
 
-	const std::wstring PLAYER_FILENAME[N_PLAYER] = {
-		L"_Models\\_Player\\player_g.X",
-		L"_Models\\_Player\\player_p.X"/*,
-		L"_Models\\_Player\\player_r.X",
-		L"_Models\\_Player\\player_y.X"*/
-	};
-
 	const float FX = 32.0f;
 	const float FY = 18.0f;
 	const float X = FX - 5.25f + 1.25f;
@@ -67,5 +60,6 @@ private:
 	static ObjBall* obj_ball_[N_BALL];
 	static ObjWire* obj_wire_[N_WIRE];
 
+	DX9::SKINNEDMODEL mod_player_[4];
 	DX9::MODEL mod_ball_;
 };

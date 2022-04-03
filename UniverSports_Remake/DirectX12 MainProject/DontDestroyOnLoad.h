@@ -39,4 +39,6 @@ public:
 	int GameMode_;
 	int ChoseColor_[4];
 	int Score_[4];
+	int winnerID_;
+	int winnerTeamID_[2];
 };

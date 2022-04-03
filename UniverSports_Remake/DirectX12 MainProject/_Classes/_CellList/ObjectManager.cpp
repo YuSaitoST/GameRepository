@@ -1,4 +1,5 @@
 #include "ObjectManager.h"
+#include "_Classes/FileNames.h"
 
 ObjPlayer* ObjectManager::obj_player_[N_PLAYER];
 ObjBall* ObjectManager::obj_ball_[N_BALL];
@@ -50,12 +51,17 @@ void ObjectManager::Initialize() {
 }
 
 void ObjectManager::LoadAssets() {
+	for (int _i = 0; _i < 4; ++_i) {
+		mod_player_[_i] = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i].c_str());
+		mod_player_[_i]->SetScale(0.018f);
+		mod_player_[_i]->SetMaterial(ObjectBase::GetNomMaterial());
+	}
 	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models\\_Ball\\ball.X");
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
 	
 	for (int _i = 0; _i < N_PLAYER; ++_i)
-		obj_player_[_i]->LoadAssets(PLAYER_FILENAME[_i]);
+		obj_player_[_i]->LoadAssets(USFN::MOD_PLAYER[_i]);
 
 	for (ObjectBase* obj : obj_ball_)
 		obj->LoadAssets(mod_ball_);
@@ -99,12 +105,12 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 }
 
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
-	for (int _i = 0; _i < N_WIRE; ++_i)
+	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_wire_[_i]->myRigidbody());
 	
 	physics_world_->removeRigidBody(obj_ball_[0]->myRigidbody());
 
-	for (int _i = 0; _i < N_PLAYER; ++_i)
+	for (int _i = N_PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_player_[_i]->myRigidbody());
 }
 

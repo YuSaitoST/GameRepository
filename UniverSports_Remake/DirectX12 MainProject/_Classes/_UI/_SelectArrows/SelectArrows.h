@@ -20,7 +20,7 @@ public:
 	void LoadAssets();
 	void LoadAssets(DX9::SPRITE right, DX9::SPRITE left);
 	void Update();
-	void Render(float alpha, SimpleMath::Vector3 adjustment);
+	void Render(float alpha);
 
 private:
 	void Animations(float& scale);

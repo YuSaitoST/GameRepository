@@ -49,10 +49,10 @@ void SelectArrows::Update() {
 	(input_ == AL_RIGHT) ? GetSmaller(scale_left_)  : GetSmaller(scale_right_);
 }
 
-void SelectArrows::Render(float alpha, SimpleMath::Vector3 adjustment) {
+void SelectArrows::Render(float alpha) {
 	DX9::SpriteBatch->Draw(
 		sp_right_.Get(),
-		SimpleMath::Vector3(pos_right_x_, pos_y_, -30.0f) + adjustment,
+		SimpleMath::Vector3(pos_right_x_, pos_y_, -30.0f),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
 		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),

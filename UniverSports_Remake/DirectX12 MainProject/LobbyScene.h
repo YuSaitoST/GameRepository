@@ -14,6 +14,8 @@
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_MainLight/MainLight.h"
 
+#include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
+
 #include "_Classes/_UI/_CharaSelect/CharaSelect.h"
 
 using Microsoft::WRL::ComPtr;
@@ -50,11 +52,11 @@ private:
 	const int VIEW_W = 720;
 	const int VIEW_H = 403;
 
-	const std::wstring FILENAME_ICON[4] = {
-		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_g.png",
-		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_p.png",
-		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_r.png",
-		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_y.png"
+	const SimpleMath::Vector3 ADJUSTMENT[4] = {
+		SimpleMath::Vector3(0.0f,0.0f,0.0f),
+		SimpleMath::Vector3(0.0f,0.0f,0.0f),
+		SimpleMath::Vector3(0.0f,0.0f,0.0f),
+		SimpleMath::Vector3(0.0f,0.0f,0.0f)
 	};
 
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
@@ -69,6 +71,8 @@ private:
 	DX9::SPRITE							sp_playerIcon[4];
 	DX9::SPRITE							sp_teamCol_[2];
 
+	DX9::SKINNEDMODEL					mod_player_[4];
+
 	btDynamicsWorld*					physics_world_;
 	btDefaultCollisionConfiguration*	collision_config_;
 	btCollisionDispatcher*				collision_dispatcher_;
@@ -76,6 +80,8 @@ private:
 	btConstraintSolver*					solver_;
 
 	MoviePlayer*						bg_movie_;
+
+	ObjPlayer*							player_[1];
 
 	CharaSelect*						charaSelect_[4];
 

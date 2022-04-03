@@ -15,6 +15,7 @@ ObjPlayer::ObjPlayer() {
 	eff_down_ = nullptr;
 	strategy_ = nullptr;
 	targetObj_ = nullptr;
+	id_team_ = -1;
 	myBallID_ = -1;
 	hasBall_ = false;
 	isDown_ = false;
@@ -28,6 +29,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	handForward_ = Vector2::Zero;
 	targetObj_ = nullptr;
+	id_team_ = -1;
 	myBallID_ = -1;
 	hasBall_ = false;
 	isDown_ = false;
@@ -56,6 +58,7 @@ void ObjPlayer::Initialize(const int id) {
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
 	id_my_ = id;
+	id_team_ = (DontDestroy->GameMode_ == DontDestroy->GAMEMODE::DODGE_BALL_2ON2) ? -1 : id_my_;
 }
 
 void ObjPlayer::LoadAssets(std::wstring file_name) {

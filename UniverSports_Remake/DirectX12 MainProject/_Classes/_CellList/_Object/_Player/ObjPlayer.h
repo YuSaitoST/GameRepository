@@ -70,5 +70,6 @@ private:
 	Vector2 handForward_;
 	bool hasBall_;
 	bool isDown_;
+	int id_team_;
 	int myBallID_;
 };

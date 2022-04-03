@@ -216,7 +216,7 @@ void TitleScene::DefaultRender() {
 
 	mv_bg_->Render();
 	cursor_->Render(ui_alpha_->Alpha());
-	ui_arrows_->Render(ui_alpha_->Alpha(), Vector3::Zero);
+	ui_arrows_->Render(ui_alpha_->Alpha());
 	operate_->Render();
 
 	for (int _t = 0; _t < CHOICES; ++_t)
