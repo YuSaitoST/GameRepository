@@ -17,6 +17,8 @@
 #pragma comment (lib, "LinearMath_Debug.lib")
 #endif
 
+ObjPlayer* LobbyScene::player_[1];
+
 // Initialize member variables.
 LobbyScene::LobbyScene()
 {
@@ -50,6 +52,11 @@ void LobbyScene::Initialize()
 
 	for (int _i = 0; _i < 4; ++_i)
 		charaSelect_[_i]->Initialize(_i);
+
+	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
+	//for (ObjPlayer* obj : player_)
+	//	physics_world_->addRigidBody(obj->myRigidbody());
+	physics_world_->addRigidBody(player_[0]->myRigidbody());
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -73,6 +80,8 @@ void LobbyScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
+	DXTK->Direct3D9->SetRenderState(NormalizeNormals_Enable);
+
 	D3DVIEWPORT9 _view{ VIEW_X, VIEW_Y, VIEW_W, VIEW_H, 0.0f, 1.0f };
 	DXTK->Device9->SetViewport(&_view);
 
@@ -88,14 +97,9 @@ void LobbyScene::LoadAssets()
 	for (int _i = 0; _i < 4; ++_i)
 		sp_playerIcon[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i] .c_str());
 
-	for (int _i = 0; _i < 4; ++_i)
-		mod_player_[_i] = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, USFN::MOD_PLAYER[_i].c_str());
-
 	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
 
 	player_[0]->LoadAssets(USFN::MOD_PLAYER[0]);
-	for (ObjPlayer* obj : player_)
-		physics_world_->addRigidBody(obj->myRigidbody());
 
 	for (CharaSelect* obj : charaSelect_)
 		obj->LoadAssets(sp_right, sp_left);
@@ -160,8 +164,13 @@ NextScene LobbyScene::Update(const float deltaTime)
 	for (int _i = 0; _i < 1; ++_i)
 		charaSelect_[_i]->Update(deltaTime, _i);
 
-	if (Press.UpKey())
-		return NextScene::MainScene;
+	//for (int _i = 0; _i < 1; ++_i)
+	//	if (charaSelect_[_i]->IsDecision())
+			//player_[_i]->Update(deltaTime);
+	player_[0]->Update(deltaTime);
+
+	//if (Press.UpKey())
+	//	return NextScene::MainScene;
 
 	return NextScene::Continue;
 }
@@ -177,7 +186,10 @@ void LobbyScene::Render()
 
 	Camera.Render();
 
-	// ƒ‚ƒfƒ‹‚Ì•`‰æ
+	//for (int _i = 0; _i < 1; ++_i)
+	//	if (charaSelect_[_i]->IsDecision())
+			//player_[_i]->Render();
+	player_[0]->Render();
 
 	_view.X = 0.0f;
 	_view.Y = 0.0f;
@@ -214,4 +226,8 @@ void LobbyScene::Render()
 
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();
+}
+
+void LobbyScene::ChangeModel(const int plIndex, const int selectID) {
+	player_[plIndex]->ReDecision(plIndex, USFN::MOD_PLAYER[selectID]);
 }

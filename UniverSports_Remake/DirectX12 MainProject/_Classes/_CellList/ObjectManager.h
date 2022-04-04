@@ -9,7 +9,7 @@
 class ObjectManager {
 private:
 	static const int N_PLAYER	= 2;
-	static const int N_BALL		= 1;
+	static const int N_BALL		= 2;
 	static const int N_WIRE		= 4;
 
 	const Vector3 POS_START[N_PLAYER] = {
@@ -60,6 +60,6 @@ private:
 	static ObjBall* obj_ball_[N_BALL];
 	static ObjWire* obj_wire_[N_WIRE];
 
-	DX9::SKINNEDMODEL mod_player_[4];
+	DX9::MODEL mod_wire_;
 	DX9::MODEL mod_ball_;
 };

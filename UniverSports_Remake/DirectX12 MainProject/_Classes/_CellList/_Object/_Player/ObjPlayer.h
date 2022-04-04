@@ -12,6 +12,8 @@
 
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
+#include"_Classes/FileNames.h"
+
 class ObjPlayer final : public ObjectBase {
 private:
 	enum MOTION {
@@ -37,6 +39,19 @@ public:
 	virtual void UIRender();
 
 	virtual void HitAction(ObjectBase* hitObject);
+
+	void CreateModel(std::wstring fileName) {
+		model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, fileName.c_str());
+		model_->SetScale(0.018f);
+		model_->SetMaterial(GetNomMaterial());
+	}
+
+	void ReDecision(const int plID, std::wstring fileName) {
+		CreateModel(fileName);
+		pos_ = Vector2(-13.0f, 6.0f);
+		rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
+		SetTransforms(pos_, rotate_);
+	}
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
 	void Shoting(const int ballID);

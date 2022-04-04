@@ -98,7 +98,7 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 
 	switch (colorType) {
 		case DEFAULT_COLOR : _mat = GetNomMaterial(); break;
-		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[id_owner_]; _mat.Ambient = P_AMBIENT; break;
+		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[DontDestroy->ChoseColor_[id_owner_]]; _mat.Ambient = P_AMBIENT; break;
 		case TEAM_COLOR    : break;
 		default			   : assert(!"ObjBall_assert : ïsê≥Ç»êFéwíË"); break;
 	}

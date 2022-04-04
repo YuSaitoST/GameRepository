@@ -46,18 +46,15 @@ public:
 	NextScene Update(const float deltaTime) override;
 	void Render() override;
 
+	static void ChangeModel(const int plIndex, const int selectID);
+
 private:
 	const int VIEW_X = 288;
 	const int VIEW_Y = 98;
 	const int VIEW_W = 720;
 	const int VIEW_H = 403;
 
-	const SimpleMath::Vector3 ADJUSTMENT[4] = {
-		SimpleMath::Vector3(0.0f,0.0f,0.0f),
-		SimpleMath::Vector3(0.0f,0.0f,0.0f),
-		SimpleMath::Vector3(0.0f,0.0f,0.0f),
-		SimpleMath::Vector3(0.0f,0.0f,0.0f)
-	};
+	static ObjPlayer* player_[1];
 
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
 	DX12::SPRITEBATCH					spriteBatch_;
@@ -71,8 +68,6 @@ private:
 	DX9::SPRITE							sp_playerIcon[4];
 	DX9::SPRITE							sp_teamCol_[2];
 
-	DX9::SKINNEDMODEL					mod_player_[4];
-
 	btDynamicsWorld*					physics_world_;
 	btDefaultCollisionConfiguration*	collision_config_;
 	btCollisionDispatcher*				collision_dispatcher_;
@@ -80,8 +75,6 @@ private:
 	btConstraintSolver*					solver_;
 
 	MoviePlayer*						bg_movie_;
-
-	ObjPlayer*							player_[1];
 
 	CharaSelect*						charaSelect_[4];
 

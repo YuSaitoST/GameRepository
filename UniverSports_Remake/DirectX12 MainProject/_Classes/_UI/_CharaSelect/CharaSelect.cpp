@@ -1,4 +1,5 @@
 #include "CharaSelect.h"
+#include "LobbyScene.h"
 #include "DontDestroyOnLoad.h"
 
 CharaSelect::CharaSelect() {
@@ -30,7 +31,9 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 	ui_arrows_->Update();
 
 	isDecision_ = Press.DecisionKey();
-	//if(isDecision_)
+	if (isDecision_)
+		LobbyScene::ChangeModel(index, choices_->SelectNum());
+
 	DontDestroy->ChoseColor_[index] = choices_->SelectNum();
 }
 

@@ -1,5 +1,8 @@
 #include "ObjectManager.h"
 #include "_Classes/FileNames.h"
+#include "DontDestroyOnLoad.h"
+
+#include "_Classes/_DebugRender/DebugRender.h"
 
 ObjPlayer* ObjectManager::obj_player_[N_PLAYER];
 ObjBall* ObjectManager::obj_ball_[N_BALL];
@@ -51,17 +54,14 @@ void ObjectManager::Initialize() {
 }
 
 void ObjectManager::LoadAssets() {
-	for (int _i = 0; _i < 4; ++_i) {
-		mod_player_[_i] = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, USFN::MOD_PLAYER[_i].c_str());
-		mod_player_[_i]->SetScale(0.018f);
-		mod_player_[_i]->SetMaterial(ObjectBase::GetNomMaterial());
-	}
+	mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, 13.75f, 2.35f, 1.0f);
+
 	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models\\_Ball\\ball.X");
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
 	
 	for (int _i = 0; _i < N_PLAYER; ++_i)
-		obj_player_[_i]->LoadAssets(USFN::MOD_PLAYER[_i]);
+		obj_player_[_i]->LoadAssets(USFN::MOD_PLAYER[DontDestroy->ChoseColor_[_i]]);
 
 	for (ObjectBase* obj : obj_ball_)
 		obj->LoadAssets(mod_ball_);
@@ -98,7 +98,8 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 	for (ObjectBase* obj : obj_player_)
 		physics_world_->addRigidBody(obj->myRigidbody());
 
-	physics_world_->addRigidBody(obj_ball_[0]->myRigidbody());
+	for (ObjectBase* obj : obj_ball_)
+		physics_world_->addRigidBody(obj->myRigidbody());
 
 	for (ObjectBase* obj : obj_wire_)
 		physics_world_->addRigidBody(obj->myRigidbody());
@@ -108,7 +109,8 @@ void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
 	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_wire_[_i]->myRigidbody());
 	
-	physics_world_->removeRigidBody(obj_ball_[0]->myRigidbody());
+	for (int _i = N_BALL - 1; 0 <= _i; --_i)
+		physics_world_->removeRigidBody(obj_ball_[_i]->myRigidbody());
 
 	for (int _i = N_PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_player_[_i]->myRigidbody());

@@ -65,9 +65,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	strategy_->LoadAssets();
 	eff_down_->LoadAsset(L"_Effects\\_Down\\HITeffect.efk");
 
-	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, file_name.c_str());
-	model_->SetScale(0.018f);
-	model_->SetMaterial(GetNomMaterial());
+	CreateModel(file_name.c_str());
 	
 	collision_->SetColli(model_->GetBoundingSphere());
 	collision_->SetColliScale(1.2f);
@@ -76,8 +74,6 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
 	forward_ = strategy_->GetForward();
 	r_ = model_->GetBoundingSphere().Radius;
-
-	ClampLoop(pos_);
 
 	SetTransforms(pos_, rotate_);
 }
