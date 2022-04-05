@@ -56,8 +56,6 @@ public:
 	NextScene Update(const float deltaTime) override;
 	void Render() override;
 
-	NextScene GameFined();
-
 private:
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
 	DX12::SPRITEBATCH					spriteBatch_;

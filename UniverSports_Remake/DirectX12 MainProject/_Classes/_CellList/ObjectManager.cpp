@@ -2,13 +2,13 @@
 #include "_Classes/FileNames.h"
 #include "DontDestroyOnLoad.h"
 
-#include "_Classes/_DebugRender/DebugRender.h"
-
 ObjPlayer* ObjectManager::obj_player_[N_PLAYER];
 ObjBall* ObjectManager::obj_ball_[N_BALL];
 ObjWire* ObjectManager::obj_wire_[N_WIRE];
 
 ObjectManager::ObjectManager() {
+	DontDestroy->Survivor_ = (DontDestroy->isDODGEBALL_2ON2()) ? N_PLAYER / 2 : N_PLAYER;
+
 	obj_player_[0] = new ObjPlayer(OPERATE_TYPE::MANUAL, POS_START[0], 1.0f);
 	obj_player_[1] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[1], 1.0f);
 	//obj_player_[2] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[2], 1.0f);

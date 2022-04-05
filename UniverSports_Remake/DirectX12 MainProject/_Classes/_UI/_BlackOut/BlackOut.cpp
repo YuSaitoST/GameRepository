@@ -17,7 +17,7 @@ void BlackOut::Initialize(BLACKOUT_MODE state) {
 }
 
 void BlackOut::LoadAsset() {
-	sprite_			= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\blackOut.png");
+	sprite_			= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\blackOut.png");
 }
 
 void BlackOut::Update(const float deltaTime) {

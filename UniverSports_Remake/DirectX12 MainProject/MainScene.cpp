@@ -61,7 +61,8 @@ void MainScene::Initialize()
 	m_object_->AddWorld(physics_world_);
 
 #ifdef DEBUG
-	DebugList.PushList(L"Player1 Score : %i", DontDestroy->Score_[0]);
+	DebugList.PushList(L"Player0 Score : %i", DontDestroy->Score_[0]);
+	DebugList.PushList(L"Player1 Score : %i", DontDestroy->Score_[1]);
 #endif // DEBUG
 }
 
@@ -136,8 +137,6 @@ NextScene MainScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
-	gameController_->Update(deltaTime);
-
 	physics_world_->stepSimulation(deltaTime, 10);  // —^‚¦‚½’l‚ð10•ªŠ„‚·‚é(”»’è‚ª×‚©‚­‚Å‚«‚é)
 
 	DX12Effect.Update(deltaTime);
@@ -148,8 +147,7 @@ NextScene MainScene::Update(const float deltaTime)
 
 	m_object_->Update(deltaTime);
 
-
-	return GameFined();
+	return (NextScene)gameController_->Update(deltaTime);
 }
 
 // Draws the scene.
@@ -197,8 +195,4 @@ void MainScene::Render()
 
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();
-}
-
-NextScene MainScene::GameFined() {
-	return gameController_->GameFined() ? NextScene::ResultScene : NextScene::Continue;
 }
