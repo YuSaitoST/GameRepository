@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Scene.h"
-
+#include "DontDestroyOnLoad.h"
 #include "_Classes/_UI/_OriTimer/OriTimer.h"
 #include "_Classes/_UI/_CountDown/CountDown.h"
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
@@ -19,7 +19,11 @@ public:
 	void Render();
 	bool GameFined();
 
+	static bool GamePlay() { return gameStart_; }
+
 private:
+	int RemainingNumberOfPlayer();
+
 	const float TIME_COUNT		= 4.2f;
 	const float TIME_LIMIT[4]	= { 0.0f, 120.0f, 0.0f, 0.0f };
 
@@ -30,4 +34,5 @@ private:
 	SoundPlayer*	se_whistle_;
 
 	float			startTime_;
+	static bool		gameStart_;
 };

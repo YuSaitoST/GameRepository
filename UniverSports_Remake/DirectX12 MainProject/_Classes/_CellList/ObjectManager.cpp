@@ -7,7 +7,16 @@ ObjBall* ObjectManager::obj_ball_[N_BALL];
 ObjWire* ObjectManager::obj_wire_[N_WIRE];
 
 ObjectManager::ObjectManager() {
-	DontDestroy->Survivor_ = (DontDestroy->isDODGEBALL_2ON2()) ? N_PLAYER / 2 : N_PLAYER;
+	DontDestroy->Survivor_[0] = true;
+	DontDestroy->Survivor_[1] = true;
+#ifdef DEBUG
+	DontDestroy->Survivor_[2] = false;
+	DontDestroy->Survivor_[3] = false;
+#else
+	DontDestroy->Survivor_[2] = true;
+	DontDestroy->Survivor_[3] = true;
+#endif // DEBUG
+	std::fill(std::begin(DontDestroy->winnerTeamID_), std::end(DontDestroy->winnerTeamID_), -1);
 
 	obj_player_[0] = new ObjPlayer(OPERATE_TYPE::MANUAL, POS_START[0], 1.0f);
 	obj_player_[1] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[1], 1.0f);

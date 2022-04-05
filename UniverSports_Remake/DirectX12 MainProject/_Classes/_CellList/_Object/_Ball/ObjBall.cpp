@@ -22,7 +22,7 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
-	SwitchState(FLOAT);
+	SwitchState(STANDBY);
 
 	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
@@ -40,8 +40,7 @@ void ObjBall::Initialize(const int id) {
 	st_float_.Initialize();
 	st_cautch_.Initialize();
 	st_shot_.Initialize();
-
-	state_->Initialize();
+	st_standby_.Initialize();
 
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
@@ -80,10 +79,11 @@ void ObjBall::Render(DX9::MODEL& model) {
 
 void ObjBall::SwitchState(STATE state) {
 	switch (state) {
-		case FLOAT	: state_ = &st_float_;			 break;
-		case CAUTCH	: state_ = &st_cautch_;			 break;
-		case SHOT	: state_ = &st_shot_;			 break;
-		default		: assert(!"ObjBall_ïsê≥Ç»èÛë‘"); break;
+		case STANDBY : state_ = &st_standby_;		  break;
+		case FLOAT	 : state_ = &st_float_;			  break;
+		case CAUTCH	 : state_ = &st_cautch_;		  break;
+		case SHOT	 : state_ = &st_shot_;			  break;
+		default		 : assert(!"ObjBall_ïsê≥Ç»èÛë‘"); break;
 	}
 
 	nowState_ = state;

@@ -4,7 +4,7 @@
 
 #pragma once
 
-#define GAME_TITLE      L"DirectX12 Game Solution"
+#define GAME_TITLE      L"ユニバ―スポーツ"
 
 #define DXTK_FULLSCREEN 0   // 1...fullscreen mode
 #define DXTK_KEYBOARD   1   // 1...use Keyboard

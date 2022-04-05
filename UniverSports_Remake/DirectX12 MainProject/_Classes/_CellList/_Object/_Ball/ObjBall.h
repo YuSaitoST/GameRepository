@@ -5,6 +5,7 @@
 #include "_State/_Float/StFloat.h"
 #include "_State/_Cautch/StCautch.h"
 #include "_State/_Shot/StShot.h"
+#include "_State/_Standby/StStandby.h"
 
 class ObjBall final : public ObjectBase {
 private:
@@ -18,7 +19,7 @@ private:
 	const D3DCOLORVALUE P_AMBIENT = D3DCOLORVALUE(0.35f, 0.35f, 0.35f, 1.0f);
 
 public:
-	enum STATE { FLOAT, CAUTCH, SHOT, GOAL, NONE_STATE };
+	enum STATE { STANDBY, FLOAT, CAUTCH, SHOT, GOAL, NONE_STATE };
 	enum COLOR_TYPE { DEFAULT_COLOR, PLAYERS_COLOR, TEAM_COLOR };
 
 public:
@@ -77,6 +78,7 @@ private:
 	StFloat st_float_;
 	StCautch st_cautch_;
 	StShot st_shot_;
+	StStandby st_standby_;
 
 	STATE nowState_;
 	COLOR_TYPE colorType_;

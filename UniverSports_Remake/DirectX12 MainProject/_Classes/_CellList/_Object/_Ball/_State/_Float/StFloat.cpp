@@ -1,6 +1,7 @@
 #include "StFloat.h"
 #include "DontDestroyOnLoad.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
+#include "_Classes/_GameController/GameController.h"
 
 void StFloat::Initialize() {
 	std::random_device _seed;
@@ -14,13 +15,16 @@ void StFloat::Initialize() {
 }
 
 void StFloat::Update(ObjBall* ball) {
+	if (!GameController::GamePlay())
+		return;
+
 	if (ball->IsBreaked()) {
 		ball->FlagResets();
 		ReSpone(ball);
 	}
 
 	if (ball->IsInPlayerHands() && ball->GetOwnerID() != -1) {
-		ball->SwitchState(ball->STATE::CAUTCH);
+		ball->SwitchState(ObjBall::STATE::CAUTCH);
 		return;
 	}
 
@@ -75,8 +79,9 @@ SimpleMath::Vector2 StFloat::RandomForward(const SimpleMath::Vector2 position) {
 
 
 void StFloat::CheckFieldOut(ObjBall* ball) {
-	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X))
+	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
 		ReSpone(ball);
+	}
 }
 
 void StFloat::LoopPos(ObjBall* ball) {

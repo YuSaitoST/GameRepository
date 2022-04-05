@@ -132,7 +132,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			isDown_ = true;
 
 			if (life_->NowLifePoint() <= 0)
-				DontDestroy->Survivor_ -= 1;
+				DontDestroy->Survivor_[id_my_] = false;
 			IconAnimator::DisplayOn();
 			HitInstructor::BallBreak(_ball->myObjectID());
 		}
