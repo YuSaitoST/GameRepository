@@ -37,7 +37,5 @@ void ConstStorageC::Initialize() {
 		&FN_TIME_ALPHA
 	);
 
-	// DateApps終了後、異常な値が入っていないかチェックする処理を書く（アピールポイントになる）
-
 	fclose(_file);
 }

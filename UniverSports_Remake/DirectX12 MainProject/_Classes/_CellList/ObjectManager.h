@@ -9,7 +9,7 @@
 class ObjectManager {
 private:
 	static const int N_PLAYER	= 2;
-	static const int N_BALL		= 5;
+	static const int N_BALL		= 2;
 	static const int N_WIRE		= 4;
 
 	const Vector3 POS_START[N_PLAYER] = {

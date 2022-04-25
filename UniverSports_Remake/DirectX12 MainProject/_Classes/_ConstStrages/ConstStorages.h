@@ -3,8 +3,12 @@
 
 #include <cstdio>
 #include <cassert>
+#include "Base/pch.h"
+#include "Base/dxtk.h"
 
 #define GAME_CONST ConstStorageC::GetInstance()
+
+using namespace DirectX::SimpleMath;
 
 class ConstStorageC {
 public:
@@ -69,4 +73,11 @@ public:
 	const int BallMax_Hand = 10;
 
 	const int BALLMAX[4] = { 5,10,5,6 };
+
+	const Vector3 S_POS[4] = {
+		Vector3(-13.0f,6.0f,0.f),
+		Vector3(13.0f,6.0f,0.f),
+		Vector3(-13.0f,-6.0f,0.f),
+		Vector3(13.0f,-6.0f,0.f)
+	};
 };

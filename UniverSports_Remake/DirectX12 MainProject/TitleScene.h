@@ -54,26 +54,26 @@ public:
 	void DefaultRender();
 
 private:
-	const std::wstring		UI_TEXT_FILE_NAME[2][4] = {
+	const float				DEMO_PLAYBACK	= 10.0f;				// DEMOプレイ再生までの時間
+	const float				UI_TEXT_Y[2]	= { 460.0f, 560.0f };	// 縦のUIのY座標
+	const float				SPEED_ALPHA		= 127.5f;				// UIのフェード速度
+	static const int		MODE			= 3;					// モードの数
+	static const int		CHOICES			= 2;					// 縦の選択肢数
+
+	const std::wstring		UI_TEXT_FILE_NAME[CHOICES][MODE] = {
 	{
 		L"_Images\\_Title\\_SelectText\\tex_mode00.png"  ,
 		L"_Images\\_Title\\_SelectText\\tex_mode01.png"  ,
-		L"_Images\\_Title\\_SelectText\\tex_mode02.png"  ,
-		L"_Images\\_Title\\_SelectText\\tex_mode03.png"
+		L"_Images\\_Title\\_SelectText\\tex_mode02.png"  /*,
+		L"_Images\\_Title\\_SelectText\\tex_mode03.png"*/
 	},
 	{
 		L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
 		L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
-		L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
-		L"_Images\\_Title\\_SelectText\\tex_operate.png"
+		L"_Images\\_Title\\_SelectText\\tex_operate.png" /*,
+		L"_Images\\_Title\\_SelectText\\tex_operate.png"*/
 	}
 	};
-
-	const float				DEMO_PLAYBACK	= 10.0f;  // DEMOプレイ再生までの時間
-	const float				UI_TEXT_Y[2]	= { 460.0f, 560.0f };  // 縦のUIのY座標
-	const float				SPEED_ALPHA		= 127.5f;  // UIのフェード速度
-	const int				MODE			= 4;  // モードの数
-	const int				CHOICES			= 2;  // 縦の選択肢数
 
 private:
 	DX12::DESCRIPTORHEAP	descriptorHeap_;

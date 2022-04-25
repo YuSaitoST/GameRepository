@@ -1,5 +1,6 @@
 #include "ComputerChara.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
+#include "DontDestroyOnLoad.h"
 
 void ComputerChara::Initialize(int id, ObjPlayer* player) {
 	player_ = player;
@@ -15,10 +16,13 @@ void ComputerChara::LoadAssets() {
 }
 
 void ComputerChara::Update(const float deltaTime) {
-	// ê[Ç≥óDêÊíTçıÅiÇÃÇ¬Ç‡ÇËÇæÇ¡ÇΩÅj
-	for (int _i = 0; _i < actList_.size(); _i++)
-		if (actList_[_i]->Think(*player_))
-			actList_[_i]->Update(deltaTime, *player_);
+	if (DontDestroy->NowScene_ != 3)
+		return;
+
+	// ê[Ç≥óDêÊíTçı
+	for (ActionBase* act : actList_)
+		if (act->Think(*player_))
+			act->Update(deltaTime, *player_);
 
 	SeekRotate(deltaTime, player_->myObjectID());
 }
@@ -34,5 +38,4 @@ void ComputerChara::SeekRotate(const float deltaTime, int index) {
 	rotate_x_ = atan2f(prevForward_.y, prevForward_.x);
 
 	forward_ = (prevForward_ != SimpleMath::Vector3::Zero) ? SimpleMath::Vector2(prevForward_.x, prevForward_.y) : forward_;
-	//forward_ = SimpleMath::Vector2(prevForward_.x, prevForward_.y);
 }

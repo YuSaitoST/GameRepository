@@ -17,6 +17,7 @@
 
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_MainLight/MainLight.h"
+#include "_Classes/_SoundPlayer/SoundPlayer.h"
 
 #include "_Classes/_CellList/CellList.h"
 #include "_Classes/_CellList/ObjectManager.h"
@@ -67,6 +68,7 @@ private:
 	btBroadphaseInterface*				broadphase_;
 	btConstraintSolver*					solver_;
 
+	SoundPlayer*						bgm_;
 	IconAnimator*						icon_animator_;
 	GameField*							field_;
 	GameController*						gameController_;

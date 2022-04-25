@@ -23,6 +23,8 @@ MainScene::MainScene()
 {
 	GAME_CONST.Initialize();
 
+	DontDestroy->NowScene_	= (int)NextScene::MainScene;
+
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;
 
@@ -32,6 +34,7 @@ MainScene::MainScene()
 	solver_					= new btSequentialImpulseConstraintSolver();
 	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
+	bgm_					= new SoundPlayer();
 	icon_animator_			= new IconAnimator();
 	field_					= new GameField(Vector3(0.0f, 0.0f, BACKGROUND), HOLE_FLONT, 1.0f);
 	gameController_			= new GameController();
@@ -45,6 +48,7 @@ void MainScene::Initialize()
 #ifdef DEBUG
 	omp_set_num_threads(4);
 	DXTK->SetFixedFrameRate(60);
+	GAME_CONST.Initialize();
 	Camera.Initialize();
 	Light.Initialize();
 #endif // DEBUG
@@ -53,6 +57,7 @@ void MainScene::Initialize()
 	Light.Set();
 	Light.Enable();
 
+	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_main.wav", SOUND_TYPE::BGM);
 	icon_animator_->Initialize();
 	gameController_->Initialize();
 	m_object_->Initialize();
@@ -93,6 +98,7 @@ void MainScene::LoadAssets()
 	field_->LoadAsset(L"_Movies\\main.wmv", L"_Images\\_Main\\holeFlont.png");
 	gameController_->LoadAssets();
 	m_object_->LoadAssets();
+	bgm_->Play();
 }
 
 // Releasing resources required for termination.
@@ -109,6 +115,7 @@ void MainScene::Terminate()
 
 	delete field_;
 	delete icon_animator_;
+	delete bgm_;
 
 	delete physics_world_;
 	delete solver_;
@@ -126,7 +133,7 @@ void MainScene::OnDeviceLost()
 // Restart any looped sounds here
 void MainScene::OnRestartSound()
 {
-
+	bgm_->OnRestartSound();
 }
 
 // Updates the scene.

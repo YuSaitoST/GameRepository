@@ -25,13 +25,7 @@ public:
 		return SimpleMath::Vector2(pos.x, pos.y);
 	}
 
-	inline SimpleMath::Vector2 GetLinearVelocity() {
-		const SimpleMath::Vector3 vel = (XMFLOAT3)bt_body_->getLinearVelocity();
-		return SimpleMath::Vector2(vel.x, vel.y);
-	}
-
 	inline void SetActivationState(int newState) { bt_body_->setActivationState(newState); }
-	inline void SetStateTransform(XMFLOAT3 pos, XMFLOAT3 rot) { bt_state_->setWorldTransform(btTransform(btQuaternion(rot.x, rot.y, rot.z, 1.0f), btVector3(pos.x, pos.y, pos.z))); }
 	inline void SetCenterOfMassTransform(SimpleMath::Vector3 position, SimpleMath::Vector3 rotate) {
 		btTransform transform = btTransform(*(btQuaternion*)&rotate, *(btVector3*)&position);
 		bt_body_->setCenterOfMassTransform(transform);

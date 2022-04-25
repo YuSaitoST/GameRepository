@@ -9,15 +9,17 @@
 // Initialize member variables.
 TitleScene::TitleScene()
 {
+	DontDestroy->NowScene_ = (int)NextScene::TitleScene;
+
 	descriptorHeap_ = nullptr;
-	spriteBatch_ = nullptr;
+	spriteBatch_	= nullptr;
 
 	bgm_			= new SoundPlayer();
 	se_decision_	= new SoundPlayer();
 	mv_bg_			= new MoviePlayer(Vector3(0.0f, 0.0f, 0.0f), 1.0f);
 	mv_demo_		= new DemoPlay(Vector3(0.0f, 0.0f, 0.0f), 1.0f, DEMO_PLAYBACK);
 	time_start_		= new OriTimer(2.5f);
-	cursor_			= new Cursor(2);
+	cursor_			= new Cursor(CHOICES);
 	choices_		= new Choices(MODE);
 	ui_arrows_		= new SelectArrows();
 	ui_alpha_		= new FadeAlpha(0.0f, SPEED_ALPHA);
@@ -30,6 +32,9 @@ void TitleScene::Initialize()
 	omp_set_num_threads(4);
 
 	DXTK->SetFixedFrameRate(60);
+
+	GAME_CONST.Initialize();
+	DontDestroy->GameMode_ = -1;
 
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_title.wav", SOUND_TYPE::BGM);
 	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision_title.wav", SOUND_TYPE::SE, 2);
@@ -121,11 +126,22 @@ NextScene TitleScene::Update(const float deltaTime)
 
 	time_start_->Update(deltaTime);
 
+	// タイトルの表示に合わせてUIをフェードインさせる
 	if (time_start_->NowTime() <= 0.5f)
 		ui_alpha_->Update(deltaTime);
 
+	// タイトルが表示されるまで操作不可
 	if (!time_start_->TimeOut())
 		return NextScene::Continue;
+
+	// 決定音がなり終わったらキャラ選択画面へ
+	if (DontDestroy->GameMode_ != -1) {
+		se_decision_->Update(deltaTime);
+		if (se_decision_->isFined())
+			return NextScene::LobbyScene;
+		else
+			return NextScene::Continue;
+	}
 
 	mv_demo_->Update(deltaTime);
 
@@ -168,7 +184,6 @@ NextScene TitleScene::Update(const float deltaTime)
 				return NextScene::Continue;
 
 			DontDestroy->GameMode_ = choices_->SelectNum();
-			return NextScene::LobbyScene;
 		}
 	}
 

@@ -37,6 +37,7 @@ public:
 	inline bool isHANDBALL			() const { return GameMode_ == HAND_BALL;		 }
 	inline bool isBILLIARDS			() const { return GameMode_ == BILLIARDS;		 }
 
+	int NowScene_;
 	int GameMode_;
 	int ChoseColor_[4];
 	int Score_[4];

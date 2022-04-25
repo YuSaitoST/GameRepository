@@ -20,17 +20,34 @@ bool ActMove::Think(ObjPlayer& my) {
 	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
 	ObjectBase* _targetBall = ObjectManager::TheClosestBall(my.myPosition(), _comparison);
 
-	if ((_targetPlayer != nullptr) && ((ObjPlayer*)_targetPlayer)->HasBall()) {
-		target_pos_new_ = _targetPlayer->myPosition();
-		const Vector2 _target_direction = _targetPlayer->myDirection();
-		direction_ = Vector2(-_target_direction.y, _target_direction.x);
+	// ボールを持っていれば近くのPlayerに投げる、持ってないならボールを取りに行く
+	if (0 < my.HasBall()) {
+		if (_targetPlayer != nullptr) {
+			target_pos_new_ = _targetPlayer->myPosition();
+			return ChangeForward(my);
+		}
+	}
+	else {
+		if (_targetBall != nullptr) {
+			target_pos_new_ = _targetBall->myPosition();
+			return ChangeForward(my);
+		}
+	}
 
-		const bool _ImOnTop = (0.0f < direction_.y) && (_target_direction.y < 0.0f);
-		const bool _TargetOnTop = (direction_.y < 0.0f) && (0.0f < _target_direction.y);
-		direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
-		direction_.Normalize();
-		target_pos_old_ = target_pos_new_;
-		return true;
+	// 危険なPlayerやBallから逃げる
+	if ((_targetPlayer != nullptr)) {
+		if (((ObjPlayer*)_targetPlayer)->HasBall()) {
+			target_pos_new_ = _targetPlayer->myPosition();
+			const Vector2 _target_direction = _targetPlayer->myDirection();
+			direction_ = Vector2(-_target_direction.y, _target_direction.x);
+
+			const bool _ImOnTop = (0.0f < direction_.y) && (_target_direction.y < 0.0f);
+			const bool _TargetOnTop = (direction_.y < 0.0f) && (0.0f < _target_direction.y);
+			direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
+			direction_.Normalize();
+			target_pos_old_ = target_pos_new_;
+			return true;
+		}
 	}
 	else if ((_targetBall != nullptr) && ((ObjBall*)_targetBall)->GetOwnerID() != -1) {
 		target_pos_new_ = _targetBall->myPosition();
@@ -44,18 +61,6 @@ bool ActMove::Think(ObjPlayer& my) {
 		target_pos_old_ = target_pos_new_;
 		return true;
 	}
-	else {
-		if ((_targetBall != nullptr) && !my.HasBall())
-			target_pos_new_ = _targetBall->myPosition();
-		else if (_targetPlayer != nullptr)
-			target_pos_new_ = _targetPlayer->myPosition();
-		else
-			target_pos_new_ = target_pos_new_;;
-		
-		return ChangeForward(my);
-	}
-
-	target_pos_old_ = target_pos_new_;
 }
 
 float ActMove::GetVectorLenght(Vector2 v) {
@@ -81,13 +86,13 @@ bool ActMove::ChangeForward(ObjPlayer& my) {
 		my.AssignDirection(Vector2(1.0f, 0.0f));
 
 	const float sita = std::fabsf(AngleOf2Vector((target_pos_new_ - my.myPosition()), (target_pos_old_ - my.myPosition())));
-	if (0.261f < sita || sita < 6.091f) {
+	//if (0.261f < sita || sita < 6.091f) {
 		direction_ = target_pos_new_ - my.myPosition();
 		direction_.Normalize();
 		return true;
-	}
-	else
-		return false;
+	//}
+	//else
+	//	return false;
 }
 
 bool ActMove::CheckBalls() {

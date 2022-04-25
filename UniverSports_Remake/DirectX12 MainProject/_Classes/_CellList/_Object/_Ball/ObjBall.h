@@ -82,7 +82,6 @@ private:
 
 	STATE nowState_;
 	COLOR_TYPE colorType_;
-	DX9::MODEL model_;
 	float pos_z_;
 	int id_owner_;
 	bool isInPlayerHands_;

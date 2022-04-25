@@ -16,4 +16,5 @@ private:
 	SoundPlayer* se_choice_;
 	int CHOICES;
 	int isSelected;
+	int putCount_;
 };

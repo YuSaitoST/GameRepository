@@ -12,6 +12,7 @@ public:
 	void Accepts();
 
 	bool AnyKey();
+	bool TabKey();
 	bool UpKey();
 	bool DownKey();
 	bool LeftKey();

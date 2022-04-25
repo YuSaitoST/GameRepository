@@ -16,7 +16,7 @@ void ManualChara::LoadAssets() {
 void ManualChara::Update(const float deltaTime) {
 	for (int _i = 0; _i < actList_.size(); _i++)
 		actList_[_i]->Update(deltaTime, Press.MoveDirection(player_->myObjectID()), *player_);
-
+	
 	SeekRotate(deltaTime, player_->myObjectID());
 }
 

@@ -13,6 +13,6 @@ public:
 	ObjectBase* GetCollision(int index, ObjectBase* m);  // 衝突判定	
 
 private:
-	const int N = 2;  // 分割レベルの最大
+	const int N = 3;  // 分割レベルの最大
 	Cell* cpList_;  // 線形空間リスト(CellをまとめるList)
 };

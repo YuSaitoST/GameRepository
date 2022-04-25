@@ -2,6 +2,7 @@
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_CellList/_HitInstructor/HitInstructor.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 #include "DontDestroyOnLoad.h"
 
 ObjPlayer::ObjPlayer() {
@@ -127,7 +128,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
 
 			SetTransforms(Vector2(99.0f, 99.0f), rotate_);
-			pos_ = Vector2(13.0f, 6.0f);  // èâä˙ç¿ïWÇì¸ÇÍÇΩÇ¢
+			pos_ = Vector2(GAME_CONST.S_POS[id_my_].x, GAME_CONST.S_POS[id_my_].y);
 
 			isDown_ = true;
 
@@ -176,6 +177,10 @@ ObjPlayer::MOTION ObjPlayer::AnimChange() {
 		return MOTION::HAND;
 	else
 		return MOTION::STAND;
+}
+
+void ObjPlayer::AsjustmentForward() {
+	forward_ *= 1.5f;
 }
 
 void ObjPlayer::Shoting(const int ballID) {

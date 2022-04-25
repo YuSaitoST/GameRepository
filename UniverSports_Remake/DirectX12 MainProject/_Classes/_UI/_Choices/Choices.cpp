@@ -5,12 +5,20 @@ Choices::Choices(int choices) {
 	se_choice_->Initialize(L"_Sounds\\_SE\\se_choise.wav", SOUND_TYPE::SE);
 	isSelected = 0;
 	CHOICES = choices;
+	putCount_ = 0;
 }
 
 void Choices::Update(bool low, bool high) {
-	isSelected += 
-		(high) ? 1 : 
-		(low) ? -1 : 0;
+	if (putCount_ == 0) {
+		isSelected +=
+			(high) ? 1 :
+			(low) ? -1 : 0;
+
+		if (low || high)
+			putCount_ += (int)(low || high);
+	}
+	else
+		putCount_ = 0;
 
 	ValueLoop(isSelected, 0, CHOICES - 1);
 

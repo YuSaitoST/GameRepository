@@ -11,20 +11,26 @@ bool UseKeyCheck::AnyKey() {
 	return key_.EventAnyKey() || pad_.EventAnyKey(0);
 }
 
+bool UseKeyCheck::TabKey() {
+	return key_.EventOnOffKey(KEY::TAB);
+}
+
 bool UseKeyCheck::UpKey() {
-	return key_.EventOnOffKey(KEY::UP) || pad_.EventOnOffKey(0, PAD::P_UP) || pad_.EventOnOffKey(0, PAD::STICK_L_UP) || pad_.EventOnOffKey(0, PAD::STICK_R_UP);
+	return key_.EventOnOffKey(KEY::UP) || pad_.EventOnOffKey(0, PAD::P_UP) || pad_.EventOnOffKey(0, PAD::STICK_L_UP);
 }
 
 bool UseKeyCheck::DownKey() {
-	return key_.EventOnOffKey(KEY::DOWN) || pad_.EventOnOffKey(0, PAD::P_DOWN) || pad_.EventOnOffKey(0, PAD::STICK_L_DOWN) || pad_.EventOnOffKey(0, PAD::STICK_R_DOWN);
+	return key_.EventOnOffKey(KEY::DOWN) || pad_.EventOnOffKey(0, PAD::P_DOWN) || pad_.EventOnOffKey(0, PAD::STICK_L_DOWN);
 }
 
 bool UseKeyCheck::LeftKey() {
-	return key_.EventOnOffKey(KEY::LEFT) || pad_.EventOnOffKey(0, PAD::P_LEFT) || pad_.EventOnOffKey(0, PAD::STICK_L_LEFT) || pad_.EventOnOffKey(0, PAD::STICK_R_LEFT);
+	//return key_.EventOnOffKey(KEY::LEFT) || pad_.EventOnOffKey(0, PAD::P_LEFT) || pad_.EventOnOffKey(0, PAD::STICK_L_LEFT);
+	return DXTK->KeyEvent->pressed.Left || DXTK->GamePadEvent[0].leftStickLeft || DXTK->GamePadEvent[0].dpadLeft;
 }
 
 bool UseKeyCheck::RightKey() {
-	return key_.EventOnOffKey(KEY::RIGHT) || pad_.EventOnOffKey(0, PAD::P_RIGHT) || pad_.EventOnOffKey(0, PAD::STICK_L_RIGHT) || pad_.EventOnOffKey(0, PAD::STICK_R_RIGHT);
+	//return key_.EventOnOffKey(KEY::RIGHT) || pad_.EventOnOffKey(0, PAD::P_RIGHT) || pad_.EventOnOffKey(0, PAD::STICK_L_RIGHT);
+	return DXTK->KeyEvent->pressed.Right || DXTK->GamePadEvent[0].leftStickRight || DXTK->GamePadEvent[0].dpadRight;
 }
 
 bool UseKeyCheck::DecisionKey() {
@@ -49,8 +55,7 @@ bool UseKeyCheck::ShotKey(int index) {
 
 Vector2 UseKeyCheck::MoveDirection(int index) {
 	if (index == 0)
-		//return (key_.StateDirection() != Vector2::Zero) ? key_.StateDirection() * Vector2(1.0f, -1.0f) : pad_.LeftStateDirection360(index);
-		return key_.StateDirection();
+		return (key_.StateDirection() != Vector2::Zero) ? key_.StateDirection() * Vector2(1.0f, -1.0f) : pad_.LeftStateDirection360(index);
 	else
 		return (pad_.LeftStateDirection360(index));
 }

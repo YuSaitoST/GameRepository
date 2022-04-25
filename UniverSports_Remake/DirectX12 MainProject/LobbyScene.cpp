@@ -6,6 +6,7 @@
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
 #include "_Classes/FileNames.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 
 #ifndef _DEBUG
 #pragma comment (lib, "BulletDynamics.lib")
@@ -17,13 +18,18 @@
 #pragma comment (lib, "LinearMath_Debug.lib")
 #endif
 
-ObjPlayer* LobbyScene::player_[1];
+ObjPlayer* LobbyScene::player_[PLAYER];
 
 // Initialize member variables.
 LobbyScene::LobbyScene()
 {
+	DontDestroy->NowScene_	= (int)NextScene::LobbyScene;
+
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;
+
+	font_count_				= DX9::SPRITEFONT{};
+	font_message_			= DX9::SPRITEFONT{};
 
 	collision_config_		= new btDefaultCollisionConfiguration();
 	collision_dispatcher_	= new btCollisionDispatcher(collision_config_);
@@ -32,31 +38,48 @@ LobbyScene::LobbyScene()
 	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
 	bg_movie_				= new MoviePlayer(SimpleMath::Vector3(288.0f, 96.0f, -50.0f), 0.5625f);
+	bgm_					= new SoundPlayer();
 
-	player_[0]				= new ObjPlayer(OPERATE_TYPE::MANUAL, SimpleMath::Vector3(-13.0f, 6.0f, 0.0f), 1.0f);
+	for (int _i = 0; _i < PLAYER; ++_i)
+		player_[_i] = new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
 
-	for (int _i = 0; _i < 4; ++_i)
+	for (int _i = 0; _i < PLAYER; ++_i)
 		charaSelect_[_i]	= new CharaSelect();
+
+	timer_goNext_			= new OriTimer(GAME_CONST.LB_GONEXT + 1.0f);
+
+	allSet_					= false;
 }
 
 // Initialize a variable and audio resources.
 void LobbyScene::Initialize()
 {
+	omp_set_num_threads(4);
+	DXTK->SetFixedFrameRate(60);
+
 	DX12Effect.Initialize();
 	Camera.Initialize();
 	Light.Initialize();
 	Light.Set();
 	Light.Enable();
 
-	player_[0]->Initialize(0);
+	for (int _i = 0; _i < PLAYER; ++_i)
+		DontDestroy->ChoseColor_[_i] = _i;
 
-	for (int _i = 0; _i < 4; ++_i)
+	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_charaSelect.wav", SOUND_TYPE::BGM);
+
+	for (int _i = 0; _i < PLAYER; ++_i)
+		player_[_i]->Initialize(_i);
+
+	for (int _i = 0; _i < PLAYER; ++_i)
 		charaSelect_[_i]->Initialize(_i);
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
-	//for (ObjPlayer* obj : player_)
-	//	physics_world_->addRigidBody(obj->myRigidbody());
-	physics_world_->addRigidBody(player_[0]->myRigidbody());
+	for (ObjPlayer* obj : player_)
+		physics_world_->addRigidBody(obj->myRigidbody());
+
+	font_count_		= DX9::SpriteFont::CreateFromFontName(DXTK->Device9, L"MS ゴシック", 20);
+	font_message_	= DX9::SpriteFont::CreateFromFontName(DXTK->Device9, L"MS ゴシック", 10);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -94,12 +117,13 @@ void LobbyScene::LoadAssets()
 	sp_teamCol_[0]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_a.png");
 	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_b.png");
 
-	for (int _i = 0; _i < 4; ++_i)
+	for (int _i = 0; _i < PLAYER; ++_i)
 		sp_playerIcon[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i] .c_str());
 
 	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
 
-	player_[0]->LoadAssets(USFN::MOD_PLAYER[0]);
+	for (int _i = 0; _i < PLAYER; ++_i)
+		player_[_i]->LoadAssets(USFN::MOD_PLAYER[_i]);
 
 	for (CharaSelect* obj : charaSelect_)
 		obj->LoadAssets(sp_right, sp_left);
@@ -109,6 +133,7 @@ void LobbyScene::LoadAssets()
 	DX12Effect.Stop("dummy");
 
 	bg_movie_->Play();
+	bgm_->Play();
 }
 
 // Releasing resources required for termination.
@@ -119,12 +144,16 @@ void LobbyScene::Terminate()
 
 	// TODO: Add your Termination logic here.
 
-	for (int _i = 0; 0 <= _i; --_i)
+	// ここで例外(_i == 1の時(最初)、アクセス違反による例外)
+	for (int _i = PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(player_[_i]->myRigidbody());
 
-	for (int _i = 3; 0 <= _i; --_i)
+	delete timer_goNext_;
+
+	for (int _i = PLAYER - 1; 0 <= _i; --_i)
 		delete charaSelect_[_i];
 
+	delete bgm_;
 	delete bg_movie_;
 
 	delete physics_world_;
@@ -143,7 +172,7 @@ void LobbyScene::OnDeviceLost()
 // Restart any looped sounds here
 void LobbyScene::OnRestartSound()
 {
-
+	bgm_->OnRestartSound();
 }
 
 // Updates the scene.
@@ -161,16 +190,24 @@ NextScene LobbyScene::Update(const float deltaTime)
 
 	bg_movie_->Update();
 
-	for (int _i = 0; _i < 1; ++_i)
+	// 操作練習が現状できないためコメントアウト
+	for (int _i = 0; _i < PLAYER; ++_i)
+		if (charaSelect_[_i]->IsDecision())
+			player_[_i]->Update(deltaTime);
+
+	if (AllDecision()) {
+		timer_goNext_->Update(deltaTime);
+
+		if (timer_goNext_->TimeOut())
+			return NextScene::MainScene;
+		else
+			return NextScene::Continue;
+	}
+
+	for (int _i = 0; _i < PLAYER; ++_i)
 		charaSelect_[_i]->Update(deltaTime, _i);
 
-	//for (int _i = 0; _i < 1; ++_i)
-	//	if (charaSelect_[_i]->IsDecision())
-			//player_[_i]->Update(deltaTime);
-	player_[0]->Update(deltaTime);
 
-	//if (Press.UpKey())
-	//	return NextScene::MainScene;
 
 	return NextScene::Continue;
 }
@@ -186,10 +223,9 @@ void LobbyScene::Render()
 
 	Camera.Render();
 
-	//for (int _i = 0; _i < 1; ++_i)
-	//	if (charaSelect_[_i]->IsDecision())
-			//player_[_i]->Render();
-	player_[0]->Render();
+	for (int _i = 0; _i < PLAYER; ++_i)
+		if (charaSelect_[_i]->IsDecision())
+			player_[_i]->Render();
 
 	_view.X = 0.0f;
 	_view.Y = 0.0f;
@@ -201,10 +237,11 @@ void LobbyScene::Render()
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
+	Render_String();
 	bg_movie_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
 
-	for (int _i = 0; _i < 4; ++_i)
+	for (int _i = 0; _i < PLAYER; ++_i)
 		charaSelect_[_i]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i]], sp_decisions[charaSelect_[_i]->IsDecision()], sp_entry, _i);
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
@@ -230,4 +267,29 @@ void LobbyScene::Render()
 
 void LobbyScene::ChangeModel(const int plIndex, const int selectID) {
 	player_[plIndex]->ReDecision(plIndex, USFN::MOD_PLAYER[selectID]);
+}
+
+void LobbyScene::ChangeStrategy(const int plIndex) {
+	player_[plIndex]->ChangeStrategy();
+}
+
+void LobbyScene::Render_String() {
+	if (allSet_) {
+		DX9::SpriteBatch->DrawString(font_count_.Get(), SimpleMath::Vector2(50.0f, 100.0f), DX9::Colors::Black, L"開始まで...");
+		DX9::SpriteBatch->DrawString(font_count_.Get(), SimpleMath::Vector2(50.0f, 140.0f), DX9::Colors::Black, L"%i 秒", (int)timer_goNext_->NowTime());
+	}
+
+	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すとプレイヤー2を");
+	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 360.0f), DX9::Colors::Black, L"決定にすることができます");
+}
+
+bool LobbyScene::AllDecision() {
+	int count = 0;
+
+	for (int _i = 0; _i < PLAYER; ++_i)
+		count += charaSelect_[_i]->IsDecision();
+
+	allSet_ = (count == PLAYER);
+
+	return allSet_;
 }

@@ -11,6 +11,8 @@
 // Initialize member variables.
 ResultScene::ResultScene()
 {
+	DontDestroy->NowScene_ = (int)NextScene::ResultScene;
+
 	bgm_			= new SoundPlayer();
 	se_decision_	= new SoundPlayer();
 	bg_movie_		= new MoviePlayer(Vector3::Zero, 1.0f);
@@ -23,7 +25,7 @@ ResultScene::ResultScene()
 void ResultScene::Initialize()
 {
 	bgm_		->Initialize(L"_Sounds\\_BGM\\bgm_result.wav", SOUND_TYPE::BGM);
-	se_decision_->Initialize(L"_Sounds\\_SE\\_Result\\se_decision.wav", SOUND_TYPE::SE, 2);
+	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE, 2);
 
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 

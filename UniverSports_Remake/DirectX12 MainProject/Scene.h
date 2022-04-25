@@ -10,7 +10,7 @@ enum class NextScene : int {
 	LobbyScene,
 	MainScene,
 	ResultScene,
-	StartScene = MainScene
+	StartScene = TitleScene
 };
 
 class Scene {

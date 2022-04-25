@@ -3,6 +3,7 @@
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_UI/_Choices/Choices.h"
 #include "_Classes/_UI/_SelectArrows/SelectArrows.h"
+#include "_Classes/_SoundPlayer/SoundPlayer.h"
 
 class CharaSelect {
 public:
@@ -34,5 +35,8 @@ private:
 
 	Choices* choices_;
 	SelectArrows* ui_arrows_;
+	SoundPlayer* se_decision_;
+	SoundPlayer* se_cancel_;
 	bool isDecision_;
+	bool isTabsDecision_;
 };

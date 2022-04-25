@@ -48,10 +48,18 @@ public:
 
 	void ReDecision(const int plID, std::wstring fileName) {
 		CreateModel(fileName);
-		pos_ = Vector2(-13.0f, 6.0f);
+		pos_ = Vector2(GAME_CONST.S_POS[plID].x, GAME_CONST.S_POS[plID].y);
 		rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
 		SetTransforms(pos_, rotate_);
 	}
+
+	void ChangeStrategy() {
+		strategy_ = new ComputerChara();
+		strategy_->Initialize(id_my_, this);
+		//strategy_->LoadAssets();  // Action‚Ì‰æ‘œ“Ç‚Ýž‚ÝA‚¢‚ç‚È‚¢‚ÆŽv‚¤
+	}
+
+	void AsjustmentForward();
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
 	void Shoting(const int ballID);
