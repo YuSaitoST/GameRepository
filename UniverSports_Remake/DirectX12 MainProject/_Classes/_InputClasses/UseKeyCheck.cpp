@@ -55,7 +55,7 @@ bool UseKeyCheck::ShotKey(int index) {
 
 Vector2 UseKeyCheck::MoveDirection(int index) {
 	if (index == 0)
-		return (key_.StateDirection() != Vector2::Zero) ? key_.StateDirection() * Vector2(1.0f, -1.0f) : pad_.LeftStateDirection360(index);
+		return (key_.StateDirection() != Vector2::Zero) ? key_.StateDirection() : pad_.LeftStateDirection360(index);
 	else
 		return (pad_.LeftStateDirection360(index));
 }
