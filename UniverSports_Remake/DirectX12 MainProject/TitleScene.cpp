@@ -105,7 +105,7 @@ void TitleScene::Terminate()
 // Direct3D resource cleanup.
 void TitleScene::OnDeviceLost()
 {
-
+	
 }
 
 // Restart any looped sounds here
@@ -159,8 +159,8 @@ NextScene TitleScene::Update(const float deltaTime)
 	cursor_->Update();
 
 	if (cursor_->SelectNum() == 0) {
-		choices_->Update(Press.LeftKey(), Press.RightKey());
-		ui_arrows_->Update();
+		choices_->Update(Press.LeftKey(0), Press.RightKey(0));
+		choices_->NextSelectOn(ui_arrows_->Update(0));
 	}
 
 	text_ = &nowText_[cursor_->SelectNum()][choices_->SelectNum()];
@@ -173,7 +173,7 @@ NextScene TitleScene::Update(const float deltaTime)
 	/*
 		決定ボタンを押したら、選択した項目に合わせた処理を行う
 	*/
-	if (Press.DecisionKey()) {
+	if (Press.KDecisionKey() || Press.PDecisionKey(0)) {
 		se_decision_->PlayOneShot();
 		const int _select = cursor_->SelectNum();
 

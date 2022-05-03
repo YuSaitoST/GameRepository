@@ -20,7 +20,7 @@ void Cursor::LoadAsset(std::wstring file_name) {
 }
 
 void Cursor::Update() {
-	choices_->Update(Press.DownKey(), Press.UpKey());
+	choices_->Update(Press.DownKey(0), Press.UpKey(0));
 
 	pos_.y = choices_->SelectNum() * MOVE_Y + POS_Y;
 }

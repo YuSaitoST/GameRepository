@@ -15,10 +15,8 @@ void Choices::Update(bool low, bool high) {
 			(low) ? -1 : 0;
 
 		if (low || high)
-			putCount_ += (int)(low || high);
+			putCount_ += 1;
 	}
-	else
-		putCount_ = 0;
 
 	ValueLoop(isSelected, 0, CHOICES - 1);
 

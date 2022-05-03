@@ -9,6 +9,7 @@ public:
 
 	void Update(bool low, bool high);
 	int SelectNum() const { return isSelected; };
+	void NextSelectOn(const bool on) { putCount_ = (int)on; }
 
 private:
 	void ValueLoop(int& num, int min, int max);

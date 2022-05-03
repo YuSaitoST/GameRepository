@@ -29,6 +29,7 @@ public:
 	}
 
 public:
+	enum CHARATYPE { PLAYER, COM };
 	enum GAMEMODE { DODGE_BALL_NOMAL, DODGE_BALL_2ON2, HAND_BALL, BILLIARDS };
 
 	inline bool isDODGEBALL			() const { return isDODGEBALL_NOMAL() || isDODGEBALL_2ON2(); }
@@ -37,6 +38,7 @@ public:
 	inline bool isHANDBALL			() const { return GameMode_ == HAND_BALL;		 }
 	inline bool isBILLIARDS			() const { return GameMode_ == BILLIARDS;		 }
 
+	CHARATYPE charaType_[4];
 	int NowScene_;
 	int GameMode_;
 	int ChoseColor_[4];

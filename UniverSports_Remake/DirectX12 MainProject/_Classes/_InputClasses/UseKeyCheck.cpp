@@ -5,55 +5,60 @@ UseKeyCheck UseKeyCheck::inctance_;
 void UseKeyCheck::Accepts() {
 	key_.Accepts();
 	pad_.Accepts(0);
+	pad_.Accepts(1);
+	pad_.Accepts(2);
+	pad_.Accepts(3);
 }
 
 bool UseKeyCheck::AnyKey() {
-	return key_.EventAnyKey() || pad_.EventAnyKey(0);
+	return key_.EventAnyKey() || pad_.EventAnyKey(0) || pad_.EventAnyKey(1) || pad_.EventAnyKey(2) || pad_.EventAnyKey(3);
 }
 
 bool UseKeyCheck::TabKey() {
 	return key_.EventOnOffKey(KEY::TAB);
 }
 
-bool UseKeyCheck::UpKey() {
-	return key_.EventOnOffKey(KEY::UP) || pad_.EventOnOffKey(0, PAD::P_UP) || pad_.EventOnOffKey(0, PAD::STICK_L_UP);
+bool UseKeyCheck::UpKey(const int index) {
+	return key_.EventOnOffKey(KEY::UP) || pad_.EventOnOffKey(index, PAD::P_UP) || pad_.EventOnOffKey(index, PAD::STICK_L_UP);
 }
 
-bool UseKeyCheck::DownKey() {
-	return key_.EventOnOffKey(KEY::DOWN) || pad_.EventOnOffKey(0, PAD::P_DOWN) || pad_.EventOnOffKey(0, PAD::STICK_L_DOWN);
+bool UseKeyCheck::DownKey(const int index) {
+	return key_.EventOnOffKey(KEY::DOWN) || pad_.EventOnOffKey(index, PAD::P_DOWN) || pad_.EventOnOffKey(index, PAD::STICK_L_DOWN);
 }
 
-bool UseKeyCheck::LeftKey() {
-	//return key_.EventOnOffKey(KEY::LEFT) || pad_.EventOnOffKey(0, PAD::P_LEFT) || pad_.EventOnOffKey(0, PAD::STICK_L_LEFT);
-	return DXTK->KeyEvent->pressed.Left || DXTK->GamePadEvent[0].leftStickLeft || DXTK->GamePadEvent[0].dpadLeft;
+bool UseKeyCheck::LeftKey(const int index) {
+	return key_.EventOnOffKey(KEY::LEFT) || pad_.EventOnOffKey(index, PAD::P_LEFT) || pad_.EventOnOffKey(index, PAD::STICK_L_LEFT);
 }
 
-bool UseKeyCheck::RightKey() {
-	//return key_.EventOnOffKey(KEY::RIGHT) || pad_.EventOnOffKey(0, PAD::P_RIGHT) || pad_.EventOnOffKey(0, PAD::STICK_L_RIGHT);
-	return DXTK->KeyEvent->pressed.Right || DXTK->GamePadEvent[0].leftStickRight || DXTK->GamePadEvent[0].dpadRight;
+bool UseKeyCheck::RightKey(const int index) {
+	return key_.EventOnOffKey(KEY::RIGHT) || pad_.EventOnOffKey(index, PAD::P_RIGHT) || pad_.EventOnOffKey(index, PAD::STICK_L_RIGHT);
 }
 
-bool UseKeyCheck::DecisionKey() {
-	return key_.EventOnOffKey(KEY::B) || pad_.EventOnOffKey(0, PAD::P_B);
+bool UseKeyCheck::KDecisionKey() {
+	return key_.EventOnOffKey(KEY::B);
 }
 
-bool UseKeyCheck::CancelKey() {
-	return key_.EventOnOffKey(KEY::A) || pad_.EventOnOffKey(0, PAD::P_A);
+bool UseKeyCheck::PDecisionKey(const int index) {
+	return pad_.EventOnOffKey(index, PAD::P_B);
 }
 
-bool UseKeyCheck::AllSelectKey() {
-	return key_.EventOnOffKey(KEY::TAB);
+bool UseKeyCheck::KCancelKey() {
+	return key_.EventOnOffKey(KEY::A);
 }
 
-bool UseKeyCheck::ThrasherKey(int index) {
-	return key_.EventOnOffKey(KEY::B) || pad_.StateOnOffKey(0, PAD::P_B);
+bool UseKeyCheck::PCancelKey(const int index) {
+	return pad_.EventOnOffKey(index, PAD::P_A);
 }
 
-bool UseKeyCheck::ShotKey(int index) {
+bool UseKeyCheck::ThrasherKey(const int index) {
+	return key_.EventOnOffKey(KEY::B) || pad_.StateOnOffKey(index, PAD::P_B);
+}
+
+bool UseKeyCheck::ShotKey(const int index) {
 	return (!index) ? (key_.EventOnOffKey(KEY::S) || pad_.EventOnOffKey(index, PAD::P_A)) : (pad_.EventOnOffKey(index, PAD::P_A));
 }
 
-Vector2 UseKeyCheck::MoveDirection(int index) {
+Vector2 UseKeyCheck::MoveDirection(const int index) {
 	if (index == 0)
 		return (key_.StateDirection() != Vector2::Zero) ? key_.StateDirection() : pad_.LeftStateDirection360(index);
 	else

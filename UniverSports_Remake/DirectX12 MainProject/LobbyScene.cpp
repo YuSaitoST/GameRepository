@@ -144,7 +144,6 @@ void LobbyScene::Terminate()
 
 	// TODO: Add your Termination logic here.
 
-	// ここで例外(_i == 1の時(最初)、アクセス違反による例外)
 	for (int _i = PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(player_[_i]->myRigidbody());
 
@@ -185,7 +184,6 @@ NextScene LobbyScene::Update(const float deltaTime)
 
 	physics_world_->stepSimulation(deltaTime, 10);  // 与えた値を10分割する(判定が細かくできる)
 
-	DX12Effect.Update(deltaTime);
 	Press.Accepts();
 
 	bg_movie_->Update();
@@ -259,8 +257,6 @@ void LobbyScene::Render()
 	spriteBatch_->Draw(dx9GpuDescriptor_, XMUINT2(1280, 720), SimpleMath::Vector2(0.0f, 0.0f));
 	spriteBatch_->End();
 
-	DX12Effect.Renderer();
-
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();
 }
@@ -279,7 +275,7 @@ void LobbyScene::Render_String() {
 		DX9::SpriteBatch->DrawString(font_count_.Get(), SimpleMath::Vector2(50.0f, 140.0f), DX9::Colors::Black, L"%i 秒", (int)timer_goNext_->NowTime());
 	}
 
-	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すとプレイヤー2を");
+	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すと残りのプレイヤーを");
 	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 360.0f), DX9::Colors::Black, L"決定にすることができます");
 }
 

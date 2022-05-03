@@ -1,4 +1,5 @@
 #include "IconAnimator.h"
+#include "DontDestroyOnLoad.h"
 
 bool IconAnimator::display_(false);
 
@@ -23,7 +24,7 @@ void IconAnimator::Initialize() {
 
 void IconAnimator::LoadAssets() {
 	for (int _i = 0; _i < 4; ++_i)
-		icon_[_i]->LoadAssets(PLICON_FILENAME[_i]);
+		icon_[_i]->LoadAssets(PLICON_FILENAME[DontDestroy->ChoseColor_[_i]]);
 }
 
 void IconAnimator::Update(const float deltaTime) {

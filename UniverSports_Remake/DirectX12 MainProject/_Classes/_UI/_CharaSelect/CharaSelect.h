@@ -38,5 +38,5 @@ private:
 	SoundPlayer* se_decision_;
 	SoundPlayer* se_cancel_;
 	bool isDecision_;
-	bool isTabsDecision_;
+	bool isCansel_;
 };

@@ -45,20 +45,16 @@ NextScene GameController::Update(const float deltaTime) {
 		se_whistle_->Update(deltaTime);
 		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && se_whistle_->isFined()) {
 			int count = 0;
-			for (int _i = 0; (_i < 4) && (count <= 1); ++_i) {
+			const int WINNER_NUM = std::any_of(std::begin(DontDestroy->Survivor_), std::end(DontDestroy->Survivor_), [](bool b) {return b; });
+			for (int _i = 0; (_i < 4) && (count < WINNER_NUM); ++_i) {
 				if (DontDestroy->Survivor_[_i]) {
 					DontDestroy->winnerTeamID_[count] = _i;
 					count += 1;
 				}
 			}
-
-			int a = DontDestroy->winnerTeamID_[0];
-			int b = DontDestroy->winnerTeamID_[1];
-
 			return NextScene::ResultScene;
 		}
 	}
-
 	return NextScene::Continue;
 }
 

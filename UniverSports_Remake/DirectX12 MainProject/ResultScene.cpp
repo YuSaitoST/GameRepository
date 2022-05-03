@@ -29,17 +29,22 @@ void ResultScene::Initialize()
 
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 
-	winPlayerID_	= DontDestroy->winnerID_;
-	maxScore_		= DontDestroy->Score_[winPlayerID_];
+	if (DontDestroy->GameMode_ != 2)
+		winPlayerID_[0] = DontDestroy->winnerID_;
+	else {
+		winPlayerID_[0] = DontDestroy->winnerTeamID_[0];
+		winPlayerID_[1] = DontDestroy->winnerTeamID_[1];
+	}
+
+	maxScore_		= DontDestroy->Score_[winPlayerID_[0]];
 
 	switch (DontDestroy->GameMode_) {
 		case 0: Mode_0(); break;
 		case 1: Mode_1(); break;
 		case 2: Mode_2(); break;
-		//case 3: Mode_3(); break;
 	}
 
-	player_x[0] = (DontDestroy->GameMode_ == 2) ? std::min(std::max(0, PLAYER::RECT_X * player_x[0]), PLAYER::RECT_X * 3) : std::min(std::max(0, PLAYER::RECT_X * winPlayerID_), PLAYER::RECT_X * 3);
+	player_x[0] = (DontDestroy->GameMode_ == 2) ? std::min(std::max(0, PLAYER::RECT_X * player_x[0]), PLAYER::RECT_X * 3) : std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3);
 	player_x[1] = (DontDestroy->GameMode_ == 2) ? std::min(std::max(0, PLAYER::RECT_X * player_x[1]), PLAYER::RECT_X * 3) : PLAYER::RECT_X * 5;
 }
 
@@ -62,7 +67,12 @@ void ResultScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_].c_str());
+	if (DontDestroy->GameMode_ != 2)
+		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
+	else {
+		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
+		sp_winPlayer_[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[1]].c_str());
+	}
 
 	sp_bg_tile_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\bg_tile.png");
 	sp_texWin_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_winner.png");
@@ -123,7 +133,7 @@ NextScene ResultScene::Update(const float deltaTime)
 	blackOut_->Update(deltaTime);
 
 	if (!goNext_) {
-		if (Press.DecisionKey()) {
+		if (Press.KDecisionKey() || Press.PDecisionKey(0)) {
 			se_decision_->PlayOneShot();
 			goNext_ = true;
 		}
@@ -180,7 +190,7 @@ void ResultScene::Render()
 
 void ResultScene::Render_WinChara() {
 	if (DontDestroy->GameMode_ != 2)
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[winPlayerID_].Get(), Vector3(0.0f, 0.0f, -2.0f));
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[winPlayerID_[0]].Get(), Vector3(0.0f, 0.0f, -2.0f));
 	else {
 		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[DontDestroy->winnerTeamID_[0]].Get(), Vector3(100.0f, 0.0f, -3.0f));
 		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[DontDestroy->winnerTeamID_[1]].Get(), Vector3(-226.0f, 0.0f, -2.0f));

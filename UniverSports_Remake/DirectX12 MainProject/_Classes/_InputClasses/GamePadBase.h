@@ -24,7 +24,7 @@ public:
 	virtual void Accepts(int index) = 0;
 
 	inline bool OnOffKey(PAD inputKey) {
-		return (flag_ & (1 << inputKey));
+		return (flag_ & (1 << (int)inputKey));
 	}
 
 	inline bool AnyKey() {

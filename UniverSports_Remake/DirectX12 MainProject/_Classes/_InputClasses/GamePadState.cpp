@@ -5,31 +5,29 @@ void GamePadState::Accepts(int index) {
 	flag_	= 0;
 	direct_ = Vector2::Zero;
 
-	/*
-		各bitに入力状態を入れる
-		足す理由は、同時押しを判定できるようにするため
-	*/
-	flag_ += DXTK->GamePadState[index].buttons.a				? (1 << P_A			 ) : 0;
-	flag_ += DXTK->GamePadState[index].buttons.b				? (1 << P_B			 ) : 0;
-	flag_ += DXTK->GamePadState[index].buttons.x				? (1 << P_X			 ) : 0;
-	flag_ += DXTK->GamePadState[index].buttons.y				? (1 << P_Y			 ) : 0;
-	flag_ += DXTK->GamePadState[index].dpad.up					? (1 << P_UP		 ) : 0;
-	flag_ += DXTK->GamePadState[index].dpad.down				? (1 << P_DOWN		 ) : 0;
-	flag_ += DXTK->GamePadState[index].dpad.left				? (1 << P_LEFT		 ) : 0;
-	flag_ += DXTK->GamePadState[index].dpad.right				? (1 << P_RIGHT		 ) : 0;
-	flag_ += DXTK->GamePadState[index].IsLeftThumbStickUp()		? (1 << STICK_L_UP	 ) : 0;
-	flag_ += DXTK->GamePadState[index].IsLeftThumbStickDown()	? (1 << STICK_L_DOWN ) : 0;
-	flag_ += DXTK->GamePadState[index].IsLeftThumbStickLeft()	? (1 << STICK_L_LEFT ) : 0;
-	flag_ += DXTK->GamePadState[index].IsLeftThumbStickRight()	? (1 << STICK_L_RIGHT) : 0;
-	flag_ += DXTK->GamePadState[index].IsRightThumbStickUp()	? (1 << STICK_R_UP	 ) : 0;
-	flag_ += DXTK->GamePadState[index].IsRightThumbStickDown()	? (1 << STICK_R_DOWN ) : 0;
-	flag_ += DXTK->GamePadState[index].IsRightThumbStickLeft()	? (1 << STICK_R_LEFT ) : 0;
-	flag_ += DXTK->GamePadState[index].IsRightThumbStickRight() ? (1 << STICK_R_RIGHT) : 0;
-	flag_ += DXTK->GamePadState[index].IsLeftShoulderPressed()	? (1 << SHOULDER_L	 ) : 0;
-	flag_ += DXTK->GamePadState[index].IsRightShoulderPressed() ? (1 << SHOULDER_R	 ) : 0;
-	flag_ += DXTK->GamePadState[index].IsLeftTriggerPressed()	? (1 << TRIGGER_L	 ) : 0;
-	flag_ += DXTK->GamePadState[index].IsRightTriggerPressed()	? (1 << TRIGGER_R	 ) : 0;
+	// 各ビットに入力状態を入れる
+	flag_ |= (bool)DXTK->GamePadState[index].buttons.a					<< P_A			 ;
+	flag_ |= (bool)DXTK->GamePadState[index].buttons.b					<< P_B			 ;
+	flag_ |= (bool)DXTK->GamePadState[index].buttons.x					<< P_X			 ;
+	flag_ |= (bool)DXTK->GamePadState[index].buttons.y					<< P_Y			 ;
+	flag_ |= (bool)DXTK->GamePadState[index].dpad.up					<< P_UP			 ;
+	flag_ |= (bool)DXTK->GamePadState[index].dpad.down					<< P_DOWN		 ;
+	flag_ |= (bool)DXTK->GamePadState[index].dpad.left					<< P_LEFT		 ;
+	flag_ |= (bool)DXTK->GamePadState[index].dpad.right					<< P_RIGHT		 ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsLeftThumbStickUp()		<< STICK_L_UP	 ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsLeftThumbStickDown()		<< STICK_L_DOWN  ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsLeftThumbStickLeft()		<< STICK_L_LEFT  ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsLeftThumbStickRight()	<< STICK_L_RIGHT ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsRightThumbStickUp()		<< STICK_R_UP	 ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsRightThumbStickDown()	<< STICK_R_DOWN  ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsRightThumbStickLeft()	<< STICK_R_LEFT  ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsRightThumbStickRight()	<< STICK_R_RIGHT ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsLeftShoulderPressed()	<< SHOULDER_L	 ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsRightShoulderPressed()	<< SHOULDER_R	 ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsLeftTriggerPressed()		<< TRIGGER_L	 ;
+	flag_ |= (bool)DXTK->GamePadState[index].IsRightTriggerPressed()	<< TRIGGER_R	 ;
 
+	// 0.0～1.0でとる入力
 	n_Lx_	= DXTK->GamePadState[index].thumbSticks.leftX;
 	n_Ly_	= DXTK->GamePadState[index].thumbSticks.leftY;
 	n_Rx_	= DXTK->GamePadState[index].thumbSticks.rightX;

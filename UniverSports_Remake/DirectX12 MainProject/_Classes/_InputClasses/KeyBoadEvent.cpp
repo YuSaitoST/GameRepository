@@ -5,39 +5,36 @@ void KeyBoadEvent::Accepts() {
 	flag_	= 0;
 	direct_ = Vector2::Zero;
 
-	/*
-		各bitに入力状態を入れる
-		足す理由は、同時押しを判定できるようにするため
-	*/
-	flag_ += DXTK->KeyEvent->pressed.A		? (1 << A    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.B		? (1 << B    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.C		? (1 << C    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.D		? (1 << D    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.E		? (1 << E    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.F		? (1 << F    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.G		? (1 << G    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.H		? (1 << H    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.I		? (1 << I    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.J		? (1 << J    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.K		? (1 << K    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.L		? (1 << L    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.M		? (1 << M    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.N		? (1 << N    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.O		? (1 << O    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.P		? (1 << P    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Q		? (1 << Q    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.R		? (1 << R    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.S		? (1 << S    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.T		? (1 << T    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.U		? (1 << U    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.V		? (1 << V    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.W		? (1 << W    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.X		? (1 << X    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Y		? (1 << Y    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Z		? (1 << Z    ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Up		? (1 << UP   ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Down	? (1 << DOWN ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Left	? (1 << LEFT ) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Right	? (1 << RIGHT) : 0;
-	flag_ += DXTK->KeyEvent->pressed.Tab	? (1 << TAB	 ) : 0;
+	// 各ビットに入力状態を入れる
+	flag_ |= (bool)DXTK->KeyEvent->pressed.A		<< A    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.B		<< B    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.C		<< C    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.D		<< D    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.E		<< E    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.F		<< F    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.G		<< G    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.H		<< H    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.I		<< I    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.J		<< J    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.K		<< K    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.L		<< L    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.M		<< M    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.N		<< N    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.O		<< O    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.P		<< P    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Q		<< Q    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.R		<< R    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.S		<< S    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.T		<< T    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.U		<< U    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.V		<< V    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.W		<< W    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.X		<< X    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Y		<< Y    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Z		<< Z    ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Up		<< UP   ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Down		<< DOWN ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Left		<< LEFT ;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Right	<< RIGHT;
+	flag_ |= (bool)DXTK->KeyEvent->pressed.Tab		<< TAB	;
 }

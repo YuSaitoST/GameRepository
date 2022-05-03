@@ -19,7 +19,7 @@ public:
 	void Initialize(float x_right, float x_left, float y);
 	void LoadAssets();
 	void LoadAssets(DX9::SPRITE right, DX9::SPRITE left);
-	void Update();
+	bool Update(const int index);
 	void Render(float alpha);
 
 private:

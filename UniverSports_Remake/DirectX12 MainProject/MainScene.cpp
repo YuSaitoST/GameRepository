@@ -170,7 +170,7 @@ void MainScene::Render()
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
-	for (int _i = 0; _i < 2; ++_i)
+	for (int _i = 0; _i < 4; ++_i)
 		icon_animator_->Render(m_object_->PlayerLife(_i), _i);
 
 	field_->Render();

@@ -3,24 +3,26 @@
 #include "DontDestroyOnLoad.h"
 
 ObjPlayer* ObjectManager::obj_player_[N_PLAYER];
-ObjBall* ObjectManager::obj_ball_[N_BALL];
+std::vector<ObjBall*> ObjectManager::obj_ball_;
 ObjWire* ObjectManager::obj_wire_[N_WIRE];
 
 ObjectManager::ObjectManager() {
 	DontDestroy->Survivor_[0] = true;
 	DontDestroy->Survivor_[1] = true;
-	DontDestroy->Survivor_[2] = false;
-	DontDestroy->Survivor_[3] = false;
+	DontDestroy->Survivor_[2] = true;
+	DontDestroy->Survivor_[3] = true;
+
+	N_BALL = BALLS[(int)DontDestroy->GameMode_];
+
+	obj_ball_.reserve(N_BALL);
 
 	std::fill(std::begin(DontDestroy->winnerTeamID_), std::end(DontDestroy->winnerTeamID_), -1);
 
-	obj_player_[0] = new ObjPlayer(OPERATE_TYPE::MANUAL, POS_START[0], 1.0f);
-	obj_player_[1] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[1], 1.0f);
-	// obj_player_[2] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[2], 1.0f);
-	// obj_player_[3] = new ObjPlayer(OPERATE_TYPE::COMPUTER, POS_START[3], 1.0f);
+	for (int _i = 0; _i < N_PLAYER; ++_i)
+		obj_player_[_i] = new ObjPlayer((OPERATE_TYPE)((int)DontDestroy->charaType_[_i]), POS_START[_i], 1.0f);
 
 	for (int _i = 0; _i < N_BALL; ++_i)
-		obj_ball_[_i] = new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f);
+		obj_ball_.push_back(new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f));
 
 	for (int _i = 0; _i < N_WIRE; ++_i)
 		obj_wire_[_i] = new ObjWire(POS_WIRE[_i], 1.0f);

@@ -77,7 +77,7 @@ private:
 	BlackOut*				blackOut_;
 
 	int						maxScore_;
-	int						winPlayerID_;
+	int						winPlayerID_[2];
 
 	int						player_x[2];
 	int						oneDigit_x;

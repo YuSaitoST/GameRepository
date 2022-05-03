@@ -39,14 +39,16 @@ void SelectArrows::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
 	sp_left_		= left;
 }
 
-void SelectArrows::Update() {
-	input_ = Press.RightKey() ? AL_RIGHT : Press.LeftKey() ? AL_LEFT : input_;
+bool SelectArrows::Update(const int index) {
+	input_ = Press.RightKey(index) ? AL_RIGHT : Press.LeftKey(index) ? AL_LEFT : input_;
 
 	if (input_ == AL_NONE)
-		return;
+		return false;
 
 	(input_ == AL_RIGHT) ? Animations(scale_right_) : Animations(scale_left_);
 	(input_ == AL_RIGHT) ? GetSmaller(scale_left_)  : GetSmaller(scale_right_);
+
+	return true;
 }
 
 void SelectArrows::Render(float alpha) {

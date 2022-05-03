@@ -13,17 +13,18 @@ public:
 
 	bool AnyKey();
 	bool TabKey();
-	bool UpKey();
-	bool DownKey();
-	bool LeftKey();
-	bool RightKey();
-	bool DecisionKey();
-	bool CancelKey();
-	bool AllSelectKey();
+	bool UpKey(const int index);
+	bool DownKey(const int index);
+	bool LeftKey(const int index);
+	bool RightKey(const int index);
+	bool KDecisionKey();
+	bool PDecisionKey(const int index);
+	bool KCancelKey();
+	bool PCancelKey(const int index);
 
-	bool ThrasherKey(int index);
-	bool ShotKey(int index);
-	Vector2 MoveDirection(int index);
+	bool ThrasherKey(const int index);
+	bool ShotKey(const int index);
+	Vector2 MoveDirection(const int index);
 
 private:
 	UseKeyCheck() {}

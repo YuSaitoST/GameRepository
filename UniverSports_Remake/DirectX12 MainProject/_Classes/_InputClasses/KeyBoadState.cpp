@@ -5,39 +5,36 @@ void KeyBoadState::Accepts() {
 	flag_	= 0;
 	direct_ = Vector2::Zero;
 
-	/*
-		各bitに入力状態を入れる
-		足す理由は、同時押しを判定できるようにするため
-	*/
-	flag_ += DXTK->KeyState->A     ? (1 << A    ) : 0;
-	flag_ += DXTK->KeyState->B     ? (1 << B    ) : 0;
-	flag_ += DXTK->KeyState->C     ? (1 << C    ) : 0;
-	flag_ += DXTK->KeyState->D     ? (1 << D    ) : 0;
-	flag_ += DXTK->KeyState->E     ? (1 << E    ) : 0;
-	flag_ += DXTK->KeyState->F     ? (1 << F    ) : 0;
-	flag_ += DXTK->KeyState->G     ? (1 << G    ) : 0;
-	flag_ += DXTK->KeyState->H     ? (1 << H    ) : 0;
-	flag_ += DXTK->KeyState->I     ? (1 << I    ) : 0;
-	flag_ += DXTK->KeyState->J     ? (1 << J    ) : 0;
-	flag_ += DXTK->KeyState->K     ? (1 << K    ) : 0;
-	flag_ += DXTK->KeyState->L     ? (1 << L    ) : 0;
-	flag_ += DXTK->KeyState->M     ? (1 << M    ) : 0;
-	flag_ += DXTK->KeyState->N     ? (1 << N    ) : 0;
-	flag_ += DXTK->KeyState->O     ? (1 << O    ) : 0;
-	flag_ += DXTK->KeyState->P     ? (1 << P    ) : 0;
-	flag_ += DXTK->KeyState->Q     ? (1 << Q    ) : 0;
-	flag_ += DXTK->KeyState->R     ? (1 << R    ) : 0;
-	flag_ += DXTK->KeyState->S     ? (1 << S    ) : 0;
-	flag_ += DXTK->KeyState->T     ? (1 << T    ) : 0;
-	flag_ += DXTK->KeyState->U     ? (1 << U    ) : 0;
-	flag_ += DXTK->KeyState->V     ? (1 << V    ) : 0;
-	flag_ += DXTK->KeyState->W     ? (1 << W    ) : 0;
-	flag_ += DXTK->KeyState->X     ? (1 << X    ) : 0;
-	flag_ += DXTK->KeyState->Y     ? (1 << Y    ) : 0;
-	flag_ += DXTK->KeyState->Z     ? (1 << Z    ) : 0;
-	flag_ += DXTK->KeyState->Up    ? (1 << UP   ) : 0;
-	flag_ += DXTK->KeyState->Down  ? (1 << DOWN ) : 0;
-	flag_ += DXTK->KeyState->Left  ? (1 << LEFT ) : 0;
-	flag_ += DXTK->KeyState->Right ? (1 << RIGHT) : 0;
-	flag_ += DXTK->KeyState->Tab   ? (1 << TAB	) : 0;
+	// 各ビットに入力状態を入れる
+	flag_ |= (bool)DXTK->KeyState->A     << A    ;
+	flag_ |= (bool)DXTK->KeyState->B     << B    ;
+	flag_ |= (bool)DXTK->KeyState->C     << C    ;
+	flag_ |= (bool)DXTK->KeyState->D     << D    ;
+	flag_ |= (bool)DXTK->KeyState->E     << E    ;
+	flag_ |= (bool)DXTK->KeyState->F     << F    ;
+	flag_ |= (bool)DXTK->KeyState->G     << G    ;
+	flag_ |= (bool)DXTK->KeyState->H     << H    ;
+	flag_ |= (bool)DXTK->KeyState->I     << I    ;
+	flag_ |= (bool)DXTK->KeyState->J     << J    ;
+	flag_ |= (bool)DXTK->KeyState->K     << K    ;
+	flag_ |= (bool)DXTK->KeyState->L     << L    ;
+	flag_ |= (bool)DXTK->KeyState->M     << M    ;
+	flag_ |= (bool)DXTK->KeyState->N     << N    ;
+	flag_ |= (bool)DXTK->KeyState->O     << O    ;
+	flag_ |= (bool)DXTK->KeyState->P     << P    ;
+	flag_ |= (bool)DXTK->KeyState->Q     << Q    ;
+	flag_ |= (bool)DXTK->KeyState->R     << R    ;
+	flag_ |= (bool)DXTK->KeyState->S     << S    ;
+	flag_ |= (bool)DXTK->KeyState->T     << T    ;
+	flag_ |= (bool)DXTK->KeyState->U     << U    ;
+	flag_ |= (bool)DXTK->KeyState->V     << V    ;
+	flag_ |= (bool)DXTK->KeyState->W     << W    ;
+	flag_ |= (bool)DXTK->KeyState->X     << X    ;
+	flag_ |= (bool)DXTK->KeyState->Y     << Y    ;
+	flag_ |= (bool)DXTK->KeyState->Z     << Z    ;
+	flag_ |= (bool)DXTK->KeyState->Up    << UP   ;
+	flag_ |= (bool)DXTK->KeyState->Down  << DOWN ;
+	flag_ |= (bool)DXTK->KeyState->Left  << LEFT ;
+	flag_ |= (bool)DXTK->KeyState->Right << RIGHT;
+	flag_ |= (bool)DXTK->KeyState->Tab   << TAB	;
 }
