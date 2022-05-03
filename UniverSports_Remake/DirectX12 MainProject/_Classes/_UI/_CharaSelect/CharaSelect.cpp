@@ -30,14 +30,6 @@ void CharaSelect::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
 }
 
 void CharaSelect::Update(const float deltaTime, const int index) {
-	const bool inpDec = Press.PDecisionKey(0);  // b
-	const bool inpCan = Press.PCancelKey(0);  // a
-
-	if (DXTK->GamePadEvent[0].a) {
-		bool inp = inpCan;
-	}
-
-
 	// 決定済みの時
 	if (isDecision_) {
 		//if (!isTabsDecision_)  // 多分いらない
@@ -70,10 +62,8 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 
 
 	// 選択している色を代入
-	//if (index == 0)
-		DontDestroy->ChoseColor_[index] = choices_->SelectNum();
-	//else
-	//	DontDestroy->ChoseColor_[index] = 1;
+	DontDestroy->ChoseColor_[index] = choices_->SelectNum();
+	SelectToAvoidDupLicates(index);
 
 	// 決定したら、色とキャラの操作タイプを設定
 	if (isDecision_) {
@@ -81,7 +71,8 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 		DontDestroy->charaType_[index] = DontDestroy->CHARATYPE::PLAYER;
 		se_decision_->PlayOneShot();
 	}
-	else if (Press.TabKey()) {
+	else if ((index != 0) && Press.TabKey()) {
+		SelectToAvoidDupLicates(index);
 		LobbyScene::ChangeModel(index, DontDestroy->ChoseColor_[index]);
 		LobbyScene::ChangeStrategy(index);
 		DontDestroy->charaType_[index] = DontDestroy->CHARATYPE::COM;
@@ -97,4 +88,33 @@ void CharaSelect::Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE 
 
 	if (isDecision_)
 		DX9::SpriteBatch->DrawSimple(entry.Get(), SimpleMath::Vector3(ENTRY_X[index], ENTRY_Y, -90));
+}
+
+void CharaSelect::SelectToAvoidDupLicates(int index) {
+	while (haveSameValue(index)) {
+		DontDestroy->ChoseColor_[index] += 1;
+		ValueLoop(DontDestroy->ChoseColor_[index], 0, 4 - 1);
+	}
+}
+
+bool CharaSelect::haveSameValue(int index) {
+	for (int _i = 0; _i < 4; ++_i) {
+		// 自分のIDだったら調べなおす
+		if (_i == index)
+			continue;
+
+		// 重複しているものがあればtrueを返す
+		if (DontDestroy->ChoseColor_[index] == DontDestroy->ChoseColor_[_i])
+			return true;
+	}
+
+	return false;
+}
+
+void CharaSelect::ValueLoop(int& num, int min, int max) {
+	if (num < min)
+		num = max;
+
+	if (max < num)
+		num = min;
 }

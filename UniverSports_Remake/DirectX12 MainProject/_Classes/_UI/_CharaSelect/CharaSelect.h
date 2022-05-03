@@ -18,6 +18,10 @@ public:
 	bool IsDecision() const { return isDecision_; }
 
 private:
+	void SelectToAvoidDupLicates(int index);
+	bool haveSameValue(int index);
+	static void ValueLoop(int& num, int min, int max);
+
 	const float INPUT_Y = 686.0f;
 	const float ENTRY_Y = 585.0f;
 	const float ARROW_Y = 600.0f;

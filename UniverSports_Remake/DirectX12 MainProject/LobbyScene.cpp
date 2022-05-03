@@ -188,7 +188,6 @@ NextScene LobbyScene::Update(const float deltaTime)
 
 	bg_movie_->Update();
 
-	// 操作練習が現状できないためコメントアウト
 	for (int _i = 0; _i < PLAYER; ++_i)
 		if (charaSelect_[_i]->IsDecision())
 			player_[_i]->Update(deltaTime);
@@ -201,11 +200,10 @@ NextScene LobbyScene::Update(const float deltaTime)
 		else
 			return NextScene::Continue;
 	}
-
-	for (int _i = 0; _i < PLAYER; ++_i)
-		charaSelect_[_i]->Update(deltaTime, _i);
-
-
+	else {
+		for (int _i = 0; _i < PLAYER; ++_i)
+			charaSelect_[_i]->Update(deltaTime, _i);
+	}
 
 	return NextScene::Continue;
 }
