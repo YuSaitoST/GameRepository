@@ -9,6 +9,10 @@ void HitInstructor::BallShot(const int ballID, DirectX::SimpleMath::Vector2 forw
 	ObjectManager::GetBallObj(ballID)->WasThrown(forward);
 }
 
-void HitInstructor::BallBreak(const int ballID) {
+void HitInstructor::BallBreakOfThrower(const int ballID) {
 	ObjectManager::GetBallObj(ballID)->WasGuessed();
+}
+
+void HitInstructor::BallBreakOfTheHitter(const int ballID) {
+	ObjectManager::GetBallObj(ballID)->BallReset();
 }

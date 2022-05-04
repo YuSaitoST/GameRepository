@@ -7,6 +7,8 @@ void StStandby::Initialize() {
 }
 
 void StStandby::Update(ObjBall* ball) {
-	if (GameController::GamePlay())
+	if (GameController::GamePlay()) {
+		ball->SwitchColor(ObjBall::COLOR_TYPE::DEFAULT_COLOR);
 		ball->SwitchState(ObjBall::STATE::FLOAT);
+	}
 }

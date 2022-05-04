@@ -29,8 +29,8 @@ void ResultScene::Initialize()
 
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 
-	if (DontDestroy->GameMode_ != 2)
-		winPlayerID_[0] = DontDestroy->winnerID_;
+	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
+		winPlayerID_[0] = DontDestroy->winnerTeamID_[0];
 	else {
 		winPlayerID_[0] = DontDestroy->winnerTeamID_[0];
 		winPlayerID_[1] = DontDestroy->winnerTeamID_[1];
@@ -44,8 +44,8 @@ void ResultScene::Initialize()
 		case 2: Mode_2(); break;
 	}
 
-	player_x[0] = (DontDestroy->GameMode_ == 2) ? std::min(std::max(0, PLAYER::RECT_X * player_x[0]), PLAYER::RECT_X * 3) : std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3);
-	player_x[1] = (DontDestroy->GameMode_ == 2) ? std::min(std::max(0, PLAYER::RECT_X * player_x[1]), PLAYER::RECT_X * 3) : PLAYER::RECT_X * 5;
+	player_rect_x[0] = (DontDestroy->isSOLOTEAM_SHOWDOWN()) ? std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3)	: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3);
+	player_rect_x[1] = (DontDestroy->isSOLOTEAM_SHOWDOWN()) ? 0																				: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[1]), PLAYER::RECT_X * 3);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -67,7 +67,7 @@ void ResultScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	if (DontDestroy->GameMode_ != 2)
+	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
 		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
 	else {
 		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
@@ -189,8 +189,8 @@ void ResultScene::Render()
 }
 
 void ResultScene::Render_WinChara() {
-	if (DontDestroy->GameMode_ != 2)
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[winPlayerID_[0]].Get(), Vector3(0.0f, 0.0f, -2.0f));
+	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(0.0f, 0.0f, -2.0f));
 	else {
 		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[DontDestroy->winnerTeamID_[0]].Get(), Vector3(100.0f, 0.0f, -3.0f));
 		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[DontDestroy->winnerTeamID_[1]].Get(), Vector3(-226.0f, 0.0f, -2.0f));
@@ -198,11 +198,11 @@ void ResultScene::Render_WinChara() {
 }
 
 void ResultScene::Render_WinCName() {
-	if (DontDestroy->GameMode_ != 2)
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X, PLAYER::POS_Y, -3.0f), RECT(player_x[0], 0, player_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
+	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X,							PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
 	else {
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X - 50.0f, PLAYER::POS_Y, -3.0f), RECT(player_x[0], 0, player_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X + PLAYER::RECT_X - 50.0f, PLAYER::POS_Y, -3.0f), RECT(player_x[1], 0, player_x[1] + PLAYER::RECT_X, PLAYER::RECT_Y));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X - 50.0f,					PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X + PLAYER::RECT_X - 50.0f,	PLAYER::POS_Y, -3.0f), RECT(player_rect_x[1], 0, player_rect_x[1] + PLAYER::RECT_X, PLAYER::RECT_Y));
 	}
 }
 
@@ -228,8 +228,8 @@ void ResultScene::Mode_1() {
 
 // 2on2
 void ResultScene::Mode_2() {
-	player_x[0] = DontDestroy->winnerTeamID_[0];
-	player_x[1] = DontDestroy->winnerTeamID_[1];
+	player_rect_x[0] = DontDestroy->winnerTeamID_[0];
+	player_rect_x[1] = DontDestroy->winnerTeamID_[1];
 
 	if (maxScore_ < 10) {
 		oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * maxScore_), NUMBER::RECT_X * 9);

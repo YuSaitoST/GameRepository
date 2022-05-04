@@ -60,6 +60,7 @@ private:
 
 	static ObjPlayer* obj_player_[N_PLAYER];
 	static std::vector<ObjBall*> obj_ball_;
+	//static ObjBall* obj_ball_[5];
 	static ObjWire* obj_wire_[N_WIRE];
 
 	int N_BALL;

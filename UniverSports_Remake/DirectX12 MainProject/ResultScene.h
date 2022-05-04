@@ -79,7 +79,7 @@ private:
 	int						maxScore_;
 	int						winPlayerID_[2];
 
-	int						player_x[2];
+	int						player_rect_x[2];
 	int						oneDigit_x;
 	int						twoDigit_x;
 

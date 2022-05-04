@@ -177,7 +177,6 @@ void MainScene::Render()
 	gameController_->Render();
 	m_object_->RenderSprites();
 
-
 #ifdef DEBUG
 	DebugList.Render();
 #endif // DEBUG

@@ -4,6 +4,7 @@
 
 ObjPlayer* ObjectManager::obj_player_[N_PLAYER];
 std::vector<ObjBall*> ObjectManager::obj_ball_;
+//ObjBall* ObjectManager::obj_ball_[5];
 ObjWire* ObjectManager::obj_wire_[N_WIRE];
 
 ObjectManager::ObjectManager() {
@@ -21,6 +22,8 @@ ObjectManager::ObjectManager() {
 	for (int _i = 0; _i < N_PLAYER; ++_i)
 		obj_player_[_i] = new ObjPlayer((OPERATE_TYPE)((int)DontDestroy->charaType_[_i]), POS_START[_i], 1.0f);
 
+	//for (int _i = 0; _i < N_BALL; ++_i)
+	//	obj_ball_[_i] = new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f);
 	for (int _i = 0; _i < N_BALL; ++_i)
 		obj_ball_.push_back(new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f));
 
@@ -32,8 +35,10 @@ ObjectManager::~ObjectManager() {
 	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		delete obj_wire_[_i];
 
-	for (int _i = N_BALL - 1; 0 <= _i; --_i)
-		delete obj_ball_[_i];
+	//for (int _i = N_BALL - 1; 0 <= _i; --_i)
+	//	delete obj_ball_[_i];
+	std::vector<ObjBall*> arr(N_BALL);
+	obj_ball_.swap(arr);
 	
 	for (int _i = N_PLAYER - 1; 0 <= _i; --_i)
 		delete obj_player_[_i];
@@ -74,8 +79,10 @@ void ObjectManager::Update(const float deltaTime) {
 	for (ObjectBase* obj : obj_ball_)
 		obj->Update(deltaTime);
 
-	for (ObjectBase* obj : obj_wire_)
-		obj->Update(deltaTime);
+	// ゴールを用いるモードのみ回す
+	if (DontDestroy->GameMode_ == DontDestroy->isGAMES_WITH_GOALS())
+		for (ObjectBase* obj : obj_wire_)
+			obj->Update(deltaTime);
 }
 
 void ObjectManager::RenderModels() {

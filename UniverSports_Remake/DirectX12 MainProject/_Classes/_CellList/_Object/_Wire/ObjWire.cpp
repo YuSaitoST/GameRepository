@@ -1,4 +1,6 @@
 #include "ObjWire.h"
+#include "_Classes/_CellList/_HitInstructor/HitInstructor.h"
+#include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 #include "DontDestroyOnLoad.h"
 
 ObjWire::ObjWire() {
@@ -30,5 +32,47 @@ void ObjWire::LoadAssets(std::wstring file_name) {
 	mod_wire_->SetRotation(_qua.x, _qua.y, _qua.z);
 	collision_->SetColli(mod_wire_->GetBoundingOrientedBox());
 	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
+}
 
-}  // FILE_NAMEは空文字でいい,読み込みはしないから
+void ObjWire::Update(const float deltaTime) {
+	HitAction(GetHitObject());
+}
+
+void ObjWire::HitAction(ObjectBase* object) {
+	// 衝突したものがないなら早期リターン
+	if (object == nullptr)
+		return;
+
+	if (object->myObjectType() == OBJ_TYPE::PLAYER) {
+		ObjPlayer* player = dynamic_cast<ObjPlayer*>(object);
+
+		// 自分の陣地ではないのなら早期リターン
+		if (player->myObjectID() != id_my_)
+			return;
+
+		// ゴール内にボールが入っていなければ早期リターン
+		if (hasBalls_.size() <= 0)
+			return;
+
+		// ボールを持っているなら早期リターン
+		if (player->HasBall())
+			return;
+
+
+		player->CautchedBall(hasBalls_.back()->myObjectID());
+		HitInstructor::BallCautch(player->myObjectID(), hasBalls_.back()->myObjectID());
+		hasBalls_.back()->SwitchState(ObjBall::STATE::CAUTCH);
+		hasBalls_.pop_back();
+
+	}
+	else if (object->myObjectType() == OBJ_TYPE::BALL) {
+		ObjBall* ball = dynamic_cast<ObjBall*>(object);
+
+		// 投げられたボールでなければ早期リターン
+		if (ball->NowState() != ObjBall::STATE::SHOT)
+			return;
+
+		ball->SwitchState(ObjBall::STATE::GOAL);
+		hasBalls_.push_back(ball);
+	}
+}

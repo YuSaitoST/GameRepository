@@ -83,6 +83,7 @@ void ObjBall::SwitchState(STATE state) {
 		case FLOAT	 : state_ = &st_float_;			  break;
 		case CAUTCH	 : state_ = &st_cautch_;		  break;
 		case SHOT	 : state_ = &st_shot_;			  break;
+		case GOAL	 : state_ = &st_goal_;			  break;
 		default		 : assert(!"ObjBall_不正な状態"); break;
 	}
 
@@ -98,7 +99,7 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 
 	switch (colorType) {
 		case DEFAULT_COLOR : _mat = GetNomMaterial(); break;
-		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[DontDestroy->ChoseColor_[id_owner_]]; _mat.Ambient = P_AMBIENT; break;
+		case PLAYERS_COLOR: _mat.Diffuse = P_DIFFUSE[std::min(std::max(0, DontDestroy->ChoseColor_[id_owner_]), 4 - 1)]; _mat.Ambient = P_AMBIENT; break;
 		case TEAM_COLOR    : break;
 		default			   : assert(!"ObjBall_assert : 不正な色指定"); break;
 	}
@@ -134,7 +135,12 @@ void ObjBall::WasThrown(Vector2 forward) {
 }
 
 void ObjBall::WasGuessed() {
-	isBreak_ = true;
 	DontDestroy->Score_[id_owner_] += 1;
+	BallReset();
+}
+
+void ObjBall::BallReset() {
+	isBreak_ = true;
+	id_owner_ = -1;
 	AssignTransform(Vector3(GAME_CONST.FieldSide_X, GAME_CONST.FieldSide_Y, 0.0f), Vector2::Zero);
 }

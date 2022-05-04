@@ -97,17 +97,14 @@ void ObjPlayer::Render() {
 }
 
 void ObjPlayer::HitAction(ObjectBase* hitObject) {
-	if (hitObject == nullptr) {
-#ifdef DEBUG
-		model_->SetMaterial(GetNomMaterial());
-#endif // DEBUG
+	// 衝突したものがないなら早期リターン
+	if (hitObject == nullptr)
 		return;
-	}
 
 	const OBJ_TYPE _type = hitObject->myObjectType();
 
 	if (_type == BALL) {
-		ObjBall* _ball = dynamic_cast<ObjBall*>(hitObject);  // ボールの状態を知るため
+		ObjBall* _ball = dynamic_cast<ObjBall*>(hitObject);  // ボールの状態を知るためにダウンキャスト
 
 		if (id_my_ == _ball->GetOwnerID())  // 自分が持つボールとの当たり判定は取る必要なし
 			return;
@@ -118,9 +115,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			if (hasBall_ && myBallID_ != -1)
 				return;
 
-			hasBall_ = true;
-			myBallID_ = _ball->myObjectID();
-			HitInstructor::BallCautch(id_my_, myBallID_);
+			CautchedBall(_ball->myObjectID());
 		}
 		else if (_baleState == _ball->STATE::SHOT) {  // やられ処理
 			life_->TakeDamage();
@@ -134,18 +129,17 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 
 			if (life_->NowLifePoint() <= 0)
 				DontDestroy->Survivor_[id_my_] = false;
+
 			IconAnimator::DisplayOn();
-			HitInstructor::BallBreak(_ball->myObjectID());
+			HitInstructor::BallBreakOfThrower(_ball->myObjectID());
+
+			if (hasBall_) {
+				HitInstructor::BallBreakOfTheHitter(myBallID_);
+				myBallID_ = -1;
+				hasBall_ = false;
+			}
 		}
 	}
-#ifdef DEBUG
-	else if (_type == WIRE) {
-		D3DMATERIAL9 _mate{};
-		_mate.Diffuse = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
-		_mate.Ambient = DX9::Colors::Value(0.0f, 0.0f, 0.0f, 1.0f);
-		model_->SetMaterial(_mate);
-	}
-#endif // DEBUG
 }
 
 void ObjPlayer::UIRender() {
@@ -187,6 +181,12 @@ void ObjPlayer::Shoting(const int ballID) {
 	hasBall_ = false;
 	myBallID_ = -1;
 	HitInstructor::BallShot(ballID, forward_);
+}
+
+void ObjPlayer::CautchedBall(const int ballID) {
+	hasBall_ = true;
+	myBallID_ = ballID;
+	HitInstructor::BallCautch(id_my_, myBallID_);
 }
 
 Vector2 ObjPlayer::Get_HandPos() {

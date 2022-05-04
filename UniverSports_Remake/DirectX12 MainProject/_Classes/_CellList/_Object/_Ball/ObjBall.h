@@ -6,14 +6,15 @@
 #include "_State/_Cautch/StCautch.h"
 #include "_State/_Shot/StShot.h"
 #include "_State/_Standby/StStandby.h"
+#include "_State/_Goal/StGoal.h"
 
 class ObjBall final : public ObjectBase {
 private:
 	const D3DCOLORVALUE P_DIFFUSE[5] = {
-		D3DCOLORVALUE(0.0f,0.65f,0.0f,1.0f),
-		D3DCOLORVALUE(0.65f,0.0f,0.65f,1.0f),
-		D3DCOLORVALUE(0.65f,0.0f,0.0f,1.0f),
-		D3DCOLORVALUE(0.0f,0.0f,0.65f,1.0f),
+		D3DCOLORVALUE(0.0f,0.65f,0.0f,1.0f),  // 緑(PL.1)
+		D3DCOLORVALUE(0.65f,0.0f,0.65f,1.0f),  // 紫(PL.2)
+		D3DCOLORVALUE(0.65f,0.0f,0.0f,1.0f),  // 赤(PL.3)
+		D3DCOLORVALUE(0.0f,0.0f,0.65f,1.0f),  // 青(PL.4)
 		D3DCOLORVALUE(0.0f,0.0f,0.0f,0.0f)
 	};
 	const D3DCOLORVALUE P_AMBIENT = D3DCOLORVALUE(0.35f, 0.35f, 0.35f, 1.0f);
@@ -40,11 +41,11 @@ public:
 	void WasCaught(const int ownerID);  // HitInstructorクラスで呼ぶ、ビリヤードモードでは1つだけInitizalizeでこれ呼ぶ
 	void WasThrown(Vector2 forward);
 	void WasGuessed();
+	void BallReset();
 
 	void SwitchState(STATE state);
 	void SwitchColor(COLOR_TYPE colorType);
 
-	/* ここまで確定関数 */
 
 	void Moving(Vector3 power) { physics_->Moving(power); }
 	void AddPower(Vector3 forward, float speed);
@@ -79,6 +80,7 @@ private:
 	StCautch st_cautch_;
 	StShot st_shot_;
 	StStandby st_standby_;
+	StGoal st_goal_;
 
 	STATE nowState_;
 	COLOR_TYPE colorType_;

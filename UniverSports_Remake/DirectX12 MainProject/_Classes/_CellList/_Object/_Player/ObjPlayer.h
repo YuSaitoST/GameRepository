@@ -56,13 +56,13 @@ public:
 	void ChangeStrategy() {
 		strategy_ = new ComputerChara();
 		strategy_->Initialize(id_my_, this);
-		//strategy_->LoadAssets();  // Action‚Ì‰æ‘œ“Ç‚Ýž‚ÝA‚¢‚ç‚È‚¢‚ÆŽv‚¤
 	}
 
 	void AsjustmentForward();
 
 	void Moving(Vector3 power) { physics_->Moving(power); };
 	void Shoting(const int ballID);
+	void CautchedBall(const int ballID);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 	void AssignDirection(Vector2 dir) { forward_ = dir; }
 	void SetTarget(ObjectBase* target) { targetObj_ = target; }
@@ -81,7 +81,6 @@ private:
 	void AnimSet(MOTION motion, float deltaTime);
 	MOTION AnimChange();
 
-	//const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
 	MyLife* life_;

@@ -12,7 +12,7 @@ void StShot::Update(ObjBall* ball) {
 
 	if (_isFieldOut || _isGotStuck || ball->IsBreaked() || ball->GetOwnerID() == -1) {
 		ball->SetOwnerID(-1);
-		ball->SwitchState(ObjBall::STATE::FLOAT);
 		ball->SwitchColor(ObjBall::COLOR_TYPE::DEFAULT_COLOR);
+		ball->SwitchState(ObjBall::STATE::FLOAT);
 	}
 }
