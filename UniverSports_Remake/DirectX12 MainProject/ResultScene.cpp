@@ -29,23 +29,66 @@ void ResultScene::Initialize()
 
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 
-	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
-		winPlayerID_[0] = DontDestroy->winnerTeamID_[0];
+	if (DontDestroy->GameMode_.isSINGLES_GAME()) {
+		// シングルスのスコア計算(一番多いプレイヤーが優勝)
+		int _maxScore = 0;
+		for (int _i = 0; _i < 4; ++_i) {
+			if (_maxScore < DontDestroy->Score_[_i]) {
+				_maxScore = DontDestroy->Score_[_i];
+				winPlayerID_[0] = _i;
+			}
+		}
+	}
 	else {
-		winPlayerID_[0] = DontDestroy->winnerTeamID_[0];
-		winPlayerID_[1] = DontDestroy->winnerTeamID_[1];
+		// ダブルス
+
+		// チームごとにPlayerIDをまとめる
+		int _indexOfTeam0 = 0;
+		int _indexOfTeam1 = 0;
+		int _IDofTeam0[2];
+		int _IDofTeam1[2];
+		for (int _i = 0; _i < 4; ++_i) {
+			if (DontDestroy->TeamID[_i] == 0) {
+				_IDofTeam0[_indexOfTeam0] = _i;
+				_indexOfTeam0 += 1;
+			}
+			else {
+				_IDofTeam1[_indexOfTeam1] = _i;
+				_indexOfTeam1 += 1;
+			}
+		}
+
+		const int _scoreOfTeam0 = DontDestroy->Score_[_IDofTeam0[0]] + DontDestroy->Score_[_IDofTeam0[1]];
+		const int _scoreOfTeam1 = DontDestroy->Score_[_IDofTeam1[0]] + DontDestroy->Score_[_IDofTeam1[1]];
+		if (_scoreOfTeam0 < _scoreOfTeam1) {
+			// チーム1勝利
+			maxScore_ = _scoreOfTeam1;
+			SetPlayerIDofTheWinningTeam(_IDofTeam1);
+		}
+		else if (_scoreOfTeam1 < _scoreOfTeam0) {
+			// チーム0勝利
+			maxScore_ = _scoreOfTeam0;
+			SetPlayerIDofTheWinningTeam(_IDofTeam0);
+		}
+		else {
+			// 同点
+			maxScore_ = _scoreOfTeam0;
+			winPlayerID_[0] = 99;
+			winPlayerID_[1] = 99;
+		}
 	}
 
-	maxScore_		= DontDestroy->Score_[winPlayerID_[0]];
+	// 数字連番の表示範囲を決める
+	if (DontDestroy->GameMode_.isDODGEBALL_NOMAL())
+		Mode_0();
+	else if (DontDestroy->GameMode_.isHANDBALL())
+		Mode_1();
+	else if (DontDestroy->GameMode_.isDODGEBALL_2ON2())
+		Mode_2();
 
-	switch (DontDestroy->GameMode_) {
-		case 0: Mode_0(); break;
-		case 1: Mode_1(); break;
-		case 2: Mode_2(); break;
-	}
-
-	player_rect_x[0] = (DontDestroy->isSOLOTEAM_SHOWDOWN()) ? std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3)	: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3);
-	player_rect_x[1] = (DontDestroy->isSOLOTEAM_SHOWDOWN()) ? 0																				: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[1]), PLAYER::RECT_X * 3);
+	// プレイヤー名の連番の表示範囲を決める
+	player_rect_x[0] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3)	: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3);
+	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0																				: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[1]), PLAYER::RECT_X * 3);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -67,7 +110,7 @@ void ResultScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
+	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
 	else {
 		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
@@ -81,7 +124,7 @@ void ResultScene::LoadAssets()
 	sp_number_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\number.png");
 
 	// GameMode { 0(撃破) , 1(スコア) , 2(撃破) , 3(スコア) }
-	sp_texCrushing_	= (DontDestroy->GameMode_ / 2 == 0) ?
+	sp_texCrushing_	= (DontDestroy->GameMode_.isDODGEBALL()) ?
 		DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_gekiha.png") :
 		DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_score.png");
 
@@ -189,16 +232,16 @@ void ResultScene::Render()
 }
 
 void ResultScene::Render_WinChara() {
-	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
+	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(0.0f, 0.0f, -2.0f));
 	else {
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[DontDestroy->winnerTeamID_[0]].Get(), Vector3(100.0f, 0.0f, -3.0f));
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[DontDestroy->winnerTeamID_[1]].Get(), Vector3(-226.0f, 0.0f, -2.0f));
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[winPlayerID_[0]].Get(), Vector3(100.0f, 0.0f, -3.0f));
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[winPlayerID_[1]].Get(), Vector3(-226.0f, 0.0f, -2.0f));
 	}
 }
 
 void ResultScene::Render_WinCName() {
-	if (DontDestroy->isSOLOTEAM_SHOWDOWN())
+	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X,							PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
 	else {
 		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X - 50.0f,					PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
@@ -228,9 +271,6 @@ void ResultScene::Mode_1() {
 
 // 2on2
 void ResultScene::Mode_2() {
-	player_rect_x[0] = DontDestroy->winnerTeamID_[0];
-	player_rect_x[1] = DontDestroy->winnerTeamID_[1];
-
 	if (maxScore_ < 10) {
 		oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * maxScore_), NUMBER::RECT_X * 9);
 		twoDigit_x = 0;
@@ -242,4 +282,9 @@ void ResultScene::Mode_2() {
 		oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * _oneDigit), NUMBER::RECT_X * 9);
 		twoDigit_x = std::min(std::max(0, NUMBER::RECT_X * _twoDigit), NUMBER::RECT_X * 9);
 	}
+}
+
+void ResultScene::SetPlayerIDofTheWinningTeam(const int teamMember[2]) {
+	winPlayerID_[0] = teamMember[0];
+	winPlayerID_[1] = teamMember[1];
 }

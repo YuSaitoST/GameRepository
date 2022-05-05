@@ -11,7 +11,7 @@ GameField::~GameField() {
 }
 
 void GameField::LoadAsset(std::wstring m_file_name, std::wstring s_file_name) {
-	if (DontDestroy->GameMode_ == DontDestroy->GAMEMODE::DODGE_BALL_NOMAL || DontDestroy->GameMode_ == DontDestroy->GAMEMODE::DODGE_BALL_2ON2)
+	if (DontDestroy->GameMode_.isDODGEBALL())
 		sprite_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Main\\_Wire\\honeycomb_wire02.png"));
 	else
 		for (int _i = 0; _i < 4; ++_i)

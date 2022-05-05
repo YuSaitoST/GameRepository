@@ -30,7 +30,7 @@ private:
 	const float TEAM_COL_X[4] = { 84.0f, 375.0f, 676.0f, 969.0f };
 	const float TEAM_COL_Y = 493.5f;
 
-	const float INPUT_X[4] = { 151.0f, 457.0f, 760.0f, 1054.0f };
+	const float INPUT_X[4] = { 140.0f, 432.0f, 735.0f, 10295.0f };
 
 	const float ENTRY_X[4] = { 108.0f, 400.0f, 702.0f, 991.0f };
 	const float ARROW_L_X[4] = { 100.0f, 389.0f, 691.0f, 981.0f };

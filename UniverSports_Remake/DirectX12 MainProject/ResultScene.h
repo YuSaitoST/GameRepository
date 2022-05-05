@@ -37,6 +37,8 @@ public:
 	NextScene Update(const float deltaTime) override;
 	void Render() override;
 
+
+private:
 	void Render_WinChara();
 	void Render_WinCName();
 
@@ -44,7 +46,8 @@ public:
 	void Mode_1();
 	void Mode_2();
 
-private:
+	void SetPlayerIDofTheWinningTeam(const int teamMember[2]);
+
 	struct PLAYER {
 		static const int	POS_X	= 115;
 		static const int	POS_Y	= 250;
@@ -54,8 +57,8 @@ private:
 	struct NUMBER {
 		static const int	POS_X	= 360;
 		static const int	POS_Y	= 462;
-		static const int	RECT_X	= 50;  // 210;
-		static const int	RECT_Y	= 75;  // 150;
+		static const int	RECT_X	= 50;
+		static const int	RECT_Y	= 75;
 	};
 
 	DX12::DESCRIPTORHEAP	descriptorHeap_;

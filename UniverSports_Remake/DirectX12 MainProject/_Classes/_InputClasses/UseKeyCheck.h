@@ -21,6 +21,7 @@ public:
 	bool PDecisionKey(const int index);
 	bool KCancelKey();
 	bool PCancelKey(const int index);
+	bool MinGameFinedKey(const int index);
 
 	bool ThrasherKey(const int index);
 	bool ShotKey(const int index);
@@ -29,6 +30,8 @@ public:
 private:
 	UseKeyCheck() {}
 	virtual ~UseKeyCheck() {}
+
+	inline bool KeyB(const int index);
 
 	static UseKeyCheck inctance_;
 	KeyBoadChecker key_;

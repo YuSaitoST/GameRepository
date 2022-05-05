@@ -13,11 +13,9 @@ ObjectManager::ObjectManager() {
 	DontDestroy->Survivor_[2] = true;
 	DontDestroy->Survivor_[3] = true;
 
-	N_BALL = BALLS[(int)DontDestroy->GameMode_];
+	N_BALL = BALLS[(int)DontDestroy->GameMode_.SelectionMode()];
 
 	obj_ball_.reserve(N_BALL);
-
-	std::fill(std::begin(DontDestroy->winnerTeamID_), std::end(DontDestroy->winnerTeamID_), -1);
 
 	for (int _i = 0; _i < N_PLAYER; ++_i)
 		obj_player_[_i] = new ObjPlayer((OPERATE_TYPE)((int)DontDestroy->charaType_[_i]), POS_START[_i], 1.0f);
@@ -80,7 +78,7 @@ void ObjectManager::Update(const float deltaTime) {
 		obj->Update(deltaTime);
 
 	// ゴールを用いるモードのみ回す
-	if (DontDestroy->GameMode_ == DontDestroy->isGAMES_WITH_GOALS())
+	if (DontDestroy->GameMode_.isGAMES_WITH_GOALS())
 		for (ObjectBase* obj : obj_wire_)
 			obj->Update(deltaTime);
 }

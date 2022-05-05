@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "_Classes/_GameModes/GameModes.h"
+
 #define DontDestroy DontDestroyOnLoad::GetInstance()
 
 // Include Files.
@@ -30,22 +32,12 @@ public:
 
 public:
 	enum CHARATYPE { PLAYER, COM };
-	enum GAMEMODE { DODGE_BALL_NOMAL, DODGE_BALL_2ON2, HAND_BALL, BILLIARDS };
 
-	inline bool isSOLOTEAM_SHOWDOWN	() const { return !isDODGEBALL_2ON2	();							}
-	inline bool isGAMES_WITH_GOALS	() const { return isHANDBALL		()	|| isBILLIARDS		();	}
-	inline bool isDODGEBALL			() const { return isDODGEBALL_NOMAL	()	|| isDODGEBALL_2ON2	();	}
-	inline bool isDODGEBALL_NOMAL	() const { return GameMode_ == DODGE_BALL_NOMAL;				}
-	inline bool isDODGEBALL_2ON2	() const { return GameMode_ == DODGE_BALL_2ON2;					}
-	inline bool isHANDBALL			() const { return GameMode_ == HAND_BALL;						}
-	inline bool isBILLIARDS			() const { return GameMode_ == BILLIARDS;						}
-
+	GameModes GameMode_;
 	CHARATYPE charaType_[4];
-	int GameMode_;
 	int NowScene_;
 	int ChoseColor_[4];
+	int TeamID[4];
 	int Score_[4];
-	int winnerID_;
-	int winnerTeamID_[2];
 	bool Survivor_[4];
 };

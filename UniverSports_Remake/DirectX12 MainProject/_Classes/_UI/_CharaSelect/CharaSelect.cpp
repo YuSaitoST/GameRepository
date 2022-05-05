@@ -8,7 +8,6 @@ CharaSelect::CharaSelect() {
 	se_decision_ = new SoundPlayer();
 	se_cancel_ = new SoundPlayer();
 	isDecision_ = false;
-	//isTabsDecision_ = false;
 	isCansel_ = false;
 }
 
@@ -32,9 +31,6 @@ void CharaSelect::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
 void CharaSelect::Update(const float deltaTime, const int index) {
 	// Œˆ’èÏ‚İ‚Ì
 	if (isDecision_) {
-		//if (!isTabsDecision_)  // ‘½•ª‚¢‚ç‚È‚¢
-			//isCansel_ = Press.CancelKey(index);
-
 		// ƒLƒƒƒ“ƒZƒ‹ˆ—
 		if (Press.PCancelKey(index)) {
 			isDecision_ = false;

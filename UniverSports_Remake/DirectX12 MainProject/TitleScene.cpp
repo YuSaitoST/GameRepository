@@ -34,7 +34,6 @@ void TitleScene::Initialize()
 	DXTK->SetFixedFrameRate(60);
 
 	GAME_CONST.Initialize();
-	DontDestroy->GameMode_ = -1;
 
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_title.wav", SOUND_TYPE::BGM);
 	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision_title.wav", SOUND_TYPE::SE, 2);
@@ -135,7 +134,7 @@ NextScene TitleScene::Update(const float deltaTime)
 		return NextScene::Continue;
 
 	// Œˆ’è‰¹‚ª‚È‚èI‚í‚Á‚½‚çƒLƒƒƒ‰‘I‘ð‰æ–Ê‚Ö
-	if (DontDestroy->GameMode_ != -1) {
+	if (DontDestroy->GameMode_.SelectionMode() != GAMEMODE::NONE_GAMEMODE) {
 		se_decision_->Update(deltaTime);
 		if (se_decision_->isFined())
 			return NextScene::LobbyScene;
@@ -183,7 +182,7 @@ NextScene TitleScene::Update(const float deltaTime)
 			if (operate_->isDisplayed())
 				return NextScene::Continue;
 
-			DontDestroy->GameMode_ = choices_->SelectNum();
+			DontDestroy->GameMode_.SelectMode((GAMEMODE)choices_->SelectNum());
 		}
 	}
 

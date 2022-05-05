@@ -237,8 +237,18 @@ void LobbyScene::Render()
 	bg_movie_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
 
-	for (int _i = 0; _i < PLAYER; ++_i)
-		charaSelect_[_i]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i]], sp_decisions[charaSelect_[_i]->IsDecision()], sp_entry, _i);
+	for (int _i = 0; _i <= PLAYER/2; _i += 2) {
+		charaSelect_[_i		]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i		]], sp_decisions[charaSelect_[_i	]->IsDecision()], sp_entry, _i		);
+		charaSelect_[_i + 1	]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i + 1	]], sp_decisions[charaSelect_[_i + 1]->IsDecision()], sp_entry, _i + 1	);
+	}
+
+	// チームカラーの表示
+	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
+		for (int _i = 0; _i <= PLAYER/2; _i += 2) {
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), Vector3(TEAM_COL_X[_i		], TEAM_COL_Y, 100.0f));
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), Vector3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, 100.0f));
+		}
+	}
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言

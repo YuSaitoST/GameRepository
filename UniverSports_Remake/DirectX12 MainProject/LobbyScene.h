@@ -56,11 +56,13 @@ private:
 	bool AllDecision();
 
 private:
-	static const int PLAYER = 4;
-	const int VIEW_X = 288;
-	const int VIEW_Y = 98;
-	const int VIEW_W = 720;
-	const int VIEW_H = 403;
+	static const int	PLAYER			= 4;
+	const int			VIEW_X			= 288;
+	const int			VIEW_Y			= 98;
+	const int			VIEW_W			= 720;
+	const int			VIEW_H			= 403;
+	const float			TEAM_COL_X[4]	= { 84.0f, 375.0f, 676.0f, 969.0f };
+	const float			TEAM_COL_Y		= 493.5f;
 
 	static ObjPlayer* player_[PLAYER];
 

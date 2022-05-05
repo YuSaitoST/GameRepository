@@ -59,7 +59,7 @@ void ObjPlayer::Initialize(const int id) {
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
 	id_my_ = id;
-	id_team_ = (DontDestroy->GameMode_ == DontDestroy->GAMEMODE::DODGE_BALL_2ON2) ? -1 : id_my_;
+	id_team_ = (DontDestroy->GameMode_.isDODGEBALL_2ON2()) ? -1 : id_my_;
 }
 
 void ObjPlayer::LoadAssets(std::wstring file_name) {

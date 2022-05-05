@@ -1,10 +1,11 @@
 #include "GameController.h"
+#include "_Classes/_InputClasses/UseKeyCheck.h"
 #include <cassert>
 
 bool GameController::gameStart_;
 
 GameController::GameController() {
-	startTime_	= TIME_LIMIT[DontDestroy->GameMode_] + TIME_COUNT;
+	startTime_	= TIME_LIMIT[(int)DontDestroy->GameMode_.SelectionMode()] + TIME_COUNT;
 	timer_		= new OriTimer(startTime_);
 	countDown_	= new CountDownUI();
 	blackOut_	= new BlackOut();
@@ -43,17 +44,9 @@ NextScene GameController::Update(const float deltaTime) {
 		blackOut_->Update(deltaTime);
 		ui_finish_->Update(deltaTime);
 		se_whistle_->Update(deltaTime);
-		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && se_whistle_->isFined()) {
-			int count = 0;
-			const int WINNER_NUM = std::any_of(std::begin(DontDestroy->Survivor_), std::end(DontDestroy->Survivor_), [](bool b) {return b; });
-			for (int _i = 0; (_i < 4) && (count < WINNER_NUM); ++_i) {
-				if (DontDestroy->Survivor_[_i]) {
-					DontDestroy->winnerTeamID_[count] = _i;
-					count += 1;
-				}
-			}
+
+		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && se_whistle_->isFined())
 			return NextScene::ResultScene;
-		}
 	}
 	return NextScene::Continue;
 }
@@ -70,10 +63,12 @@ void GameController::Render() {
 }
 
 bool GameController::GameFined() {
-	if (DontDestroy->isHANDBALL())
+	if (DontDestroy->GameMode_.isHANDBALL())
 		return timer_->TimeOut();
-	else if (DontDestroy->isDODGEBALL())
+	else if (DontDestroy->GameMode_.isDODGEBALL())
 		return (RemainingNumberOfPlayer() == 1);
+	else if (DontDestroy->GameMode_.isBILLIARDS())
+		return Press.MinGameFinedKey(0);
 
 	assert(!"不正なゲームモードです__in GameController::GameFined()");
 	return false;

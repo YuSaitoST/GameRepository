@@ -6,10 +6,10 @@
 void StFloat::Initialize() {
 	std::random_device _seed;
 	randomEngine	= std::mt19937(_seed());
-	limit_pos_x		= (DontDestroy->GameMode_ != 3) ? GAME_CONST.FieldSide_X : 5.5f;
-	limit_pos_y		= (DontDestroy->GameMode_ != 3) ? GAME_CONST.FieldSide_Y : 5.5f;
-	limit_direct_x	= DIRECT_X[DontDestroy->GameMode_ / 3];
-	limit_direct_y	= DIRECT_Y[DontDestroy->GameMode_ / 3];
+	limit_pos_x		= (!DontDestroy->GameMode_.isBILLIARDS()) ? GAME_CONST.FieldSide_X : 5.5f;
+	limit_pos_y		= (!DontDestroy->GameMode_.isBILLIARDS()) ? GAME_CONST.FieldSide_Y : 5.5f;
+	limit_direct_x	= DIRECT_X[DontDestroy->GameMode_.SelectionMode() / 3];
+	limit_direct_y	= DIRECT_Y[DontDestroy->GameMode_.SelectionMode() / 3];
 
 	SetTransform();
 }
@@ -28,7 +28,7 @@ void StFloat::Update(ObjBall* ball) {
 		return;
 	}
 
-	if (DontDestroy->GameMode_ != 3)
+	if (!DontDestroy->GameMode_.isBILLIARDS())
 		CheckFieldOut(ball);
 	else
 		LoopPos(ball);

@@ -51,16 +51,30 @@ bool UseKeyCheck::PCancelKey(const int index) {
 }
 
 bool UseKeyCheck::ThrasherKey(const int index) {
-	return key_.EventOnOffKey(KEY::B) || pad_.StateOnOffKey(index, PAD::P_B);
+	return KeyB(index);
 }
 
 bool UseKeyCheck::ShotKey(const int index) {
-	return (!index) ? (key_.EventOnOffKey(KEY::S) || pad_.EventOnOffKey(index, PAD::P_A)) : (pad_.EventOnOffKey(index, PAD::P_A));
+	if (index == 0)
+		return key_.EventOnOffKey(KEY::A) || pad_.EventOnOffKey(index, PAD::P_A);
+	else
+		return pad_.EventOnOffKey(index, PAD::P_A);
 }
 
 Vector2 UseKeyCheck::MoveDirection(const int index) {
 	if (index == 0)
 		return (key_.StateDirection() != Vector2::Zero) ? key_.StateDirection() : pad_.LeftStateDirection360(index);
 	else
-		return (pad_.LeftStateDirection360(index));
+		return pad_.LeftStateDirection360(index);
+}
+
+bool UseKeyCheck::MinGameFinedKey(const int index) {
+	return KeyB(index);
+}
+
+bool UseKeyCheck::KeyB(const int index) {
+	if (index == 0)
+		return key_.EventOnOffKey(KEY::B) || pad_.StateOnOffKey(index, PAD::P_B);
+	else
+		return pad_.StateOnOffKey(index, PAD::P_B);
 }

@@ -21,6 +21,7 @@ void Cursor::LoadAsset(std::wstring file_name) {
 
 void Cursor::Update() {
 	choices_->Update(Press.DownKey(0), Press.UpKey(0));
+	choices_->NextSelectOn((Press.DownKey(0)) || (Press.UpKey(0)));  // ’·‰Ÿ‚µ‹ÖŽ~
 
 	pos_.y = choices_->SelectNum() * MOVE_Y + POS_Y;
 }
