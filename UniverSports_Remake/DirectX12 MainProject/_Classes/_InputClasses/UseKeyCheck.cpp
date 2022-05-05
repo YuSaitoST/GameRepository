@@ -27,11 +27,17 @@ bool UseKeyCheck::DownKey(const int index) {
 }
 
 bool UseKeyCheck::LeftKey(const int index) {
-	return key_.EventOnOffKey(KEY::LEFT) || pad_.EventOnOffKey(index, PAD::P_LEFT) || pad_.EventOnOffKey(index, PAD::STICK_L_LEFT);
+	if (index == 0)
+		return key_.EventOnOffKey(KEY::LEFT) || pad_.EventOnOffKey(index, PAD::P_LEFT) || pad_.EventOnOffKey(index, PAD::STICK_L_LEFT);
+	else
+		return pad_.EventOnOffKey(index, PAD::P_LEFT) || pad_.EventOnOffKey(index, PAD::STICK_L_LEFT);
 }
 
 bool UseKeyCheck::RightKey(const int index) {
-	return key_.EventOnOffKey(KEY::RIGHT) || pad_.EventOnOffKey(index, PAD::P_RIGHT) || pad_.EventOnOffKey(index, PAD::STICK_L_RIGHT);
+	if (index == 0)
+		return key_.EventOnOffKey(KEY::RIGHT) || pad_.EventOnOffKey(index, PAD::P_RIGHT) || pad_.EventOnOffKey(index, PAD::STICK_L_RIGHT);
+	else
+		return pad_.EventOnOffKey(index, PAD::P_RIGHT) || pad_.EventOnOffKey(index, PAD::STICK_L_RIGHT);
 }
 
 bool UseKeyCheck::KDecisionKey() {

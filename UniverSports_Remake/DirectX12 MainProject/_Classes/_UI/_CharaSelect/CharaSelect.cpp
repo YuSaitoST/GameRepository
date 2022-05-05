@@ -59,10 +59,15 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 
 	// 選択している色を代入
 	DontDestroy->ChoseColor_[index] = choices_->SelectNum();
-	SelectToAvoidDupLicates(index);
 
 	// 決定したら、色とキャラの操作タイプを設定
 	if (isDecision_) {
+		// 色が重複していたら決定できない
+		if (haveSameValue(DontDestroy->ChoseColor_[index])) {
+			isDecision_ = false;
+			return;
+		}
+
 		LobbyScene::ChangeModel(index, DontDestroy->ChoseColor_[index]);
 		DontDestroy->charaType_[index] = DontDestroy->CHARATYPE::PLAYER;
 		se_decision_->PlayOneShot();

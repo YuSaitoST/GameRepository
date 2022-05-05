@@ -28,6 +28,10 @@ LobbyScene::LobbyScene()
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;
 
+	std::random_device _seed;
+	randomEngine_			= std::mt19937(_seed());
+	newTeamID_				= std::uniform_int_distribution<>(0, 1);
+
 	font_count_				= DX9::SPRITEFONT{};
 	font_message_			= DX9::SPRITEFONT{};
 
@@ -41,7 +45,7 @@ LobbyScene::LobbyScene()
 	bgm_					= new SoundPlayer();
 
 	for (int _i = 0; _i < PLAYER; ++_i)
-		player_[_i] = new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
+		player_[_i]			= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
 
 	for (int _i = 0; _i < PLAYER; ++_i)
 		charaSelect_[_i]	= new CharaSelect();
@@ -63,8 +67,14 @@ void LobbyScene::Initialize()
 	Light.Set();
 	Light.Enable();
 
-	for (int _i = 0; _i < PLAYER; ++_i)
-		DontDestroy->ChoseColor_[_i] = _i;
+	//for (int _i = 0; _i < PLAYER; ++_i)
+	//	DontDestroy->ChoseColor_[_i] = _i;
+	std::fill(std::begin(DontDestroy->ChoseColor_), std::end(DontDestroy->ChoseColor_), 0);
+
+	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
+		for (int _i = 0; _i < PLAYER; ++_i)
+			GiveTeamID(_i);
+	}
 
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_charaSelect.wav", SOUND_TYPE::BGM);
 
@@ -237,14 +247,14 @@ void LobbyScene::Render()
 	bg_movie_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
 
-	for (int _i = 0; _i <= PLAYER/2; _i += 2) {
+	for (int _i = 0; _i <= PLAYER / 2; _i += 2) {
 		charaSelect_[_i		]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i		]], sp_decisions[charaSelect_[_i	]->IsDecision()], sp_entry, _i		);
 		charaSelect_[_i + 1	]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i + 1	]], sp_decisions[charaSelect_[_i + 1]->IsDecision()], sp_entry, _i + 1	);
 	}
 
 	// チームカラーの表示
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
-		for (int _i = 0; _i <= PLAYER/2; _i += 2) {
+		for (int _i = 0; _i <= PLAYER / 2; _i += 2) {
 			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), Vector3(TEAM_COL_X[_i		], TEAM_COL_Y, 100.0f));
 			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), Vector3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, 100.0f));
 		}
@@ -285,6 +295,23 @@ void LobbyScene::Render_String() {
 
 	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すと残りのプレイヤーを");
 	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 360.0f), DX9::Colors::Black, L"決定にすることができます");
+}
+
+void LobbyScene::GiveTeamID(int myID) {
+	int _newID = -1;
+	do {
+		_newID = newTeamID_(randomEngine_);
+		DontDestroy->TeamID[myID] = _newID;
+	} while (2 < HowManyValuesIn(DontDestroy->TeamID, 4, _newID));
+}
+
+int LobbyScene::HowManyValuesIn(const int* list, int size, int findNum) {
+	int _count = 0;
+	for (int _i = 0; _i < size; ++_i)
+		if (list[_i] == findNum)
+			_count += 1;
+	
+	return _count;
 }
 
 bool LobbyScene::AllDecision() {

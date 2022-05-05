@@ -53,6 +53,8 @@ public:
 
 private:
 	void Render_String();
+	void GiveTeamID(int myID);
+	int HowManyValuesIn(const int* list, int size, int findNum);
 	bool AllDecision();
 
 private:
@@ -65,6 +67,9 @@ private:
 	const float			TEAM_COL_Y		= 493.5f;
 
 	static ObjPlayer* player_[PLAYER];
+
+	std::mt19937						randomEngine_;
+	std::uniform_int_distribution<>		newTeamID_;
 
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
 	DX12::SPRITEBATCH					spriteBatch_;
