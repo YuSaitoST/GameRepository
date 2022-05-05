@@ -41,6 +41,7 @@ private:
 	SelectArrows* ui_arrows_;
 	SoundPlayer* se_decision_;
 	SoundPlayer* se_cancel_;
+	SoundPlayer* se_warning_;
 	bool isDecision_;
 	bool isCansel_;
 };

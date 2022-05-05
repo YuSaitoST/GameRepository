@@ -17,10 +17,8 @@ public:
 	bool DownKey(const int index);
 	bool LeftKey(const int index);
 	bool RightKey(const int index);
-	bool KDecisionKey();
-	bool PDecisionKey(const int index);
-	bool KCancelKey();
-	bool PCancelKey(const int index);
+	bool DecisionKey(const int index);
+	bool CancelKey(const int index);
 	bool MinGameFinedKey(const int index);
 
 	bool ThrasherKey(const int index);

@@ -3,15 +3,17 @@
 #include "DontDestroyOnLoad.h"
 
 CharaSelect::CharaSelect() {
-	choices_ = new Choices(4);
-	ui_arrows_ = new SelectArrows();
-	se_decision_ = new SoundPlayer();
-	se_cancel_ = new SoundPlayer();
-	isDecision_ = false;
-	isCansel_ = false;
+	choices_		= new Choices(4);
+	ui_arrows_		= new SelectArrows();
+	se_decision_	= new SoundPlayer();
+	se_cancel_		= new SoundPlayer();
+	se_warning_		= new SoundPlayer();
+	isDecision_		= false;
+	isCansel_		= false;
 }
 
 CharaSelect::~CharaSelect() {
+	delete se_warning_;
 	delete se_cancel_;
 	delete se_decision_;
 	delete ui_arrows_;
@@ -20,8 +22,9 @@ CharaSelect::~CharaSelect() {
 
 void CharaSelect::Initialize(int index) {
 	ui_arrows_->Initialize(ARROW_R_X[index], ARROW_L_X[index], ARROW_Y);
-	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE, 2);
-	se_cancel_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_cancel.wav", SOUND_TYPE::SE, 2);
+	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE);
+	se_cancel_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_cancel.wav", SOUND_TYPE::SE);
+	se_warning_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_warning.wav", SOUND_TYPE::SE);
 }
 
 void CharaSelect::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
@@ -32,17 +35,9 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 	// 決定済みの時
 	if (isDecision_) {
 		// キャンセル処理
-		if (Press.PCancelKey(index)) {
+		if (Press.CancelKey(index)) {
 			isDecision_ = false;
 			se_cancel_->PlayOneShot();
-		}
-
-		// キーボード操作によるキャンセル
-		if (index == 0) {
-			if (Press.KCancelKey()) {
-				isDecision_ = false;
-				se_cancel_->PlayOneShot();
-			}
 		}
 		return;
 	}
@@ -50,12 +45,7 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 	choices_->Update(Press.LeftKey(index), Press.RightKey(index));
 	choices_->NextSelectOn(ui_arrows_->Update(index));
 
-	isDecision_ = Press.PDecisionKey(index);
-
-	// キーボード操作による決定
-	if (index == 0)
-		isDecision_ = Press.KDecisionKey() || Press.PDecisionKey(index);
-
+	isDecision_ = Press.DecisionKey(index);
 
 	// 選択している色を代入
 	DontDestroy->ChoseColor_[index] = choices_->SelectNum();
@@ -65,6 +55,7 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 		// 色が重複していたら決定できない
 		if (haveSameValue(DontDestroy->ChoseColor_[index])) {
 			isDecision_ = false;
+			se_warning_->PlayOneShot();
 			return;
 		}
 

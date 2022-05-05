@@ -40,20 +40,18 @@ bool UseKeyCheck::RightKey(const int index) {
 		return pad_.EventOnOffKey(index, PAD::P_RIGHT) || pad_.EventOnOffKey(index, PAD::STICK_L_RIGHT);
 }
 
-bool UseKeyCheck::KDecisionKey() {
-	return key_.EventOnOffKey(KEY::B);
+bool UseKeyCheck::DecisionKey(const int index) {
+	if (index == 0)
+		return key_.EventOnOffKey(KEY::B) || pad_.EventOnOffKey(index, PAD::P_B);
+	else
+		return pad_.EventOnOffKey(index, PAD::P_B);
 }
 
-bool UseKeyCheck::PDecisionKey(const int index) {
-	return pad_.EventOnOffKey(index, PAD::P_B);
-}
-
-bool UseKeyCheck::KCancelKey() {
-	return key_.EventOnOffKey(KEY::A);
-}
-
-bool UseKeyCheck::PCancelKey(const int index) {
-	return pad_.EventOnOffKey(index, PAD::P_A);
+bool UseKeyCheck::CancelKey(const int index) {
+	if (index == 0)
+		return key_.EventOnOffKey(KEY::A) || pad_.EventOnOffKey(index, PAD::P_A);
+	else
+		return pad_.EventOnOffKey(index, PAD::P_A);
 }
 
 bool UseKeyCheck::ThrasherKey(const int index) {

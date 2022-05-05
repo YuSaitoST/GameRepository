@@ -4,11 +4,10 @@
 
 #pragma once
 
-#include "_Classes/_GameModes/GameModes.h"
-
 #define DontDestroy DontDestroyOnLoad::GetInstance()
 
 // Include Files.
+#include "_Classes/_GameModes/GameModes.h"
 
 class DontDestroyOnLoad final
 {

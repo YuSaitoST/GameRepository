@@ -176,7 +176,7 @@ NextScene ResultScene::Update(const float deltaTime)
 	blackOut_->Update(deltaTime);
 
 	if (!goNext_) {
-		if (Press.KDecisionKey() || Press.PDecisionKey(0)) {
+		if (Press.DecisionKey(0) || Press.DecisionKey(1) || Press.DecisionKey(2) || Press.DecisionKey(3)) {
 			se_decision_->PlayOneShot();
 			goNext_ = true;
 		}

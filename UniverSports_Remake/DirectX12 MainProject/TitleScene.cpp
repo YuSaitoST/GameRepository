@@ -172,7 +172,7 @@ NextScene TitleScene::Update(const float deltaTime)
 	/*
 		決定ボタンを押したら、選択した項目に合わせた処理を行う
 	*/
-	if (Press.KDecisionKey() || Press.PDecisionKey(0)) {
+	if (Press.DecisionKey(0)) {
 		se_decision_->PlayOneShot();
 		const int _select = cursor_->SelectNum();
 
