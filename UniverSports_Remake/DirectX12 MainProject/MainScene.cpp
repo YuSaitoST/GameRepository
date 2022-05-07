@@ -21,8 +21,6 @@ CellList cellList = CellList{};
 // Initialize member variables.
 MainScene::MainScene()
 {
-	GAME_CONST.Initialize();
-
 	DontDestroy->NowScene_	= (int)NextScene::MainScene;
 
 	descriptorHeap_			= nullptr;
@@ -182,6 +180,9 @@ void MainScene::Render()
 #endif // DEBUG
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
+
+	m_object_->RenderAlphas();
+
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言
 
 	DXTK->Direct3D9->UpdateResource();

@@ -141,6 +141,6 @@ void ObjBall::WasGuessed() {
 
 void ObjBall::BallReset() {
 	isBreak_ = true;
-	id_owner_ = -1;
+	//id_owner_ = -1;
 	AssignTransform(Vector3(GAME_CONST.FieldSide_X, GAME_CONST.FieldSide_Y, 0.0f), Vector2::Zero);
 }

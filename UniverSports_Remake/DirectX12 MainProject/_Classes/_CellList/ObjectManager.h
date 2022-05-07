@@ -42,6 +42,7 @@ public:
 	void Update(const float deltaTime);
 	void RenderModels();
 	void RenderSprites();
+	void RenderAlphas();
 
 	void AddWorld(btDynamicsWorld* physics_world_);
 	void RemoveWorld(btDynamicsWorld* physics_world_);

@@ -2,11 +2,12 @@
 
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_Classes/_CellList/_Object/_Player/_MyLife/MyLife.h"
-
+#include "_Classes/_CellList/_TeamID/TeamID.h"
 #include "_State/CharaState.h"
 #include "_Strategy/CharaStrategy.h"
 #include "_Strategy/_ManualChara/ManualChara.h"
 #include "_Strategy/_ComputerChara/ComputerChara.h"
+#include "_Barrier/Barrier.h"
 
 #include "_EffDown/EffDown.h"
 
@@ -37,6 +38,7 @@ public:
 	virtual void Render();
 	virtual void Render(DX9::MODEL& model) {}
 	virtual void UIRender();
+	void AlphaRender();
 
 	virtual void HitAction(ObjectBase* hitObject);
 
@@ -83,15 +85,16 @@ private:
 
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
-	MyLife* life_;
-	OriTimer* ti_respone_;
-	EffDown* eff_down_;
-	CharaStrategy* strategy_;
-	ObjectBase* targetObj_;
-	DX9::SKINNEDMODEL model_;
-	Vector2 handForward_;
-	bool hasBall_;
-	bool isDown_;
-	int id_team_;
-	int myBallID_;
+	MyLife*				life_;
+	TeamID*				teamID_;
+	OriTimer*			ti_respone_;
+	EffDown*			eff_down_;
+	CharaStrategy*		strategy_;
+	Barrier*			barrier_;
+	ObjectBase*			targetObj_;
+	DX9::SKINNEDMODEL	model_;
+	Vector2				handForward_;
+	bool				hasBall_;
+	bool				isDown_;
+	int					myBallID_;
 };

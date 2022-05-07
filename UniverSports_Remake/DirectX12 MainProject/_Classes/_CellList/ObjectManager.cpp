@@ -96,6 +96,13 @@ void ObjectManager::RenderSprites() {
 		obj->UIRender();
 }
 
+void ObjectManager::RenderAlphas() {
+	for (int _i = 0; _i <= N_PLAYER / 2; _i += 2) {
+		obj_player_[_i		]->AlphaRender();
+		obj_player_[_i + 1	]->AlphaRender();
+	}
+}
+
 void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 	for (ObjectBase* obj : obj_player_)
 		physics_world_->addRigidBody(obj->myRigidbody());

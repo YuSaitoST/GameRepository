@@ -53,7 +53,7 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 	// 決定したら、色とキャラの操作タイプを設定
 	if (isDecision_) {
 		// 色が重複していたら決定できない
-		if (haveSameValue(DontDestroy->ChoseColor_[index])) {
+		if (haveSameValue(index)) {
 			isDecision_ = false;
 			se_warning_->PlayOneShot();
 			return;

@@ -81,7 +81,7 @@ private:
 	DX9::SPRITE							sp_bg;
 	DX9::SPRITE							sp_right;
 	DX9::SPRITE							sp_left;
-	DX9::SPRITE							sp_decisions[PLAYER];
+	DX9::SPRITE							sp_decisions[2];
 	DX9::SPRITE							sp_entry;
 	DX9::SPRITE							sp_playerIcon[PLAYER];
 	DX9::SPRITE							sp_teamCol_[PLAYER / 2];
