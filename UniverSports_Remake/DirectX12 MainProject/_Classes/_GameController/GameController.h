@@ -23,6 +23,7 @@ public:
 
 private:
 	int RemainingNumberOfPlayer();
+	int RemainingOfTeam();
 
 	const float TIME_COUNT		= 4.2f;
 	const float TIME_LIMIT[4]	= { 0.0f, 120.0f, 0.0f, 0.0f };

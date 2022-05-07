@@ -60,14 +60,14 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 		}
 
 		LobbyScene::ChangeModel(index, DontDestroy->ChoseColor_[index]);
-		DontDestroy->charaType_[index] = DontDestroy->CHARATYPE::PLAYER;
+		DontDestroy->charaType_[index] = CHARATYPE::TYPE_PLAYER;
 		se_decision_->PlayOneShot();
 	}
 	else if ((index != 0) && Press.TabKey()) {
 		SelectToAvoidDupLicates(index);
 		LobbyScene::ChangeModel(index, DontDestroy->ChoseColor_[index]);
 		LobbyScene::ChangeStrategy(index);
-		DontDestroy->charaType_[index] = DontDestroy->CHARATYPE::COM;
+		DontDestroy->charaType_[index] = CHARATYPE::TYPE_COM;
 		se_decision_->PlayOneShot();
 		isDecision_ = true;
 	}
