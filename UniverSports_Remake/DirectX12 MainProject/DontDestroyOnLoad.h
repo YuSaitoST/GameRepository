@@ -9,6 +9,8 @@
 // Include Files.
 #include "_Classes/_GameModes/GameModes.h"
 
+enum CHARATYPE { TYPE_PLAYER, TYPE_COM };
+
 class DontDestroyOnLoad final
 {
 private:
@@ -30,8 +32,6 @@ public:
 	}
 
 public:
-	enum CHARATYPE { PLAYER, COM };
-
 	GameModes GameMode_;
 	CHARATYPE charaType_[4];
 	int NowScene_;

@@ -21,10 +21,10 @@ CharaSelect::~CharaSelect() {
 }
 
 void CharaSelect::Initialize(int index) {
-	ui_arrows_->Initialize(ARROW_R_X[index], ARROW_L_X[index], ARROW_Y);
-	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE);
-	se_cancel_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_cancel.wav", SOUND_TYPE::SE);
-	se_warning_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_warning.wav", SOUND_TYPE::SE);
+	ui_arrows_	->Initialize(ARROW_R_X[index], ARROW_L_X[index], ARROW_Y);
+	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav",			SOUND_TYPE::SE);
+	se_cancel_	->Initialize(L"_Sounds\\_SE\\_Lobby\\se_cancel.wav",	SOUND_TYPE::SE);
+	se_warning_	->Initialize(L"_Sounds\\_SE\\_Lobby\\se_warning.wav",	SOUND_TYPE::SE);
 }
 
 void CharaSelect::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
@@ -60,14 +60,14 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 		}
 
 		LobbyScene::ChangeModel(index, DontDestroy->ChoseColor_[index]);
-		DontDestroy->charaType_[index] = DontDestroy->CHARATYPE::PLAYER;
+		DontDestroy->charaType_[index] = CHARATYPE::TYPE_PLAYER;
 		se_decision_->PlayOneShot();
 	}
 	else if ((index != 0) && Press.TabKey()) {
 		SelectToAvoidDupLicates(index);
 		LobbyScene::ChangeModel(index, DontDestroy->ChoseColor_[index]);
 		LobbyScene::ChangeStrategy(index);
-		DontDestroy->charaType_[index] = DontDestroy->CHARATYPE::COM;
+		DontDestroy->charaType_[index] = CHARATYPE::TYPE_COM;
 		se_decision_->PlayOneShot();
 		isDecision_ = true;
 	}

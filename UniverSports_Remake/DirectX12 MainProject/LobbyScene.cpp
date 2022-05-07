@@ -67,13 +67,14 @@ void LobbyScene::Initialize()
 	Light.Set();
 	Light.Enable();
 
-	//for (int _i = 0; _i < PLAYER; ++_i)
-	//	DontDestroy->ChoseColor_[_i] = _i;
 	std::fill(std::begin(DontDestroy->ChoseColor_), std::end(DontDestroy->ChoseColor_), 0);
+	std::fill(std::begin(DontDestroy->TeamID), std::end(DontDestroy->TeamID), -1);
 
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
-		for (int _i = 0; _i < PLAYER; ++_i)
+		for (int _i = 0; _i <= PLAYER / 2; _i += 2) {
 			GiveTeamID(_i);
+			GiveTeamID(_i + 1);
+		}
 	}
 
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_charaSelect.wav", SOUND_TYPE::BGM);

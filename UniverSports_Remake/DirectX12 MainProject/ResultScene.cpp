@@ -88,7 +88,7 @@ void ResultScene::Initialize()
 
 	// プレイヤー名の連番の表示範囲を決める
 	player_rect_x[0] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3)	: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3);
-	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0																				: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[1]), PLAYER::RECT_X * 3);
+	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0																			: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[1]), PLAYER::RECT_X * 3);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -235,8 +235,8 @@ void ResultScene::Render_WinChara() {
 	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(0.0f, 0.0f, -2.0f));
 	else {
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[winPlayerID_[0]].Get(), Vector3(100.0f, 0.0f, -3.0f));
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[winPlayerID_[1]].Get(), Vector3(-226.0f, 0.0f, -2.0f));
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(100.0f, 0.0f, -3.0f));
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[1].Get(), Vector3(-226.0f, 0.0f, -2.0f));
 	}
 }
 

@@ -63,11 +63,14 @@ void GameController::Render() {
 }
 
 bool GameController::GameFined() {
-	if (DontDestroy->GameMode_.isHANDBALL())
+	GameModes _gamemode = DontDestroy->GameMode_;
+	if (_gamemode.isHANDBALL())
 		return timer_->TimeOut();
-	else if (DontDestroy->GameMode_.isDODGEBALL())
+	else if (_gamemode.isDODGEBALL_NOMAL())
 		return (RemainingNumberOfPlayer() == 1);
-	else if (DontDestroy->GameMode_.isBILLIARDS())
+	else if (_gamemode.isDODGEBALL_2ON2())
+		return (RemainingOfTeam() == 1);
+	else if (_gamemode.isBILLIARDS())
 		return Press.MinGameFinedKey(0);
 
 	assert(!"不正なゲームモードです__in GameController::GameFined()");
@@ -75,9 +78,30 @@ bool GameController::GameFined() {
 }
 
 int GameController::RemainingNumberOfPlayer() {
-	int count = 0;
-	for (bool alive : DontDestroy->Survivor_)
-		count += alive ? 1 : 0;
+	int _count = 0;
+	for (int _i = 0; _i <= 2; _i += 2) {
+		_count += (int)DontDestroy->Survivor_[_i];
+		_count += (int)DontDestroy->Survivor_[_i + 1];
+	}
 
-	return count;
+	return _count;
+}
+
+int GameController::RemainingOfTeam() {
+	// 「生存者が2人より多い」or「最後の1人」なら調べる必要がないため早期リターンする
+	const int _count = RemainingNumberOfPlayer();
+	if ((2 < _count) || (_count == 1))
+		return _count;
+
+	// 残りの2人が同じチームかを調べる
+	int _index = 0;
+	int _lastPlayersTeamID[2];
+	for (int _i = 0; (_i < 4) && (_index < 2); ++_i) {
+		if (DontDestroy->Survivor_[_i]) {
+			_lastPlayersTeamID[_index] = DontDestroy->TeamID[_i];
+			_index += 1;
+		}
+	}
+
+	return (int)(_lastPlayersTeamID[0] == _lastPlayersTeamID[1]);
 }

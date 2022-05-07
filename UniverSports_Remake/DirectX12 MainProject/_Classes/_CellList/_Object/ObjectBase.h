@@ -33,7 +33,6 @@ public:
 		D3DMATERIAL9 _mate{};
 		_mate.Diffuse = DX9::Colors::Value(0.3f, 0.3f, 0.3f, 1.0f);
 		_mate.Ambient = DX9::Colors::Value(0.7f, 0.7f, 0.7f, 1.0f);
-
 		return _mate;
 	}
 
