@@ -4,8 +4,8 @@
 
 class StGoal : public BallState {
 public:
-	StGoal() = default;
-	virtual ~StGoal() = default;
+	StGoal() {}
+	virtual ~StGoal() {}
 
 	virtual void Initialize();
 	virtual void Update(ObjBall* ball);

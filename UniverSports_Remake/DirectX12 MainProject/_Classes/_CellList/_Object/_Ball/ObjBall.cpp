@@ -9,7 +9,6 @@ ObjBall::ObjBall() {
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
-	nowState_ = NONE_STATE;
 	colorType_ = DEFAULT_COLOR;
 	state_ = nullptr;
 	pos_z_ = 0.0f;
@@ -22,7 +21,7 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
-	SwitchState(STANDBY);
+	SwitchState(B_STATE::STANDBY);
 
 	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
@@ -37,11 +36,6 @@ ObjBall::~ObjBall() {
 }
 
 void ObjBall::Initialize(const int id) {
-	st_float_.Initialize();
-	st_cautch_.Initialize();
-	st_shot_.Initialize();
-	st_standby_.Initialize();
-
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
 	pos_		= state_->GetPosition();
@@ -77,17 +71,16 @@ void ObjBall::Render(DX9::MODEL& model) {
 	model->Draw();
 }
 
-void ObjBall::SwitchState(STATE state) {
+void ObjBall::SwitchState(B_STATE state) {
 	switch (state) {
-		case STANDBY : state_ = &st_standby_;		  break;
-		case FLOAT	 : state_ = &st_float_;			  break;
-		case CAUTCH	 : state_ = &st_cautch_;		  break;
-		case SHOT	 : state_ = &st_shot_;			  break;
-		case GOAL	 : state_ = &st_goal_;			  break;
-		default		 : assert(!"ObjBall_•s³‚Èó‘Ô"); break;
+		case B_STATE::STANDBY	:state_ = &st_standby_; break;
+		case B_STATE::FLOATING	:state_ = &st_float_;	break;
+		case B_STATE::CAUTCH	:state_ = &st_cautch_;	break;
+		case B_STATE::SHOT		:state_ = &st_shot_;	break;
+		case B_STATE::GOAL		:state_ = &st_goal_;	break;
+		default					:assert(!"ObjBall::SwitchState : •s³‚Èó‘Ô‚Å‚·");
 	}
-
-	nowState_ = state;
+	state_->Initialize();
 }
 
 void ObjBall::SwitchColor(COLOR_TYPE colorType) {
@@ -125,7 +118,6 @@ void ObjBall::WasCaught(const int ownerID) {
 	isInPlayerHands_ = true;
 	ResetVelocity();
 	AssignTransform(Vector3(pos_.x, pos_.y, pos_z_smallest_), forward_);
-	SwitchColor(PLAYERS_COLOR);
 }
 
 void ObjBall::WasThrown(Vector2 forward) {
@@ -140,6 +132,7 @@ void ObjBall::WasGuessed() {
 }
 
 void ObjBall::BallReset() {
+	isInPlayerHands_ = false;
 	isBreak_ = true;
 	//id_owner_ = -1;
 	AssignTransform(Vector3(GAME_CONST.FieldSide_X, GAME_CONST.FieldSide_Y, 0.0f), Vector2::Zero);

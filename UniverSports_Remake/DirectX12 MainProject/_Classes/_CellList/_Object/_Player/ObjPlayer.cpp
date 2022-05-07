@@ -120,16 +120,16 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 		if (id_my_ == _ball->GetOwnerID())  // 自分が持つボールとの当たり判定は取る必要なし
 			return;
 
-		const ObjBall::STATE _baleState = _ball->NowState();
+		const B_STATE _baleState = _ball->NowState();
 
-		if (_baleState == _ball->STATE::FLOAT) {  // キャッチ処理
+		if (_baleState == B_STATE::FLOATING) {  // キャッチ処理
+			// ボールを持っている且つ保持ボールのIDが存在する
 			if (hasBall_ && myBallID_ != -1)
 				return;
 
 			CautchedBall(_ball->myObjectID());
 		}
-		else if (_baleState == _ball->STATE::SHOT) {  // やられ処理
-
+		else if (_baleState == B_STATE::SHOT) {  // やられ処理
 			// バリアが出ているなら
 			if (barrier_->IsDisplayed())
 				return;
@@ -142,6 +142,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			eff_down_->PlayOneShot();
 			eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
 
+			// 当たり判定を消すために、一旦明らかに場外な位置へ移動させる
 			SetTransforms(Vector2(99.0f, 99.0f), rotate_);
 			pos_ = Vector2(GAME_CONST.S_POS[id_my_].x, GAME_CONST.S_POS[id_my_].y);
 

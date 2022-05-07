@@ -2,7 +2,7 @@
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
 void StGoal::Initialize() {
-	
+	myState_ = B_STATE::GOAL;
 }
 
 void StGoal::Update(ObjBall* ball) {
@@ -13,21 +13,15 @@ void StGoal::Update(ObjBall* ball) {
 	//	////ball->SetOwnerID(-1);
 
 	//	//ball->SetBtPosition(SimpleMath::Vector3(99.0f, 99.0f, 0.0f));
-
-	//	//// ゴールしたボールをループさせるなら
-	//	////ball->SetIsGoal(false);
-	//	////ball->SwitchState(ball->STATE::FLOAT);
-	//}
-	//else {
-	//	// 移動処理
-	//	position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
-	//	//ball->SetBtPosition(position_);
-	//}
+		//	// 移動処理
+		//	position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
+		//	//ball->SetBtPosition(position_);
+		//}
 
 	if (!ball->IsFieldOut(position_, 1.0f)) {
 		position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
 	}
-	else if(ball->GetOwnerID()!=-1) {
-		ball->SwitchState(ObjBall::STATE::CAUTCH);
+	else if (ball->IsInPlayerHands()) {
+		ball->SwitchState(B_STATE::CAUTCH);
 	}
 }

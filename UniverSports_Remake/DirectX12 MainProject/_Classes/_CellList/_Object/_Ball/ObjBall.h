@@ -20,7 +20,6 @@ private:
 	const D3DCOLORVALUE P_AMBIENT = D3DCOLORVALUE(0.35f, 0.35f, 0.35f, 1.0f);
 
 public:
-	enum STATE { STANDBY, FLOAT, CAUTCH, SHOT, GOAL, NONE_STATE };
 	enum COLOR_TYPE { DEFAULT_COLOR, PLAYERS_COLOR, TEAM_COLOR };
 
 public:
@@ -43,7 +42,7 @@ public:
 	void WasGuessed();
 	void BallReset();
 
-	void SwitchState(STATE state);
+	void SwitchState(B_STATE state);
 	void SwitchColor(COLOR_TYPE colorType);
 
 
@@ -67,7 +66,7 @@ public:
 	float myPosZ() const { return pos_z_; }
 	bool IsInPlayerHands() const { return isInPlayerHands_; }
 	bool IsBreaked() const { return isBreak_; }
-	STATE NowState() const { return nowState_; }
+	B_STATE NowState() const { return state_->MyState(); }
 
 	static float pos_z_smallest_;
 
@@ -82,7 +81,6 @@ private:
 	StStandby st_standby_;
 	StGoal st_goal_;
 
-	STATE nowState_;
 	COLOR_TYPE colorType_;
 	float pos_z_;
 	int id_owner_;

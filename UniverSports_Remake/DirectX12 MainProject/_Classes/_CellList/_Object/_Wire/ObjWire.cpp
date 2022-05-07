@@ -58,10 +58,7 @@ void ObjWire::HitAction(ObjectBase* object) {
 		if (player->HasBall())
 			return;
 
-
 		player->CautchedBall(hasBalls_.back()->myObjectID());
-		HitInstructor::BallCautch(player->myObjectID(), hasBalls_.back()->myObjectID());
-		hasBalls_.back()->SwitchState(ObjBall::STATE::CAUTCH);
 		hasBalls_.pop_back();
 
 	}
@@ -69,10 +66,10 @@ void ObjWire::HitAction(ObjectBase* object) {
 		ObjBall* ball = dynamic_cast<ObjBall*>(object);
 
 		// 投げられたボールでなければ早期リターン
-		if (ball->NowState() != ObjBall::STATE::SHOT)
+		if (ball->NowState() != B_STATE::SHOT)
 			return;
 
-		ball->SwitchState(ObjBall::STATE::GOAL);
+		ball->SwitchState(B_STATE::GOAL);
 		hasBalls_.push_back(ball);
 	}
 }
