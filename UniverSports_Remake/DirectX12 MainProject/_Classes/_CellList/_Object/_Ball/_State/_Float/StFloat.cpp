@@ -11,27 +11,27 @@ void StFloat::Initialize() {
 	limit_direct_x	= DIRECT_X[DontDestroy->GameMode_.SelectionMode() / 3];
 	limit_direct_y	= DIRECT_Y[DontDestroy->GameMode_.SelectionMode() / 3];
 
+	pos_start_x		= std::uniform_int_distribution<>(-limit_pos_x, limit_pos_x);
+	direct_x		= std::uniform_real_distribution<float>(-limit_direct_x, limit_direct_x);
+	direct_y		= std::uniform_real_distribution<float>(-limit_direct_y, limit_direct_y);
+
+	myState_		= B_STATE::FLOATING;
+
 	SetTransform();
 }
 
 void StFloat::Update(ObjBall* ball) {
-	if (!GameController::GamePlay())
-		return;
-
-	if (ball->IsBreaked()) {
-		ball->FlagResets();
-		ReSpone(ball);
-	}
-
 	if (ball->IsInPlayerHands() && ball->GetOwnerID() != -1) {
-		ball->SwitchState(ObjBall::STATE::CAUTCH);
+		ball->SwitchState(B_STATE::CAUTCH);
 		return;
 	}
 
-	if (!DontDestroy->GameMode_.isBILLIARDS())
+	if (!DontDestroy->GameMode_.isBILLIARDS()) {
 		CheckFieldOut(ball);
-	else
+	}
+	else {
 		LoopPos(ball);
+	}
 }
 
 void StFloat::SetTransform() {
@@ -42,12 +42,11 @@ void StFloat::SetTransform() {
 void StFloat::ReSpone(ObjBall* ball) {
 	SetTransform();
 	ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward_);
-	const int power = GAME_CONST.BA_SPEED_FLOAT;
 	ball->AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
+	ball->FlagResets();
 }
 
 SimpleMath::Vector2 StFloat::RandomPosition() {
-	pos_start_x		= std::uniform_int_distribution<>(-limit_pos_x, limit_pos_x);
 	int _random_x	= pos_start_x(randomEngine);
 	int _random_y;
 
@@ -65,15 +64,9 @@ SimpleMath::Vector2 StFloat::RandomPosition() {
 }
 
 SimpleMath::Vector2 StFloat::RandomForward(const SimpleMath::Vector2 position) {
-	direct_x					 = std::uniform_real_distribution<float>(-limit_direct_x, limit_direct_x);
-	direct_y					 = std::uniform_real_distribution<float>(-limit_direct_y, limit_direct_y);
-	const float _direct_x		 = direct_x(randomEngine);
-	const float _direct_y		 = direct_y(randomEngine);
-	SimpleMath::Vector2 _forward = SimpleMath::Vector2(_direct_x, _direct_y);
-
+	SimpleMath::Vector2 _forward = SimpleMath::Vector2(direct_x(randomEngine), direct_y(randomEngine));
 	_forward					 = _forward - position;
 	_forward.Normalize();
-
 	return _forward;
 }
 
@@ -85,8 +78,9 @@ void StFloat::CheckFieldOut(ObjBall* ball) {
 }
 
 void StFloat::LoopPos(ObjBall* ball) {
-	if (ball->IsFieldOut(position_, 0.0f)) {
-		ball->ClampLoop(position_);
-		//ball->SetBtPosition(position_);
-	}
+	//if (ball->IsFieldOut(position_, 0.0f)) {
+	//	ball->ClampLoop(position_);
+	//	//ball->SetBtPosition(position_);
+	//}
+	ball->ClampLoop(position_);
 }

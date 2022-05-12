@@ -1,9 +1,9 @@
 #include "BitCalculation.h"
 
-int BitCalculation::BitSlide(int b) {
-	b = (b | b << 2) & 0x33;
-	b = (b | b << 1) & 0x55;
-	return b;
+int BitCalculation::BitSlide(int bit) {
+	bit = (bit | bit << 2) & 0x33;
+	bit = (bit | bit << 1) & 0x55;
+	return bit;
 }
 
 int BitCalculation::PointToMorton(Vector2 pos) {
@@ -24,4 +24,10 @@ int BitCalculation::PointToMorton(Vector2 pos) {
 
 	// OR‰‰ŽZ‚µ‚Ä•Ô‚·
 	return (_bx | (_by << 1));
+}
+
+// Level,Index‚©‚çMortonIndex‚ð‹‚ß‚é
+int BitCalculation::GetIndex(int Level, int Index) {
+	const int _CR = (int)std::pow(4, Level);  // Common ratio (Œö”ä)
+	return (((_CR - 1) / (4 - 1)) + Index);  // “™”ä‹‰”
 }

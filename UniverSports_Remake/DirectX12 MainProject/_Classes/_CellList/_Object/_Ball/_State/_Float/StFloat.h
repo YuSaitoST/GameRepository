@@ -6,8 +6,8 @@
 
 class StFloat : public BallState {
 public:
-	StFloat() = default;
-	virtual ~StFloat() = default;
+	StFloat() : limit_pos_x(0.0f), limit_pos_y(0.0f), limit_direct_x(0.0f), limit_direct_y(0.0f) {}
+	virtual ~StFloat() {}
 
 	virtual void Initialize();
 	virtual void Update(ObjBall* ball);
@@ -34,8 +34,6 @@ private:
 	float limit_direct_y;
 
 private:
-	// MODE { 0 Å` 3 }
-	// MODE / 3 { 0 , 0 , 0 , 1 }
 	const float DIRECT_X[2] = { 5.5f,5.5f };
 	const float DIRECT_Y[2] = { 5.5f,5.5f };
 };

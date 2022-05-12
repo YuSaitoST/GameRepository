@@ -3,10 +3,10 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
-class HitInstructor {
+class BallsInstructor {
 public:
-	HitInstructor() {}
-	virtual ~HitInstructor() {}
+	BallsInstructor() {}
+	virtual ~BallsInstructor() {}
 
 	static void BallCautch(const int playerID, const int ballID);
 	static void BallShot(const int ballID, DirectX::SimpleMath::Vector2 forward);

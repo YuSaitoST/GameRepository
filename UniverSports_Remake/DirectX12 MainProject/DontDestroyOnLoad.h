@@ -32,8 +32,6 @@ public:
 	}
 
 public:
-	enum CHARATYPE { TYPE_PLAYER, TYPE_COM };
-
 	GameModes GameMode_;
 	CHARATYPE charaType_[4];
 	int NowScene_;

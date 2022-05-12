@@ -2,6 +2,7 @@
 
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
+#include "_Classes/_SoundPlayer/SoundPlayer.h"
 
 class ObjWire final : public ObjectBase {
 public:
@@ -27,4 +28,5 @@ private:
 	const float ROT_Z[2] = { 0.415f, -0.415f };
 
 	std::vector<ObjBall*> hasBalls_;
+	SoundPlayer* se_goal_;
 };

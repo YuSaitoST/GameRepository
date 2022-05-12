@@ -1,7 +1,7 @@
 #include "ObjPlayer.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
-#include "_Classes/_CellList/_HitInstructor/HitInstructor.h"
+#include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "DontDestroyOnLoad.h"
 
@@ -120,15 +120,15 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 		if (id_my_ == _ball->GetOwnerID())  // 自分が持つボールとの当たり判定は取る必要なし
 			return;
 
-		const ObjBall::STATE _baleState = _ball->NowState();
+		const B_STATE _baleState = _ball->NowState();
 
-		if (_baleState == _ball->STATE::FLOAT) {  // キャッチ処理
+		if (_baleState == B_STATE::FLOATING) {  // キャッチ処理
 			if (hasBall_ && myBallID_ != -1)
 				return;
 
 			CautchedBall(_ball->myObjectID());
 		}
-		else if (_baleState == _ball->STATE::SHOT) {  // やられ処理
+		else if (_baleState == B_STATE::SHOT) {  // やられ処理
 
 			// バリアが出ているなら
 			if (barrier_->IsDisplayed())
@@ -138,7 +138,6 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			if (TeamID::Get(_ball->GetOwnerID()) == teamID_->Get())
 				return;
 
-			life_->TakeDamage();
 			eff_down_->PlayOneShot();
 			eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
 
@@ -147,14 +146,18 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 
 			isDown_ = true;
 
-			if (life_->NowLifePoint() <= 0)
-				DontDestroy->Survivor_[id_my_] = false;
+			// ゴールを用いるモードではライフの処理はない
+			if (!DontDestroy->GameMode_.isGAMES_WITH_GOALS()) {
+				IconAnimator::DisplayOn();
+				life_->TakeDamage();
+				if (life_->NowLifePoint() <= 0)
+					DontDestroy->Survivor_[id_my_] = false;
+			}
 
-			IconAnimator::DisplayOn();
-			HitInstructor::BallBreakOfThrower(_ball->myObjectID());
+			BallsInstructor::BallBreakOfThrower(_ball->myObjectID());
 
 			if (hasBall_) {
-				HitInstructor::BallBreakOfTheHitter(myBallID_);
+				BallsInstructor::BallBreakOfTheHitter(myBallID_);
 				myBallID_ = -1;
 				hasBall_ = false;
 			}
@@ -182,8 +185,12 @@ void ObjPlayer::SetTransforms(const Vector2 pos, const Vector2 rotate) {
 }
 
 void ObjPlayer::AnimReset() {
-	for (int i = 0; i < 6; i++)
-		model_->SetTrackEnable(i, false);
+	const int _limit = (int)(6 * 0.5f);
+	for (int _i = 0; _i <= _limit; _i += 3) {
+		model_->SetTrackEnable(_i, false);
+		model_->SetTrackEnable(_i + 1, false);
+		model_->SetTrackEnable(_i + 2, false);
+	}
 }
 
 void ObjPlayer::AnimSet(MOTION motion, float deltaTime) {
@@ -192,10 +199,7 @@ void ObjPlayer::AnimSet(MOTION motion, float deltaTime) {
 }
 
 ObjPlayer::MOTION ObjPlayer::AnimChange() {
-	if (hasBall_)
-		return MOTION::HAND;
-	else
-		return MOTION::STAND;
+	return hasBall_ ? MOTION::HAND : MOTION::STAND;
 }
 
 void ObjPlayer::AsjustmentForward() {
@@ -205,13 +209,13 @@ void ObjPlayer::AsjustmentForward() {
 void ObjPlayer::Shoting(const int ballID) {
 	hasBall_ = false;
 	myBallID_ = -1;
-	HitInstructor::BallShot(ballID, forward_);
+	BallsInstructor::BallShot(ballID, forward_);
 }
 
 void ObjPlayer::CautchedBall(const int ballID) {
 	hasBall_ = true;
 	myBallID_ = ballID;
-	HitInstructor::BallCautch(id_my_, myBallID_);
+	BallsInstructor::BallCautch(id_my_, myBallID_);
 }
 
 Vector2 ObjPlayer::Get_HandPos() {

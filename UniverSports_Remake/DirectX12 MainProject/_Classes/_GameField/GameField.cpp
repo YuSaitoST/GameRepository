@@ -13,9 +13,12 @@ GameField::~GameField() {
 void GameField::LoadAsset(std::wstring m_file_name, std::wstring s_file_name) {
 	if (DontDestroy->GameMode_.isDODGEBALL())
 		sprite_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Main\\_Wire\\honeycomb_wire02.png"));
-	else
-		for (int _i = 0; _i < 4; ++_i)
+	else {
+		for (int _i = 0; _i <= 2; _i += 2) {
 			sprite_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_WIRE[DontDestroy->ChoseColor_[_i]][_i].c_str()));
+			sprite_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_WIRE[DontDestroy->ChoseColor_[_i + 1]][_i + 1].c_str()));
+		}
+	}
 
 	sp_hole_ = DX9::Sprite::CreateFromFile(DXTK->Device9, s_file_name.c_str());
 	movie_->LoadAsset(m_file_name);

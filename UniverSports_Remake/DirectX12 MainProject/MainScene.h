@@ -18,21 +18,12 @@
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_MainLight/MainLight.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
-
-#include "_Classes/_CellList/CellList.h"
 #include "_Classes/_CellList/ObjectManager.h"
-
-#ifdef DEBUG
-#include "_Classes/_DebugRender/DebugRender.h"
-#endif // DEBUG
-
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
 using std::make_unique;
 using namespace DirectX;
-
-extern CellList cellList;  // ‹óŠÔƒŠƒXƒg
 
 class MainScene final : public Scene {
 public:

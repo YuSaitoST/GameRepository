@@ -5,7 +5,6 @@
 #pragma once
 
 #include "Scene.h"
-#include "Base/DX12Effekseer.h"
 #include <btBulletDynamicsCommon.h>
 
 #include "_Classes/_InputClasses/UseKeyCheck.h"

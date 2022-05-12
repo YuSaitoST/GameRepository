@@ -26,7 +26,7 @@ private:
 	int RemainingOfTeam();
 
 	const float TIME_COUNT		= 4.2f;
-	const float TIME_LIMIT[4]	= { 0.0f, 120.0f, 0.0f, 0.0f };
+	const float TIME_LIMIT[4]	= { 0.0f, 0.0f, 120.0f, 0.0f };
 
 	OriTimer*		timer_;
 	CountDownUI*	countDown_;

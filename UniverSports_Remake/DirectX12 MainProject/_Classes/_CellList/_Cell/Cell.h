@@ -9,8 +9,6 @@ public:
 	Cell(ObjectBase* m);
 	virtual ~Cell();
 
-	static int GetIndex(int Level, int Index);  // L,IからMを求める
-
 	void UpdateToMorton();		// mp_に合わせてモートン符号を更新する
 	void Remove();				// 双方向リストから抜ける
 	ObjectBase* GetCollision();  // 衝突判定

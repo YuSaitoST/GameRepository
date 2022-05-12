@@ -2,116 +2,138 @@
 #include "_Classes/FileNames.h"
 #include "DontDestroyOnLoad.h"
 
+CellList cellList = CellList{};
+
 ObjPlayer* ObjectManager::obj_player_[N_PLAYER];
 std::vector<ObjBall*> ObjectManager::obj_ball_;
-//ObjBall* ObjectManager::obj_ball_[5];
 ObjWire* ObjectManager::obj_wire_[N_WIRE];
 
 ObjectManager::ObjectManager() {
-	DontDestroy->Survivor_[0] = true;
-	DontDestroy->Survivor_[1] = true;
-	DontDestroy->Survivor_[2] = true;
-	DontDestroy->Survivor_[3] = true;
-
 	N_BALL = BALLS[(int)DontDestroy->GameMode_.SelectionMode()];
 
 	obj_ball_.reserve(N_BALL);
 
-	for (int _i = 0; _i < N_PLAYER; ++_i)
-		obj_player_[_i] = new ObjPlayer((OPERATE_TYPE)((int)DontDestroy->charaType_[_i]), POS_START[_i], 1.0f);
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
+		obj_player_[_i]		= new ObjPlayer((OPERATE_TYPE)((int)DontDestroy->charaType_[_i]), POS_START[_i], 1.0f);
+		obj_player_[_i + 1] = new ObjPlayer((OPERATE_TYPE)((int)DontDestroy->charaType_[_i + 1]), POS_START[_i + 1], 1.0f);
+		obj_wire_[_i]		= new ObjWire(POS_WIRE[_i], 1.0f);
+		obj_wire_[_i + 1]	= new ObjWire(POS_WIRE[_i + 1], 1.0f);
+	}
 
-	//for (int _i = 0; _i < N_BALL; ++_i)
-	//	obj_ball_[_i] = new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f);
 	for (int _i = 0; _i < N_BALL; ++_i)
 		obj_ball_.push_back(new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f));
-
-	for (int _i = 0; _i < N_WIRE; ++_i)
-		obj_wire_[_i] = new ObjWire(POS_WIRE[_i], 1.0f);
 }
 
 ObjectManager::~ObjectManager() {
+	for (ObjBall* ball : obj_ball_)
+		delete ball;
+
 	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		delete obj_wire_[_i];
-
-	//for (int _i = N_BALL - 1; 0 <= _i; --_i)
-	//	delete obj_ball_[_i];
-	std::vector<ObjBall*> arr(N_BALL);
-	obj_ball_.swap(arr);
 	
 	for (int _i = N_PLAYER - 1; 0 <= _i; --_i)
 		delete obj_player_[_i];
 }
 
 void ObjectManager::Initialize() {
-	for (int _i = 0; _i < N_PLAYER; ++_i)
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
 		obj_player_[_i]->Initialize(_i);
+		obj_player_[_i + 1]->Initialize(_i + 1);
+	}
 
 	for (int _i = 0; _i < N_BALL; ++_i)
 		obj_ball_[_i]->Initialize(_i);
 
-	for (int _i = 0; _i < N_WIRE; ++_i)
+	const int _WIRE = N_WIRE * 0.5f;
+	for (int _i = 0; _i <= _WIRE; _i += 2) {
 		obj_wire_[_i]->Initialize(_i);
+		obj_wire_[_i + 1]->Initialize(_i + 1);
+	}
 }
 
 void ObjectManager::LoadAssets() {
 	mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, 13.75f, 2.35f, 1.0f);
-
 	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models\\_Ball\\ball.X");
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
 	
-	for (int _i = 0; _i < N_PLAYER; ++_i)
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
 		obj_player_[_i]->LoadAssets(USFN::MOD_PLAYER[DontDestroy->ChoseColor_[_i]]);
+		obj_wire_[_i]->LoadAssets(L"");
+
+		obj_player_[_i + 1]->LoadAssets(USFN::MOD_PLAYER[DontDestroy->ChoseColor_[_i + 1]]);
+		obj_wire_[_i + 1]->LoadAssets(L"");
+	}
 
 	for (ObjectBase* obj : obj_ball_)
 		obj->LoadAssets(mod_ball_);
-
-	for (ObjectBase* obj : obj_wire_)
-		obj->LoadAssets(L"");
 }
 
 void ObjectManager::Update(const float deltaTime) {
-	for (ObjectBase* obj : obj_player_)
-		obj->Update(deltaTime);
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
+		obj_player_[_i		]->Update(deltaTime);
+		obj_player_[_i + 1	]->Update(deltaTime);
+	}
 
 	for (ObjectBase* obj : obj_ball_)
 		obj->Update(deltaTime);
 
 	// ゴールを用いるモードのみ回す
-	if (DontDestroy->GameMode_.isGAMES_WITH_GOALS())
-		for (ObjectBase* obj : obj_wire_)
-			obj->Update(deltaTime);
+	if (DontDestroy->GameMode_.isGAMES_WITH_GOALS()) {
+		const int _WIRE = N_WIRE * 0.5f;
+		for (int _i = 0; _i <= _WIRE; _i += 2) {
+			obj_wire_[_i	]->Update(deltaTime);
+			obj_wire_[_i + 1]->Update(deltaTime);
+		}
+	}
 }
 
 void ObjectManager::RenderModels() {
-	for (ObjectBase* obj : obj_player_)
-		obj->Render();
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
+		obj_player_[_i		]->Render();
+		obj_player_[_i + 1	]->Render();
+	}
 
 	for (ObjectBase* obj : obj_ball_)
 		obj->Render(mod_ball_);
 }
 
 void ObjectManager::RenderSprites() {
-	for (ObjectBase* obj : obj_player_)
-		obj->UIRender();
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
+		obj_player_[_i		]->UIRender();
+		obj_player_[_i + 1	]->UIRender();
+	}
 }
 
 void ObjectManager::RenderAlphas() {
-	for (int _i = 0; _i <= N_PLAYER / 2; _i += 2) {
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
 		obj_player_[_i		]->AlphaRender();
 		obj_player_[_i + 1	]->AlphaRender();
 	}
 }
 
 void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
-	for (ObjectBase* obj : obj_player_)
-		physics_world_->addRigidBody(obj->myRigidbody());
+	const int _PLAYER = N_PLAYER * 0.5f;
+	for (int _i = 0; _i <= _PLAYER; _i += 2) {
+		physics_world_->addRigidBody(obj_player_[_i]->myRigidbody());
+		physics_world_->addRigidBody(obj_player_[_i + 1]->myRigidbody());
+	}
 
 	for (ObjectBase* obj : obj_ball_)
 		physics_world_->addRigidBody(obj->myRigidbody());
 
-	for (ObjectBase* obj : obj_wire_)
-		physics_world_->addRigidBody(obj->myRigidbody());
+	const int _WIRE = N_WIRE * 0.5f;
+	for (int _i = 0; _i <= _WIRE; _i += 2) {
+		physics_world_->addRigidBody(obj_wire_[_i]->myRigidbody());
+		physics_world_->addRigidBody(obj_wire_[_i + 1]->myRigidbody());
+	}
 }
 
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {

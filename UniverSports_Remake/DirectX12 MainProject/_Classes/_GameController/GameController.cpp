@@ -68,9 +68,9 @@ bool GameController::GameFined() {
 	if (_gameMode.isHANDBALL())
 		return timer_->TimeOut();
 	else if (_gameMode.isDODGEBALL_NOMAL())
-		return (RemainingNumberOfPlayer() == 1);
+		return (RemainingNumberOfPlayer() <= 1);
 	else if (_gameMode.isDODGEBALL_2ON2())
-		return (RemainingOfTeam() == 1);
+		return (RemainingOfTeam() <= 1);
 	else if (_gameMode.isBILLIARDS())
 		return Press.MinGameFinedKey(0);
 
@@ -80,10 +80,10 @@ bool GameController::GameFined() {
 
 int GameController::RemainingNumberOfPlayer() {
 	int count = 0;
-	for (int _i = 0; _i <= 2; _i = +2) {
-		count += (int)DontDestroy->Survivor_[_i];
-		count += (int)DontDestroy->Survivor_[_i + 1];
-	}
+	count += (int)DontDestroy->Survivor_[0];
+	count += (int)DontDestroy->Survivor_[1];
+	count += (int)DontDestroy->Survivor_[2];
+	count += (int)DontDestroy->Survivor_[3];
 	return count;
 }
 

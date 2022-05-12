@@ -41,28 +41,22 @@ bool UseKeyCheck::RightKey(const int index) {
 }
 
 bool UseKeyCheck::DecisionKey(const int index) {
-	if (index == 0)
-		return key_.EventOnOffKey(KEY::B) || pad_.EventOnOffKey(index, PAD::P_B);
-	else
-		return pad_.EventOnOffKey(index, PAD::P_B);
+	return KeyEventB(index);
 }
 
 bool UseKeyCheck::CancelKey(const int index) {
-	if (index == 0)
-		return key_.EventOnOffKey(KEY::A) || pad_.EventOnOffKey(index, PAD::P_A);
-	else
-		return pad_.EventOnOffKey(index, PAD::P_A);
+	return KeyEventA(index);
 }
 
 bool UseKeyCheck::ThrasherKey(const int index) {
-	return KeyB(index);
+	if (index == 0)
+		return key_.StateOnOffKey(KEY::B) || pad_.StateOnOffKey(index, PAD::P_B);
+	else
+		return pad_.StateOnOffKey(index, PAD::P_B);
 }
 
 bool UseKeyCheck::ShotKey(const int index) {
-	if (index == 0)
-		return key_.EventOnOffKey(KEY::A) || pad_.EventOnOffKey(index, PAD::P_A);
-	else
-		return pad_.EventOnOffKey(index, PAD::P_A);
+	return KeyEventA(index);
 }
 
 Vector2 UseKeyCheck::MoveDirection(const int index) {
@@ -73,10 +67,17 @@ Vector2 UseKeyCheck::MoveDirection(const int index) {
 }
 
 bool UseKeyCheck::MinGameFinedKey(const int index) {
-	return KeyB(index);
+	return KeyEventB(index);
 }
 
-bool UseKeyCheck::KeyB(const int index) {
+bool UseKeyCheck::KeyEventA(const int index) {
+	if (index == 0)
+		return key_.EventOnOffKey(KEY::A) || pad_.StateOnOffKey(index, PAD::P_A);
+	else
+		return pad_.StateOnOffKey(index, PAD::P_A);
+}
+
+bool UseKeyCheck::KeyEventB(const int index) {
 	if (index == 0)
 		return key_.EventOnOffKey(KEY::B) || pad_.StateOnOffKey(index, PAD::P_B);
 	else

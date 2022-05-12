@@ -9,7 +9,6 @@ ObjBall::ObjBall() {
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
-	nowState_ = NONE_STATE;
 	colorType_ = DEFAULT_COLOR;
 	state_ = nullptr;
 	pos_z_ = 0.0f;
@@ -22,6 +21,11 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
+	st_float_ = new StFloat();
+	st_cautch_ = new StCautch();
+	st_shot_ = new StShot();
+	st_standby_ = new StStandby();
+
 	SwitchState(STANDBY);
 
 	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
@@ -30,17 +34,22 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	id_owner_ = -1;
 	isInPlayerHands_ = false;
 	isBreak_ = false;
+
 }
 
 ObjBall::~ObjBall() {
 	delete physics_;
+	delete st_standby_;
+	delete st_shot_;
+	delete st_cautch_;
+	delete st_float_;
 }
 
 void ObjBall::Initialize(const int id) {
-	st_float_.Initialize();
-	st_cautch_.Initialize();
-	st_shot_.Initialize();
-	st_standby_.Initialize();
+	st_float_->Initialize();
+	st_cautch_->Initialize();
+	st_shot_->Initialize();
+	st_standby_->Initialize();
 
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
@@ -77,17 +86,15 @@ void ObjBall::Render(DX9::MODEL& model) {
 	model->Draw();
 }
 
-void ObjBall::SwitchState(STATE state) {
+void ObjBall::SwitchState(B_STATE state) {
 	switch (state) {
-		case STANDBY : state_ = &st_standby_;		  break;
-		case FLOAT	 : state_ = &st_float_;			  break;
-		case CAUTCH	 : state_ = &st_cautch_;		  break;
-		case SHOT	 : state_ = &st_shot_;			  break;
-		case GOAL	 : state_ = &st_goal_;			  break;
-		default		 : assert(!"ObjBall_不正な状態"); break;
+		case STANDBY	: state_ = &*st_standby_;			break;
+		case FLOATING	: state_ = &*st_float_;				break;
+		case CAUTCH		: state_ = &*st_cautch_;			break;
+		case SHOT		: state_ = &*st_shot_;				break;
+		case GOAL		: state_ = &*st_goal_;				break;
+		default			: assert(!"ObjBall_不正な状態");	break;
 	}
-
-	nowState_ = state;
 }
 
 void ObjBall::SwitchColor(COLOR_TYPE colorType) {
@@ -99,7 +106,7 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 
 	switch (colorType) {
 		case DEFAULT_COLOR : _mat = GetNomMaterial(); break;
-		case PLAYERS_COLOR: _mat.Diffuse = P_DIFFUSE[std::min(std::max(0, DontDestroy->ChoseColor_[id_owner_]), 4 - 1)]; _mat.Ambient = P_AMBIENT; break;
+		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[std::min(std::max(0, DontDestroy->ChoseColor_[id_owner_]), 4 - 1)]; _mat.Ambient = P_AMBIENT; break;
 		case TEAM_COLOR    : break;
 		default			   : assert(!"ObjBall_assert : 不正な色指定"); break;
 	}
@@ -136,11 +143,12 @@ void ObjBall::WasThrown(Vector2 forward) {
 
 void ObjBall::WasGuessed() {
 	DontDestroy->Score_[id_owner_] += 1;
-	BallReset();
+	BallBreak();
 }
 
-void ObjBall::BallReset() {
+void ObjBall::BallBreak() {
+	id_owner_ = -1;
 	isBreak_ = true;
-	//id_owner_ = -1;
+	isInPlayerHands_ = false;
 	AssignTransform(Vector3(GAME_CONST.FieldSide_X, GAME_CONST.FieldSide_Y, 0.0f), Vector2::Zero);
 }

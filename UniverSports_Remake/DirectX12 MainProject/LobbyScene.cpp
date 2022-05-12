@@ -4,6 +4,7 @@
 
 #include "Base/pch.h"
 #include "Base/dxtk.h"
+#include "Base/DX12Effekseer.h"
 #include "SceneFactory.h"
 #include "_Classes/FileNames.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
@@ -23,36 +24,39 @@ ObjPlayer* LobbyScene::player_[PLAYER];
 // Initialize member variables.
 LobbyScene::LobbyScene()
 {
-	DontDestroy->NowScene_	= (int)NextScene::LobbyScene;
+	DontDestroy->NowScene_		= (int)NextScene::LobbyScene;
 
-	descriptorHeap_			= nullptr;
-	spriteBatch_			= nullptr;
+	descriptorHeap_				= nullptr;
+	spriteBatch_				= nullptr;
 
 	std::random_device _seed;
-	randomEngine_			= std::mt19937(_seed());
-	newTeamID_				= std::uniform_int_distribution<>(0, 1);
+	randomEngine_				= std::mt19937(_seed());
+	newTeamID_					= std::uniform_int_distribution<>(0, 1);
 
-	font_count_				= DX9::SPRITEFONT{};
-	font_message_			= DX9::SPRITEFONT{};
+	font_count_					= DX9::SPRITEFONT{};
+	font_message_				= DX9::SPRITEFONT{};
 
-	collision_config_		= new btDefaultCollisionConfiguration();
-	collision_dispatcher_	= new btCollisionDispatcher(collision_config_);
-	broadphase_				= new btDbvtBroadphase();
-	solver_					= new btSequentialImpulseConstraintSolver();
-	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
+	collision_config_			= new btDefaultCollisionConfiguration();
+	collision_dispatcher_		= new btCollisionDispatcher(collision_config_);
+	broadphase_					= new btDbvtBroadphase();
+	solver_						= new btSequentialImpulseConstraintSolver();
+	physics_world_				= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
-	bg_movie_				= new MoviePlayer(SimpleMath::Vector3(288.0f, 96.0f, -50.0f), 0.5625f);
-	bgm_					= new SoundPlayer();
+	bg_movie_					= new MoviePlayer(SimpleMath::Vector3(288.0f, 96.0f, -50.0f), 0.5625f);
+	bgm_						= new SoundPlayer();
 
-	for (int _i = 0; _i < PLAYER; ++_i)
-		player_[_i]			= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
+	// ループ回数を削減するため、1度のループ内で2つずつ処理する
+	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+		player_[_i]				= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
+		charaSelect_[_i]		= new CharaSelect();
 
-	for (int _i = 0; _i < PLAYER; ++_i)
-		charaSelect_[_i]	= new CharaSelect();
+		player_[_i + 1]			= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i + 1], 1.0f);
+		charaSelect_[_i + 1]	= new CharaSelect();
+	}
 
-	timer_goNext_			= new OriTimer(GAME_CONST.LB_GONEXT + 1.0f);
+	timer_goNext_				= new OriTimer(GAME_CONST.LB_GONEXT + 1.0f);
 
-	allSet_					= false;
+	allSet_						= false;
 }
 
 // Initialize a variable and audio resources.
@@ -68,10 +72,10 @@ void LobbyScene::Initialize()
 	Light.Enable();
 
 	std::fill(std::begin(DontDestroy->ChoseColor_), std::end(DontDestroy->ChoseColor_), 0);
-	std::fill(std::begin(DontDestroy->TeamID), std::end(DontDestroy->TeamID), -1);
+	std::fill(std::begin(DontDestroy->TeamID),		std::end(DontDestroy->TeamID),		-1);
 
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
-		for (int _i = 0; _i <= PLAYER / 2; _i += 2) {
+		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 			GiveTeamID(_i);
 			GiveTeamID(_i + 1);
 		}
@@ -79,15 +83,17 @@ void LobbyScene::Initialize()
 
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_charaSelect.wav", SOUND_TYPE::BGM);
 
-	for (int _i = 0; _i < PLAYER; ++_i)
-		player_[_i]->Initialize(_i);
-
-	for (int _i = 0; _i < PLAYER; ++_i)
-		charaSelect_[_i]->Initialize(_i);
-
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
-	for (ObjPlayer* obj : player_)
-		physics_world_->addRigidBody(obj->myRigidbody());
+
+	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+		player_[_i]->Initialize(_i);
+		charaSelect_[_i]->Initialize(_i);
+		physics_world_->addRigidBody(player_[_i]->myRigidbody());
+
+		player_[_i + 1]->Initialize(_i + 1);
+		charaSelect_[_i + 1]->Initialize(_i + 1);
+		physics_world_->addRigidBody(player_[_i + 1]->myRigidbody());
+	}
 
 	font_count_		= DX9::SpriteFont::CreateFromFontName(DXTK->Device9, L"MS ゴシック", 20);
 	font_message_	= DX9::SpriteFont::CreateFromFontName(DXTK->Device9, L"MS ゴシック", 10);
@@ -96,8 +102,6 @@ void LobbyScene::Initialize()
 // Allocate all memory the Direct3D and Direct2D resources.
 void LobbyScene::LoadAssets()
 {
-	DX12Effect.SetCamera((DX12::CAMERA)Camera.GetCamera());
-
 	descriptorHeap_ = DX12::CreateDescriptorHeap(DXTK->Device, 1);
 
 	ResourceUploadBatch resourceUploadBatch(DXTK->Device);
@@ -128,20 +132,17 @@ void LobbyScene::LoadAssets()
 	sp_teamCol_[0]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_a.png");
 	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_b.png");
 
-	for (int _i = 0; _i < PLAYER; ++_i)
-		sp_playerIcon[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i] .c_str());
+	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+		sp_playerIcon[_i]		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i].c_str());
+		player_[_i]->LoadAssets(USFN::MOD_PLAYER[_i]);
+		charaSelect_[_i]->LoadAssets(sp_right, sp_left);
+
+		sp_playerIcon[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i + 1].c_str());
+		player_[_i + 1]->LoadAssets(USFN::MOD_PLAYER[_i + 1]);
+		charaSelect_[_i + 1]->LoadAssets(sp_right, sp_left);
+	}
 
 	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
-
-	for (int _i = 0; _i < PLAYER; ++_i)
-		player_[_i]->LoadAssets(USFN::MOD_PLAYER[_i]);
-
-	for (CharaSelect* obj : charaSelect_)
-		obj->LoadAssets(sp_right, sp_left);
-
-	EFFECT _eff_dummy = DX12Effect.Create(L"_Effects\\_Down\\HITeffect.efk", "dummy");
-	DX12Effect.PlayOneShot("dummy");
-	DX12Effect.Stop("dummy");
 
 	bg_movie_->Play();
 	bgm_->Play();
@@ -176,7 +177,7 @@ void LobbyScene::Terminate()
 // Direct3D resource cleanup.
 void LobbyScene::OnDeviceLost()
 {
-	DX12Effect.Reset();
+
 }
 
 // Restart any looped sounds here
@@ -199,9 +200,13 @@ NextScene LobbyScene::Update(const float deltaTime)
 
 	bg_movie_->Update();
 
-	for (int _i = 0; _i < PLAYER; ++_i)
+	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		if (charaSelect_[_i]->IsDecision())
 			player_[_i]->Update(deltaTime);
+
+		if (charaSelect_[_i + 1]->IsDecision())
+			player_[_i + 1]->Update(deltaTime);
+	}
 
 	if (AllDecision()) {
 		timer_goNext_->Update(deltaTime);
@@ -212,8 +217,10 @@ NextScene LobbyScene::Update(const float deltaTime)
 			return NextScene::Continue;
 	}
 	else {
-		for (int _i = 0; _i < PLAYER; ++_i)
+		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 			charaSelect_[_i]->Update(deltaTime, _i);
+			charaSelect_[_i + 1]->Update(deltaTime, _i + 1);
+		}
 	}
 
 	return NextScene::Continue;
@@ -230,9 +237,13 @@ void LobbyScene::Render()
 
 	Camera.Render();
 
-	for (int _i = 0; _i < PLAYER; ++_i)
+	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		if (charaSelect_[_i]->IsDecision())
 			player_[_i]->Render();
+
+		if (charaSelect_[_i + 1]->IsDecision())
+			player_[_i + 1]->Render();
+	}
 
 	_view.X = 0.0f;
 	_view.Y = 0.0f;
@@ -248,14 +259,14 @@ void LobbyScene::Render()
 	bg_movie_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
 
-	for (int _i = 0; _i <= PLAYER / 2; _i += 2) {
+	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		charaSelect_[_i		]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i		]], sp_decisions[charaSelect_[_i	]->IsDecision()], sp_entry, _i		);
 		charaSelect_[_i + 1	]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i + 1	]], sp_decisions[charaSelect_[_i + 1]->IsDecision()], sp_entry, _i + 1	);
 	}
 
 	// チームカラーの表示
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
-		for (int _i = 0; _i <= PLAYER / 2; _i += 2) {
+		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), Vector3(TEAM_COL_X[_i		], TEAM_COL_Y, 100.0f));
 			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), Vector3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, 100.0f));
 		}
@@ -318,8 +329,10 @@ int LobbyScene::HowManyValuesIn(const int* list, int size, int findNum) {
 bool LobbyScene::AllDecision() {
 	int count = 0;
 
-	for (int _i = 0; _i < PLAYER; ++_i)
+	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		count += charaSelect_[_i]->IsDecision();
+		count += charaSelect_[_i + 1]->IsDecision();
+	}
 
 	allSet_ = (count == PLAYER);
 

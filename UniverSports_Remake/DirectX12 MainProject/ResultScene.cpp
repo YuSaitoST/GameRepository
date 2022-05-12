@@ -9,7 +9,7 @@
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 
 // Initialize member variables.
-ResultScene::ResultScene()
+ResultScene::ResultScene() : maxScore_(0)
 {
 	DontDestroy->NowScene_ = (int)NextScene::ResultScene;
 
@@ -31,10 +31,9 @@ void ResultScene::Initialize()
 
 	if (DontDestroy->GameMode_.isSINGLES_GAME()) {
 		// シングルスのスコア計算(一番多いプレイヤーが優勝)
-		int _maxScore = 0;
 		for (int _i = 0; _i < 4; ++_i) {
-			if (_maxScore < DontDestroy->Score_[_i]) {
-				_maxScore = DontDestroy->Score_[_i];
+			if (maxScore_ < DontDestroy->Score_[_i]) {
+				maxScore_ = DontDestroy->Score_[_i];
 				winPlayerID_[0] = _i;
 			}
 		}
@@ -127,7 +126,6 @@ void ResultScene::LoadAssets()
 	sp_texCrushing_	= (DontDestroy->GameMode_.isDODGEBALL()) ?
 		DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_gekiha.png") :
 		DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_score.png");
-
 
 	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
 	blackOut_->LoadAsset();
@@ -251,37 +249,27 @@ void ResultScene::Render_WinCName() {
 
 // ドッジ
 void ResultScene::Mode_0() {
-	oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * maxScore_), NUMBER::RECT_X * 9);
+	oneDigit_x = std::min(maxScore_, 9) * NUMBER::RECT_X;
 }
 
 // ハンド
 void ResultScene::Mode_1() {
 	if (maxScore_ < 10) {
-		oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * maxScore_), NUMBER::RECT_X * 9);
+		oneDigit_x = std::min(maxScore_, 9) * NUMBER::RECT_X;
 		twoDigit_x = 0;
 	}
 	else {
 		const int _oneDigit = maxScore_ % 10;
 		const int _twoDigit = (maxScore_ - _oneDigit) * 0.5f;
 
-		oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * _oneDigit), NUMBER::RECT_X * 9);
-		twoDigit_x = std::min(std::max(0, NUMBER::RECT_X * _twoDigit), NUMBER::RECT_X * 9);
+		oneDigit_x = std::min(_oneDigit, 9) * NUMBER::RECT_X;
+		twoDigit_x = std::min(_twoDigit, 9) * NUMBER::RECT_X;
 	}
 }
 
 // 2on2
 void ResultScene::Mode_2() {
-	if (maxScore_ < 10) {
-		oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * maxScore_), NUMBER::RECT_X * 9);
-		twoDigit_x = 0;
-	}
-	else {
-		const int _oneDigit = maxScore_ % 10;
-		const int _twoDigit = (maxScore_ - _oneDigit) * 0.1f;
-
-		oneDigit_x = std::min(std::max(0, NUMBER::RECT_X * _oneDigit), NUMBER::RECT_X * 9);
-		twoDigit_x = std::min(std::max(0, NUMBER::RECT_X * _twoDigit), NUMBER::RECT_X * 9);
-	}
+	Mode_1();
 }
 
 void ResultScene::SetPlayerIDofTheWinningTeam(const int teamMember[2]) {

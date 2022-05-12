@@ -1,5 +1,5 @@
 #include "Cell.h"
-#include "MainScene.h"
+#include "_Classes/_CellList/ObjectManager.h"
 #include "_Classes/_BitCalculation/BitCalculation.h"
 
 Cell::Cell() {
@@ -40,7 +40,6 @@ ObjectBase* Cell::UpperSearch() {
 	return nullptr;
 }
 
-// 中の動きがよくわからない
 ObjectBase* Cell::LowerSearch(int nr) {
 	ObjectBase* _mr = nullptr;
 
@@ -49,11 +48,10 @@ ObjectBase* Cell::LowerSearch(int nr) {
 	if (_mr != nullptr)
 		return _mr;
 
-	// 下位の左上のIndex (?)
 	nr = nr * 4 + 1;
 
 	// 下位空間4つ全て回る
-	for (int _i = 0, _n = GetIndex(BitCalculation::N_ + 1, 0); _i < 4; _i++) {
+	for (int _i = 0, _n = BitCalculation::GetIndex(BitCalculation::N_ + 1, 0); _i < 4; _i++) {
 		// 最大数を超えてなければ、再起して最大分割レベルまで判定
 		if (nr + _i < _n) {
 			_mr = LowerSearch(nr + _i);
@@ -90,7 +88,7 @@ void Cell::MoverToMorton(ObjectBase& m, int& L, int& I, int& M) {
 
 	L = BitCalculation::N_ - _k;  // KはLと対になる値を表し、この式から分割レベルLが求まる
 	I = _mUR >> (2 * _k);
-	M = GetIndex(L, I);
+	M = BitCalculation::GetIndex(L, I);
 
 	// _mURを2*Kだけ右シフトする
 	// * _mURを使う理由 : I = _mUL^(_mUL^_mUR)>>2k より I = _mUR>>2K (bit演算の性質 a^(a^b)==b を用いている)
@@ -121,13 +119,7 @@ void Cell::Remove() {
 	this->prev_->next_ = this->next_;
 }
 
-// Level,IndexからMortonIndexを求める
-int Cell::GetIndex(int Level, int Index) {
-	const int _CR = (int)std::pow(4, Level);  // Common ratio (公比)
-	return (((_CR - 1) / (4 - 1)) + Index);  // 等比級数
-}
-
-// mp_に合わせてモートン符号を更新する
+// mp_の座標に合わせてモートン符号を更新する
 void Cell::UpdateToMorton() {
 	Remove();
 	MoverToMorton(*mp_, level_, LsIndex_, MsIndex_);  // 所属空間の更新

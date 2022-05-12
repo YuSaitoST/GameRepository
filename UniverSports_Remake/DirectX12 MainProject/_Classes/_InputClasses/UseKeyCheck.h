@@ -29,7 +29,8 @@ private:
 	UseKeyCheck() {}
 	virtual ~UseKeyCheck() {}
 
-	inline bool KeyB(const int index);
+	inline bool KeyEventA(const int index);
+	inline bool KeyEventB(const int index);
 
 	static UseKeyCheck inctance_;
 	KeyBoadChecker key_;

@@ -1,7 +1,9 @@
 #include "CellList.h"
+#include "_Cell/Cell.h"
+#include "_Classes/_BitCalculation/BitCalculation.h"
 
 CellList::CellList() {
-	cpList_				= new Cell[Cell::GetIndex(N + 1, 0)];
+	cpList_				= new Cell[BitCalculation::GetIndex(N + 1, 0)];
 }
 
 CellList::~CellList() {
@@ -10,7 +12,7 @@ CellList::~CellList() {
 
 void CellList::PushList(Cell* cp) {
 	int _m				= cp->MsIndex_;
-	int _iMax			= Cell::GetIndex(N + 1, 0);
+	int _iMax			= BitCalculation::GetIndex(N + 1, 0);
 
 	assert((0 <= _m) && (_m < _iMax));
 

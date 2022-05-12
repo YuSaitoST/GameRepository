@@ -16,8 +16,6 @@
 #pragma comment (lib, "LinearMath_Debug.lib")
 #endif
 
-CellList cellList = CellList{};
-
 // Initialize member variables.
 MainScene::MainScene()
 {
@@ -43,14 +41,6 @@ MainScene::MainScene()
 // Initialize a variable and audio resources.
 void MainScene::Initialize()
 {
-#ifdef DEBUG
-	omp_set_num_threads(4);
-	DXTK->SetFixedFrameRate(60);
-	GAME_CONST.Initialize();
-	Camera.Initialize();
-	Light.Initialize();
-#endif // DEBUG
-
 	DX12Effect.Initialize();
 	Light.Set();
 	Light.Enable();
@@ -62,11 +52,6 @@ void MainScene::Initialize()
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 	m_object_->AddWorld(physics_world_);
-
-#ifdef DEBUG
-	DebugList.PushList(L"Player0 Score : %i", DontDestroy->Score_[0]);
-	DebugList.PushList(L"Player1 Score : %i", DontDestroy->Score_[1]);
-#endif // DEBUG
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -165,19 +150,18 @@ void MainScene::Render()
 
 	m_object_->RenderModels();
 
-
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
-	for (int _i = 0; _i < 4; ++_i)
-		icon_animator_->Render(m_object_->PlayerLife(_i), _i);
+	if (!DontDestroy->GameMode_.isGAMES_WITH_GOALS()) {
+		for (int _i = 0; _i <= 2; _i += 2) {
+			icon_animator_->Render(m_object_->PlayerLife(_i), _i);
+			icon_animator_->Render(m_object_->PlayerLife(_i + 1), _i + 1);
+		}
+	}
 
 	field_->Render();
 	gameController_->Render();
 	m_object_->RenderSprites();
-
-#ifdef DEBUG
-	DebugList.Render();
-#endif // DEBUG
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 

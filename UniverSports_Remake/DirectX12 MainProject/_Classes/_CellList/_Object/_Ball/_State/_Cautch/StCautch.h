@@ -7,7 +7,7 @@ public:
 	StCautch() {}
 	virtual ~StCautch() {}
 
-	virtual void Initialize() {}
+	virtual void Initialize();
 	virtual void Update(ObjBall* ball);
 
 private:

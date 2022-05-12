@@ -7,11 +7,7 @@ public:
 	FadeAlpha(float alpha, float speed);
 	virtual ~FadeAlpha() {};
 
-	void Update(const float deltaTime);
-
-	void FadeIn();
-	void FadeOut();
-
+	void FadeIn(const float deltaTime);
 	inline float Alpha() const { return ui_alpha_; };
 
 private:

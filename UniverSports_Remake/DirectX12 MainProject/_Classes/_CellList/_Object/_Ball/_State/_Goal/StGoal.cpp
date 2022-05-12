@@ -2,7 +2,7 @@
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
 void StGoal::Initialize() {
-	
+	myState_ = B_STATE::GOAL;
 }
 
 void StGoal::Update(ObjBall* ball) {
@@ -28,6 +28,7 @@ void StGoal::Update(ObjBall* ball) {
 		position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
 	}
 	else if(ball->GetOwnerID()!=-1) {
-		ball->SwitchState(ObjBall::STATE::CAUTCH);
+		ball->SwitchColor(ObjBall::COLOR_TYPE::PLAYERS_COLOR);
+		ball->SwitchState(B_STATE::CAUTCH);
 	}
 }

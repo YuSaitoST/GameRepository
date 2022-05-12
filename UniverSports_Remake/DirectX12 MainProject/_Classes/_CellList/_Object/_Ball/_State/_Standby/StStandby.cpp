@@ -3,12 +3,13 @@
 #include "_Classes/_GameController/GameController.h"
 
 void StStandby::Initialize() {
-	position_ = Vector2(99.0f, 99.0f);
+	myState_	= B_STATE::STANDBY;
+	position_	= Vector2(99.0f, 99.0f);
 }
 
 void StStandby::Update(ObjBall* ball) {
 	if (GameController::GamePlay()) {
 		ball->SwitchColor(ObjBall::COLOR_TYPE::DEFAULT_COLOR);
-		ball->SwitchState(ObjBall::STATE::FLOAT);
+		ball->SwitchState(B_STATE::FLOATING);
 	}
 }

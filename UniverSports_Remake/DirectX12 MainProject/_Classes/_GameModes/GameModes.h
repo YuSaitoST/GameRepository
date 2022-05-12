@@ -1,6 +1,6 @@
 #pragma once
 
-enum GAMEMODE { DODGE_BALL_NOMAL, HAND_BALL, DODGE_BALL_2ON2, BILLIARDS, NONE_GAMEMODE };
+enum GAMEMODE { DODGE_BALL_NOMAL, DODGE_BALL_2ON2, HAND_BALL, BILLIARDS, NONE_GAMEMODE };
 
 class GameModes {
 public:
@@ -15,6 +15,7 @@ public:
 	inline bool isDODGEBALL_2ON2	() const { return GameMode_ == DODGE_BALL_2ON2;					}
 	inline bool isHANDBALL			() const { return GameMode_ == HAND_BALL;						}
 	inline bool isBILLIARDS			() const { return GameMode_ == BILLIARDS;						}
+	inline bool isNotDecision		() const { return GameMode_ == NONE_GAMEMODE;					}
 	inline GAMEMODE SelectionMode	() const { return GameMode_;									}
 
 private:

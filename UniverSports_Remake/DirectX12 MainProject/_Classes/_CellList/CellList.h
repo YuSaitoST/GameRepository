@@ -1,7 +1,9 @@
 #pragma once
 
 #include "_Object/ObjectBase.h"
-#include "_Cell/Cell.h"
+
+// 前方宣言
+class Cell;
 
 // 空間リストクラス
 class CellList {
