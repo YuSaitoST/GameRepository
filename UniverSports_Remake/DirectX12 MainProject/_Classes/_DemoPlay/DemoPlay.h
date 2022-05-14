@@ -2,7 +2,7 @@
 
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_MoviePlayer/MoviePlayer.h"
-#include "_Classes/_UI/_OriTimer/OriTimer.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 
 class DemoPlay {
 public:
@@ -18,6 +18,6 @@ public:
 
 private:
 	MoviePlayer* mv_demo_;
-	OriTimer* timer_;
+	CountTimer* timer_;
 	bool isDisplay_;
 };

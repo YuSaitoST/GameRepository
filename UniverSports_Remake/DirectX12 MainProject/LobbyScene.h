@@ -17,7 +17,7 @@
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 
 #include "_Classes/_UI/_CharaSelect/CharaSelect.h"
-#include "_Classes/_UI/_OriTimer/OriTimer.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
@@ -95,7 +95,7 @@ private:
 	SoundPlayer*						bgm_;
 
 	CharaSelect*						charaSelect_[PLAYER];
-	OriTimer*							timer_goNext_;
+	CountTimer*							timer_goNext_;
 
 	bool								allSet_;
 };

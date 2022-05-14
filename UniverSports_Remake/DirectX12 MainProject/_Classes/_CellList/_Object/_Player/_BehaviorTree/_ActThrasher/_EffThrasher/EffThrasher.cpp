@@ -1,7 +1,7 @@
 #include "EffThrasher.h"
 
 EffThrasher::EffThrasher() : EffectBase(0.575f) {  // この時間が片道の再生時間
-	timer_roop_ = new OriTimer(0.2f);  // 加速時の座標更新時間
+	timer_roop_ = new CountTimer(0.2f);  // 加速時の座標更新時間
 	usedThrasher_ = false;
 }
 

@@ -5,6 +5,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes/_MainLight/MainLight.h"
 
 #ifndef _DEBUG
 #pragma comment (lib, "BulletDynamics.lib")
@@ -42,8 +43,9 @@ MainScene::MainScene()
 void MainScene::Initialize()
 {
 	DX12Effect.Initialize();
-	Light.Set();
-	Light.Enable();
+
+	MainLight _light;
+	_light.Register();
 
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_main.wav", SOUND_TYPE::BGM);
 	icon_animator_->Initialize();
@@ -145,8 +147,6 @@ void MainScene::Render()
 {
 	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 0, 255));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
-
-	Camera.Render();
 
 	m_object_->RenderModels();
 

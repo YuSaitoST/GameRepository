@@ -2,7 +2,7 @@
 
 DemoPlay::DemoPlay(SimpleMath::Vector3 pos, float scale, float playBack) {
 	mv_demo_	= new MoviePlayer(pos, scale);
-	timer_		= new OriTimer(playBack);
+	timer_		= new CountTimer(playBack);
 	isDisplay_	= false;
 }
 

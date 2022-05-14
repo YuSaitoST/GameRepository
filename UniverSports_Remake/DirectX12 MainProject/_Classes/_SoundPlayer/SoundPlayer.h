@@ -2,14 +2,11 @@
 
 #include"Base/pch.h"
 #include"Base/dxtk.h"
-#include"_Classes/_UI/_OriTimer/OriTimer.h"
+#include"_Classes/_UI/_CountTimer/CountTimer.h"
 
 using namespace DirectX;
 
-enum SOUND_TYPE {
-	BGM,
-	SE
-};
+enum SOUND_TYPE { BGM, SE };
 
 class SoundPlayer {
 public:
@@ -32,7 +29,7 @@ private:
 	XAudio::SOUNDEFFECT sound_;
 	XAudio::SOUNDEFFECTINSTANCE bgm_instance_;
 
-	OriTimer* timer_;
+	CountTimer* timer_;
 	bool autoPlay_;
 	bool isPlay_;
 };

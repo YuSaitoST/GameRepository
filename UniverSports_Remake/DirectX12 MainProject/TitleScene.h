@@ -13,7 +13,7 @@
 #include "_Classes/_MoviePlayer/MoviePlayer.h"
 #include "_Classes/_DemoPlay/DemoPlay.h"
 
-#include "_Classes/_UI/_OriTimer/OriTimer.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 #include "_Classes/_UI/_Cursor/Cursor.h"
 #include "_Classes/_UI/_SelectArrows/SelectArrows.h"
 #include "_Classes/_UI/_Choices/Choices.h"
@@ -86,7 +86,7 @@ private:
 	SoundPlayer*			se_decision_;
 	MoviePlayer*			mv_bg_;
 	DemoPlay*				mv_demo_;
-	OriTimer*				time_start_;
+	CountTimer*				time_start_;
 	Cursor*					cursor_;
 	SelectArrows*			ui_arrows_;
 	Choices*				mode_choices_;

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "CharaIcon.h"
-#include "_Classes/_UI/_OriTimer/OriTimer.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 
 class IconAnimator {
 public:
@@ -20,7 +20,7 @@ private:
 	void FadeOut(const float deltaTime);
 
 	CharaIcon* icon_[4];
-	OriTimer* display_time_;
+	CountTimer* display_time_;
 	float alpha_;
 	static bool display_;
 

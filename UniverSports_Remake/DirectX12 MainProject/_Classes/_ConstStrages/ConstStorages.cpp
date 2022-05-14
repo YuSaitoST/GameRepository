@@ -7,7 +7,7 @@ void ConstStorageC::Initialize() {
 
 	FILE* _file;
 
-	auto a = _wfopen_s(&_file, L"paraList.csv", L"r");
+	auto a = _wfopen_s(&_file, L"_Parameters\\paraList.csv", L"r");
 	if (a != 0)
 		std::abort();
 

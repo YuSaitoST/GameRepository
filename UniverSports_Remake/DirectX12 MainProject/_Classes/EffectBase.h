@@ -3,7 +3,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "Base/DX12Effekseer.h"
-#include "_Classes/_UI/_OriTimer/OriTimer.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 
 using namespace DirectX;
 
@@ -15,7 +15,7 @@ public:
 
 	virtual void SetMember(const float time) {
 		effect_ = EFFECT{}; 
-		timer_ = new OriTimer(time);
+		timer_ = new CountTimer(time);
 	}
 
 	virtual void Initialize(std::string eff_name) { name_ = eff_name; }
@@ -40,6 +40,6 @@ public:
 
 protected:
 	EFFECT		effect_;
-	OriTimer*	timer_;
+	CountTimer*	timer_;
 	std::string name_;
 };

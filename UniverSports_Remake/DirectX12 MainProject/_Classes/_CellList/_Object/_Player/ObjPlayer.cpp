@@ -37,7 +37,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 
 	life_			= new MyLife(3);
 	teamID_			= new TeamID();
-	ti_respone_		= new OriTimer(GAME_CONST.PL_ReSponeTime);
+	ti_respone_		= new CountTimer(GAME_CONST.PL_ReSponeTime);
 	eff_down_		= new EffDown();
 	barrier_		= new Barrier();
 	

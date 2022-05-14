@@ -6,7 +6,7 @@ bool GameController::gameStart_;
 
 GameController::GameController() {
 	startTime_	= TIME_LIMIT[(int)DontDestroy->GameMode_.SelectionMode()] + TIME_COUNT;
-	timer_		= new OriTimer(startTime_);
+	timer_		= new CountTimer(startTime_);
 	countDown_	= new CountDownUI();
 	blackOut_	= new BlackOut();
 	ui_finish_	= new Finish();
@@ -72,7 +72,7 @@ bool GameController::GameFined() {
 	else if (_gameMode.isDODGEBALL_2ON2())
 		return (RemainingOfTeam() <= 1);
 	else if (_gameMode.isBILLIARDS())
-		return Press.MinGameFinedKey(0);
+		return Press.MiniGameFinedKey(0);
 
 	assert(!"不正なゲームモードです__in GameController::GameFined()");
 	return false;

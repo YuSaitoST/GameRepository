@@ -3,7 +3,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
-#include "_Classes/_UI/_OriTimer/OriTimer.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 
 using namespace DirectX;
 
@@ -24,7 +24,7 @@ public:
 private:
 	void SetMaterial();
 
-	OriTimer* timer_;
+	CountTimer* timer_;
 	DX9::MODEL mod_;
 	bool isInvincible_;
 };

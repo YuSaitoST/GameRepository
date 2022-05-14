@@ -1,28 +1,26 @@
 #include"MainCamera.h"
 
+using namespace DirectX;
+
 MainCamera::MainCamera() {
 	camera_ = DX9::CAMERA{};
-	pos_ = SimpleMath::Vector3::Zero;
 }
 
-void MainCamera::Initialize()
+/**
+* @brief カメラの設定
+*/
+void MainCamera::Register()
 {
-	pos_ = SimpleMath::Vector3(0.0f, 0.0f, -10.0f);
-
-	camera_->SetPerspectiveFieldOfView(
-		XMConvertToRadians(45.0f), 16.0f / 9.0f, 1.0f, 10000.0f);
-
-	// 平行投射にする
+	//平行投射にする
 	camera_->SetOrthographic(128.0f * 0.48f, 72.0f * 0.48f, 1.0f, 10000.0f);
 
-	DXTK->Direct3D9->SetCamera(camera_);
-}
-
-void MainCamera::Render() {
+	//位置・視点を設定
 	camera_->SetViewLookAt(
-		pos_,
+		SimpleMath::Vector3(0.0f, 0.0f, -10.0f),
 		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
-		SimpleMath::Vector3::Up);
+		SimpleMath::Vector3::Up
+	);
 
+	//カメラを登録
 	DXTK->Direct3D9->SetCamera(camera_);
 }

@@ -26,8 +26,8 @@ ObjectManager::ObjectManager() {
 }
 
 ObjectManager::~ObjectManager() {
-	for (ObjBall* ball : obj_ball_)
-		delete ball;
+	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
+		obj_ball_.erase(obj_ball_.begin() + _i);
 
 	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		delete obj_wire_[_i];
@@ -190,6 +190,7 @@ ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) 
 	float _min_comparison = 99.0f;  // ˆê”Ô‹ß‚¢‹——£
 
 	for (ObjectBase* obj : obj_ball_) {
+		// Ž©•ª‚¾‚Á‚½‚ç–³Ž‹
 		if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
 			continue;
 

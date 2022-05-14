@@ -1,11 +1,14 @@
 #include "KeyBoadEvent.h"
 
+/**
+* @brief “ü—Íó‘Ô‚ğ’²‚×‚é
+*/
 void KeyBoadEvent::Accepts() {
-	// Œ…ã‚ª‚è–h~
+	//Œ…ã‚ª‚è–h~
 	flag_	= 0;
 	direct_ = Vector2::Zero;
 
-	// Šeƒrƒbƒg‚É“ü—Íó‘Ô‚ğ“ü‚ê‚é
+	//Šeƒrƒbƒg‚É“ü—Íó‘Ô‚ğ“ü‚ê‚é
 	flag_ |= (bool)DXTK->KeyEvent->pressed.A		<< A    ;
 	flag_ |= (bool)DXTK->KeyEvent->pressed.B		<< B    ;
 	flag_ |= (bool)DXTK->KeyEvent->pressed.C		<< C    ;

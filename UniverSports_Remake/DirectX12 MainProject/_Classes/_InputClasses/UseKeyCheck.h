@@ -1,8 +1,19 @@
+/**
+ * @file UseKeyCheck.h
+ * @brief ゲームで用いる入力を管理するクラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "KeyBoadChecker.h"
 #include "GamePadChecker.h"
 
+//マクロ
 #define Press UseKeyCheck::GetInstance()
 
 class UseKeyCheck {
@@ -19,7 +30,7 @@ public:
 	bool RightKey(const int index);
 	bool DecisionKey(const int index);
 	bool CancelKey(const int index);
-	bool MinGameFinedKey(const int index);
+	bool MiniGameFinedKey(const int index);
 
 	bool ThrasherKey(const int index);
 	bool ShotKey(const int index);

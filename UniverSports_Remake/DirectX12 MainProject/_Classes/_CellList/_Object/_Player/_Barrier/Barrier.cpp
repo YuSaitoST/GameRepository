@@ -1,7 +1,7 @@
 #include "Barrier.h"
 
 Barrier::Barrier() : mod_(nullptr), isInvincible_(false) {
-	timer_ = new OriTimer(GAME_CONST.PL_InvincibleTime);
+	timer_ = new CountTimer(GAME_CONST.PL_InvincibleTime);
 }
 
 Barrier::~Barrier() {

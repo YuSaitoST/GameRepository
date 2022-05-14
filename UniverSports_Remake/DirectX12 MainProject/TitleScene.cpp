@@ -18,7 +18,7 @@ TitleScene::TitleScene()
 	se_decision_	= new SoundPlayer();
 	mv_bg_			= new MoviePlayer(Vector3(0.0f, 0.0f, 0.0f), 1.0f);
 	mv_demo_		= new DemoPlay(Vector3(0.0f, 0.0f, 0.0f), 1.0f, DEMO_PLAYBACK);
-	time_start_		= new OriTimer(UI_FADE_STARTTIME);
+	time_start_		= new CountTimer(UI_FADE_STARTTIME);
 	cursor_			= new Cursor(CHOICES);
 	mode_choices_	= new Choices(MODE);
 	ui_arrows_		= new SelectArrows();
@@ -32,7 +32,7 @@ void TitleScene::Initialize()
 	omp_set_num_threads(4);
 	DXTK->SetFixedFrameRate(60);
 	GAME_CONST.Initialize();
-
+	
 	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_title.wav", SOUND_TYPE::BGM);
 	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision_title.wav", SOUND_TYPE::SE, 2);
 

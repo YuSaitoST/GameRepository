@@ -51,7 +51,7 @@ ObjectBase* Cell::LowerSearch(int nr) {
 	nr = nr * 4 + 1;
 
 	// 下位空間4つ全て回る
-	for (int _i = 0, _n = BitCalculation::GetIndex(BitCalculation::N_ + 1, 0); _i < 4; _i++) {
+	for (int _i = 0, _n = BitCalculation::GetIndex(BitCalculation::DivisionLevel + 1, 0); _i < 4; _i++) {
 		// 最大数を超えてなければ、再起して最大分割レベルまで判定
 		if (nr + _i < _n) {
 			_mr = LowerSearch(nr + _i);
@@ -86,7 +86,7 @@ void Cell::MoverToMorton(ObjectBase& m, int& L, int& I, int& M) {
 	// XORを00が出てくるまでループして、その回った数をKに保存する
 	for (int _b = _XOR; _b != 0; _b >>= 2, _k++);
 
-	L = BitCalculation::N_ - _k;  // KはLと対になる値を表し、この式から分割レベルLが求まる
+	L = BitCalculation::DivisionLevel - _k;  // KはLと対になる値を表し、この式から分割レベルLが求まる
 	I = _mUR >> (2 * _k);
 	M = BitCalculation::GetIndex(L, I);
 

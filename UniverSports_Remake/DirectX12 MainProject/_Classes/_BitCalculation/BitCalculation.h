@@ -1,18 +1,22 @@
+/**
+ * @file BitCalculation.h
+ * @brief ビット計算クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
-using namespace DirectX::SimpleMath;
-
-class BitCalculation {
-public:
-	BitCalculation() {}
-	virtual ~BitCalculation() {}
-
-	static int BitSlide(int bit);
-	static int PointToMorton(Vector2 pos);
-	static int GetIndex(int Level, int Index);  // L,IからMを求める
-
-	static const int N_ = 2;
-};
+namespace BitCalculation {
+	int BitSlide(int bit);
+	int PointToMorton(DirectX::XMFLOAT2 pos);
+	int GetIndex(int Level, int Index);
+	const int NumberOfDivisions = 4;
+	const int DivisionLevel = 2;
+}

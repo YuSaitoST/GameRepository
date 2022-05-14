@@ -87,7 +87,7 @@ private:
 
 	MyLife*				life_;
 	TeamID*				teamID_;
-	OriTimer*			ti_respone_;
+	CountTimer*			ti_respone_;
 	EffDown*			eff_down_;
 	CharaStrategy*		strategy_;
 	Barrier*			barrier_;

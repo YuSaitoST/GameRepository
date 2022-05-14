@@ -1,11 +1,15 @@
 #include "GamePadState.h"
 
+/**
+* @brief “ü—Íó‘Ô‚ð’²‚×‚é
+* @param index ƒQ[ƒ€ƒpƒbƒh‚Ì”Ô†
+*/
 void GamePadState::Accepts(int index) {
-	// Œ…ã‚ª‚è–hŽ~
+	//Œ…ã‚ª‚è–hŽ~
 	flag_	= 0;
 	direct_ = Vector2::Zero;
 
-	// Šeƒrƒbƒg‚É“ü—Íó‘Ô‚ð“ü‚ê‚é
+	//Šeƒrƒbƒg‚É“ü—Íó‘Ô‚ð“ü‚ê‚é
 	flag_ |= (bool)DXTK->GamePadState[index].buttons.a					<< P_A			 ;
 	flag_ |= (bool)DXTK->GamePadState[index].buttons.b					<< P_B			 ;
 	flag_ |= (bool)DXTK->GamePadState[index].buttons.x					<< P_X			 ;
@@ -27,11 +31,11 @@ void GamePadState::Accepts(int index) {
 	flag_ |= (bool)DXTK->GamePadState[index].IsLeftTriggerPressed()		<< TRIGGER_L	 ;
 	flag_ |= (bool)DXTK->GamePadState[index].IsRightTriggerPressed()	<< TRIGGER_R	 ;
 
-	// 0.0`1.0‚Å‚Æ‚é“ü—Í
-	n_Lx_	= DXTK->GamePadState[index].thumbSticks.leftX;
-	n_Ly_	= DXTK->GamePadState[index].thumbSticks.leftY;
-	n_Rx_	= DXTK->GamePadState[index].thumbSticks.rightX;
-	n_Ry_	= DXTK->GamePadState[index].thumbSticks.rightY;
-	n_Ltrg_ = DXTK->GamePadState[index].triggers.left;
-	n_Rtrg_ = DXTK->GamePadState[index].triggers.right;
+	//0.0`1.0‚ÅŽæ‚é“ü—Í
+	direct_L_.x	= DXTK->GamePadState[index].thumbSticks.leftX;
+	direct_L_.y	= DXTK->GamePadState[index].thumbSticks.leftY;
+	direct_R_.x	= DXTK->GamePadState[index].thumbSticks.rightX;
+	direct_R_.y	= DXTK->GamePadState[index].thumbSticks.rightY;
+	n_Ltrg_		= DXTK->GamePadState[index].triggers.left;
+	n_Rtrg_		= DXTK->GamePadState[index].triggers.right;
 }

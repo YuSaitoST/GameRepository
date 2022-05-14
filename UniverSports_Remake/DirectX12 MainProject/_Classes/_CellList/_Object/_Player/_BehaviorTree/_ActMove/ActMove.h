@@ -11,7 +11,7 @@ class ObjPlayer;
 
 class ActMove : public ActionBase {
 public:
-	ActMove() { target_pos_old_ = Vector2::Zero; }
+	ActMove() {}
 	virtual ~ActMove() {}
 
 	virtual void Initialize(int id) {}
@@ -23,13 +23,11 @@ public:
 	virtual bool Think(ObjPlayer& player);
 
 private:
+	Vector2 GetVerticalDirection(Vector2 targetsDirection);
 	float GetVectorLenght(Vector2 v);  // í∑Ç≥
 	float DotProduct(Vector2 v1, Vector2 v2);  // ì‡êœ
-	float AngleOf2Vector(Vector2 a, Vector2 b);  // Ç»Ç∑äpÉ∆
+	float RadianOf2Vector(Vector2 a, Vector2 b);  // Ç»Ç∑äpÉ∆
 
-	bool ChangeForward(ObjPlayer& my);
-	bool CheckBalls();
-
-	Vector2 target_pos_new_;
-	Vector2 target_pos_old_;
+	void SeekEscapeDirection(Vector2 targetsDirection);
+	void SeekForwardDirection(Vector2 myPosition, Vector2 targetPosition);
 };

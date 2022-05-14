@@ -54,7 +54,7 @@ LobbyScene::LobbyScene()
 		charaSelect_[_i + 1]	= new CharaSelect();
 	}
 
-	timer_goNext_				= new OriTimer(GAME_CONST.LB_GONEXT + 1.0f);
+	timer_goNext_				= new CountTimer(GAME_CONST.LB_GONEXT + 1.0f);
 
 	allSet_						= false;
 }
@@ -66,10 +66,10 @@ void LobbyScene::Initialize()
 	DXTK->SetFixedFrameRate(60);
 
 	DX12Effect.Initialize();
-	Camera.Initialize();
-	Light.Initialize();
-	Light.Set();
-	Light.Enable();
+	Camera.Register();
+
+	MainLight _light;
+	_light.Register();
 
 	std::fill(std::begin(DontDestroy->ChoseColor_), std::end(DontDestroy->ChoseColor_), 0);
 	std::fill(std::begin(DontDestroy->TeamID),		std::end(DontDestroy->TeamID),		-1);
@@ -234,8 +234,6 @@ void LobbyScene::Render()
 
 	D3DVIEWPORT9 _view{ VIEW_X,VIEW_Y,VIEW_W,VIEW_H, 0.0f,1.0f };
 	DXTK->Device9->SetViewport(&_view);
-
-	Camera.Render();
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		if (charaSelect_[_i]->IsDecision())

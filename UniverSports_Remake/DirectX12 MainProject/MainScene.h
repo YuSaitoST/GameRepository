@@ -16,7 +16,6 @@
 #include "_Classes/_GameController/GameController.h"
 
 #include "_Classes/_MainCamera/MainCamera.h"
-#include "_Classes/_MainLight/MainLight.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
 #include "_Classes/_CellList/ObjectManager.h"
 

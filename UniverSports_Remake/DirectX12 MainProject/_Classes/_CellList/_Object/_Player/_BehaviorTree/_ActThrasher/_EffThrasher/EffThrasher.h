@@ -15,5 +15,5 @@ public:
 	bool usedThrasher_;
 
 private:
-	OriTimer* timer_roop_;
+	CountTimer* timer_roop_;
 };

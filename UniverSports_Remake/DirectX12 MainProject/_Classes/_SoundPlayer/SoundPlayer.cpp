@@ -20,7 +20,7 @@ void SoundPlayer::Initialize(std::wstring file_name, SOUND_TYPE sound_type) {
 void SoundPlayer::Initialize(std::wstring file_name, SOUND_TYPE sound_type, int playTime) {
 	sound_			= XAudio::CreateSoundEffect(DXTK->AudioEngine, file_name.c_str());
 	bgm_instance_	= (sound_type == SOUND_TYPE::BGM) ? sound_->CreateInstance() : XAudio::SOUNDEFFECTINSTANCE{};
-	timer_			= new OriTimer(playTime);
+	timer_			= new CountTimer(playTime);
 }
 
 void SoundPlayer::OnRestartSound() {

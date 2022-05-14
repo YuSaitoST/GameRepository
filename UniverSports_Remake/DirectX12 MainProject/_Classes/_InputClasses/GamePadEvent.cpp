@@ -1,11 +1,15 @@
 #include "GamePadEvent.h"
 
+/**
+* @brief 入力状態を調べる
+* @param index ゲームパッドの番号
+*/
 void GamePadEvent::Accepts(int index) {
-	// 桁上がり防止
+	//桁上がり防止
 	flag_	= 0;
 	direct_ = Vector2::Zero;
 
-	// 各ビットに入力状態を入れる
+	//各ビットに入力状態を入れる
 	flag_ |= (bool)DXTK->GamePadEvent[index].a				<< P_A			 ;
 	flag_ |= (bool)DXTK->GamePadEvent[index].b				<< P_B			 ;
 	flag_ |= (bool)DXTK->GamePadEvent[index].x				<< P_X			 ;

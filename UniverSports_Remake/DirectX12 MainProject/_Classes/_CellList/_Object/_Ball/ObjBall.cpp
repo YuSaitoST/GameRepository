@@ -6,6 +6,7 @@ float ObjBall::pos_z_smallest_;
 
 ObjBall::ObjBall() {
 	cp_ = nullptr;
+	pos_ = Vector2::Zero;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
@@ -19,6 +20,7 @@ ObjBall::ObjBall() {
 
 ObjBall::ObjBall(Vector3 pos, float r) {
 	cp_ = nullptr;
+	pos_ = Vector2::Zero;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
 	st_float_ = new StFloat();

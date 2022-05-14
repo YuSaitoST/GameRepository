@@ -78,9 +78,5 @@ void StFloat::CheckFieldOut(ObjBall* ball) {
 }
 
 void StFloat::LoopPos(ObjBall* ball) {
-	//if (ball->IsFieldOut(position_, 0.0f)) {
-	//	ball->ClampLoop(position_);
-	//	//ball->SetBtPosition(position_);
-	//}
 	ball->ClampLoop(position_);
 }

@@ -1,24 +1,22 @@
+/**
+ * @file MainLight.h
+ * @brief ライトクラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
-#define Light MainLight::GetInstance()
-
 class MainLight {
 public:
-	MainLight();
-	virtual ~MainLight() = default;
+	MainLight() {}
+	virtual ~MainLight() {};
 
-	static MainLight& GetInstance() {
-		static MainLight _light;
-		return _light;
-	}
-
-	void Initialize();
-	void Set();
-	void Enable();
-
-private:
-	D3DLIGHT9 light_;
+	void Register();
 };

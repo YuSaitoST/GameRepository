@@ -10,6 +10,7 @@ void ActShot::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPl
 }
 
 void ActShot::Update(const float deltaTime, ObjPlayer& player) {
+	// ƒ{[ƒ‹‚ð“Š‚°‚éŠÔŠu‚ð‚ ‚¯‚é
 	timer_->Update(deltaTime);
 	if (timer_->TimeOut()) {
 		player.AsjustmentForward();

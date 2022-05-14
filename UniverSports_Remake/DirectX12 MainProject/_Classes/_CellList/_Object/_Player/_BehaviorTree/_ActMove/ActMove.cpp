@@ -3,13 +3,13 @@
 #include "_Classes/_CellList/ObjectManager.h"
 
 void ActMove::Update(const float deltaTime, Vector2 direction, ObjPlayer& player) {
-	const Vector2 power = direction * GAME_CONST.Move_FirSpeed * 0.25f * deltaTime;
+	const Vector2 power = direction * GAME_CONST.Move_FirSpeed * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
 	player.AssignPosition();
 }
 
 void ActMove::Update(const float deltaTime, ObjPlayer& player) {
-	const Vector2 power = direction_ * GAME_CONST.Move_FirSpeed * 0.25f * deltaTime;
+	const Vector2 power = direction_ * GAME_CONST.Move_FirSpeed * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
 	player.AssignPosition();
 }
@@ -20,47 +20,37 @@ bool ActMove::Think(ObjPlayer& my) {
 	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
 	ObjectBase* _targetBall = ObjectManager::TheClosestBall(my.myPosition(), _comparison);
 
-	// ボールを持っていれば近くのPlayerに投げる、持ってないならボールを取りに行く
-	if (0 < my.HasBall()) {
-		if (_targetPlayer != nullptr) {
-			target_pos_new_ = _targetPlayer->myPosition();
-			return ChangeForward(my);
-		}
-	}
-	else {
-		if (_targetBall != nullptr) {
-			target_pos_new_ = _targetBall->myPosition();
-			return ChangeForward(my);
-		}
-	}
-
-	// 危険なPlayerやBallから逃げる
-	if ((_targetPlayer != nullptr)) {
+	if (_targetPlayer != nullptr) {
 		if (((ObjPlayer*)_targetPlayer)->HasBall()) {
-			target_pos_new_ = _targetPlayer->myPosition();
-			const Vector2 _target_direction = _targetPlayer->myDirection();
-			direction_ = Vector2(-_target_direction.y, _target_direction.x);
-
-			const bool _ImOnTop = (0.0f < direction_.y) && (_target_direction.y < 0.0f);
-			const bool _TargetOnTop = (direction_.y < 0.0f) && (0.0f < _target_direction.y);
-			direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
-			direction_.Normalize();
-			target_pos_old_ = target_pos_new_;
+			// 相手がボールを持っているなら
+			// 逃げる方向を決める
+			SeekEscapeDirection(_targetPlayer->myDirection());
+			return true;
+		}
+		else if (my.HasBall()) {
+			// 投げる方向を決める
+			SeekForwardDirection(my.myPosition(), _targetPlayer->myPosition());
 			return true;
 		}
 	}
-	else if ((_targetBall != nullptr) && ((ObjBall*)_targetBall)->GetOwnerID() != -1) {
-		target_pos_new_ = _targetBall->myPosition();
-		const Vector2 _target_direction = _targetBall->myDirection();
-		direction_ = Vector2(-_target_direction.y, _target_direction.x);
-
-		const bool _ImOnTop = (0.0f < direction_.y) && (_target_direction.y < 0.0f);
-		const bool _TargetOnTop = (direction_.y < 0.0f) && (0.0f < _target_direction.y);
-		direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
-		direction_.Normalize();
-		target_pos_old_ = target_pos_new_;
-		return true;
+	else if (_targetBall != nullptr) {
+		if (((ObjBall*)_targetBall)->GetOwnerID() != -1) {
+			// 対象のボールが「投げられたボール」なら
+			// 方向ベクトルの向きを決める
+			SeekEscapeDirection(_targetBall->myDirection());
+			return true;
+		}
+		else if (my.HasBall() == 0) {
+			// ボールを持っていないなら、ボールを取りに行く
+			SeekForwardDirection(my.myPosition(), _targetBall->myPosition());
+			return true;
+		}
 	}
+}
+
+
+Vector2 ActMove::GetVerticalDirection(Vector2 targetsDirection) {
+	return Vector2(-targetsDirection.y, targetsDirection.x);
 }
 
 float ActMove::GetVectorLenght(Vector2 v) {
@@ -71,30 +61,26 @@ float ActMove::DotProduct(Vector2 v1, Vector2 v2) {
 	return (v1.x * v2.x) + (v2.y * v1.y);
 }
 
-float ActMove::AngleOf2Vector(Vector2 a, Vector2 b) {
+float ActMove::RadianOf2Vector(Vector2 a, Vector2 b) {
 	const float _lenght_a = GetVectorLenght(a);
 	const float _lenght_b = GetVectorLenght(b);
 
 	float _cos_sita = DotProduct(a, b) / (_lenght_a * _lenght_b);
 
 	return  std::acosf(_cos_sita);  // ラジアン
-	// return (_sita * (180.0f / XM_PI));  // 弧度法
 }
 
-bool ActMove::ChangeForward(ObjPlayer& my) {
-	if (my.myDirection() == Vector2::Zero)
-		my.AssignDirection(Vector2(1.0f, 0.0f));
-
-	const float sita = std::fabsf(AngleOf2Vector((target_pos_new_ - my.myPosition()), (target_pos_old_ - my.myPosition())));
-	//if (0.261f < sita || sita < 6.091f) {
-		direction_ = target_pos_new_ - my.myPosition();
-		direction_.Normalize();
-		return true;
-	//}
-	//else
-	//	return false;
+void ActMove::SeekEscapeDirection(Vector2 targetsDirection) {
+	direction_ = GetVerticalDirection(targetsDirection);
+	const bool _ImOnTop = (0.0f < direction_.y) && (targetsDirection.y < 0.0f);
+	const bool _TargetOnTop = (direction_.y < 0.0f) && (0.0f < targetsDirection.y);
+	direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
+	direction_.Normalize();
 }
+void ActMove::SeekForwardDirection(Vector2 myPosition, Vector2 targetPosition) {
+	//if (my.myDirection() == Vector2::Zero)
+	//	my.AssignDirection(Vector2(1.0f, 0.0f));
 
-bool ActMove::CheckBalls() {
-	return false;
+	direction_ = targetPosition - myPosition;
+	direction_.Normalize();
 }

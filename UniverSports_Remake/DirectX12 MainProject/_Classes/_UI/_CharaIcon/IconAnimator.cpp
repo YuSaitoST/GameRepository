@@ -7,7 +7,7 @@ IconAnimator::IconAnimator() : alpha_(0) {
 	for (int _i = 0; _i < 4; ++_i)
 		icon_[_i] = new CharaIcon();
 
-	display_time_ = new OriTimer(3);
+	display_time_ = new CountTimer(3);
 }
 
 IconAnimator::~IconAnimator() {

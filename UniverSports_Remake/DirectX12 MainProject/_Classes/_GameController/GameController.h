@@ -2,7 +2,7 @@
 
 #include "Scene.h"
 #include "DontDestroyOnLoad.h"
-#include "_Classes/_UI/_OriTimer/OriTimer.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 #include "_Classes/_UI/_CountDown/CountDown.h"
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
 #include "_Classes/_UI/_Finish/Finish.h"
@@ -28,7 +28,7 @@ private:
 	const float TIME_COUNT		= 4.2f;
 	const float TIME_LIMIT[4]	= { 0.0f, 0.0f, 120.0f, 0.0f };
 
-	OriTimer*		timer_;
+	CountTimer*		timer_;
 	CountDownUI*	countDown_;
 	BlackOut*		blackOut_;
 	Finish*			ui_finish_;
