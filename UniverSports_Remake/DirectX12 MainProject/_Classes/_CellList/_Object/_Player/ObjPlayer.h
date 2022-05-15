@@ -13,8 +13,6 @@
 
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
-#include"_Classes/FileNames.h"
-
 class ObjPlayer final : public ObjectBase {
 private:
 	enum MOTION {

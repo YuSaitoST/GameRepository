@@ -6,6 +6,7 @@
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
 #include "_Classes/_MainLight/MainLight.h"
+#include "_Classes/_FileNames/FileNames.h"
 
 #ifndef _DEBUG
 #pragma comment (lib, "BulletDynamics.lib")
@@ -33,7 +34,7 @@ MainScene::MainScene()
 
 	bgm_					= new SoundPlayer();
 	icon_animator_			= new IconAnimator();
-	field_					= new GameField(Vector3(0.0f, 0.0f, BACKGROUND), HOLE_FLONT, 1.0f);
+	field_					= new GameField(HOLE_FLONT);
 	gameController_			= new GameController();
 
 	m_object_				= new ObjectManager();
@@ -47,7 +48,7 @@ void MainScene::Initialize()
 	MainLight _light;
 	_light.Register();
 
-	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_main.wav", SOUND_TYPE::BGM);
+	bgm_->Initialize(USFN_SOUND::BGM::MAIN, SOUND_TYPE::BGM, 0.0f);
 	icon_animator_->Initialize();
 	gameController_->Initialize();
 	m_object_->Initialize();
@@ -80,7 +81,7 @@ void MainScene::LoadAssets()
 	DXTK->Direct3D9->SetRenderState(NormalizeNormals_Enable);
 
 	icon_animator_->LoadAssets();
-	field_->LoadAsset(L"_Movies\\main.wmv", L"_Images\\_Main\\holeFlont.png");
+	field_->LoadAsset();
 	gameController_->LoadAssets();
 	m_object_->LoadAssets();
 	bgm_->Play();

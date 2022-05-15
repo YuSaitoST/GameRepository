@@ -6,7 +6,7 @@
 
 class DemoPlay {
 public:
-	DemoPlay(SimpleMath::Vector3 pos, float scale, float playBack);
+	DemoPlay(float playBack);
 	virtual ~DemoPlay();
 
 	void LoadAssets();

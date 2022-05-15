@@ -64,6 +64,8 @@ private:
 	const int			VIEW_H			= 403;
 	const float			TEAM_COL_X[4]	= { 84.0f, 375.0f, 676.0f, 969.0f };
 	const float			TEAM_COL_Y		= 493.5f;
+	const float			MV_SCALE		= 0.5625f;
+	const XMFLOAT3		MV_POS			= XMFLOAT3(288.0f, 96.0f, -50.0f);
 
 	static ObjPlayer* player_[PLAYER];
 

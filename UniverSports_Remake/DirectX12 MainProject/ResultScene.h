@@ -42,49 +42,48 @@ private:
 	void Render_WinChara();
 	void Render_WinCName();
 
-	void Mode_0();
-	void Mode_1();
-	void Mode_2();
+	float GetRectX(int number, int numbersMax, int wight);
 
-	void SetPlayerIDofTheWinningTeam(const int teamMember[2]);
+	const int SERIALNUMBERS_MAX = 9;
 
-	struct PLAYER {
-		static const int	POS_X	= 115;
-		static const int	POS_Y	= 250;
-		static const int	RECT_X	= 270;
-		static const int	RECT_Y	= 135;
-	};
-	struct NUMBER {
-		static const int	POS_X	= 360;
-		static const int	POS_Y	= 462;
-		static const int	RECT_X	= 50;
-		static const int	RECT_Y	= 75;
-	};
 
-	DX12::DESCRIPTORHEAP	descriptorHeap_;
-	DX12::SPRITEBATCH		spriteBatch_;
-	DX12::HGPUDESCRIPTOR	dx9GpuDescriptor_;
 
-	DX9::SPRITE				sp_winPlayer_[2];
+	DX12::DESCRIPTORHEAP		descriptorHeap_;
+	DX12::SPRITEBATCH			spriteBatch_;
+	DX12::HGPUDESCRIPTOR		dx9GpuDescriptor_;
 
-	DX9::SPRITE				sp_bg_tile_;
-	DX9::SPRITE				sp_texWin_;
-	DX9::SPRITE				sp_texPressB_;
-	DX9::SPRITE				sp_texCrushing_;
-	DX9::SPRITE				sp_playerName_;
-	DX9::SPRITE				sp_number_;
+	std::vector<DX9::SPRITE>	sp_winPlayer_;
 
-	SoundPlayer*			bgm_;
-	SoundPlayer*			se_decision_;
-	MoviePlayer*			bg_movie_;
-	BlackOut*				blackOut_;
+	DX9::SPRITE					sp_bg_tile_;
+	DX9::SPRITE					sp_texWin_;
+	DX9::SPRITE					sp_texPressB_;
+	DX9::SPRITE					sp_texCrushing_;
+	DX9::SPRITE					sp_playerName_;
+	DX9::SPRITE					sp_number_;
 
-	int						maxScore_;
-	int						winPlayerID_[2];
+	SoundPlayer*				bgm_;
+	SoundPlayer*				se_decision_;
+	MoviePlayer*				bg_movie_;
+	BlackOut*					blackOut_;
 
-	int						player_rect_x[2];
-	int						oneDigit_x;
-	int						twoDigit_x;
+	int							maxScore_;
 
-	bool					goNext_;
+	int							player_rect_x[2];
+	int							oneDigit_x;
+	int							twoDigit_x;
+
+	bool						goNext_;
+};
+
+namespace SERIAL_PLAYER {
+	const int		POS_X = 115;
+	const int		POS_Y = 250;
+	const int		RECT_X = 270;
+	const int		RECT_Y = 135;
+};
+namespace SERIAL_NUMBER {
+	const int		POS_X = 360;
+	const int		POS_Y = 462;
+	const int		RECT_X = 50;
+	const int		RECT_Y = 75;
 };

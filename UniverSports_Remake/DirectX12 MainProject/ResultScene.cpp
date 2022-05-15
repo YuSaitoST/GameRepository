@@ -5,7 +5,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
-#include "_Classes/FileNames.h"
+#include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 
 // Initialize member variables.
@@ -15,26 +15,31 @@ ResultScene::ResultScene() : maxScore_(0)
 
 	bgm_			= new SoundPlayer();
 	se_decision_	= new SoundPlayer();
-	bg_movie_		= new MoviePlayer(Vector3::Zero, 1.0f);
+	bg_movie_		= new MoviePlayer();
 	blackOut_		= new BlackOut();
 
 	goNext_			= false;
+
+	const int _numberOfWinner = DontDestroy->GameMode_.isSINGLES_GAME() ? 1 : 2;
+	sp_winPlayer_.reserve(_numberOfWinner);
 }
 
 // Initialize a variable and audio resources.
 void ResultScene::Initialize()
 {
-	bgm_		->Initialize(L"_Sounds\\_BGM\\bgm_result.wav", SOUND_TYPE::BGM);
-	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE, 2);
+	bgm_		->Initialize(USFN_SOUND::BGM::RESULT, SOUND_TYPE::BGM, 0.0f);
+	se_decision_->Initialize(USFN_SOUND::SE::DECISION, SOUND_TYPE::SE, 2.0f);
 
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
+
+	int _winPlayerID[2] = { -1,-1 };
 
 	if (DontDestroy->GameMode_.isSINGLES_GAME()) {
 		// シングルスのスコア計算(一番多いプレイヤーが優勝)
 		for (int _i = 0; _i < 4; ++_i) {
 			if (maxScore_ < DontDestroy->Score_[_i]) {
 				maxScore_ = DontDestroy->Score_[_i];
-				winPlayerID_[0] = _i;
+				_winPlayerID[0] = _i;
 			}
 		}
 	}
@@ -44,8 +49,8 @@ void ResultScene::Initialize()
 		// チームごとにPlayerIDをまとめる
 		int _indexOfTeam0 = 0;
 		int _indexOfTeam1 = 0;
-		int _IDofTeam0[2];
-		int _IDofTeam1[2];
+		int _IDofTeam0[2] = { 0, 0 };
+		int _IDofTeam1[2] = { 0, 0 };
 		for (int _i = 0; _i < 4; ++_i) {
 			if (DontDestroy->TeamID[_i] == 0) {
 				_IDofTeam0[_indexOfTeam0] = _i;
@@ -62,32 +67,34 @@ void ResultScene::Initialize()
 		if (_scoreOfTeam0 < _scoreOfTeam1) {
 			// チーム1勝利
 			maxScore_ = _scoreOfTeam1;
-			SetPlayerIDofTheWinningTeam(_IDofTeam1);
+			_winPlayerID[0] = _IDofTeam1[0];
+			_winPlayerID[1] = _IDofTeam1[1];
 		}
 		else if (_scoreOfTeam1 < _scoreOfTeam0) {
 			// チーム0勝利
 			maxScore_ = _scoreOfTeam0;
-			SetPlayerIDofTheWinningTeam(_IDofTeam0);
+			_winPlayerID[0] = _IDofTeam0[0];
+			_winPlayerID[1] = _IDofTeam0[1];
 		}
 		else {
 			// 同点
 			maxScore_ = _scoreOfTeam0;
-			winPlayerID_[0] = 99;
-			winPlayerID_[1] = 99;
+			_winPlayerID[0] = 99;
+			_winPlayerID[1] = 99;
 		}
 	}
 
 	// 数字連番の表示範囲を決める
-	if (DontDestroy->GameMode_.isDODGEBALL_NOMAL())
-		Mode_0();
-	else if (DontDestroy->GameMode_.isHANDBALL())
-		Mode_1();
-	else if (DontDestroy->GameMode_.isDODGEBALL_2ON2())
-		Mode_2();
+	const int _oneDigit = maxScore_ % 10;
+	const int _twoDigit = (maxScore_ - _oneDigit) * 0.5f;
+
+	oneDigit_x = GetRectX(_oneDigit, SERIALNUMBERS_MAX, SERIAL_NUMBER::RECT_X);
+	twoDigit_x = GetRectX(_twoDigit, SERIALNUMBERS_MAX, SERIAL_NUMBER::RECT_X);
+
 
 	// プレイヤー名の連番の表示範囲を決める
-	player_rect_x[0] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3)	: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[0]), PLAYER::RECT_X * 3);
-	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0																			: std::min(std::max(0, PLAYER::RECT_X * winPlayerID_[1]), PLAYER::RECT_X * 3);
+	player_rect_x[0] = GetRectX(_winPlayerID[0], SERIAL_PLAYER::RECT_X * 3, SERIAL_PLAYER::RECT_X);
+	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0 : GetRectX(_winPlayerID[1], SERIAL_PLAYER::RECT_X * 3, SERIAL_PLAYER::RECT_X);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -109,25 +116,28 @@ void ResultScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
+	const int _winPlayerID_0 = player_rect_x[0] / SERIAL_PLAYER::RECT_X;
+	const int _winPlayerID_1 = player_rect_x[1] / SERIAL_PLAYER::RECT_X;
+
 	if (DontDestroy->GameMode_.isSINGLES_GAME())
-		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
+		sp_winPlayer_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::WINNERCHARA[_winPlayerID_0].c_str()));
 	else {
-		sp_winPlayer_[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[0]].c_str());
-		sp_winPlayer_[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_WINNERCHARA[winPlayerID_[1]].c_str());
+		sp_winPlayer_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::WINNERCHARA[_winPlayerID_0].c_str()));
+		sp_winPlayer_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::WINNERCHARA[_winPlayerID_1].c_str()));
 	}
 
-	sp_bg_tile_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\bg_tile.png");
-	sp_texWin_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_winner.png");
-	sp_texPressB_	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_pressB.png");
-	sp_playerName_	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_player.png");
-	sp_number_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\number.png");
+	sp_bg_tile_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::RESULT_BG.c_str());
+	sp_texWin_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEX_WINNER.c_str());
+	sp_texPressB_	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEX_PRESS_B.c_str());
+	sp_playerName_	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEX_PLAYER.c_str());
+	sp_number_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::NUMBER.c_str());
 
 	// GameMode { 0(撃破) , 1(スコア) , 2(撃破) , 3(スコア) }
 	sp_texCrushing_	= (DontDestroy->GameMode_.isDODGEBALL()) ?
-		DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_gekiha.png") :
-		DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Result\\_UIText\\tex_score.png");
+		DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::GEKIHA.c_str()) :
+		DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::SCORE.c_str());
 
-	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
+	bg_movie_->LoadAsset(USFN_MV::MAIN_BG);
 	blackOut_->LoadAsset();
 
 	bg_movie_->Play();
@@ -175,13 +185,11 @@ NextScene ResultScene::Update(const float deltaTime)
 
 	if (!goNext_) {
 		if (Press.DecisionKey(0) || Press.DecisionKey(1) || Press.DecisionKey(2) || Press.DecisionKey(3)) {
-			se_decision_->PlayOneShot();
 			goNext_ = true;
 		}
 	}
 	else {
-		se_decision_->Update(deltaTime);
-		if (se_decision_->isFined())
+		if (se_decision_->PlayOneShot(deltaTime))
 			return NextScene::TitleScene;
 	}
 
@@ -204,8 +212,8 @@ void ResultScene::Render()
 	DX9::SpriteBatch->DrawSimple(sp_texWin_.Get(), Vector3(0.0f, 0.0f, -3.0f));
 	DX9::SpriteBatch->DrawSimple(sp_texCrushing_.Get(), Vector3(0.0f, 0.0f, -3.0f));
 	DX9::SpriteBatch->DrawSimple(sp_texPressB_.Get(), Vector3(0.0f, 0.0f, -3.0f));
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(NUMBER::POS_X, NUMBER::POS_Y, -3.0f), RECT(twoDigit_x, 0, twoDigit_x + NUMBER::RECT_X, NUMBER::RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(NUMBER::POS_X + NUMBER::RECT_X, NUMBER::POS_Y, -3.0f), RECT(oneDigit_x, 0, oneDigit_x + NUMBER::RECT_X, NUMBER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIAL_NUMBER::POS_X, SERIAL_NUMBER::POS_Y, -3.0f), RECT(twoDigit_x, 0, twoDigit_x + SERIAL_NUMBER::RECT_X, SERIAL_NUMBER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIAL_NUMBER::POS_X + SERIAL_NUMBER::RECT_X, SERIAL_NUMBER::POS_Y, -3.0f), RECT(oneDigit_x, 0, oneDigit_x + SERIAL_NUMBER::RECT_X, SERIAL_NUMBER::RECT_Y));
 
 	Render_WinCName();
 	Render_WinChara();
@@ -240,39 +248,13 @@ void ResultScene::Render_WinChara() {
 
 void ResultScene::Render_WinCName() {
 	if (DontDestroy->GameMode_.isSINGLES_GAME())
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X,							PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIAL_PLAYER::POS_X, SERIAL_PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIAL_PLAYER::RECT_X, SERIAL_PLAYER::RECT_Y));
 	else {
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X - 50.0f,					PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + PLAYER::RECT_X, PLAYER::RECT_Y));
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(PLAYER::POS_X + PLAYER::RECT_X - 50.0f,	PLAYER::POS_Y, -3.0f), RECT(player_rect_x[1], 0, player_rect_x[1] + PLAYER::RECT_X, PLAYER::RECT_Y));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIAL_PLAYER::POS_X - 50.0f, SERIAL_PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIAL_PLAYER::RECT_X, SERIAL_PLAYER::RECT_Y));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIAL_PLAYER::POS_X + SERIAL_PLAYER::RECT_X - 50.0f, SERIAL_PLAYER::POS_Y, -3.0f), RECT(player_rect_x[1], 0, player_rect_x[1] + SERIAL_PLAYER::RECT_X, SERIAL_PLAYER::RECT_Y));
 	}
 }
 
-// ドッジ
-void ResultScene::Mode_0() {
-	oneDigit_x = std::min(maxScore_, 9) * NUMBER::RECT_X;
-}
-
-// ハンド
-void ResultScene::Mode_1() {
-	if (maxScore_ < 10) {
-		oneDigit_x = std::min(maxScore_, 9) * NUMBER::RECT_X;
-		twoDigit_x = 0;
-	}
-	else {
-		const int _oneDigit = maxScore_ % 10;
-		const int _twoDigit = (maxScore_ - _oneDigit) * 0.5f;
-
-		oneDigit_x = std::min(_oneDigit, 9) * NUMBER::RECT_X;
-		twoDigit_x = std::min(_twoDigit, 9) * NUMBER::RECT_X;
-	}
-}
-
-// 2on2
-void ResultScene::Mode_2() {
-	Mode_1();
-}
-
-void ResultScene::SetPlayerIDofTheWinningTeam(const int teamMember[2]) {
-	winPlayerID_[0] = teamMember[0];
-	winPlayerID_[1] = teamMember[1];
+float ResultScene::GetRectX(int number, int numbersMax, int wight) {
+	return std::min(number, numbersMax) * wight;
 }

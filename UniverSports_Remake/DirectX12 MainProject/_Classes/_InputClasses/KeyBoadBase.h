@@ -41,7 +41,7 @@ public:
 	/**
 	* @brief 指定したボタンの入力状態を返す
 	* @param inputKey 入力状態を調べたいボタン
-	* @return 入力されていればtrue。なければfalse
+	* @return 入力されていればtrue　なければfalse
 	*/
 	inline bool OnOffKey(KEY inputKey) {
 		return (flag_ & (1 << (int)inputKey));
@@ -49,7 +49,7 @@ public:
 
 	/**
 	* @brief 何かしらボタンの入力状態を返す
-	* @return 入力されていればtrue。なければfalse
+	* @return 入力されていればtrue　なければfalse
 	*/
 	inline bool AnyKey() {
 		return (flag_ & 0xffffffff);

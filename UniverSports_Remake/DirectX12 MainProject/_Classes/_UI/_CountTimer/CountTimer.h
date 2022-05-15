@@ -22,21 +22,30 @@ public:
 	/**
 	* @brief タイマーをリセットする
 	*/
-	void ResetCountTime() { time_ = max_; };
+	inline void ResetCountTime() { time_ = max_; };
 
 	/**
 	* @brief 今の経過時間を返す
 	* @return 経過時間
 	*/
-	float NowTime() const { return time_; };
+	inline float NowTime() const { return time_; };
+
+	/**
+	* @brief カウントを開始したかを返す
+	* @return カウント開始前ならtrue　カウント中ならfalse
+	*/
+	inline bool NotYetCounted() const { return (time_ == max_); }
 
 	/**
 	* @brief タイマーが終了したかを返す
 	* @return タイマーの終了状態
 	*/
-	bool TimeOut() const { return (time_ <= 0.0f); };
+	inline bool TimeOut() const { return (time_ <= 0.0f); };
 
 private:
-	float				max_;	//!< タイマーの最大値
-	float				time_;	//!< 経過時間
+	//! タイマーの最大値
+	float max_;
+
+	//! 経過時間
+	float time_;
 };

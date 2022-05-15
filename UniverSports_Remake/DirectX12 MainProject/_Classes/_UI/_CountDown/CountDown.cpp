@@ -12,7 +12,7 @@ CountDownUI::~CountDownUI() {
 }
 
 void CountDownUI::Initialize() {
-	se_count_->Initialize(L"_Sounds\\_SE\\_Main\\se_gameStart.wav", SOUND_TYPE::SE);
+	se_count_->Initialize(L"_Sounds\\_SE\\_Main\\se_gameStart.wav", SOUND_TYPE::SE, 0.0f);
 	alpha_			= 255.0f;
 	scale_			= 1.0f;
 }

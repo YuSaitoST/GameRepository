@@ -66,7 +66,7 @@ private:
 
 private:
 	enum POS_Z_2D {
-		PLAYER_UI  = -990,  // UI‚Í-90‘ä‚É‚·‚é‚Æ•ª‚©‚è‚â‚·‚¢
+		PLAYER_UI  = -990,
 		HOLE_FLONT = -980,
 		BACKGROUND =  999
 	};

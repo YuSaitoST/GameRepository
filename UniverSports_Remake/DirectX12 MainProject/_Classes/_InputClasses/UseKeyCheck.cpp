@@ -15,7 +15,7 @@ void UseKeyCheck::Accepts() {
 
 /**
 * @brief ‰½‚©‚µ‚ç‚Ì’P”­“ü—Íó‘Ô‚ğ•Ô‚·
-* @return “ü—Í‚³‚ê‚Ä‚¢‚ê‚ÎtrueB‚È‚¯‚ê‚Îfalse
+* @return “ü—Í‚³‚ê‚Ä‚¢‚ê‚Îtrue@‚È‚¯‚ê‚Îfalse
 */
 bool UseKeyCheck::AnyKey() {
 	return key_.EventAnyKey() || pad_.EventAnyKey(0) || pad_.EventAnyKey(1) || pad_.EventAnyKey(2) || pad_.EventAnyKey(3);

@@ -22,9 +22,9 @@ CharaSelect::~CharaSelect() {
 
 void CharaSelect::Initialize(int index) {
 	ui_arrows_->Initialize(ARROW_R_X[index], ARROW_L_X[index], ARROW_Y);
-	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE);
-	se_cancel_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_cancel.wav", SOUND_TYPE::SE);
-	se_warning_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_warning.wav", SOUND_TYPE::SE);
+	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE, 0.0f);
+	se_cancel_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_cancel.wav", SOUND_TYPE::SE, 0.0f);
+	se_warning_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_warning.wav", SOUND_TYPE::SE, 0.0f);
 }
 
 void CharaSelect::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {

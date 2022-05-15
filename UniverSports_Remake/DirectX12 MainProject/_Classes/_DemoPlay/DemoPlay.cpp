@@ -1,7 +1,7 @@
 #include "DemoPlay.h"
 
-DemoPlay::DemoPlay(SimpleMath::Vector3 pos, float scale, float playBack) {
-	mv_demo_	= new MoviePlayer(pos, scale);
+DemoPlay::DemoPlay(float playBack) {
+	mv_demo_	= new MoviePlayer();
 	timer_		= new CountTimer(playBack);
 	isDisplay_	= false;
 }

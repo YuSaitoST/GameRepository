@@ -47,9 +47,6 @@ void ActThrasher::UIRender() {
 }
 
 bool ActThrasher::Think(ObjPlayer& my) {
-	// 他のObjectBaseクラスを参照できるようにしたい
-
-	// これを利用して、加速するかを検討する...かな?
 	float n;
 	const ObjectBase* _closestPlayer = (ObjPlayer*)ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), n);
 	if (_closestPlayer == nullptr)

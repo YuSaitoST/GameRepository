@@ -5,19 +5,21 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes/_FileNames/FileNames.h"
 
 // Initialize member variables.
 TitleScene::TitleScene()
 {
 	DontDestroy->NowScene_ = (int)NextScene::TitleScene;
+	DontDestroy->GameMode_.SelectMode(GAMEMODE::NONE_GAMEMODE);
 
 	descriptorHeap_ = nullptr;
 	spriteBatch_	= nullptr;
 
 	bgm_			= new SoundPlayer();
 	se_decision_	= new SoundPlayer();
-	mv_bg_			= new MoviePlayer(Vector3(0.0f, 0.0f, 0.0f), 1.0f);
-	mv_demo_		= new DemoPlay(Vector3(0.0f, 0.0f, 0.0f), 1.0f, DEMO_PLAYBACK);
+	mv_bg_			= new MoviePlayer();
+	mv_demo_		= new DemoPlay(DEMO_PLAYBACK);
 	time_start_		= new CountTimer(UI_FADE_STARTTIME);
 	cursor_			= new Cursor(CHOICES);
 	mode_choices_	= new Choices(MODE);
@@ -33,8 +35,8 @@ void TitleScene::Initialize()
 	DXTK->SetFixedFrameRate(60);
 	GAME_CONST.Initialize();
 	
-	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_title.wav", SOUND_TYPE::BGM);
-	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision_title.wav", SOUND_TYPE::SE, 2);
+	bgm_->Initialize(USFN_SOUND::BGM::TITLE, SOUND_TYPE::BGM, 0.0f);
+	se_decision_->Initialize(USFN_SOUND::SE::DECISION_TITLE, SOUND_TYPE::SE, 2.0f);
 
 	cursor_->Initialize();
 	ui_arrows_->Initialize(ARROW_POS_R_X, ARROW_POS_L_X, ARROW_POS_Y);
@@ -77,9 +79,9 @@ void TitleScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	mv_bg_->LoadAsset(L"_Movies\\title.wmv");
+	mv_bg_->LoadAsset(USFN_MV::TITLE_BG);
 	mv_demo_->LoadAssets();
-	cursor_->LoadAsset(L"_Images\\_Title\\cursor.png");
+	cursor_->LoadAsset(USFN_SP::CURSOR);
 	ui_arrows_->LoadAssets();
 	operate_->LoadAsset();
 
@@ -150,8 +152,7 @@ NextScene TitleScene::Update(const float deltaTime)
 
 	// Œˆ’è‰¹‚ª‚È‚èI‚í‚Á‚½‚çƒLƒƒƒ‰‘I‘ð‰æ–Ê‚Ö
 	if (!DontDestroy->GameMode_.isNotDecision()) {
-		se_decision_->Update(deltaTime);
-		if (se_decision_->isFined())
+		if (se_decision_->PlayOneShot(deltaTime))
 			return NextScene::LobbyScene;
 		else
 			return NextScene::Continue;

@@ -3,6 +3,7 @@
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
+#include "_Classes/_FileNames/FileNames.h"
 #include "DontDestroyOnLoad.h"
 
 ObjPlayer::ObjPlayer() {
@@ -135,7 +136,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 				return;
 
 			// 同じチームのメンバーが投げたボールはヒットしない
-			if (TeamID::Get(_ball->GetOwnerID()) == teamID_->Get())
+			if (teamID_->Get(_ball->GetOwnerID()) == teamID_->Get())
 				return;
 
 			eff_down_->PlayOneShot();

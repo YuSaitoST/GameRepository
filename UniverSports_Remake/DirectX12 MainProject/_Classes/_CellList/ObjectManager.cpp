@@ -1,5 +1,5 @@
 #include "ObjectManager.h"
-#include "_Classes/FileNames.h"
+#include "_Classes/_FileNames/FileNames.h"
 #include "DontDestroyOnLoad.h"
 
 CellList cellList = CellList{};
@@ -55,16 +55,16 @@ void ObjectManager::Initialize() {
 
 void ObjectManager::LoadAssets() {
 	mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, 13.75f, 2.35f, 1.0f);
-	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, L"_Models\\_Ball\\ball.X");
+	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, USFN_MOD::BALL.c_str());
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
 	
 	const int _PLAYER = N_PLAYER * 0.5f;
 	for (int _i = 0; _i <= _PLAYER; _i += 2) {
-		obj_player_[_i]->LoadAssets(USFN::MOD_PLAYER[DontDestroy->ChoseColor_[_i]]);
+		obj_player_[_i]->LoadAssets(USFN_MOD::PLAYER[DontDestroy->ChoseColor_[_i]]);
 		obj_wire_[_i]->LoadAssets(L"");
 
-		obj_player_[_i + 1]->LoadAssets(USFN::MOD_PLAYER[DontDestroy->ChoseColor_[_i + 1]]);
+		obj_player_[_i + 1]->LoadAssets(USFN_MOD::PLAYER[DontDestroy->ChoseColor_[_i + 1]]);
 		obj_wire_[_i + 1]->LoadAssets(L"");
 	}
 

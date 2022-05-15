@@ -6,7 +6,7 @@
 #include "Base/dxtk.h"
 #include "Base/DX12Effekseer.h"
 #include "SceneFactory.h"
-#include "_Classes/FileNames.h"
+#include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 
 #ifndef _DEBUG
@@ -42,7 +42,7 @@ LobbyScene::LobbyScene()
 	solver_						= new btSequentialImpulseConstraintSolver();
 	physics_world_				= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
-	bg_movie_					= new MoviePlayer(SimpleMath::Vector3(288.0f, 96.0f, -50.0f), 0.5625f);
+	bg_movie_					= new MoviePlayer();
 	bgm_						= new SoundPlayer();
 
 	// ループ回数を削減するため、1度のループ内で2つずつ処理する
@@ -81,7 +81,7 @@ void LobbyScene::Initialize()
 		}
 	}
 
-	bgm_->Initialize(L"_Sounds\\_BGM\\bgm_charaSelect.wav", SOUND_TYPE::BGM);
+	bgm_->Initialize(USFN_SOUND::BGM::LOBBY, SOUND_TYPE::BGM, 0.0f);
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 
@@ -123,26 +123,26 @@ void LobbyScene::LoadAssets()
 	D3DVIEWPORT9 _view{ VIEW_X, VIEW_Y, VIEW_W, VIEW_H, 0.0f, 1.0f };
 	DXTK->Device9->SetViewport(&_view);
 
-	sp_bg			= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\backGround.png");
-	sp_right		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_right.png");
-	sp_left			= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_left.png");
-	sp_decisions[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_decision.png");
-	sp_decisions[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_cancel.png");
-	sp_entry		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_UIText\\tex_entry.png");
-	sp_teamCol_[0]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_a.png");
-	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_TeamColor\\team_b.png");
+	sp_bg			= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::LOBBY_BG.c_str());
+	sp_right		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_R.c_str());
+	sp_left			= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_L.c_str());
+	sp_decisions[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::DECISION.c_str());
+	sp_decisions[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CANCEL.c_str());
+	sp_entry		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ENTRY.c_str());
+	sp_teamCol_[0]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEAM_A.c_str());
+	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEAM_B.c_str());
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
-		sp_playerIcon[_i]		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i].c_str());
-		player_[_i]->LoadAssets(USFN::MOD_PLAYER[_i]);
+		sp_playerIcon[_i]		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICEICON[_i].c_str());
+		player_[_i]->LoadAssets(USFN_MOD::PLAYER[_i]);
 		charaSelect_[_i]->LoadAssets(sp_right, sp_left);
 
-		sp_playerIcon[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN::SP_CHOICEICON[_i + 1].c_str());
-		player_[_i + 1]->LoadAssets(USFN::MOD_PLAYER[_i + 1]);
+		sp_playerIcon[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICEICON[_i + 1].c_str());
+		player_[_i + 1]->LoadAssets(USFN_MOD::PLAYER[_i + 1]);
 		charaSelect_[_i + 1]->LoadAssets(sp_right, sp_left);
 	}
 
-	bg_movie_->LoadAsset(L"_Movies\\main.wmv");
+	bg_movie_->LoadAsset(USFN_MV::MAIN_BG);
 
 	bg_movie_->Play();
 	bgm_->Play();
@@ -254,7 +254,7 @@ void LobbyScene::Render()
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
 	Render_String();
-	bg_movie_->Render();
+	bg_movie_->Render(MV_POS, MV_SCALE);
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
@@ -290,7 +290,7 @@ void LobbyScene::Render()
 }
 
 void LobbyScene::ChangeModel(const int plIndex, const int selectID) {
-	player_[plIndex]->ReDecision(plIndex, USFN::MOD_PLAYER[selectID]);
+	player_[plIndex]->ReDecision(plIndex, USFN_MOD::PLAYER[selectID]);
 }
 
 void LobbyScene::ChangeStrategy(const int plIndex) {

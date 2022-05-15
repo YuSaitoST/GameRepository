@@ -2,7 +2,7 @@
 
 Choices::Choices(int choices) {
 	se_choice_ = new SoundPlayer();
-	se_choice_->Initialize(L"_Sounds\\_SE\\se_choise.wav", SOUND_TYPE::SE);
+	se_choice_->Initialize(L"_Sounds\\_SE\\se_choise.wav", SOUND_TYPE::SE, 0.0f);
 	isSelected = 0;
 	CHOICES = choices;
 	putCount_ = 0;

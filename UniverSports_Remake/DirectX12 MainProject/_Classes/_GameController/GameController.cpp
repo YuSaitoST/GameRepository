@@ -25,8 +25,7 @@ void GameController::Initialize() {
 	countDown_->Initialize();
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_IN);
 	ui_finish_->Initialize();
-	se_whistle_->Initialize(L"_Sounds\\_SE\\_Main\\se_whistle.wav", SOUND_TYPE::SE, 1);
-	se_whistle_->AutoPlay(true);
+	se_whistle_->Initialize(L"_Sounds\\_SE\\_Main\\se_whistle.wav", SOUND_TYPE::SE, 1.0f);
 }
 
 void GameController::LoadAssets() {
@@ -43,9 +42,9 @@ NextScene GameController::Update(const float deltaTime) {
 		gameStart_ = false;
 		blackOut_->Update(deltaTime);
 		ui_finish_->Update(deltaTime);
-		se_whistle_->Update(deltaTime);
+		const bool _seFined = se_whistle_->PlayOneShot(deltaTime);
 
-		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && se_whistle_->isFined())
+		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && _seFined)
 			return NextScene::ResultScene;
 	}
 	return NextScene::Continue;
