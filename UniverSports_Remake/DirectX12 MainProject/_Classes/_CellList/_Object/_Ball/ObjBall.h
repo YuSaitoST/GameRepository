@@ -2,10 +2,10 @@
 
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_State/BallState.h"
+#include "_State/_Standby/StStandby.h"
 #include "_State/_Float/StFloat.h"
 #include "_State/_Cautch/StCautch.h"
 #include "_State/_Shot/StShot.h"
-#include "_State/_Standby/StStandby.h"
 #include "_State/_Goal/StGoal.h"
 
 class ObjBall final : public ObjectBase {
@@ -76,11 +76,11 @@ private:
 
 	BallState* state_;
 
-	StFloat* st_float_;
-	StCautch* st_cautch_;
-	StShot* st_shot_;
-	StStandby* st_standby_;
-	StGoal* st_goal_;
+	StStandby st_standby_;
+	StFloat st_float_;
+	StCautch st_cautch_;
+	StShot st_shot_;
+	StGoal st_goal_;
 
 	COLOR_TYPE colorType_;
 	float pos_z_;

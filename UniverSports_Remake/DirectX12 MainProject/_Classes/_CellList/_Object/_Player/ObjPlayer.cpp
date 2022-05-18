@@ -126,6 +126,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 		const B_STATE _baleState = _ball->NowState();
 
 		if (_baleState == B_STATE::FLOATING) {  // キャッチ処理
+			// ボールを持っている且つ保持ボールのIDが存在する
 			if (hasBall_ && myBallID_ != -1)
 				return;
 
@@ -144,6 +145,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			eff_down_->PlayOneShot();
 			eff_down_->Set_Position(Vector3(pos_.x, pos_.y, 0.0f));
 
+			// 当たり判定を消すために、一旦明らかに場外な位置へ移動させる
 			SetTransforms(Vector2(99.0f, 99.0f), rotate_);
 			pos_ = Vector2(GAME_CONST.S_POS[id_my_].x, GAME_CONST.S_POS[id_my_].y);
 

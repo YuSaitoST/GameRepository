@@ -57,7 +57,7 @@ public:
 	static ObjectBase* TheClosestPlayer(const int id, const Vector2 pos, float& comparison);
 	static ObjectBase* TheClosestBall(const Vector2 pos, float& comparison);
 
-	static ObjBall* GetBallObj(const int ballID) { return obj_ball_[ballID]; }
+	static ObjBall* Access(const int ballID) { return obj_ball_[ballID]; }
 
 private:
 	static float Comparison2Vector(const Vector2 p1, const Vector2 p2);

@@ -6,11 +6,13 @@
 using namespace DirectX;
 
 enum B_STATE { STANDBY, FLOATING, CAUTCH, SHOT, GOAL, NONE_STATE };
+
+// ëOï˚êÈåæ
 class ObjBall;
 
 class BallState {
 public:
-	BallState() {}
+	BallState() : myState_(B_STATE::NONE_STATE) {}
 	virtual ~BallState() {}
 
 	virtual void Initialize() = 0;
@@ -22,6 +24,8 @@ public:
 	virtual SimpleMath::Vector2 GetPosition	() const { return position_; }
 	virtual SimpleMath::Vector2 GetForward	() const { return forward_; }
 	virtual B_STATE				GetMyState	() const { return myState_; }
+
+	B_STATE MyState() const { return myState_; }
 
 protected:
 	SimpleMath::Vector2 position_;

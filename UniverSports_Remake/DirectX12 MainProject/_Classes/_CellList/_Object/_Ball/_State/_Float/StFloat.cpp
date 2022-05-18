@@ -22,22 +22,20 @@ void StFloat::Initialize() {
 }
 
 void StFloat::Update(ObjBall* ball) {
-	if (ball->IsInPlayerHands() && ball->GetOwnerID() != -1) {
+	if (ball->IsInPlayerHands()) {
 		ball->SwitchState(B_STATE::CAUTCH);
+		ball->SwitchColor(ObjBall::COLOR_TYPE::PLAYERS_COLOR);
 		return;
 	}
 
 	if (!DontDestroy->GameMode_.isBILLIARDS()) {
+		// 通常モードなら、フィールド外に出たらリスポーンする
 		CheckFieldOut(ball);
 	}
 	else {
+		// ミニゲームなら、フィールド外に出たら反対側から出てくる(ループする)
 		LoopPos(ball);
 	}
-}
-
-void StFloat::SetTransform() {
-	position_	= RandomPosition();
-	forward_	= RandomForward(position_);
 }
 
 void StFloat::ReSpone(ObjBall* ball) {
@@ -47,18 +45,23 @@ void StFloat::ReSpone(ObjBall* ball) {
 	ball->FlagResets();
 }
 
+void StFloat::SetTransform() {
+	position_	= RandomPosition();
+	forward_	= RandomForward(position_);
+}
+
 SimpleMath::Vector2 StFloat::RandomPosition() {
-	int _random_x	= pos_start_x(randomEngine);
-	int _random_y;
+	const int _random_x	= pos_start_x(randomEngine);
+	int _random_y		= 0;
 
 	if (std::abs(_random_x) == limit_pos_x) {
 		pos_start_y = std::uniform_int_distribution<>(-limit_pos_y - GAME_CONST.BA_SCALE, limit_pos_y + GAME_CONST.BA_SCALE);
 		_random_y	= pos_start_y(randomEngine);
 	}
 	else {
-		pos_start_y = std::uniform_int_distribution<>(0, 2);
+		pos_start_y = std::uniform_int_distribution<>(0, 1);
 		_random_y	= pos_start_y(randomEngine);
-		_random_y	= _random_y == 0 ? -limit_pos_y - GAME_CONST.BA_SCALE : limit_pos_y + GAME_CONST.BA_SCALE;
+		_random_y	= (_random_y == 0) ? -limit_pos_y - GAME_CONST.BA_SCALE : limit_pos_y + GAME_CONST.BA_SCALE;
 	}
 
 	return Vector2(_random_x, _random_y);
@@ -70,7 +73,6 @@ SimpleMath::Vector2 StFloat::RandomForward(const SimpleMath::Vector2 position) {
 	_forward.Normalize();
 	return _forward;
 }
-
 
 void StFloat::CheckFieldOut(ObjBall* ball) {
 	if (FIELD::IsOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {

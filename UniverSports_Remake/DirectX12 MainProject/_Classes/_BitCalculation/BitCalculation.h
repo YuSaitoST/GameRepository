@@ -17,6 +17,11 @@ namespace BitCalculation {
 	int BitSlide(int bit);
 	int PointToMorton(DirectX::XMFLOAT2 pos);
 	int GetIndex(int Level, int Index);
+
+	//! •ªŠ„”
 	const int NumberOfDivisions = 4;
+
+	//! •ªŠ„‚·‚é’iŠK”
 	const int DivisionLevel = 2;
+
 }  //namespace BitCalculation

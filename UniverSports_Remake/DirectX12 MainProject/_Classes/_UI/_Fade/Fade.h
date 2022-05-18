@@ -31,4 +31,5 @@ namespace FADE {
 
 	//! F‚ÌÅ‘å’l
 	const int COLORMAX = 255;
+
 }  //namespace FADE

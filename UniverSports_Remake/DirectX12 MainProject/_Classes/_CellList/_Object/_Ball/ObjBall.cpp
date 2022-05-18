@@ -23,12 +23,7 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	pos_ = Vector2::Zero;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
-	st_float_ = new StFloat();
-	st_cautch_ = new StCautch();
-	st_shot_ = new StShot();
-	st_standby_ = new StStandby();
-
-	SwitchState(STANDBY);
+	SwitchState(B_STATE::STANDBY);
 
 	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
@@ -41,18 +36,9 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 
 ObjBall::~ObjBall() {
 	delete physics_;
-	delete st_standby_;
-	delete st_shot_;
-	delete st_cautch_;
-	delete st_float_;
 }
 
 void ObjBall::Initialize(const int id) {
-	st_float_->Initialize();
-	st_cautch_->Initialize();
-	st_shot_->Initialize();
-	st_standby_->Initialize();
-
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
 	pos_		= state_->GetPosition();
@@ -90,13 +76,14 @@ void ObjBall::Render(DX9::MODEL& model) {
 
 void ObjBall::SwitchState(B_STATE state) {
 	switch (state) {
-		case STANDBY	: state_ = &*st_standby_;			break;
-		case FLOATING	: state_ = &*st_float_;				break;
-		case CAUTCH		: state_ = &*st_cautch_;			break;
-		case SHOT		: state_ = &*st_shot_;				break;
-		case GOAL		: state_ = &*st_goal_;				break;
-		default			: assert(!"ObjBall_•s³‚Èó‘Ô");	break;
+		case B_STATE::STANDBY	:state_ = &st_standby_; break;
+		case B_STATE::FLOATING	:state_ = &st_float_;	break;
+		case B_STATE::CAUTCH	:state_ = &st_cautch_;	break;
+		case B_STATE::SHOT		:state_ = &st_shot_;	break;
+		case B_STATE::GOAL		:state_ = &st_goal_;	break;
+		default					:assert(!"ObjBall::SwitchState : •s³‚Èó‘Ô‚Å‚·");
 	}
+	state_->Initialize();
 }
 
 void ObjBall::SwitchColor(COLOR_TYPE colorType) {
@@ -134,7 +121,6 @@ void ObjBall::WasCaught(const int ownerID) {
 	isInPlayerHands_ = true;
 	ResetVelocity();
 	AssignTransform(Vector3(pos_.x, pos_.y, pos_z_smallest_), forward_);
-	SwitchColor(PLAYERS_COLOR);
 }
 
 void ObjBall::WasThrown(Vector2 forward) {

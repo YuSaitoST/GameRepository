@@ -46,10 +46,6 @@ public:
 	float FN_TIME_MOVE;
 	float FN_TIME_DISPLAY;
 	float FN_TIME_ALPHA;
-
-
-	const float FieldSide_X = 32.0f;
-	const float FieldSide_Y = 18.0f;
 	
 	const int MODE_1_TIME = 120;
 

@@ -15,4 +15,11 @@
 namespace FIELD {
 	void ClampLoop(DirectX::SimpleMath::Vector2& position);
 	bool IsOut(DirectX::SimpleMath::Vector2 position, float raidus);
+
+	//! フィールドのX軸の端の値
+	const float SIDE_X = 32.0f;
+	
+	//! フィールドのY軸の端の値
+	const float SIDE_Y = 18.0f;
+
 }  //namespace FIELD
