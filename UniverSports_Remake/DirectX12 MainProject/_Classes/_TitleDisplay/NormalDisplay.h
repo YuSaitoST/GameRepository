@@ -33,19 +33,18 @@ public:
 	virtual bool IsChange() override;
 
 private:
-	const float			UI_FADE_STARTTIME = 2.5f;					// タイトル背景に合わせてUIをフェードインさせる時間
-	const float			DEMO_PLAYBACK = 10.0f; // DEMOプレイ再生までの時間
-	const float			UI_TEXT_Y[2] = { 460.0f, 560.0f };	// 縦のUIのY座標
-	const float			SPEED_ALPHA = 127.5f;				// UIのフェード速度
-	const float			ARROW_POS_R_X = 917.5f;
-	const float			ARROW_POS_L_X = 328.5f;
-	const float			ARROW_POS_Y = 455.0f;
-	const float			TEXT_POS_X = 640.0f;
-	static const int	MODE = 2;					// モードの数
-	static const int	CHOICES = 2;					// 縦の選択肢数
+	const float			UI_FADE_STARTTIME	= 2.5f;					// タイトル背景に合わせてUIをフェードインさせる時間
+	const float			DEMO_PLAYBACK		= 10.0f; // DEMOプレイ再生までの時間
+	const float			UI_TEXT_Y[2]		= { 460.0f, 560.0f };	// 縦のUIのY座標
+	const float			SPEED_ALPHA			= 127.5f;				// UIのフェード速度
+	const float			ARROW_POS_R_X		= 917.5f;
+	const float			ARROW_POS_L_X		= 328.5f;
+	const float			ARROW_POS_Y			= 455.0f;
+	const float			TEXT_POS_X			= 640.0f;
+	static const int	MODE				= 2;					// モードの数
+	static const int	CHOICES				= 2;					// 縦の選択肢数
 
 private:
-	SoundPlayer*		se_choice_;
 	SoundPlayer*		se_decision_;
 	CountTimer*			time_start_;
 	CountTimer*			time_demo_;

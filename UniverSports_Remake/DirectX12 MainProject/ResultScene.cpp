@@ -9,20 +9,28 @@
 #include "_Classes/_UI/_Serials/Serials.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 
+#include "_Classes/_ResultDraw/SinglesDraw.h"
+#include "_Classes/_ResultDraw/DoublesDraw.h"
+
 // Initialize member variables.
-ResultScene::ResultScene() : maxScore_(0)
+ResultScene::ResultScene()
 {
-	DontDestroy->NowScene_ = (int)NextScene::ResultScene;
+	DontDestroy->NowScene_	= (int)NextScene::ResultScene;
 
-	bgm_			= new SoundPlayer();
-	se_decision_	= new SoundPlayer();
-	bg_movie_		= new MoviePlayer();
-	blackOut_		= new BlackOut();
+	descriptorHeap_			= nullptr;
+	spriteBatch_			= nullptr;
 
-	goNext_			= false;
+	bgm_					= new SoundPlayer();
+	se_decision_			= new SoundPlayer();
+	bg_movie_				= new MoviePlayer();
+	blackOut_				= new BlackOut();
 
-	const int _numberOfWinner = DontDestroy->GameMode_.isSINGLES_GAME() ? 1 : 2;
-	sp_winPlayer_.reserve(_numberOfWinner);
+	if (DontDestroy->GameMode_.isSINGLES_GAME())
+		drawingByMode_		= new SinglesDraw();
+	else
+		drawingByMode_		= new DoublesDraw();
+
+	goNext_					= false;
 }
 
 // Initialize a variable and audio resources.
@@ -33,69 +41,7 @@ void ResultScene::Initialize()
 
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 
-	int _winPlayerID[2] = { -1,-1 };
-
-	if (DontDestroy->GameMode_.isSINGLES_GAME()) {
-		// シングルスのスコア計算(一番多いプレイヤーが優勝)
-		for (int _i = 0; _i < 4; ++_i) {
-			if (maxScore_ < DontDestroy->Score_[_i]) {
-				maxScore_ = DontDestroy->Score_[_i];
-				_winPlayerID[0] = _i;
-			}
-		}
-	}
-	else {
-		// ダブルス
-
-		// チームごとにPlayerIDをまとめる
-		int _indexOfTeam0 = 0;
-		int _indexOfTeam1 = 0;
-		int _IDofTeam0[2] = { 0, 0 };
-		int _IDofTeam1[2] = { 0, 0 };
-		for (int _i = 0; _i < 4; ++_i) {
-			if (DontDestroy->TeamID[_i] == 0) {
-				_IDofTeam0[_indexOfTeam0] = _i;
-				_indexOfTeam0 += 1;
-			}
-			else {
-				_IDofTeam1[_indexOfTeam1] = _i;
-				_indexOfTeam1 += 1;
-			}
-		}
-
-		const int _scoreOfTeam0 = DontDestroy->Score_[_IDofTeam0[0]] + DontDestroy->Score_[_IDofTeam0[1]];
-		const int _scoreOfTeam1 = DontDestroy->Score_[_IDofTeam1[0]] + DontDestroy->Score_[_IDofTeam1[1]];
-		if (_scoreOfTeam0 < _scoreOfTeam1) {
-			// チーム1勝利
-			maxScore_ = _scoreOfTeam1;
-			_winPlayerID[0] = _IDofTeam1[0];
-			_winPlayerID[1] = _IDofTeam1[1];
-		}
-		else if (_scoreOfTeam1 < _scoreOfTeam0) {
-			// チーム0勝利
-			maxScore_ = _scoreOfTeam0;
-			_winPlayerID[0] = _IDofTeam0[0];
-			_winPlayerID[1] = _IDofTeam0[1];
-		}
-		else {
-			// 同点
-			maxScore_ = _scoreOfTeam0;
-			_winPlayerID[0] = 99;
-			_winPlayerID[1] = 99;
-		}
-	}
-
-	// 数字連番の表示範囲を決める
-	const int _oneDigit = maxScore_ % 10;
-	const int _twoDigit = (maxScore_ - _oneDigit) * 0.5f;
-
-	oneDigit_x = SERIALS::GetRectX(_oneDigit, SERIALS::NUMBER::MAX, SERIALS::NUMBER::RECT_X);
-	twoDigit_x = SERIALS::GetRectX(_twoDigit, SERIALS::NUMBER::MAX, SERIALS::NUMBER::RECT_X);
-
-
-	// プレイヤー名の連番の表示範囲を決める
-	player_rect_x[0] = SERIALS::GetRectX(_winPlayerID[0], SERIALS::PLAYER::MAX, SERIALS::PLAYER::RECT_X);
-	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0 : SERIALS::GetRectX(_winPlayerID[1], SERIALS::PLAYER::MAX, SERIALS::PLAYER::RECT_X);
+	drawingByMode_->Initialize();
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -117,21 +63,11 @@ void ResultScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	const int _winPlayerID_0 = player_rect_x[0] / SERIALS::PLAYER::RECT_X;
-	const int _winPlayerID_1 = player_rect_x[1] / SERIALS::PLAYER::RECT_X;
-
-	if (DontDestroy->GameMode_.isSINGLES_GAME())
-		sp_winPlayer_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::WINNERCHARA[_winPlayerID_0].c_str()));
-	else {
-		sp_winPlayer_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::WINNERCHARA[_winPlayerID_0].c_str()));
-		sp_winPlayer_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::WINNERCHARA[_winPlayerID_1].c_str()));
-	}
+	drawingByMode_->LoadAssets();
 
 	sp_bg_tile_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::RESULT_BG.c_str());
 	sp_texWin_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEX_WINNER.c_str());
 	sp_texPressB_	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEX_PRESS_B.c_str());
-	sp_playerName_	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEX_PLAYER.c_str());
-	sp_number_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::NUMBER.c_str());
 
 	// GameMode { 0(撃破) , 1(スコア) , 2(撃破) , 3(スコア) }
 	sp_texCrushing_	= (DontDestroy->GameMode_.isDODGEBALL()) ?
@@ -212,19 +148,8 @@ void ResultScene::Render()
 	DX9::SpriteBatch->DrawSimple(sp_texWin_.Get(), Vector3(0.0f, 0.0f, -3.0f));
 	DX9::SpriteBatch->DrawSimple(sp_texCrushing_.Get(), Vector3(0.0f, 0.0f, -3.0f));
 	DX9::SpriteBatch->DrawSimple(sp_texPressB_.Get(), Vector3(0.0f, 0.0f, -3.0f));
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIALS::NUMBER::POS_X, SERIALS::NUMBER::POS_Y, -3.0f), RECT(twoDigit_x, 0, twoDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIALS::NUMBER::POS_X + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::POS_Y, -3.0f), RECT(oneDigit_x, 0, oneDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
 
-	if (DontDestroy->GameMode_.isSINGLES_GAME()) {
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(0.0f, 0.0f, -2.0f));
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
-	}
-	else {
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(100.0f, 0.0f, -3.0f));
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[1].Get(), Vector3(-226.0f, 0.0f, -2.0f));
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X - 50.0f, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X + SERIALS::PLAYER::RECT_X - 50.0f, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[1], 0, player_rect_x[1] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
-	}
+	drawingByMode_->Render();
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言

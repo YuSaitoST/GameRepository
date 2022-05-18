@@ -15,8 +15,8 @@
 
 class DemoDisplay final : public DisplayBase {
 public:
-	DemoDisplay();
-	virtual ~DemoDisplay();
+	DemoDisplay() {}
+	virtual ~DemoDisplay() {}
 
 	virtual void Initialize() override;
 	virtual void LoadAssets() override;

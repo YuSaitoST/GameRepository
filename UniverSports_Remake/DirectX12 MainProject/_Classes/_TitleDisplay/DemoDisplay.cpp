@@ -1,14 +1,6 @@
 #include "DemoDisplay.h"
 #include "_Classes/_FileNames/FileNames.h"
 
-DemoDisplay::DemoDisplay() {
-	movie_ = new MoviePlayer();
-}
-
-DemoDisplay::~DemoDisplay() {
-	delete movie_;
-}
-
 void DemoDisplay::Initialize() {
 	//èâä˙âªÇ»Çµ
 }

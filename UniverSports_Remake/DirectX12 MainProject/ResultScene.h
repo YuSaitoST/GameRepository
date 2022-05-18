@@ -8,6 +8,7 @@
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
 #include "_Classes/_MoviePlayer/MoviePlayer.h"
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
+#include "_Classes/_ResultDraw/DrawingByMode.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
@@ -43,25 +44,17 @@ private:
 	DX12::SPRITEBATCH			spriteBatch_;
 	DX12::HGPUDESCRIPTOR		dx9GpuDescriptor_;
 
-	std::vector<DX9::SPRITE>	sp_winPlayer_;
-
 	DX9::SPRITE					sp_bg_tile_;
 	DX9::SPRITE					sp_texWin_;
 	DX9::SPRITE					sp_texPressB_;
 	DX9::SPRITE					sp_texCrushing_;
-	DX9::SPRITE					sp_playerName_;
-	DX9::SPRITE					sp_number_;
 
 	SoundPlayer*				bgm_;
 	SoundPlayer*				se_decision_;
 	MoviePlayer*				bg_movie_;
 	BlackOut*					blackOut_;
 
-	int							maxScore_;
-
-	int							player_rect_x[2];
-	int							oneDigit_x;
-	int							twoDigit_x;
+	DrawingByMode*				drawingByMode_;
 
 	bool						goNext_;
 };

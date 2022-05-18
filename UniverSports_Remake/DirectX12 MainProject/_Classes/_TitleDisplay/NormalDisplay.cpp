@@ -5,13 +5,13 @@
 
 NormalDisplay::NormalDisplay() : ui_alpha_(0.0f) {
 	se_decision_	= new SoundPlayer();
-	movie_			= new MoviePlayer();
 	time_start_		= new CountTimer(UI_FADE_STARTTIME);
 	time_demo_		= new CountTimer(DEMO_PLAYBACK);
 	cursor_			= new Cursor();
 	mode_choices_	= new Choices();
 	ui_arrows_		= new SelectArrows();
 	operate_		= new OperateUI();
+	text_			= nullptr;
 }
 
 NormalDisplay::~NormalDisplay() {
@@ -21,7 +21,6 @@ NormalDisplay::~NormalDisplay() {
 	delete cursor_;
 	delete time_demo_;
 	delete time_start_;
-	delete movie_;
 	delete se_decision_;
 }
 
@@ -67,7 +66,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 
 	// タイトルの表示に合わせてUIをフェードインさせる
 	if (time_start_->NowTime() <= 0.5f)
-		FADE::In(ui_alpha_, 255, deltaTime * SPEED_ALPHA);
+		FADE::In(ui_alpha_, FADE::COLORMAX, deltaTime * SPEED_ALPHA);
 
 	// タイトルが表示されるまで操作不可
 	if (!time_start_->TimeOut())

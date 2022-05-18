@@ -28,4 +28,7 @@ namespace FADE {
 	* @param speed フェードアウト速度
 	*/
 	inline void Out(float& num, float min, float speed) { num = std::max(num - speed, min); }
+
+	//! 色の最大値
+	const int COLORMAX = 255;
 }  //namespace FADE

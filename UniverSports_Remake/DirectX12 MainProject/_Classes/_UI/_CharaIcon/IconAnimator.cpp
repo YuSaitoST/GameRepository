@@ -44,7 +44,7 @@ void IconAnimator::Update(const float deltaTime) {
 		display_time_->Reset();
 
 	(display_) ?
-		FADE::In(alpha_, 255.0f, deltaTime * SPEED_FADEIN) :
+		FADE::In(alpha_, FADE::COLORMAX, deltaTime * SPEED_FADEIN) :
 		FADE::Out(alpha_, 0.0f, deltaTime * SPEED_FADEOUT);
 }
 

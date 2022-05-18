@@ -2,8 +2,10 @@
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
+using namespace DirectX;
+
 CountDownUI::CountDownUI() : alpha_(0.0f), scale_(0.0f), se_played_(false) {
-	se_count_		= new SoundPlayer();
+	se_count_ = new SoundPlayer();
 }
 
 CountDownUI::~CountDownUI() {
@@ -11,9 +13,9 @@ CountDownUI::~CountDownUI() {
 }
 
 void CountDownUI::Initialize() {
-	se_count_->Initialize(L"_Sounds\\_SE\\_Main\\se_gameStart.wav", SOUND_TYPE::SE, 0.0f);
-	alpha_			= 255.0f;
-	scale_			= 1.0f;
+	se_count_->Initialize(USFN_SOUND::SE::STARTCOUNT, SOUND_TYPE::SE, 0.0f);
+	alpha_ = FADE::COLORMAX;
+	scale_ = 1.0f;
 }
 
 void CountDownUI::LoadAssets() {
@@ -29,9 +31,9 @@ void CountDownUI::Update(const float deltaTime, float nowCount) {
 		se_played_ = true;
 	}
 
-	FADE::Out(alpha_, 0.0f, deltaTime * 255);
-	alpha_ = (nowCount	<= 0.2f		) ? 0.0f : (alpha_ == 0.0f) ? 255.0f : alpha_;
-	scale_ = (alpha_	== 255.0f	) ? 1.0f : (scale_ + 1.25f * deltaTime);
+	FADE::Out(alpha_, 0.0f, deltaTime * FADE::COLORMAX);
+	alpha_ = (nowCount	<= 0.2f				) ? 0.0f : (alpha_ == 0.0f				) ? FADE::COLORMAX : alpha_;
+	scale_ = (alpha_	== FADE::COLORMAX	) ? 1.0f : (scale_ + 1.25f * deltaTime	);
 }
 
 void CountDownUI::Render(float count) const {
@@ -44,9 +46,9 @@ void CountDownUI::Render(float count) const {
 		sprite_[_count].Get(),
 		SimpleMath::Vector3(POS_X, POS_Y, 0.0f),
 		nullptr,
-		DX9::Colors::RGBA(255, 255, 255, alpha_),
+		DX9::Colors::RGBA(FADE::COLORMAX, FADE::COLORMAX, FADE::COLORMAX, alpha_),
 		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
-		SimpleMath::Vector3(88.0f, 37.5f, 0.0f),
+		SimpleMath::Vector3(CENTER_X, CENTER_Y, 0.0f),
 		SimpleMath::Vector2::One * scale_
 	);
 	DX9::SpriteBatch->ResetTransform();

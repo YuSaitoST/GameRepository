@@ -22,8 +22,8 @@ enum DISPLAYMODE { DISPLAY_NORMAL, DISPLAY_DEMO };
 
 class DisplayBase {
 public:
-	DisplayBase() {}
-	virtual ~DisplayBase() {}
+	DisplayBase() { movie_ = new MoviePlayer(); }
+	virtual ~DisplayBase() { delete movie_; }
 
 	virtual void Initialize() = 0;
 	virtual void LoadAssets() = 0;
