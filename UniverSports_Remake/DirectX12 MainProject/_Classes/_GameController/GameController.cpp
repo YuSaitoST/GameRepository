@@ -36,7 +36,9 @@ void GameController::LoadAssets() {
 
 NextScene GameController::Update(const float deltaTime) {
 	timer_->Update(deltaTime);
-	countDown_->Update(deltaTime, (TIME_COUNT - std::max(0.0f, (startTime_ - timer_->NowTime()))));
+
+	// 4.2 - max( 0 ,  4.2 ` 0 )
+	countDown_->Update(deltaTime, (TIME_COUNT - (startTime_ - timer_->NowTime())));
 
 	if (GameFined()) {
 		gameStart_ = false;
@@ -93,7 +95,7 @@ int GameController::RemainingOfTeam() {
 		return count;
 
 	int index = 0;
-	int lastPlayersTeamID[2];
+	int lastPlayersTeamID[2] = { 0,0 };
 	for (int _i = 0; (_i < 4) && (index < 2); ++_i) {
 		if (DontDestroy->Survivor_[_i]) {
 			lastPlayersTeamID[index] = DontDestroy->TeamID[_i];

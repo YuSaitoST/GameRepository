@@ -18,6 +18,7 @@ void MoviePlayer::Update() {
 
 /**
 * @brief ウィンドウサイズで描画
+* @param pos_z 動画のz座標
 */
 void MoviePlayer::Render() const {
 	DX9::SpriteBatch->DrawSimple(media_->Get(), DirectX::SimpleMath::Vector3::Zero);

@@ -1,4 +1,5 @@
 #include "DemoPlay.h"
+#include "_Classes/_FileNames/FileNames.h"
 
 DemoPlay::DemoPlay(float playBack) {
 	mv_demo_	= new MoviePlayer();
@@ -12,7 +13,7 @@ DemoPlay::~DemoPlay() {
 }
 
 void DemoPlay::LoadAssets() {
-	mv_demo_->LoadAsset(L"_Movies\\DemoPlay.wmv");
+	mv_demo_->LoadAsset(USFN_MV::TITLE_DEMO);
 }
 
 void DemoPlay::Update(const float deltaTime) {

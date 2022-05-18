@@ -44,9 +44,6 @@ public:
 	float			myRadian() { return r_; }
 	int				myObjectID() { return id_my_; };
 
-	static bool IsFieldOut(Vector2& pos, float size);
-	static void ClampLoop(Vector2& pos);
-
 protected:
 	virtual void SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r);
 	

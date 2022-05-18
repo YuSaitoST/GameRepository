@@ -1,4 +1,5 @@
 #include "StGoal.h"
+#include "_Classes/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
 void StGoal::Initialize() {
@@ -24,7 +25,7 @@ void StGoal::Update(ObjBall* ball) {
 	//	//ball->SetBtPosition(position_);
 	//}
 
-	if (!ball->IsFieldOut(position_, 1.0f)) {
+	if (FIELD::IsOut(position_, 1.0f)) {
 		position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
 	}
 	else if(ball->GetOwnerID()!=-1) {

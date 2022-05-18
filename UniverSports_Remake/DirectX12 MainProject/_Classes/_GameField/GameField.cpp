@@ -4,8 +4,8 @@
 #include "DontDestroyOnLoad.h"
 
 GameField::GameField(float sp_z) {
-	movie_	= new MoviePlayer();
-	sprite_z_ = sp_z;
+	movie_		= new MoviePlayer();
+	sprite_z_	= sp_z;
 }
 
 GameField::~GameField() {

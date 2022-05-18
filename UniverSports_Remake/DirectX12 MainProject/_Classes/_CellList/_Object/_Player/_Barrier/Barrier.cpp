@@ -20,7 +20,7 @@ void Barrier::Update(const float deltaTime) {
 
 		// タイマーリセット
 		if (!isInvincible_) {
-			timer_->ResetCountTime();
+			timer_->Reset();
 		}
 	}
 }

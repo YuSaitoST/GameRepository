@@ -1,4 +1,5 @@
 #include "ObjPlayer.h"
+#include "_Classes/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
@@ -88,6 +89,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	AssignPosition();
 
 	SetTransforms(pos_, rotate_);
+	UpdateToMorton();
 }
 
 void ObjPlayer::Update(const float deltaTime) {
@@ -239,7 +241,7 @@ void ObjPlayer::Playing(const float deltaTime) {
 	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
 	forward_ = strategy_->GetForward();
 
-	ClampLoop(pos_);
+	FIELD::ClampLoop(pos_);
 
 	SetTransforms(pos_, rotate_);
 
@@ -253,7 +255,7 @@ void ObjPlayer::Beaten(const float deltaTime) {
 
 	// •œŠˆ
 	if (ti_respone_->TimeOut()) {
-		ti_respone_->ResetCountTime();
+		ti_respone_->Reset();
 		barrier_->DisprayOn();
 		SetTransforms(pos_, rotate_);
 		AssignPosition();

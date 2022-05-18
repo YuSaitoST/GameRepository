@@ -133,11 +133,11 @@ void LobbyScene::LoadAssets()
 	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEAM_B.c_str());
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
-		sp_playerIcon[_i]		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICEICON[_i].c_str());
+		sp_playerIcon[_i]		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i].c_str());
 		player_[_i]->LoadAssets(USFN_MOD::PLAYER[_i]);
 		charaSelect_[_i]->LoadAssets(sp_right, sp_left);
 
-		sp_playerIcon[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICEICON[_i + 1].c_str());
+		sp_playerIcon[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i + 1].c_str());
 		player_[_i + 1]->LoadAssets(USFN_MOD::PLAYER[_i + 1]);
 		charaSelect_[_i + 1]->LoadAssets(sp_right, sp_left);
 	}

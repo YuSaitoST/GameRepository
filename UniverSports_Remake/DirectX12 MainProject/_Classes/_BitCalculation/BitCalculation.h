@@ -1,6 +1,6 @@
 /**
  * @file BitCalculation.h
- * @brief ビット計算クラス
+ * @brief ビット計算
  * @author 齋藤優宇
  * @date 2021/05/14
  */
@@ -19,4 +19,4 @@ namespace BitCalculation {
 	int GetIndex(int Level, int Index);
 	const int NumberOfDivisions = 4;
 	const int DivisionLevel = 2;
-}
+}  //namespace BitCalculation

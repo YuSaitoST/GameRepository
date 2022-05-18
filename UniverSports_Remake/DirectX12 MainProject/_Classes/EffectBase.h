@@ -21,7 +21,7 @@ public:
 	virtual void Initialize(std::string eff_name) { name_ = eff_name; }
 	virtual void LoadAsset(std::wstring file_name) { effect_ = DX12Effect.Create(file_name.c_str(), name_); }
 
-	virtual void ResetTime() { timer_->ResetCountTime(); }
+	virtual void ResetTime() { timer_->Reset(); }
 
 	virtual void Set_Position(SimpleMath::Vector3 position) { DX12Effect.SetPosition(name_, position); }
 	virtual void Set_Rotate(SimpleMath::Vector3 rotate) { DX12Effect.SetRotation(name_, rotate); }

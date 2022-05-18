@@ -3,7 +3,7 @@
 #include "DontDestroyOnLoad.h"
 
 CharaSelect::CharaSelect() {
-	choices_		= new Choices(4);
+	choices_		= new Choices();
 	ui_arrows_		= new SelectArrows();
 	se_decision_	= new SoundPlayer();
 	se_cancel_		= new SoundPlayer();
@@ -42,7 +42,7 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 		return;
 	}
 
-	choices_->Update(Press.LeftKey(index), Press.RightKey(index));
+	choices_->Update(4, Press.LeftKey(index), Press.RightKey(index));
 	choices_->NextSelectOn(ui_arrows_->Update(index));
 
 	isDecision_ = Press.DecisionKey(index);

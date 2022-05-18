@@ -39,15 +39,6 @@ public:
 
 
 private:
-	void Render_WinChara();
-	void Render_WinCName();
-
-	float GetRectX(int number, int numbersMax, int wight);
-
-	const int SERIALNUMBERS_MAX = 9;
-
-
-
 	DX12::DESCRIPTORHEAP		descriptorHeap_;
 	DX12::SPRITEBATCH			spriteBatch_;
 	DX12::HGPUDESCRIPTOR		dx9GpuDescriptor_;
@@ -73,17 +64,4 @@ private:
 	int							twoDigit_x;
 
 	bool						goNext_;
-};
-
-namespace SERIAL_PLAYER {
-	const int		POS_X = 115;
-	const int		POS_Y = 250;
-	const int		RECT_X = 270;
-	const int		RECT_Y = 135;
-};
-namespace SERIAL_NUMBER {
-	const int		POS_X = 360;
-	const int		POS_Y = 462;
-	const int		RECT_X = 50;
-	const int		RECT_Y = 75;
 };

@@ -1,10 +1,9 @@
 #include "CountDown.h"
+#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_UI/_Fade/Fade.h"
 
-CountDownUI::CountDownUI() {
+CountDownUI::CountDownUI() : alpha_(0.0f), scale_(0.0f), se_played_(false) {
 	se_count_		= new SoundPlayer();
-	alpha_			= 0.0f;
-	scale_			= 0.0f;
-	se_played_		= false;
 }
 
 CountDownUI::~CountDownUI() {
@@ -18,21 +17,21 @@ void CountDownUI::Initialize() {
 }
 
 void CountDownUI::LoadAssets() {
-	for (int _i = 0; _i < 4; ++_i)
-		sprite_[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, FILE_NAME[_i].c_str());
+	for (int _i = 0; _i <= 2; _i += 2) {
+		sprite_[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::COUNTDOWN[_i].c_str());
+		sprite_[_i + 1] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::COUNTDOWN[_i + 1].c_str());
+	}
 }
 
 void CountDownUI::Update(const float deltaTime, float nowCount) {
 	if (!se_played_) {
-#ifndef DEBUG
 		SE_Play();
-#endif // DEBUG
 		se_played_ = true;
 	}
 
-	alpha_			= std::max(0.0f, alpha_ - 255.0f * deltaTime);
-	alpha_			= (nowCount	<= 0.2f		) ? 0.0f : (alpha_ == 0.0f) ? 255.0f : alpha_;
-	scale_			= (alpha_	== 255.0f	) ? 1.0f : (scale_ + 1.25f * deltaTime);
+	FADE::Out(alpha_, 0.0f, deltaTime * 255);
+	alpha_ = (nowCount	<= 0.2f		) ? 0.0f : (alpha_ == 0.0f) ? 255.0f : alpha_;
+	scale_ = (alpha_	== 255.0f	) ? 1.0f : (scale_ + 1.25f * deltaTime);
 }
 
 void CountDownUI::Render(float count) const {

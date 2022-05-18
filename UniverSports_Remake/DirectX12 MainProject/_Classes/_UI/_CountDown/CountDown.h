@@ -21,12 +21,6 @@ public:
 private:
 	const float			POS_X			= 543.0f + 88.0f;
 	const float			POS_Y			= 325.0f + 37.5f;
-	const std::wstring	FILE_NAME[4]	= {
-		L"_Images\\_Main\\_CountDown\\go.png",
-		L"_Images\\_Main\\_CountDown\\01.png",
-		L"_Images\\_Main\\_CountDown\\02.png",
-		L"_Images\\_Main\\_CountDown\\03.png"
-	};
 
 	SoundPlayer*		se_count_;
 	DX9::SPRITE			sprite_[4];

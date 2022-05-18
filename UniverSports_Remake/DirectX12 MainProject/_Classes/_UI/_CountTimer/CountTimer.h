@@ -22,7 +22,7 @@ public:
 	/**
 	* @brief タイマーをリセットする
 	*/
-	inline void ResetCountTime() { time_ = max_; };
+	inline void Reset() { time_ = max_; };
 
 	/**
 	* @brief 今の経過時間を返す

@@ -3,18 +3,36 @@
 #include <string>
 
 namespace USFN_SP {
-	const std::wstring CHOICEICON[4] = {
+	const std::wstring UI_TEXT[2][2] = {
+		{
+			L"_Images\\_Title\\_SelectText\\tex_mode00.png"  ,
+			L"_Images\\_Title\\_SelectText\\tex_mode01.png"
+		},
+		{
+			L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
+			L"_Images\\_Title\\_SelectText\\tex_operate.png"
+		}
+	};
+
+	const std::wstring CHOICE_ICON[4] = {
 		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_bear.png",
 		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_pig.png",
 		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_dog.png",
 		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_cat.png"
 	};
 
-	const std::wstring WINNERCHARA[4] = {
-		L"_Images\\_Result\\_WinnerChara\\result_bear.png",
-		L"_Images\\_Result\\_WinnerChara\\result_pig.png",
-		L"_Images\\_Result\\_WinnerChara\\result_dog.png",
-		L"_Images\\_Result\\_WinnerChara\\result_cat.png"
+	const std::wstring	COUNTDOWN[4] = {
+		L"_Images\\_Main\\_CountDown\\go.png",
+		L"_Images\\_Main\\_CountDown\\01.png",
+		L"_Images\\_Main\\_CountDown\\02.png",
+		L"_Images\\_Main\\_CountDown\\03.png"
+	};
+
+	const std::wstring LEFT_ICON[4] = {
+		L"_Images\\_Main\\_Icon\\icon_g.png",
+		L"_Images\\_Main\\_Icon\\icon_p.png",
+		L"_Images\\_Main\\_Icon\\icon_r.png",
+		L"_Images\\_Main\\_Icon\\icon_b.png",
 	};
 
 	const std::wstring COLOR_WIRE[4][4] = {
@@ -44,6 +62,15 @@ namespace USFN_SP {
 		}
 	};
 
+	const std::wstring WINNERCHARA[4] = {
+		L"_Images\\_Result\\_WinnerChara\\result_bear.png",
+		L"_Images\\_Result\\_WinnerChara\\result_pig.png",
+		L"_Images\\_Result\\_WinnerChara\\result_dog.png",
+		L"_Images\\_Result\\_WinnerChara\\result_cat.png"
+	};
+
+	const std::wstring BLACKOUT		= L"_Images\\blackOut.png";
+
 	const std::wstring CURSOR		= L"_Images\\_Title\\cursor.png";
 
 	const std::wstring LOBBY_BG		= L"_Images\\_Lobby\\backGround.png";
@@ -65,4 +92,4 @@ namespace USFN_SP {
 	const std::wstring NUMBER		= L"_Images\\_Result\\_UIText\\number.png";
 	const std::wstring GEKIHA		= L"_Images\\_Result\\_UIText\\tex_gekiha.png";
 	const std::wstring SCORE		= L"_Images\\_Result\\_UIText\\tex_score.png";
-};
+}  //namespace USFN_SP

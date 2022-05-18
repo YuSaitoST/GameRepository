@@ -48,8 +48,8 @@ public:
 	float FN_TIME_ALPHA;
 
 
-	const int FieldSide_X = 32;
-	const int FieldSide_Y = 18;
+	const float FieldSide_X = 32.0f;
+	const float FieldSide_Y = 18.0f;
 	
 	const int MODE_1_TIME = 120;
 

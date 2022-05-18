@@ -1,5 +1,6 @@
 #include "StFloat.h"
 #include "DontDestroyOnLoad.h"
+#include "_Classes/_FieldOutCheck/FieldOutCheck.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_GameController/GameController.h"
 
@@ -72,11 +73,11 @@ SimpleMath::Vector2 StFloat::RandomForward(const SimpleMath::Vector2 position) {
 
 
 void StFloat::CheckFieldOut(ObjBall* ball) {
-	if (ball->IsFieldOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
+	if (FIELD::IsOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
 		ReSpone(ball);
 	}
 }
 
 void StFloat::LoopPos(ObjBall* ball) {
-	ball->ClampLoop(position_);
+	FIELD::ClampLoop(position_);
 }

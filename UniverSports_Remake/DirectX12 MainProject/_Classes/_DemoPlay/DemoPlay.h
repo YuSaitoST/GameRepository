@@ -13,7 +13,7 @@ public:
 	void Update(const float deltaTime);
 	void Render();
 
-	void ResetTime() { timer_->ResetCountTime(); };
+	void ResetTime() { timer_->Reset(); mv_demo_->Stop(); };
 	bool IsDisplay() const { return isDisplay_; };
 
 private:

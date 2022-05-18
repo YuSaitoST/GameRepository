@@ -6,6 +6,7 @@
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_UI/_Serials/Serials.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 
 // Initialize member variables.
@@ -88,13 +89,13 @@ void ResultScene::Initialize()
 	const int _oneDigit = maxScore_ % 10;
 	const int _twoDigit = (maxScore_ - _oneDigit) * 0.5f;
 
-	oneDigit_x = GetRectX(_oneDigit, SERIALNUMBERS_MAX, SERIAL_NUMBER::RECT_X);
-	twoDigit_x = GetRectX(_twoDigit, SERIALNUMBERS_MAX, SERIAL_NUMBER::RECT_X);
+	oneDigit_x = SERIALS::GetRectX(_oneDigit, SERIALS::NUMBER::MAX, SERIALS::NUMBER::RECT_X);
+	twoDigit_x = SERIALS::GetRectX(_twoDigit, SERIALS::NUMBER::MAX, SERIALS::NUMBER::RECT_X);
 
 
 	// プレイヤー名の連番の表示範囲を決める
-	player_rect_x[0] = GetRectX(_winPlayerID[0], SERIAL_PLAYER::RECT_X * 3, SERIAL_PLAYER::RECT_X);
-	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0 : GetRectX(_winPlayerID[1], SERIAL_PLAYER::RECT_X * 3, SERIAL_PLAYER::RECT_X);
+	player_rect_x[0] = SERIALS::GetRectX(_winPlayerID[0], SERIALS::PLAYER::MAX, SERIALS::PLAYER::RECT_X);
+	player_rect_x[1] = (DontDestroy->GameMode_.isSINGLES_GAME()) ? 0 : SERIALS::GetRectX(_winPlayerID[1], SERIALS::PLAYER::MAX, SERIALS::PLAYER::RECT_X);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -116,8 +117,8 @@ void ResultScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	const int _winPlayerID_0 = player_rect_x[0] / SERIAL_PLAYER::RECT_X;
-	const int _winPlayerID_1 = player_rect_x[1] / SERIAL_PLAYER::RECT_X;
+	const int _winPlayerID_0 = player_rect_x[0] / SERIALS::PLAYER::RECT_X;
+	const int _winPlayerID_1 = player_rect_x[1] / SERIALS::PLAYER::RECT_X;
 
 	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		sp_winPlayer_.push_back(DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::WINNERCHARA[_winPlayerID_0].c_str()));
@@ -202,7 +203,6 @@ void ResultScene::Render()
 	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 0, 255));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
 
-
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
 	blackOut_->Render();
@@ -212,11 +212,19 @@ void ResultScene::Render()
 	DX9::SpriteBatch->DrawSimple(sp_texWin_.Get(), Vector3(0.0f, 0.0f, -3.0f));
 	DX9::SpriteBatch->DrawSimple(sp_texCrushing_.Get(), Vector3(0.0f, 0.0f, -3.0f));
 	DX9::SpriteBatch->DrawSimple(sp_texPressB_.Get(), Vector3(0.0f, 0.0f, -3.0f));
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIAL_NUMBER::POS_X, SERIAL_NUMBER::POS_Y, -3.0f), RECT(twoDigit_x, 0, twoDigit_x + SERIAL_NUMBER::RECT_X, SERIAL_NUMBER::RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIAL_NUMBER::POS_X + SERIAL_NUMBER::RECT_X, SERIAL_NUMBER::POS_Y, -3.0f), RECT(oneDigit_x, 0, oneDigit_x + SERIAL_NUMBER::RECT_X, SERIAL_NUMBER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIALS::NUMBER::POS_X, SERIALS::NUMBER::POS_Y, -3.0f), RECT(twoDigit_x, 0, twoDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIALS::NUMBER::POS_X + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::POS_Y, -3.0f), RECT(oneDigit_x, 0, oneDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
 
-	Render_WinCName();
-	Render_WinChara();
+	if (DontDestroy->GameMode_.isSINGLES_GAME()) {
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(0.0f, 0.0f, -2.0f));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
+	}
+	else {
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(100.0f, 0.0f, -3.0f));
+		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[1].Get(), Vector3(-226.0f, 0.0f, -2.0f));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X - 50.0f, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
+		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X + SERIALS::PLAYER::RECT_X - 50.0f, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[1], 0, player_rect_x[1] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
+	}
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言
@@ -235,26 +243,4 @@ void ResultScene::Render()
 
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();
-}
-
-void ResultScene::Render_WinChara() {
-	if (DontDestroy->GameMode_.isSINGLES_GAME())
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(0.0f, 0.0f, -2.0f));
-	else {
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(100.0f, 0.0f, -3.0f));
-		DX9::SpriteBatch->DrawSimple(sp_winPlayer_[1].Get(), Vector3(-226.0f, 0.0f, -2.0f));
-	}
-}
-
-void ResultScene::Render_WinCName() {
-	if (DontDestroy->GameMode_.isSINGLES_GAME())
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIAL_PLAYER::POS_X, SERIAL_PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIAL_PLAYER::RECT_X, SERIAL_PLAYER::RECT_Y));
-	else {
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIAL_PLAYER::POS_X - 50.0f, SERIAL_PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIAL_PLAYER::RECT_X, SERIAL_PLAYER::RECT_Y));
-		DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIAL_PLAYER::POS_X + SERIAL_PLAYER::RECT_X - 50.0f, SERIAL_PLAYER::POS_Y, -3.0f), RECT(player_rect_x[1], 0, player_rect_x[1] + SERIAL_PLAYER::RECT_X, SERIAL_PLAYER::RECT_Y));
-	}
-}
-
-float ResultScene::GetRectX(int number, int numbersMax, int wight) {
-	return std::min(number, numbersMax) * wight;
 }

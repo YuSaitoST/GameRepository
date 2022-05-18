@@ -9,12 +9,12 @@ using namespace DirectX;
 
 class Cursor {
 public:
-	Cursor(int selects);
+	Cursor();
 	virtual ~Cursor();
 
 	void Initialize();
 	void LoadAsset(std::wstring file_name);
-	void Update();
+	void Update(int choices);
 	void Render(float alpha) const;
 
 	int SelectNum() const { return choices_->SelectNum(); };
@@ -28,5 +28,4 @@ private:
 	Choices*			choices_;
 	DX9::SPRITE			sp_;
 	SimpleMath::Vector3	pos_;
-	int		SELECTS;
 };

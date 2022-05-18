@@ -16,9 +16,6 @@ public:
 	static void DisplayOn() { display_ = true; }
 
 private:
-	void FadeIn(const float deltaTime);
-	void FadeOut(const float deltaTime);
-
 	CharaIcon* icon_[4];
 	CountTimer* display_time_;
 	float alpha_;
@@ -38,12 +35,5 @@ private:
 		SimpleMath::Vector3(CEN_X_2,CEN_Y_1,0.0f),
 		SimpleMath::Vector3(CEN_X_1,CEN_Y_2,0.0f),
 		SimpleMath::Vector3(CEN_X_2,CEN_Y_2,0.0f)
-	};
-
-	const std::wstring PLICON_FILENAME[4] = {
-		L"_Images\\_Main\\_Icon\\icon_g.png",
-		L"_Images\\_Main\\_Icon\\icon_b.png",
-		L"_Images\\_Main\\_Icon\\icon_r.png",
-		L"_Images\\_Main\\_Icon\\icon_p.png",
 	};
 };

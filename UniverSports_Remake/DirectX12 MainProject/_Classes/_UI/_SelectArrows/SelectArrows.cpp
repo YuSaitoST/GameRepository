@@ -40,7 +40,8 @@ void SelectArrows::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
 }
 
 bool SelectArrows::Update(const int index) {
-	input_ = Press.RightKey(index) ? AL_RIGHT : Press.LeftKey(index) ? AL_LEFT : input_;
+	input_ =	Press.RightKey(index)	? AL_RIGHT	: 
+				Press.LeftKey(index)	? AL_LEFT	: input_;
 
 	if (input_ == AL_NONE)
 		return false;
@@ -68,7 +69,7 @@ void SelectArrows::Render(float alpha) {
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
 		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
-		SimpleMath::Vector3(12.5f, 12.5f, 0.0f),
+		SimpleMath::Vector3(RECT, RECT, 0.0f),
 		SimpleMath::Vector2::One * scale_left_
 	);
 

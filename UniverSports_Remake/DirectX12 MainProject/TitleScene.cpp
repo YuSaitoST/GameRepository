@@ -6,6 +6,7 @@
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_UI/_Fade/Fade.h"
 
 // Initialize member variables.
 TitleScene::TitleScene()
@@ -17,43 +18,31 @@ TitleScene::TitleScene()
 	spriteBatch_	= nullptr;
 
 	bgm_			= new SoundPlayer();
-	se_decision_	= new SoundPlayer();
-	mv_bg_			= new MoviePlayer();
-	mv_demo_		= new DemoPlay(DEMO_PLAYBACK);
-	time_start_		= new CountTimer(UI_FADE_STARTTIME);
-	cursor_			= new Cursor(CHOICES);
-	mode_choices_	= new Choices(MODE);
-	ui_arrows_		= new SelectArrows();
-	ui_alpha_		= new FadeAlpha(0.0f, SPEED_ALPHA);
-	operate_		= new OperateUI();
+
+	display_		= nullptr;
+	displayMode_	= DISPLAYMODE::DISPLAY_NORMAL;
 }
 
 // Initialize a variable and audio resources.
 void TitleScene::Initialize()
 {
+	//使用するコア数を指定
 	omp_set_num_threads(4);
+
+	//FPS指定
 	DXTK->SetFixedFrameRate(60);
+
+	//パラメーターの読み込み
 	GAME_CONST.Initialize();
 	
+	//BGMの読み込み
 	bgm_->Initialize(USFN_SOUND::BGM::TITLE, SOUND_TYPE::BGM, 0.0f);
-	se_decision_->Initialize(USFN_SOUND::SE::DECISION_TITLE, SOUND_TYPE::SE, 2.0f);
 
-	cursor_->Initialize();
-	ui_arrows_->Initialize(ARROW_POS_R_X, ARROW_POS_L_X, ARROW_POS_Y);
-	operate_->Initialize();
+	//画面表示の初期化
+	disp_normal_.Initialize();
+	disp_demo_.Initialize();
 
-	/*
-		選択肢のテキストを初期化
-		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
-	*/
-	for (int _u = 0; _u < MODE; ++_u) {
-		nowText_[0][_u].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[0], -10.0f));
-		nowText_[1][_u].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[1], -10.0f));
-	}
-
-	// 最初に選択状態にする選択肢を代入
-	text_ = &nowText_[0][0];
-
+	//ゲーム進行関連の変数の初期化
 	std::fill(std::begin(DontDestroy->ChoseColor_), std::end(DontDestroy->ChoseColor_), 0	);
 	std::fill(std::begin(DontDestroy->TeamID),		std::end(DontDestroy->TeamID),		-1	);
 	std::fill(std::begin(DontDestroy->Score_),		std::end(DontDestroy->Score_),		0	);
@@ -79,22 +68,14 @@ void TitleScene::LoadAssets()
 	auto uploadResourcesFinished = resourceUploadBatch.End(DXTK->CommandQueue);
 	uploadResourcesFinished.wait();
 
-	mv_bg_->LoadAsset(USFN_MV::TITLE_BG);
-	mv_demo_->LoadAssets();
-	cursor_->LoadAsset(USFN_SP::CURSOR);
-	ui_arrows_->LoadAssets();
-	operate_->LoadAsset();
+	//画面表示に使用するファイルの読み込み
+	disp_normal_.LoadAssets();
+	disp_demo_.LoadAssets();
 
-	/*
-		選択肢に使用する画像のパスを
-		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
-	*/
-	for (int _u = 0; _u < MODE; ++_u) {
-		nowText_[0][_u].LoadAsset(UI_TEXT_FILE_NAME[0][_u]);
-		nowText_[1][_u].LoadAsset(UI_TEXT_FILE_NAME[1][_u]);
-	}
-
-	mv_bg_->Play();
+	//画面表示の設定
+	SwitchState(displayMode_);
+	
+	//BGM再生
 	bgm_->Play();
 }
 
@@ -106,15 +87,6 @@ void TitleScene::Terminate()
 
 	// TODO: Add your Termination logic here.
 
-	delete operate_;
-	delete ui_alpha_;
-	delete ui_arrows_;
-	delete mode_choices_;
-	delete cursor_;
-	delete time_start_;
-	delete mv_demo_;
-	delete mv_bg_;
-	delete se_decision_;
 	delete bgm_;
 }
 
@@ -127,6 +99,7 @@ void TitleScene::OnDeviceLost()
 // Restart any looped sounds here
 void TitleScene::OnRestartSound()
 {
+	//デバイスリセット時に再生し直す
 	bgm_->OnRestartSound();
 }
 
@@ -138,70 +111,20 @@ NextScene TitleScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
+	//入力状態を調べる
 	Press.Accepts();
 
-	time_start_->Update(deltaTime);
+	//画面上の更新
+	NextScene _next = display_->Update(deltaTime);
 
-	// タイトルの表示に合わせてUIをフェードインさせる
-	if (time_start_->NowTime() <= 0.5f)
-		ui_alpha_->FadeIn(deltaTime);
-
-	// タイトルが表示されるまで操作不可
-	if (!time_start_->TimeOut())
-		return NextScene::Continue;
-
-	// 決定音がなり終わったらキャラ選択画面へ
-	if (!DontDestroy->GameMode_.isNotDecision()) {
-		if (se_decision_->PlayOneShot(deltaTime))
-			return NextScene::LobbyScene;
-		else
-			return NextScene::Continue;
+	//表示の変更条件を満たしていれば、表示状態を変更する
+	if (display_->IsChange()) {
+		display_->Reset();
+		displayMode_ = (displayMode_ == DISPLAYMODE::DISPLAY_NORMAL) ? DISPLAYMODE::DISPLAY_DEMO : DISPLAYMODE::DISPLAY_NORMAL;
+		SwitchState(displayMode_);
 	}
-
-	mv_demo_->Update(deltaTime);
-
-	if (Press.AnyKey()) {
-		mv_demo_->ResetTime();
-		if (mv_demo_->IsDisplay())
-			return NextScene::Continue;
-	}
-	else {
-		if (mv_demo_->IsDisplay())
-			return NextScene::Continue;
-	}
-
-	mv_bg_->Update();
-	cursor_->Update();
-
-	if (cursor_->SelectNum() == 0) {
-		mode_choices_->Update(Press.LeftKey(0), Press.RightKey(0));
-		mode_choices_->NextSelectOn(ui_arrows_->Update(0));
-	}
-
-	text_ = &nowText_[cursor_->SelectNum()][mode_choices_->SelectNum()];
-
-	for (int _t = 0; _t < CHOICES; ++_t) {
-		(_t == cursor_->SelectNum()) ?
-			nowText_[_t][mode_choices_->SelectNum()].GetBigger(deltaTime) :
-			nowText_[_t][mode_choices_->SelectNum()].GetSmaller(deltaTime);
-	}
-
-	/*
-		決定ボタンを押したら、選択した項目に合わせた処理を行う
-	*/
-	if (Press.DecisionKey(0)) {
-		se_decision_->PlayOneShot();
-		const int _select = cursor_->SelectNum();
-
-		if (_select == 1)
-			operate_->isPut();
-		else if(!operate_->isDisplayed())
-			DontDestroy->GameMode_.SelectMode((GAMEMODE)mode_choices_->SelectNum());
-	}
-
-	operate_->Update(deltaTime);
-
-	return NextScene::Continue;
+	
+	return _next;
 }
 
 // Draws the scene.
@@ -213,7 +136,7 @@ void TitleScene::Render()
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
-	DefaultRender();
+	display_->Render();
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
 	DXTK->Direct3D9->EndScene();  // シーンの終了を宣言
@@ -235,21 +158,13 @@ void TitleScene::Render()
 	DXTK->ExecuteCommandList();
 }
 
-void TitleScene::DefaultRender() {
-	mv_demo_->Render();
+void TitleScene::SwitchState(DISPLAYMODE mode) {
+	switch (mode) {
+		case DISPLAYMODE::DISPLAY_NORMAL: display_ = &disp_normal_; break;
+		case DISPLAYMODE::DISPLAY_DEMO	: display_ = &disp_demo_;	break;
+		default							: assert(!"TitleScene::SwitchState : 不正な状態です");
+	}
 
-	if (mv_demo_->IsDisplay())
-		return;
-
-	mv_bg_->Render();
-	cursor_->Render(ui_alpha_->Alpha());
-	ui_arrows_->Render(ui_alpha_->Alpha());
-	operate_->Render();
-
-	/*
-		選択肢のテキストを初期化
-		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
-	*/
-	nowText_[0][mode_choices_->SelectNum()].Render(ui_alpha_->Alpha());
-	nowText_[1][mode_choices_->SelectNum()].Render(ui_alpha_->Alpha());
+	//動画の再生
+	display_->MVPlay();
 }

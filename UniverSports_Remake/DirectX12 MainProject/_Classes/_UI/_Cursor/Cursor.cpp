@@ -1,10 +1,9 @@
 #include "Cursor.h"
 
-Cursor::Cursor(int selects) {
-	choices_	= new Choices(selects);
+Cursor::Cursor() {
+	choices_	= new Choices();
 	sp_			= nullptr;
 	pos_		= SimpleMath::Vector3::Zero;
-	SELECTS		= selects;
 }
 
 Cursor::~Cursor() {
@@ -19,8 +18,8 @@ void Cursor::LoadAsset(std::wstring file_name) {
 	sp_ = DX9::Sprite::CreateFromFile(DXTK->Device9, file_name.c_str());
 }
 
-void Cursor::Update() {
-	choices_->Update(Press.DownKey(0), Press.UpKey(0));
+void Cursor::Update(int choices) {
+	choices_->Update(choices, Press.DownKey(0), Press.UpKey(0));
 	choices_->NextSelectOn((Press.DownKey(0)) || (Press.UpKey(0)));  // ’·‰Ÿ‚µ‹ÖŽ~
 
 	pos_.y = choices_->SelectNum() * MOVE_Y + POS_Y;

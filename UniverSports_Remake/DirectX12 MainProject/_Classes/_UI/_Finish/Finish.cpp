@@ -1,4 +1,5 @@
 #include "Finish.h"
+#include "_Classes/_UI/_Fade/Fade.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 
 Finish::Finish() {
@@ -24,12 +25,12 @@ void Finish::LoadAssets() {
 
 void Finish::Update(const float deltaTime) {
 	position_.x		= std::max(0.0f, position_.x - movement_move_ * deltaTime);
-
+	
 	if (position_.x == 0.0f)
 		time_display_	= std::max(0.0f, time_display_ - GAME_CONST.FN_TIME_DISPLAY * deltaTime);
 
 	if (position_.x == 0.0f && time_display_ == 0.0f)
-		alpha_			= std::max(0.0f, alpha_ - movement_alpha_ * deltaTime);
+		FADE::Out(alpha_, 0.0f, deltaTime * movement_alpha_);
 }
 
 void Finish::Render() {

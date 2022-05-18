@@ -74,22 +74,3 @@ void ObjectBase::UpdateToMorton() {
 ObjectBase* ObjectBase::GetHitObject() {
 	return cp_->GetCollision();  // 上方、同レベル、下方の3方向を調べる(四分木探索)
 }
-
-void ObjectBase::ClampLoop(Vector2& pos) {
-	if (pos.x < -GAME_CONST.FieldSide_X)
-		pos.x = GAME_CONST.FieldSide_X;
-	else if (GAME_CONST.FieldSide_X < pos.x)
-		pos.x = -GAME_CONST.FieldSide_X;
-
-	if (pos.y < -GAME_CONST.FieldSide_Y)
-		pos.y = GAME_CONST.FieldSide_Y;
-	else if (GAME_CONST.FieldSide_Y < pos.y)
-		pos.y = -GAME_CONST.FieldSide_Y;
-}
-
-bool ObjectBase::IsFieldOut(Vector2& pos, float size) {
-	const bool _isOut_x = pos.x + size < -GAME_CONST.FieldSide_X || GAME_CONST.FieldSide_X < pos.x - size;
-	const bool _isOut_y = pos.y + size < -GAME_CONST.FieldSide_Y || GAME_CONST.FieldSide_Y < pos.y - size;
-
-	return _isOut_x || _isOut_y;
-}

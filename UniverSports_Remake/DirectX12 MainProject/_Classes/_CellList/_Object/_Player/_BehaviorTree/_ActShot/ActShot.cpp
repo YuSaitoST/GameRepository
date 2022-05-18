@@ -15,7 +15,7 @@ void ActShot::Update(const float deltaTime, ObjPlayer& player) {
 	if (timer_->TimeOut()) {
 		player.AsjustmentForward();
 		player.Shoting(player.MyBallID());
-		timer_->ResetCountTime();
+		timer_->Reset();
 	}
 }
 

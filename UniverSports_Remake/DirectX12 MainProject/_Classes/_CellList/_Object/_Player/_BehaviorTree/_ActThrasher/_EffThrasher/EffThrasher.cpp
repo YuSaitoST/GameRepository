@@ -24,7 +24,7 @@ void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position
 	if (usedThrasher_) {
 		timer_roop_->Update(deltaTime);
 		if (timer_roop_->TimeOut()) {
-			timer_roop_->ResetCountTime();
+			timer_roop_->Reset();
 			Set_Position(position);
 		}
 		Move(-direction * GAME_CONST.JT_MOVEMENT_NOMAL);

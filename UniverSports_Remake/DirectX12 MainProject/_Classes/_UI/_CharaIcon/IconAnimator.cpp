@@ -1,11 +1,15 @@
 #include "IconAnimator.h"
 #include "DontDestroyOnLoad.h"
+#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_UI/_Fade/Fade.h"
 
 bool IconAnimator::display_(false);
 
 IconAnimator::IconAnimator() : alpha_(0) {
-	for (int _i = 0; _i < 4; ++_i)
-		icon_[_i] = new CharaIcon();
+	for (int _i = 0; _i <= 2; _i += 2) {
+		icon_[_i]		= new CharaIcon();
+		icon_[_i + 1]	= new CharaIcon();
+	}
 
 	display_time_ = new CountTimer(3);
 }
@@ -18,13 +22,17 @@ IconAnimator::~IconAnimator() {
 }
 
 void IconAnimator::Initialize() {
-	for (int _i = 0; _i < 4; ++_i)
+	for (int _i = 0; _i <= 2; _i += 2) {
 		icon_[_i]->Initialize(POS_LEFTICON[_i]);
+		icon_[_i + 1]->Initialize(POS_LEFTICON[_i + 1]);
+	}
 }
 
 void IconAnimator::LoadAssets() {
-	for (int _i = 0; _i < 4; ++_i)
-		icon_[_i]->LoadAssets(PLICON_FILENAME[DontDestroy->ChoseColor_[_i]]);
+	for (int _i = 0; _i <= 2; _i += 2) {
+		icon_[_i]->LoadAssets(USFN_SP::LEFT_ICON[DontDestroy->ChoseColor_[_i]]);
+		icon_[_i + 1]->LoadAssets(USFN_SP::LEFT_ICON[DontDestroy->ChoseColor_[_i + 1]]);
+	}
 }
 
 void IconAnimator::Update(const float deltaTime) {
@@ -33,22 +41,13 @@ void IconAnimator::Update(const float deltaTime) {
 		display_ = !display_time_->TimeOut();
 	}
 	else
-		display_time_->ResetCountTime();
+		display_time_->Reset();
 
-	if (display_)
-		FadeIn(deltaTime);
-	else
-		FadeOut(deltaTime);
+	(display_) ?
+		FADE::In(alpha_, 255.0f, deltaTime * SPEED_FADEIN) :
+		FADE::Out(alpha_, 0.0f, deltaTime * SPEED_FADEOUT);
 }
 
 void IconAnimator::Render(const int lifeCount, int index) {
 	icon_[index]->Render(lifeCount, alpha_);
-}
-
-void IconAnimator::FadeIn(const float deltaTime) {
-	alpha_ = std::min(alpha_ + SPEED_FADEIN * deltaTime, 255.0f);
-}
-
-void IconAnimator::FadeOut(const float deltaTime) {
-	alpha_ = std::max(0.0f, alpha_ - SPEED_FADEOUT * deltaTime);
 }

@@ -11,4 +11,4 @@ namespace USFN_MOD {
 	};
 
 	const std::wstring BALL = L"_Models\\_Ball\\ball.X";
-};
+}  //namespace USFN_MOD
