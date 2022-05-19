@@ -36,6 +36,8 @@ public:
 		return _mate;
 	}
 
+	ObjectBase* GetHitObject();
+
 	OBJ_TYPE		myObjectType() { return obj_type_; }
 	btRigidBody*	myRigidbody() { return physics_->Get_RigidBody(); }
 	Vector2&		myPosition() { return pos_; }
@@ -48,7 +50,6 @@ protected:
 	virtual void SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r);
 	
 	void UpdateToMorton();
-	ObjectBase* GetHitObject();
 
 	OBJ_TYPE obj_type_;		// オブジェクトの種類
 	bdCollision* collision_;// 当たり判定

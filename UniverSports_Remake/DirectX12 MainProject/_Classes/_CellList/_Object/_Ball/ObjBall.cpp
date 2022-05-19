@@ -1,5 +1,6 @@
 #include "ObjBall.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
+#include "_Classes/_FieldOutCheck/FieldOutCheck.h"
 #include "DontDestroyOnLoad.h"
 
 float ObjBall::pos_z_smallest_;
@@ -138,5 +139,5 @@ void ObjBall::BallBreak() {
 	id_owner_ = -1;
 	isBreak_ = true;
 	isInPlayerHands_ = false;
-	AssignTransform(Vector3(GAME_CONST.FieldSide_X, GAME_CONST.FieldSide_Y, 0.0f), Vector2::Zero);
+	AssignTransform(Vector3(FIELD::SIDE_X, FIELD::SIDE_Y, 0.0f), Vector2::Zero);
 }

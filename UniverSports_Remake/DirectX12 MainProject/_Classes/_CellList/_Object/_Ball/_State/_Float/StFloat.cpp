@@ -7,8 +7,8 @@
 void StFloat::Initialize() {
 	std::random_device _seed;
 	randomEngine	= std::mt19937(_seed());
-	limit_pos_x		= (!DontDestroy->GameMode_.isBILLIARDS()) ? GAME_CONST.FieldSide_X : 5.5f;
-	limit_pos_y		= (!DontDestroy->GameMode_.isBILLIARDS()) ? GAME_CONST.FieldSide_Y : 5.5f;
+	limit_pos_x		= (!DontDestroy->GameMode_.isBILLIARDS()) ? FIELD::SIDE_X : 5.5f;
+	limit_pos_y		= (!DontDestroy->GameMode_.isBILLIARDS()) ? FIELD::SIDE_Y : 5.5f;
 	limit_direct_x	= DIRECT_X[DontDestroy->GameMode_.SelectionMode() / 3];
 	limit_direct_y	= DIRECT_Y[DontDestroy->GameMode_.SelectionMode() / 3];
 
@@ -75,7 +75,7 @@ SimpleMath::Vector2 StFloat::RandomForward(const SimpleMath::Vector2 position) {
 }
 
 void StFloat::CheckFieldOut(ObjBall* ball) {
-	if (FIELD::IsOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == GAME_CONST.FieldSide_X)) {
+	if (FIELD::IsOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == FIELD::SIDE_X)) {
 		ReSpone(ball);
 	}
 }

@@ -1,6 +1,9 @@
 #include "ObjWire.h"
 #include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
+#include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
+#include "_Strategy/_Wires/Wires.h"
+#include "_Strategy/_Goals/Goals.h"
 #include "DontDestroyOnLoad.h"
 
 ObjWire::ObjWire() {
@@ -11,6 +14,11 @@ ObjWire::ObjWire() {
 ObjWire::ObjWire(Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(WIRE, ORIENTEDBOX, pos, r);
+
+	if (DontDestroy->GameMode_.isDODGEBALL_NOMAL())
+		strategy_ = new Wires();
+	else
+		strategy_ = new Goals();
 
 	se_goal_ = new SoundPlayer();
 }
@@ -38,7 +46,7 @@ void ObjWire::LoadAssets(std::wstring file_name) {
 }
 
 void ObjWire::Update(const float deltaTime) {
-	HitAction(GetHitObject());
+	strategy_->Update(this);
 }
 
 void ObjWire::HitAction(ObjectBase* object) {
