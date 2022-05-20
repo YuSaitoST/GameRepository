@@ -1,5 +1,5 @@
 #include "StGoal.h"
-#include "_Classes/_FieldOutCheck/FieldOutCheck.h"
+#include "_Classes/_Field/Field.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
 void StGoal::Initialize() {

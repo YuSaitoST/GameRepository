@@ -1,6 +1,6 @@
 #include "ObjBall.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
-#include "_Classes/_FieldOutCheck/FieldOutCheck.h"
+#include "_Classes/_Field/Field.h"
 #include "DontDestroyOnLoad.h"
 
 float ObjBall::pos_z_smallest_;

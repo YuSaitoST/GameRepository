@@ -1,5 +1,15 @@
+/**
+ * @file ObjectBase.h
+ * @brief 空間に所属する物体の基底クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
@@ -7,8 +17,14 @@
 #include "btObject.h"
 
 using namespace DirectX::SimpleMath;
+
+//前方宣言
 class Cell;
 
+/**
+* @enum OBJ_TYEP
+* 物体の種類
+*/
 enum OBJ_TYPE { PLAYER, BALL, WIRE, NONE_OBJ_ID };
 
 class ObjectBase {
@@ -48,8 +64,7 @@ public:
 
 protected:
 	virtual void SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r);
-	
-	void UpdateToMorton();
+	virtual void UpdateToMorton();
 
 	OBJ_TYPE obj_type_;		// オブジェクトの種類
 	bdCollision* collision_;// 当たり判定

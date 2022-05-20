@@ -1,34 +1,29 @@
 #include "Cell.h"
 #include "_Classes/_CellList/ObjectManager.h"
-#include "_Classes/_BitCalculation/BitCalculation.h"
 
 Cell::Cell() {
-	level_		= -1;
-	LsIndex_	= -1;
-	MsIndex_	= -1;
+	numbers_	= -1;
 	mp_			= nullptr;
 	next_		= prev_ = this;
 }
 
 Cell::Cell(ObjectBase* m) {
-	level_		= -1;
-	LsIndex_	= -1;
-	MsIndex_	= -1;
+	numbers_	= -1;
 	mp_			= m;
 	next_		= prev_ = this;
-	MoverToMorton(*mp_, level_, LsIndex_, MsIndex_);
+	BitCalculation::MoverToMorton(mp_->myPosition(), mp_->myRadian(), numbers_);
 }
 
 Cell::~Cell() {
-
+	
 }
 
 ObjectBase* Cell::UpperSearch() {
-	int _m = MsIndex_;
+	int _m = numbers_.MsIndex_;
 	ObjectBase* _mr = nullptr;
 
 	// ルート空間まで
-	for (int _i = (level_ - 1); 0 <= _i; _i--) {
+	for (int _i = (numbers_.Level_ - 1); 0 <= _i; _i--) {
 		_m = (_m - 1) / 4;  // Indexを取得
 
 		// _mの空間に対して衝突判定
@@ -66,39 +61,15 @@ ObjectBase* Cell::LowerSearch(int nr) {
 	return nullptr;
 }
 
-void Cell::MoverToMorton(ObjectBase& m, int& L, int& I, int& M) {
-	// 左上、右下の座標(原点が左上の場合の式)
-	Vector2 _UL = Vector2(m.myPosition().x - m.myRadian(), m.myPosition().y + m.myRadian());
-	Vector2 _UR = Vector2(m.myPosition().x + m.myRadian(), m.myPosition().y - m.myRadian());
-
-	// それぞれのモートンを代入
-	int _mUL = BitCalculation::PointToMorton(_UL);
-	int _mUR = BitCalculation::PointToMorton(_UR);
-
-	/* 
-		MortonIndexが同じならば、
-		最大レベル L = N のどれかのマスに収まっていることになる
-			-> 境界をまたいでいない
-	*/
-	const int _XOR = _mUL ^ _mUR;
-
-	int _k = 0;
-	// XORを00が出てくるまでループして、その回った数をKに保存する
-	for (int _b = _XOR; _b != 0; _b >>= 2, _k++);
-
-	L = BitCalculation::DivisionLevel - _k;  // KはLと対になる値を表し、この式から分割レベルLが求まる
-	I = _mUR >> (2 * _k);
-	M = BitCalculation::GetIndex(L, I);
-
-	// _mURを2*Kだけ右シフトする
-	// * _mURを使う理由 : I = _mUL^(_mUL^_mUR)>>2k より I = _mUR>>2K (bit演算の性質 a^(a^b)==b を用いている)
-}
-
+/**
+* @brief 物体が所属する空間とその上下空間を探索し、衝突した物体を返す
+* @return 衝突した物体
+*/
 ObjectBase* Cell::GetCollision() {
 	ObjectBase* _mr = nullptr;
 
 	// 同レベル探索
-	_mr = cellList.GetCollision(this->MsIndex_, this->mp_);
+	_mr = cellList.GetCollision(numbers_.MsIndex_, mp_);
 	if (_mr != nullptr)
 		return _mr;
 
@@ -108,20 +79,24 @@ ObjectBase* Cell::GetCollision() {
 		return _mr;
 
 	// 下方探索
-	_mr = LowerSearch(MsIndex_);
+	_mr = LowerSearch(numbers_.MsIndex_);
 	
 	return _mr;
 }
 
-//双方向リストから抜ける
+/**
+* @brief 双方向リストから抜ける
+*/
 void Cell::Remove() {
 	this->next_->prev_ = this->prev_;
 	this->prev_->next_ = this->next_;
 }
 
-// mp_の座標に合わせてモートン符号を更新する
+/**
+* @brief 所属する物体の座標に合わせて空間を更新
+*/
 void Cell::UpdateToMorton() {
 	Remove();
-	MoverToMorton(*mp_, level_, LsIndex_, MsIndex_);  // 所属空間の更新
+	BitCalculation::MoverToMorton(mp_->myPosition(), mp_->myRadian(), numbers_);
 	cellList.PushList(this);
 }

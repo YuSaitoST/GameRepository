@@ -11,10 +11,12 @@ NormalDisplay::NormalDisplay() : ui_alpha_(0.0f) {
 	mode_choices_	= new Choices();
 	ui_arrows_		= new SelectArrows();
 	operate_		= new OperateUI();
+	blackOut_		= new BlackOut();
 	text_			= nullptr;
 }
 
 NormalDisplay::~NormalDisplay() {
+	delete blackOut_;
 	delete operate_;
 	delete ui_arrows_;
 	delete mode_choices_;
@@ -27,9 +29,11 @@ NormalDisplay::~NormalDisplay() {
 void NormalDisplay::Initialize() {
 	se_decision_->Initialize(USFN_SOUND::SE::DECISION_TITLE, SOUND_TYPE::SE, 2.0f);
 
+	mode_choices_->Initialize();
 	cursor_->Initialize();
 	ui_arrows_->Initialize(ARROW_POS_R_X, ARROW_POS_L_X, ARROW_POS_Y);
 	operate_->Initialize();
+	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 
 	/*
 		選択肢のテキストを初期化
@@ -50,6 +54,7 @@ void NormalDisplay::LoadAssets() {
 	cursor_->LoadAsset(USFN_SP::CURSOR);
 	ui_arrows_->LoadAssets();
 	operate_->LoadAsset();
+	blackOut_->LoadAsset();
 
 	/*
 		選択肢に使用する画像のパスを
@@ -63,6 +68,7 @@ void NormalDisplay::LoadAssets() {
 
 NextScene NormalDisplay::Update(const float deltaTime) {
 	time_start_->Update(deltaTime);
+	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 
 	// タイトルの表示に合わせてUIをフェードインさせる
 	if (time_start_->NowTime() <= 0.5f)
@@ -74,7 +80,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 
 	// 決定音がなり終わったらキャラ選択画面へ
 	if (!DontDestroy->GameMode_.isNotDecision()) {
-		if (se_decision_->PlayOneShot(deltaTime))
+		if (se_decision_->PlayOneShot(deltaTime) && blackOut_->isDone())
 			return NextScene::LobbyScene;
 		else
 			return NextScene::Continue;
@@ -102,6 +108,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 	*/
 	if (Press.DecisionKey(0)) {
 		se_decision_->PlayOneShot();
+		blackOut_->ChangeMode();
 
 		if (cursor_->SelectNum() == 1)
 			operate_->isPut();
@@ -120,6 +127,7 @@ void NormalDisplay::Render() {
 	cursor_->Render(ui_alpha_);
 	ui_arrows_->Render(ui_alpha_);
 	operate_->Render();
+	blackOut_->Render();
 
 	/*
 		選択肢のテキストを初期化

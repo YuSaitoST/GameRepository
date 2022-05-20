@@ -1,4 +1,5 @@
 #include "OperateUI.h"
+#include "_Classes/_FileNames/FileNames.h"
 
 OperateUI::OperateUI() {
 	state_		= &st_close_;
@@ -18,8 +19,8 @@ void OperateUI::Initialize() {
 }
 
 void OperateUI::LoadAsset() {
-	sp_gamepad_ = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Title\\_Operate\\operate_gamepad.png");
-	sp_keybord_ = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Title\\_Operate\\operate_keybord.png");
+	sp_gamepad_ = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::GAMEPAD.c_str());
+	sp_keybord_ = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::KEYBOAD.c_str());
 }
 
 void OperateUI::Update(const float deltaTime) {
@@ -29,23 +30,18 @@ void OperateUI::Update(const float deltaTime) {
 }
 
 void OperateUI::Render() const {
-	DX9::SpriteBatch->DrawSimple(
-		sp_gamepad_.Get(),
-		pos_pad_
-	);
-	DX9::SpriteBatch->DrawSimple(
-		sp_keybord_.Get(),
-		pos_key_
-	);
+	DX9::SpriteBatch->DrawSimple(sp_gamepad_.Get(), pos_pad_);
+	DX9::SpriteBatch->DrawSimple(sp_keybord_.Get(), pos_key_);
 }
 
+/**
+* @brief 入力された際にアニメーションを切り替える処理
+*/
 void OperateUI::isPut() {
-	num_state_ = (num_state_ < 2)	? num_state_ + 1	: 0;
-	num_state_ = ((num_state_ == 2) && (state_->myPosPad().x != 0.0f)) ? 0 : num_state_;
-	isDisplay_ = (1 <= num_state_)	? true				: false;
-	isDisplay_ ?
-		AnimateOn() :
-		AnimateOff();
+	num_state_ = (num_state_ < OPERATE_COUNT)	? num_state_ + 1	: 0;
+	num_state_ = ((num_state_ == OPERATE_COUNT) && (state_->myPosPad().x != 0.0f)) ? 0 : num_state_;
+	isDisplay_ = (1 <= num_state_)	? true : false;
+	isDisplay_ ? AnimateOn() : AnimateOff();
 	state_->SetPosPad(pos_pad_);
 	state_->SetPosKey(pos_key_);
 }

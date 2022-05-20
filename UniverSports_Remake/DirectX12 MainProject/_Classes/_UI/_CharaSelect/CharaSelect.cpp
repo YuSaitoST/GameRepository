@@ -1,6 +1,8 @@
 #include "CharaSelect.h"
 #include "LobbyScene.h"
 #include "DontDestroyOnLoad.h"
+#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_StandardCalculation/StandardCalculation.h"
 
 CharaSelect::CharaSelect() {
 	choices_		= new Choices();
@@ -21,10 +23,11 @@ CharaSelect::~CharaSelect() {
 }
 
 void CharaSelect::Initialize(int index) {
+	choices_->Initialize();
 	ui_arrows_->Initialize(ARROW_R_X[index], ARROW_L_X[index], ARROW_Y);
-	se_decision_->Initialize(L"_Sounds\\_SE\\se_decision.wav", SOUND_TYPE::SE, 0.0f);
-	se_cancel_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_cancel.wav", SOUND_TYPE::SE, 0.0f);
-	se_warning_->Initialize(L"_Sounds\\_SE\\_Lobby\\se_warning.wav", SOUND_TYPE::SE, 0.0f);
+	se_decision_->Initialize(USFN_SOUND::SE::DECISION, SOUND_TYPE::SE, 0.0f);
+	se_cancel_->Initialize(USFN_SOUND::SE::CANCEL, SOUND_TYPE::SE, 0.0f);
+	se_warning_->Initialize(USFN_SOUND::SE::WARNING, SOUND_TYPE::SE, 0.0f);
 }
 
 void CharaSelect::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
@@ -85,7 +88,7 @@ void CharaSelect::Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE 
 void CharaSelect::SelectToAvoidDupLicates(int index) {
 	while (haveSameValue(index)) {
 		DontDestroy->ChoseColor_[index] += 1;
-		ValueLoop(DontDestroy->ChoseColor_[index], 0, 4 - 1);
+		StandardCalculation::ValueLoop(DontDestroy->ChoseColor_[index], 0, 4 - 1);
 	}
 }
 
@@ -101,12 +104,4 @@ bool CharaSelect::haveSameValue(int index) {
 	}
 
 	return false;
-}
-
-void CharaSelect::ValueLoop(int& num, int min, int max) {
-	if (num < min)
-		num = max;
-
-	if (max < num)
-		num = min;
 }

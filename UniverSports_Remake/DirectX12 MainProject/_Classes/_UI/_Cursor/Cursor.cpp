@@ -1,4 +1,7 @@
 #include "Cursor.h"
+#include "_Classes/_InputClasses/UseKeyCheck.h"
+
+using namespace DirectX;
 
 Cursor::Cursor() {
 	choices_	= new Choices();
@@ -11,6 +14,7 @@ Cursor::~Cursor() {
 }
 
 void Cursor::Initialize() {
+	choices_->Initialize();
 	pos_ = SimpleMath::Vector3(POS_X, POS_Y, -2.0f);
 }
 
@@ -28,7 +32,7 @@ void Cursor::Update(int choices) {
 void Cursor::Render(float alpha) const {
 	DX9::SpriteBatch->DrawSimple(
 		sp_.Get(),
-		SimpleMath::Vector3(pos_.x,pos_.y,-2.0f),
+		SimpleMath::Vector3(pos_.x, pos_.y, -2.0f),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, (int)alpha)
 	);

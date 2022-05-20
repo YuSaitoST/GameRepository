@@ -13,8 +13,6 @@
 #include "Base/dxtk.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 
-using namespace DirectX;
-
 /**
  * @enum BLACKOUT_MODE
  * 開始状態
@@ -28,10 +26,16 @@ public:
 
 	void Initialize(BLACKOUT_MODE state);
 	void LoadAsset();
-	void Update(const float deltaTime);
+	void Update(float speed);
 	void Render();
 
 	bool isDone();
+	int GetMode() { return (int)mode_; }
+
+	/**
+	* @brief フェード状態の変更
+	*/
+	void ChangeMode() { mode_ = (BLACKOUT_MODE::FADE_IN) ? BLACKOUT_MODE::FADE_OUT : BLACKOUT_MODE::FADE_IN; }
 
 private:
 	const float		RGBA_MAX		= 255.0f;

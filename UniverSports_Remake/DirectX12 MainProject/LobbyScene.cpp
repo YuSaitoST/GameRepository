@@ -55,6 +55,7 @@ LobbyScene::LobbyScene()
 	}
 
 	timer_goNext_				= new CountTimer(GAME_CONST.LB_GONEXT + 1.0f);
+	blackOut_					= new BlackOut();
 
 	allSet_						= false;
 }
@@ -82,6 +83,7 @@ void LobbyScene::Initialize()
 	}
 
 	bgm_->Initialize(USFN_SOUND::BGM::LOBBY, SOUND_TYPE::BGM, 0.0f);
+	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 
@@ -143,6 +145,7 @@ void LobbyScene::LoadAssets()
 	}
 
 	bg_movie_->LoadAsset(USFN_MV::MAIN_BG);
+	blackOut_->LoadAsset();
 
 	bg_movie_->Play();
 	bgm_->Play();
@@ -159,6 +162,7 @@ void LobbyScene::Terminate()
 	for (int _i = PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(player_[_i]->myRigidbody());
 
+	delete blackOut_;
 	delete timer_goNext_;
 
 	for (int _i = PLAYER - 1; 0 <= _i; --_i)
@@ -200,6 +204,8 @@ NextScene LobbyScene::Update(const float deltaTime)
 
 	bg_movie_->Update();
 
+	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
+
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		if (charaSelect_[_i]->IsDecision())
 			player_[_i]->Update(deltaTime);
@@ -211,8 +217,14 @@ NextScene LobbyScene::Update(const float deltaTime)
 	if (AllDecision()) {
 		timer_goNext_->Update(deltaTime);
 
-		if (timer_goNext_->TimeOut())
-			return NextScene::MainScene;
+		if (timer_goNext_->TimeOut()) {
+			blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);;
+
+			if (blackOut_->isDone())
+				return NextScene::MainScene;
+			else
+				return NextScene::Continue;
+		}
 		else
 			return NextScene::Continue;
 	}
@@ -255,6 +267,7 @@ void LobbyScene::Render()
 
 	Render_String();
 	bg_movie_->Render(MV_POS, MV_SCALE);
+	blackOut_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {

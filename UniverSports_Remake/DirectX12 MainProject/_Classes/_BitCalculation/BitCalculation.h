@@ -12,11 +12,13 @@
  //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
+#include "SpaceNumber.h"
 
 namespace BitCalculation {
 	int BitSlide(int bit);
 	int PointToMorton(DirectX::XMFLOAT2 pos);
 	int GetIndex(int Level, int Index);
+	void MoverToMorton(DirectX::XMFLOAT2 m_pos, float radian, SpaceNumber& numbers);
 
 	//! ï™äÑêî
 	const int NumberOfDivisions = 4;

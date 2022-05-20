@@ -36,4 +36,5 @@ namespace SERIALS {
 	* @return •\¦”ÍˆÍ‚Ì¶x’l
 	*/
 	inline float GetRectX(int number, int numbersMax, int wight) { return std::min(number, numbersMax) * wight; }
+
 }  //namespace SERIALS

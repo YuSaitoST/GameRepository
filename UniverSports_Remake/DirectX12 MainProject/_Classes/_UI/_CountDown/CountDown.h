@@ -15,12 +15,10 @@ public:
 	void Render(float count) const;
 
 private:
-	void SE_Play();
-
-	const float			CENTER_X		= 88.0f;
-	const float			CENTER_Y		= 37.5f;
-	const float			POS_X			= 543.0f + CENTER_X;
-	const float			POS_Y			= 325.0f + CENTER_Y;
+	const float			CENTER_X = 88.0f;
+	const float			CENTER_Y = 37.5f;
+	const float			POS_X	 = 543.0f + CENTER_X;
+	const float			POS_Y	 = 325.0f + CENTER_Y;
 
 	SoundPlayer*		se_count_;
 	DX9::SPRITE			sprite_[4];

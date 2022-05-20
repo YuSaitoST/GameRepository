@@ -49,9 +49,9 @@ void MainScene::Initialize()
 	_light.Register();
 
 	bgm_->Initialize(USFN_SOUND::BGM::MAIN, SOUND_TYPE::BGM, 0.0f);
+	m_object_->Initialize();
 	icon_animator_->Initialize();
 	gameController_->Initialize();
-	m_object_->Initialize();
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 	m_object_->AddWorld(physics_world_);
@@ -80,10 +80,10 @@ void MainScene::LoadAssets()
 
 	DXTK->Direct3D9->SetRenderState(NormalizeNormals_Enable);
 
+	m_object_->LoadAssets();
 	icon_animator_->LoadAssets();
 	field_->LoadAsset();
 	gameController_->LoadAssets();
-	m_object_->LoadAssets();
 	bgm_->Play();
 }
 
@@ -130,15 +130,14 @@ NextScene MainScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
-	physics_world_->stepSimulation(deltaTime, 10);  // —^‚¦‚½’l‚ð10•ªŠ„‚·‚é(”»’è‚ª×‚©‚­‚Å‚«‚é)
+	physics_world_->stepSimulation(deltaTime, 10);
 
 	DX12Effect.Update(deltaTime);
 	Press.Accepts();
 
+	m_object_->Update(deltaTime);
 	icon_animator_->Update(deltaTime);
 	field_->Update();
-
-	m_object_->Update(deltaTime);
 
 	return (NextScene)gameController_->Update(deltaTime);
 }
@@ -159,7 +158,7 @@ void MainScene::Render()
 			icon_animator_->Render(m_object_->PlayerLife(_i + 1), _i + 1);
 		}
 	}
-
+	
 	field_->Render();
 	gameController_->Render();
 	m_object_->RenderSprites();
@@ -183,7 +182,8 @@ void MainScene::Render()
 
 	spriteBatch_->End();
 
-	DX12Effect.Renderer();
+	if (!gameController_->GameFined())
+		DX12Effect.Renderer();
 
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();

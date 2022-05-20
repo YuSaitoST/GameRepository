@@ -14,6 +14,9 @@ namespace USFN_SP {
 		}
 	};
 
+	const std::wstring GAMEPAD = L"_Images\\_Title\\_Operate\\operate_gamepad.png";
+	const std::wstring KEYBOAD = L"_Images\\_Title\\_Operate\\operate_keybord.png";
+
 	const std::wstring CHOICE_ICON[4] = {
 		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_bear.png",
 		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_pig.png",
@@ -92,4 +95,5 @@ namespace USFN_SP {
 	const std::wstring NUMBER		= L"_Images\\_Result\\_UIText\\number.png";
 	const std::wstring GEKIHA		= L"_Images\\_Result\\_UIText\\tex_gekiha.png";
 	const std::wstring SCORE		= L"_Images\\_Result\\_UIText\\tex_score.png";
+
 }  //namespace USFN_SP

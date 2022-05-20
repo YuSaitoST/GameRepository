@@ -1,13 +1,13 @@
 #include "TextUI.h"
 
 void TextUI::Initialize(int modeID, SimpleMath::Vector3 pos) {
-	position_ = pos;
-	scale_ = 1.0f;
-	modeID_ = modeID;
+	position_	= pos;
+	scale_		= 1.0f;
+	modeID_		= modeID;
 }
 
 void TextUI::LoadAsset(std::wstring file_name) {
-	sprite_ = DX9::Sprite::CreateFromFile(DXTK->Device9, file_name.c_str());
+	sprite_		= DX9::Sprite::CreateFromFile(DXTK->Device9, file_name.c_str());
 }
 
 void TextUI::Render(float alpha) {

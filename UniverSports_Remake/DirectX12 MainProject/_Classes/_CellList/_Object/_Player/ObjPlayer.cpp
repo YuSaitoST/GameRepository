@@ -1,5 +1,5 @@
 #include "ObjPlayer.h"
-#include "_Classes/_FieldOutCheck/FieldOutCheck.h"
+#include "_Classes/_Field/Field.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "_Classes/_ConstStrages/ConstStorages.h"
+#include "_Classes/_Field/Field.h"
 #include "_Classes/_CellList/CellList.h"
 #include "_Object/ObjectBase.h"
 #include "_Object/_Player/ObjPlayer.h"

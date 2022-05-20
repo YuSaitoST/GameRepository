@@ -16,15 +16,15 @@ void ComputerChara::LoadAssets() {
 }
 
 void ComputerChara::Update(const float deltaTime) {
-	//if (DontDestroy->NowScene_ != 3)
-	//	return;
+	if (DontDestroy->NowScene_ != 3)
+		return;
 
-	//// [‚³—Dæ’Tõ
-	//for (ActionBase* act : actList_)
-	//	if (act->Think(*player_))
-	//		act->Update(deltaTime, *player_);
+	// [‚³—Dæ’Tõ
+	for (ActionBase* act : actList_)
+		if (act->Think(*player_))
+			act->Update(deltaTime, *player_);
 
-	//SeekRotate(deltaTime, player_->myObjectID());
+	SeekRotate(deltaTime, player_->myObjectID());
 }
 
 void ComputerChara::SeekRotate(const float deltaTime, int index) {

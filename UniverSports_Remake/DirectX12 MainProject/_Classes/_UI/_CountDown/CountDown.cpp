@@ -27,7 +27,7 @@ void CountDownUI::LoadAssets() {
 
 void CountDownUI::Update(const float deltaTime, float nowCount) {
 	if (!se_played_) {
-		SE_Play();
+		se_count_->PlayOneShot();
 		se_played_ = true;
 	}
 
@@ -52,8 +52,4 @@ void CountDownUI::Render(float count) const {
 		SimpleMath::Vector2::One * scale_
 	);
 	DX9::SpriteBatch->ResetTransform();
-}
-
-void CountDownUI::SE_Play() {
-	se_count_->PlayOneShot();
 }

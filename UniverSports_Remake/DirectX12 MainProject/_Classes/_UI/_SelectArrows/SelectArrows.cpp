@@ -1,5 +1,8 @@
 #include "SelectArrows.h"
+#include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
+
+using namespace DirectX;
 
 SelectArrows::SelectArrows() {
 	input_			= AL_NONE;
@@ -30,8 +33,8 @@ void SelectArrows::Initialize(float x_right, float x_left, float y) {
 }
 
 void SelectArrows::LoadAssets() {
-	sp_right_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_right.png");
-	sp_left_		= DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Lobby\\_Arrow\\arrow_left.png");
+	sp_right_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_R.c_str());
+	sp_left_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_L.c_str());
 }
 
 void SelectArrows::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
@@ -87,12 +90,4 @@ void SelectArrows::Animations(float& scale) {
 		GetSmaller(scale);
 
 	input_			= (isFinBigger && isFinSmaller) ? AL_NONE : input_;
-}
-
-void SelectArrows::GetBigger(float& scale) {
-	scale = std::min(scale + 0.15f, SCALE_MAX);
-}
-
-void SelectArrows::GetSmaller(float& scale) {
-	scale = std::max(1.0f, scale - 0.1f);
 }

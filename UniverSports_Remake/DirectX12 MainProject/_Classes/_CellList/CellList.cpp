@@ -11,7 +11,7 @@ CellList::~CellList() {
 }
 
 void CellList::PushList(Cell* cp) {
-	int _m				= cp->MsIndex_;
+	int _m				= cp->numbers_.MsIndex_;
 	int _iMax			= BitCalculation::GetIndex(N + 1, 0);
 
 	assert((0 <= _m) && (_m < _iMax));

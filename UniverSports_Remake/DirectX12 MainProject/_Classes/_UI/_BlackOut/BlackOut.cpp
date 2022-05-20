@@ -27,10 +27,10 @@ void BlackOut::LoadAsset() {
 /**
 * @brief XV
 */
-void BlackOut::Update(const float deltaTime) {
+void BlackOut::Update(float speed) {
 	(mode_ == BLACKOUT_MODE::FADE_IN) ?
-		FADE::In(alpha_, RGBA_MAX, deltaTime * TIME_FADEIN) :
-		FADE::Out(alpha_, 0.0f, deltaTime * TIME_FADEOUT);
+		FADE::In(alpha_, RGBA_MAX, speed) :
+		FADE::Out(alpha_, 0.0f, speed);
 }
 
 /**
@@ -39,9 +39,9 @@ void BlackOut::Update(const float deltaTime) {
 void BlackOut::Render() {
 	DX9::SpriteBatch->DrawSimple(
 		sprite_.Get(),
-		SimpleMath::Vector3(0.0f, 0.0f, -9999.0f),
+		DirectX::XMFLOAT3(0.0f, 0.0f, -9999.0f),
 		nullptr,
-		DX9::Colors::RGBA(RGBA_MAX, RGBA_MAX, RGBA_MAX, alpha_)
+		DX9::Colors::RGBA(0.0f, 0.0f, 0.0f, alpha_)
 	);
 }
 
