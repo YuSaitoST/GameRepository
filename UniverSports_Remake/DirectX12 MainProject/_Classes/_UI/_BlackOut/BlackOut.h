@@ -35,7 +35,7 @@ public:
 	/**
 	* @brief フェード状態の変更
 	*/
-	void ChangeMode() { mode_ = (BLACKOUT_MODE::FADE_IN) ? BLACKOUT_MODE::FADE_OUT : BLACKOUT_MODE::FADE_IN; }
+	void ChangeMode(BLACKOUT_MODE mode) { mode_ = mode; }
 
 private:
 	const float		RGBA_MAX		= 255.0f;

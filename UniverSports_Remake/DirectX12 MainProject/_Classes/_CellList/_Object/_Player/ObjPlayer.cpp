@@ -261,6 +261,7 @@ void ObjPlayer::Beaten(const float deltaTime) {
 		barrier_->DisprayOn();
 		SetTransforms(pos_, rotate_);
 		AssignPosition();
+		UpdateToMorton();
 		isDown_ = false;
 	}
 }

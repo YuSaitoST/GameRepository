@@ -16,8 +16,6 @@
 #include "_StateOpe/_Open/OpeClose.h"
 #include "_StateOpe/_Close/OpeOpen.h"
 
-using namespace DirectX;
-
 class OperateUI {
 public:
 	OperateUI();
@@ -43,7 +41,6 @@ public:
 	bool isDisplayed() const { return isDisplay_; };
 
 private:
-
 	/**
 	* @brief アニメーションをオンにする
 	*/
@@ -73,10 +70,10 @@ private:
 	DX9::SPRITE sp_gamepad_;
 
 	//! キーボード操作説明画像の座標
-	SimpleMath::Vector3 pos_key_;
+	DirectX::XMFLOAT3 pos_key_;
 
 	//! ゲームパッド操作説明画像の座標
-	SimpleMath::Vector3 pos_pad_;
+	DirectX::XMFLOAT3 pos_pad_;
 
 	//! 現在の状態
 	int num_state_;

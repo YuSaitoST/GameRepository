@@ -29,38 +29,33 @@ void ObjectBase::SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, flo
 }
 
 ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
-	if (this->obj_type_ == m->myObjectType())
+	OBJ_TYPE type = m->myObjectType();
+	if (this->obj_type_ == type)
 		return nullptr;
 
-	const COLLI_TYPE type_1 = collision_->GetType();
-	const COLLI_TYPE type_2 = m->collision_->GetType();
+	if (this->obj_type_ != OBJ_TYPE::WIRE) {
+		//自分がプレイヤー
 
-	BoundingSphere sphere_1;
-	BoundingSphere sphere_2;
-	BoundingOrientedBox box;
-
-	// 自身のcollisionを用意
-	if (type_1 == SPHRER)
-		sphere_1 = collision_->GetBoundingSph();
-	else if (type_1 == ORIENTEDBOX)
-		box = collision_->GetBoundingBox();
-
-	// 相手のcollisionを用意
-	if (type_2 == SPHRER)
-		sphere_2 = m->collision_->GetBoundingSph();
-	else if (type_2 == ORIENTEDBOX)
-		box = m->collision_->GetBoundingBox();
-
-	// 衝突判定
-	if (type_1 == SPHRER && type_1 == type_2) {
-		// キャラtoキャラ or キャラtoボール or ボールtoキャラ or ボールtoボール
-		if (sphere_1.Intersects(sphere_2))
-			return m;
+		if (m->myObjectType() != OBJ_TYPE::WIRE) {
+			//球体同士の衝突判定(ボールとプレイヤー)
+			if (this->collision_->GetBoundingSph().Intersects(m->collision_->GetBoundingSph())) {
+				return m;
+			}
+		}
+		else {
+			//球体と直方体の衝突判定(ボールorプレイヤーとワイヤー)
+			if (this->collision_->GetBoundingSph().Intersects(m->collision_->GetBoundingBox())) {
+				return m;
+			}
+		}
 	}
-	else if ((type_1 == SPHRER && type_2 == ORIENTEDBOX) || (type_1 == ORIENTEDBOX && type_2 == SPHRER))
-		// ワイヤーとキャラorボール
-		if (sphere_1.Intersects(box))
+	else {
+		//自分がワイヤー
+		//相手が球体と確定している
+		if (this->collision_->GetBoundingBox().Intersects(m->collision_->GetBoundingSph())) {
 			return m;
+		}
+	}
 
 	return nullptr;
 }

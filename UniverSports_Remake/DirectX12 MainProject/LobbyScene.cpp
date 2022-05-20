@@ -203,7 +203,6 @@ NextScene LobbyScene::Update(const float deltaTime)
 	Press.Accepts();
 
 	bg_movie_->Update();
-
 	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
@@ -218,7 +217,7 @@ NextScene LobbyScene::Update(const float deltaTime)
 		timer_goNext_->Update(deltaTime);
 
 		if (timer_goNext_->TimeOut()) {
-			blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);;
+			blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
 
 			if (blackOut_->isDone())
 				return NextScene::MainScene;

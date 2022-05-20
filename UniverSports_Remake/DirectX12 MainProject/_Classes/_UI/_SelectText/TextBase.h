@@ -13,14 +13,12 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
-using namespace DirectX;
-
 class TextBase {
 public:
 	TextBase() : scale_(0.0f), modeID_(0) {};
 	virtual ~TextBase() {};
 
-	virtual void Initialize(int modeID, SimpleMath::Vector3 pos) = 0;
+	virtual void Initialize(int modeID, DirectX::XMFLOAT3 pos) = 0;
 	virtual void LoadAsset(std::wstring file_name) = 0;
 	virtual void Render(float alpha) = 0;
 
@@ -52,7 +50,7 @@ protected:
 	DX9::SPRITE sprite_;
 
 	//! テキスト座標
-	SimpleMath::Vector3 position_;
+	DirectX::XMFLOAT3 position_;
 	
 	//! テキストサイズ
 	float scale_;

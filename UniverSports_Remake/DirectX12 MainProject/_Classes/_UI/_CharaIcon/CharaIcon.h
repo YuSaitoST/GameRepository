@@ -1,21 +1,27 @@
+/**
+ * @file CharaIcon.h
+ * @brief 残機アイコンクラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
-
-using namespace DirectX;
 
 class CharaIcon {
 public:
 	CharaIcon() {}
 	virtual ~CharaIcon() {}
 
-	void Initialize(SimpleMath::Vector3 pos);
 	void LoadAssets(std::wstring file_name);
-	void Render(const int life, float alpha);
+	void Render(const int life, float alpha, DirectX::XMFLOAT3 pos);
 
 private:
-	SimpleMath::Vector3 pos_;
 	DX9::SPRITE sprite_;
 
 	const int SIZE = 40;

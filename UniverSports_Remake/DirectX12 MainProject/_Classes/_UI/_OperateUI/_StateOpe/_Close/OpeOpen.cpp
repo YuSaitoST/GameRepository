@@ -2,8 +2,8 @@
 #include "_Classes/_UI/_OperateUI/OperateUI.h"
 
 void OpeOpen::Initialize() {
-	pos_ope_pad_ = SimpleMath::Vector3(0.0f, 0.0f, -98.0f);
-	pos_ope_key_ = SimpleMath::Vector3(0.0f, 0.0f, -99.0f);
+	pos_ope_pad_ = DirectX::XMFLOAT3(0.0f, 0.0f, -98.0f);
+	pos_ope_key_ = DirectX::XMFLOAT3(0.0f, 0.0f, -99.0f);
 }
 
 void OpeOpen::Update(const float deltaTime, OperateUI* operate) {

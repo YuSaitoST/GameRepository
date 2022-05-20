@@ -58,22 +58,22 @@ bool SelectArrows::Update(const int index) {
 void SelectArrows::Render(float alpha) {
 	DX9::SpriteBatch->Draw(
 		sp_right_.Get(),
-		SimpleMath::Vector3(pos_right_x_, pos_y_, -30.0f),
+		DirectX::XMFLOAT3(pos_right_x_, pos_y_, -30.0f),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
-		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
-		SimpleMath::Vector3(RECT, RECT, 0.0f),
-		SimpleMath::Vector2::One * scale_right_
+		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+		DirectX::XMFLOAT3(RECT, RECT, 0.0f),
+		DirectX::SimpleMath::Vector2::One * scale_right_
 	);
 	
 	DX9::SpriteBatch->Draw(
 		sp_left_.Get(),
-		SimpleMath::Vector3(pos_left_x_, pos_y_, -30.0f),
+		DirectX::XMFLOAT3(pos_left_x_, pos_y_, -30.0f),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
-		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
-		SimpleMath::Vector3(RECT, RECT, 0.0f),
-		SimpleMath::Vector2::One * scale_left_
+		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+		DirectX::XMFLOAT3(RECT, RECT, 0.0f),
+		DirectX::SimpleMath::Vector2::One * scale_left_
 	);
 
 	DX9::SpriteBatch->ResetTransform();

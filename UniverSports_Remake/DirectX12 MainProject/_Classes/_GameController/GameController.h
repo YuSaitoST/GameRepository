@@ -1,5 +1,15 @@
+/**
+ * @file GameController.h
+ * @brief ゲームの進行管理クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Scene.h"
 #include "DontDestroyOnLoad.h"
 #include "_Classes/_UI/_CountTimer/CountTimer.h"
@@ -27,13 +37,26 @@ private:
 
 	const float TIME_COUNT		= 4.2f;
 	const float TIME_LIMIT[4]	= { 0.0f, 0.0f, 120.0f, 0.0f };
+	const float	SPEED_FADE[3]	= { 51.0f, 510.0f, 0.0f };
 
+	//! タイマー
 	CountTimer*		timer_;
+
+	//! 開始前カウントダウン
 	CountDownUI*	countDown_;
+
+	//! ブラックアウト
 	BlackOut*		blackOut_;
+
+	//! 終了時テキスト
 	Finish*			ui_finish_;
+
+	//! 終了時SE
 	SoundPlayer*	se_whistle_;
 
+	//! ゲームの制限時間
 	float			startTime_;
+
+	//! ゲームの進行状態フラグ
 	static bool		gameStart_;
 };

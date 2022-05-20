@@ -1,5 +1,15 @@
+/**
+ * @file IconAnimator.h
+ * @brief 残機アイコンのアニメーションクラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "CharaIcon.h"
 #include "_Classes/_UI/_CountTimer/CountTimer.h"
 
@@ -8,19 +18,17 @@ public:
 	IconAnimator();
 	virtual ~IconAnimator();
 
-	void Initialize();
 	void LoadAssets();
 	void Update(const float deltaTime);
 	void Render(const int lifeCount, int index);
 
+	/**
+	* @brief 表示状態を返す
+	* @return 表示状態
+	*/
 	static void DisplayOn() { display_ = true; }
 
 private:
-	CharaIcon* icon_[4];
-	CountTimer* display_time_;
-	float alpha_;
-	static bool display_;
-
 	const float SPEED_FADEIN	= 255.0f;
 	const float SPEED_FADEOUT	= 127.5f;
 
@@ -30,10 +38,22 @@ private:
 	const int CEN_Y_1			= 20;
 	const int CEN_Y_2			= CEN_Y_1 + 40 + 10;
 
-	const SimpleMath::Vector3 POS_LEFTICON[4] = {
-		SimpleMath::Vector3(CEN_X_1,CEN_Y_1,0.0f),
-		SimpleMath::Vector3(CEN_X_2,CEN_Y_1,0.0f),
-		SimpleMath::Vector3(CEN_X_1,CEN_Y_2,0.0f),
-		SimpleMath::Vector3(CEN_X_2,CEN_Y_2,0.0f)
+	const DirectX::XMFLOAT3 POS_LEFTICON[4] = {
+		DirectX::XMFLOAT3(CEN_X_1,CEN_Y_1,0.0f),
+		DirectX::XMFLOAT3(CEN_X_2,CEN_Y_1,0.0f),
+		DirectX::XMFLOAT3(CEN_X_1,CEN_Y_2,0.0f),
+		DirectX::XMFLOAT3(CEN_X_2,CEN_Y_2,0.0f)
 	};
+
+	//! アイコン
+	CharaIcon* icon_[4];
+	
+	//! 表示時間のタイマー
+	CountTimer* display_time_;
+	
+	//! 画像のα値
+	float alpha_;
+	
+	//! 表示状態
+	static bool display_;
 };

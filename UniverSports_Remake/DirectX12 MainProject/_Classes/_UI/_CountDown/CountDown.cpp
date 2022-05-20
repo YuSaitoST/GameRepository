@@ -2,9 +2,7 @@
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
-using namespace DirectX;
-
-CountDownUI::CountDownUI() : alpha_(0.0f), scale_(0.0f), se_played_(false) {
+CountDownUI::CountDownUI() : alpha_(0.0f), scale_(0.0f), soundPlay_(false) {
 	se_count_ = new SoundPlayer();
 }
 
@@ -26,9 +24,9 @@ void CountDownUI::LoadAssets() {
 }
 
 void CountDownUI::Update(const float deltaTime, float nowCount) {
-	if (!se_played_) {
+	if (!soundPlay_) {
 		se_count_->PlayOneShot();
-		se_played_ = true;
+		soundPlay_ = true;
 	}
 
 	FADE::Out(alpha_, 0.0f, deltaTime * FADE::COLORMAX);
@@ -44,12 +42,12 @@ void CountDownUI::Render(float count) const {
 
 	DX9::SpriteBatch->Draw(
 		sprite_[_count].Get(),
-		SimpleMath::Vector3(POS_X, POS_Y, 0.0f),
+		DirectX::XMFLOAT3(POS_X, POS_Y, 0.0f),
 		nullptr,
 		DX9::Colors::RGBA(FADE::COLORMAX, FADE::COLORMAX, FADE::COLORMAX, alpha_),
-		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
-		SimpleMath::Vector3(CENTER_X, CENTER_Y, 0.0f),
-		SimpleMath::Vector2::One * scale_
+		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+		DirectX::XMFLOAT3(CENTER_X, CENTER_Y, 0.0f),
+		DirectX::SimpleMath::Vector2::One * scale_
 	);
 	DX9::SpriteBatch->ResetTransform();
 }

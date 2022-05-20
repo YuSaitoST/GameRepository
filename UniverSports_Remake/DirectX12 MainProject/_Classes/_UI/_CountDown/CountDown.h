@@ -1,5 +1,15 @@
+/**
+ * @file CountDown.h
+ * @brief 開始時カウントダウンクラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include"Base/pch.h"
 #include"Base/dxtk.h"
 #include"_Classes/_SoundPlayer/SoundPlayer.h"
@@ -20,9 +30,18 @@ private:
 	const float			POS_X	 = 543.0f + CENTER_X;
 	const float			POS_Y	 = 325.0f + CENTER_Y;
 
+	//! カウントダウンSE
 	SoundPlayer*		se_count_;
+	
+	//! カウントダウン画像
 	DX9::SPRITE			sprite_[4];
+	
+	//! 画像のα値
 	float				alpha_;
+	
+	//! 画像サイズ
 	float				scale_;
-	bool				se_played_;
+
+	//! SE再生フラグ
+	bool				soundPlay_;
 };

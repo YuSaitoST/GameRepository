@@ -108,7 +108,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 	*/
 	if (Press.DecisionKey(0)) {
 		se_decision_->PlayOneShot();
-		blackOut_->ChangeMode();
+		blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
 
 		if (cursor_->SelectNum() == 1)
 			operate_->isPut();

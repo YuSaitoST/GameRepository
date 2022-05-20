@@ -21,13 +21,6 @@ IconAnimator::~IconAnimator() {
 		delete icon_[_i];
 }
 
-void IconAnimator::Initialize() {
-	for (int _i = 0; _i <= 2; _i += 2) {
-		icon_[_i]->Initialize(POS_LEFTICON[_i]);
-		icon_[_i + 1]->Initialize(POS_LEFTICON[_i + 1]);
-	}
-}
-
 void IconAnimator::LoadAssets() {
 	for (int _i = 0; _i <= 2; _i += 2) {
 		icon_[_i]->LoadAssets(USFN_SP::LEFT_ICON[DontDestroy->ChoseColor_[_i]]);
@@ -49,5 +42,5 @@ void IconAnimator::Update(const float deltaTime) {
 }
 
 void IconAnimator::Render(const int lifeCount, int index) {
-	icon_[index]->Render(lifeCount, alpha_);
+	icon_[index]->Render(lifeCount, alpha_, POS_LEFTICON[index]);
 }

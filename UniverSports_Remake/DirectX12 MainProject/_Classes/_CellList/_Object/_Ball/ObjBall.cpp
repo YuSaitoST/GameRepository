@@ -57,6 +57,8 @@ void ObjBall::LoadAssets(DX9::MODEL& model) {
 	SetTransforms();
 
 	r_ = model->GetBoundingSphere().Radius;
+
+	UpdateToMorton();
 }
 
 void ObjBall::Update(const float deltaTime) {
@@ -85,6 +87,7 @@ void ObjBall::SwitchState(B_STATE state) {
 		default					:assert(!"ObjBall::SwitchState : •s³‚Èó‘Ô‚Å‚·");
 	}
 	state_->Initialize();
+	UpdateToMorton();
 }
 
 void ObjBall::SwitchColor(COLOR_TYPE colorType) {

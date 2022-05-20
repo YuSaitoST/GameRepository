@@ -50,7 +50,6 @@ void MainScene::Initialize()
 
 	bgm_->Initialize(USFN_SOUND::BGM::MAIN, SOUND_TYPE::BGM, 0.0f);
 	m_object_->Initialize();
-	icon_animator_->Initialize();
 	gameController_->Initialize();
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));

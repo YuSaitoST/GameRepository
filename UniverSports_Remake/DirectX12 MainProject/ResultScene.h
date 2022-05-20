@@ -40,6 +40,8 @@ public:
 
 
 private:
+	const float					SPEED_FADE[3] = { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
+
 	DX12::DESCRIPTORHEAP		descriptorHeap_;
 	DX12::SPRITEBATCH			spriteBatch_;
 	DX12::HGPUDESCRIPTOR		dx9GpuDescriptor_;

@@ -118,15 +118,16 @@ NextScene ResultScene::Update(const float deltaTime)
 	Press.Accepts();
 
 	bg_movie_->Update();
-	blackOut_->Update(deltaTime);
+	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 
 	if (!goNext_) {
 		if (Press.DecisionKey(0) || Press.DecisionKey(1) || Press.DecisionKey(2) || Press.DecisionKey(3)) {
+			blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
 			goNext_ = true;
 		}
 	}
 	else {
-		if (se_decision_->PlayOneShot(deltaTime))
+		if (se_decision_->PlayOneShot(deltaTime) && blackOut_->isDone())
 			return NextScene::TitleScene;
 	}
 

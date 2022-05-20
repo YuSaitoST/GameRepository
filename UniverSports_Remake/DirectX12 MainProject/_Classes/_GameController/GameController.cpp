@@ -23,7 +23,7 @@ GameController::~GameController() {
 
 void GameController::Initialize() {
 	countDown_->Initialize();
-	blackOut_->Initialize(BLACKOUT_MODE::FADE_IN);
+	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 	ui_finish_->Initialize();
 	se_whistle_->Initialize(L"_Sounds\\_SE\\_Main\\se_whistle.wav", SOUND_TYPE::SE, 1.0f);
 }
@@ -36,16 +36,19 @@ void GameController::LoadAssets() {
 
 NextScene GameController::Update(const float deltaTime) {
 	timer_->Update(deltaTime);
-
-	// 4.2 - max( 0 ,  4.2 ～ 0 )
+	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 	countDown_->Update(deltaTime, (TIME_COUNT - (startTime_ - timer_->NowTime())));
 
 	if (GameFined()) {
+		if (gameStart_)
+			blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
+
 		gameStart_ = false;
-		blackOut_->Update(deltaTime);
 		ui_finish_->Update(deltaTime);
+
 		const bool _seFined = se_whistle_->PlayOneShot(deltaTime);
 
+		//全てのアニメーションが終了したらリザルトへ遷移する
 		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && _seFined)
 			return NextScene::ResultScene;
 	}
@@ -60,9 +63,14 @@ void GameController::Render() {
 		return;
 
 	countDown_->Render((TIME_COUNT - std::max(0.0f, (startTime_ - timer_->NowTime()))));
-	gameStart_ = TIME_COUNT <= (startTime_ - timer_->NowTime());  // カウントダウン(4.2f)より経過時間が長ければ
+	gameStart_ = TIME_COUNT <= (startTime_ - timer_->NowTime());  // カウントダウン(4.2f)より経過時間が長ければtrue
 }
 
+
+/**
+* @brief ゲームの終了状態を返す
+* @return ゲームの終了状態
+*/
 bool GameController::GameFined() {
 	GameModes _gameMode = DontDestroy->GameMode_;
 
@@ -79,6 +87,11 @@ bool GameController::GameFined() {
 	return false;
 }
 
+
+/**
+* @brief 残りの選手が1人かを調べる
+* @return 現在残っている人数
+*/
 int GameController::RemainingNumberOfPlayer() {
 	int count = 0;
 	count += (int)DontDestroy->Survivor_[0];
@@ -88,6 +101,10 @@ int GameController::RemainingNumberOfPlayer() {
 	return count;
 }
 
+/**
+* @brief 残りのチームが1つかを調べる
+* @return 現在残っているチーム数
+*/
 int GameController::RemainingOfTeam() {
 	// 残り人数が2人より多いまたは最後の1人なら、調べる必要がないため、早期リターンする
 	const int count = RemainingNumberOfPlayer();

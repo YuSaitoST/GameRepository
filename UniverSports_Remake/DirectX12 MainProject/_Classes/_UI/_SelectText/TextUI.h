@@ -22,7 +22,7 @@ public:
 	 * @param modeID モードのID
 	 * @pos 画像の座標
 	*/
-	virtual void Initialize(int modeID, SimpleMath::Vector3 pos);
+	virtual void Initialize(int modeID, DirectX::XMFLOAT3 pos);
 
 	/**
 	 * @brief ファイルの読み込み

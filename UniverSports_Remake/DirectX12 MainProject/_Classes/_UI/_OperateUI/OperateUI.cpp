@@ -5,7 +5,7 @@ OperateUI::OperateUI() {
 	state_		= &st_close_;
 	sp_gamepad_ = nullptr;
 	sp_keybord_	= nullptr;
-	pos_key_	= SimpleMath::Vector3::Zero;
+	pos_key_	= DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	num_state_	= 0;
 	isDisplay_	= false;
 }
@@ -14,8 +14,8 @@ void OperateUI::Initialize() {
 	st_open_.Initialize();
 	st_close_.Initialize();
 
-	pos_pad_	= SimpleMath::Vector3(-1280.0f, 0.0f, -98.0f);
-	pos_key_	= SimpleMath::Vector3(-1280.0f, 0.0f, -99.0f);
+	pos_pad_	= DirectX::XMFLOAT3(-1280.0f, 0.0f, -98.0f);
+	pos_key_	= DirectX::XMFLOAT3(-1280.0f, 0.0f, -99.0f);
 }
 
 void OperateUI::LoadAsset() {

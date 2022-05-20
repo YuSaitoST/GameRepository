@@ -1,5 +1,15 @@
+/**
+ * @file ActThrasher.h
+ * @brief 加速行動クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
@@ -9,6 +19,7 @@
 
 using namespace DirectX;
 
+//前方宣言
 class ObjPlayer;
 
 class ActThrasher : public ActionBase {
@@ -25,6 +36,9 @@ public:
 	virtual bool Think(ObjPlayer& player);
 
 private:
+	//! スラスターエフェクト
 	EffThrasher* effect_;
+
+	//! スラスターゲージ
 	Gauge* gauge_;
 };

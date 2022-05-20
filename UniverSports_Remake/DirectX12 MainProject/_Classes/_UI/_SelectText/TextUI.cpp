@@ -1,6 +1,6 @@
 #include "TextUI.h"
 
-void TextUI::Initialize(int modeID, SimpleMath::Vector3 pos) {
+void TextUI::Initialize(int modeID, DirectX::XMFLOAT3 pos) {
 	position_	= pos;
 	scale_		= 1.0f;
 	modeID_		= modeID;
@@ -16,8 +16,8 @@ void TextUI::Render(float alpha) {
 		position_,
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
-		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
-		SimpleMath::Vector3(CENTER_X, CENTER_Y, 0.0f),
-		SimpleMath::Vector2::One * scale_
+		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
+		DirectX::XMFLOAT3(CENTER_X, CENTER_Y, 0.0f),
+		DirectX::SimpleMath::Vector2::One * scale_
 	);
 }

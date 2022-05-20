@@ -11,7 +11,6 @@ CharaSelect::CharaSelect() {
 	se_cancel_		= new SoundPlayer();
 	se_warning_		= new SoundPlayer();
 	isDecision_		= false;
-	isCansel_		= false;
 }
 
 CharaSelect::~CharaSelect() {
@@ -85,6 +84,10 @@ void CharaSelect::Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE 
 		DX9::SpriteBatch->DrawSimple(entry.Get(), SimpleMath::Vector3(ENTRY_X[index], ENTRY_Y, -90));
 }
 
+/**
+* @brief まだ選ばれていないキャラを探索し選択する
+* @param index 自身の番号
+*/
 void CharaSelect::SelectToAvoidDupLicates(int index) {
 	while (haveSameValue(index)) {
 		DontDestroy->ChoseColor_[index] += 1;
@@ -92,6 +95,11 @@ void CharaSelect::SelectToAvoidDupLicates(int index) {
 	}
 }
 
+/**
+* @brief 他のプレイヤーが選んでいるキャラと重複しているかを調べる
+* @param index 自身の番号
+* @return 他のプレイヤーが選んでいるキャラと重複しているならtrue
+*/
 bool CharaSelect::haveSameValue(int index) {
 	for (int _i = 0; _i < 4; ++_i) {
 		// 自分のIDだったら調べなおす
