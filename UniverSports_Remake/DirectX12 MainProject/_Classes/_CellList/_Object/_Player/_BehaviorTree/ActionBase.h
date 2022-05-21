@@ -1,17 +1,27 @@
+/**
+ * @file ActionBase.h
+ * @brief プレイヤーの行動基底クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
 using namespace DirectX;
 
-enum BEHAVIOR {
-	IS_MOVE,
-	IS_SHOT,
-	IS_ACCEL,
-	IS_NONE
-};
+/**
+* @enum BEHAVIOR
+* 行動パターン
+*/
+enum BEHAVIOR { IS_MOVE, IS_SHOT, IS_ACCEL, IS_NONE };
 
+//前方宣言
 class ObjPlayer;
 
 class ActionBase {
@@ -27,8 +37,13 @@ public:
 
 	virtual bool Think(ObjPlayer& player) = 0;  // 行動条件を考慮する
 
+	/**
+	* @brief 正面方向を返す
+	* @return 正面方向
+	*/
 	SimpleMath::Vector2 GetDirection() { return direction_; };
 
 protected:
+	//! 正面ベクトル
 	SimpleMath::Vector2 direction_;
 };

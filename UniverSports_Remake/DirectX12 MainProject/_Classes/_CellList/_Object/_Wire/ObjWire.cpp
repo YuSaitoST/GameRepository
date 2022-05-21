@@ -29,7 +29,7 @@ ObjWire::~ObjWire() {
 
 void ObjWire::Initialize(const int id) {
 	id_my_ = id;
-	physics_ = new btObject(BOX, Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
+	physics_ = new btObject(BT_BOX, Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
 	se_goal_->Initialize(L"_Sounds\\_SE\\_Main\\se_goal.wav", SOUND_TYPE::SE, 0.0f);
 
 	UpdateToMorton();

@@ -1,5 +1,15 @@
+/**
+ * @file ActMove.h
+ * @brief 移動行動クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
@@ -24,10 +34,6 @@ public:
 
 private:
 	Vector2 GetVerticalDirection(Vector2 targetsDirection);
-	float GetVectorLenght(Vector2 v);  // 長さ
-	float DotProduct(Vector2 v1, Vector2 v2);  // 内積
-	float RadianOf2Vector(Vector2 a, Vector2 b);  // なす角θ
-
 	void SeekEscapeDirection(Vector2 targetsDirection);
 	void SeekForwardDirection(Vector2 myPosition, Vector2 targetPosition);
 };

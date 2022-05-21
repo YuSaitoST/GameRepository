@@ -65,6 +65,20 @@ namespace USFN_SP {
 		}
 	};
 
+	const std::wstring GAUGE_LEFT[3] = {
+		L"_Images\\_Main\\_Player\\_Gauge\\_long\\g_green_long.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_long\\g_orange_long.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_long\\g_red_long.png"
+	};
+
+	const std::wstring GAUGE_RIGHT[3] = {
+		L"_Images\\_Main\\_Player\\_Gauge\\_tip\\g_green_tip.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_tip\\g_orange_tip.png",
+		L"_Images\\_Main\\_Player\\_Gauge\\_tip\\g_red_tip.png"
+	};
+
+	const std::wstring GAUGE_FLAME = L"_Images\\_Main\\_Player\\_Gauge\\flame.png";
+
 	const std::wstring WINNERCHARA[4] = {
 		L"_Images\\_Result\\_WinnerChara\\result_bear.png",
 		L"_Images\\_Result\\_WinnerChara\\result_pig.png",

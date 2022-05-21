@@ -1,5 +1,15 @@
+/**
+ * @file CellList.h
+ * @brief 空間リストクラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "_Object/ObjectBase.h"
 
 // 前方宣言
@@ -11,10 +21,12 @@ public:
 	CellList();
 	virtual ~CellList();
 
-	void PushList(Cell* cp);  // リストに追加
-	ObjectBase* GetCollision(int index, ObjectBase* m);  // 衝突判定	
+	void PushList(Cell* cp);
+	ObjectBase* GetCollision(int index, ObjectBase* m);
 
 private:
-	const int N = 3;  // 分割レベルの最大
-	Cell* cpList_;  // 線形空間リスト(CellをまとめるList)
+	//! 分割レベルの最大値
+	const int N = 3;
+	//! 線形空間リスト
+	Cell* cpList_;
 };

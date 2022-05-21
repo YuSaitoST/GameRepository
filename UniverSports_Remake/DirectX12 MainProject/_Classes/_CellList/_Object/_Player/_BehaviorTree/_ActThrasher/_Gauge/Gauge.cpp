@@ -1,8 +1,9 @@
 #include "Gauge.h"
+#include "_Classes/_FileNames/FileNames.h"
 
 Gauge::Gauge() {
-	color_				= COLOR::GREEN;
-	position_			= SimpleMath::Vector3::Zero;
+	color_				= GAUGECOLOR::GREEN;
+	position_			= DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	movement_decrease_	= 0.0f;
 	movement_recovery_	= 0.0f;
 	proportion_			= 0.0f;
@@ -20,23 +21,25 @@ void Gauge::Initialize() {
 
 void Gauge::LoadAssets() {
 	for (int _i = 0; _i < 3; ++_i)
-		sp_gauge_L_[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_GL[_i].c_str());
+		sp_gauge_L_[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::GAUGE_LEFT[_i].c_str());
 	for (int _i = 0; _i < 3; ++_i)
-		sp_gauge_R_[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, FILENAME_GR[_i].c_str());
+		sp_gauge_R_[_i] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::GAUGE_RIGHT[_i].c_str());
 
-	sp_flame_ = DX9::Sprite::CreateFromFile(DXTK->Device9, L"_Images\\_Main\\_Player\\_Gauge\\flame.png");
+	sp_flame_ = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::GAUGE_FLAME.c_str());
 }
 
 void Gauge::Update(const float deltaTime, bool usedThrasher) {
-	usedThrasher ? IsDecrease(deltaTime) : IsRecovery(deltaTime);
+	usedThrasher ? 
+		IsDecrease(gauge_, movement_decrease_ * deltaTime, 0.0f) : 
+		IsRecovery(gauge_, movement_recovery_ * deltaTime, MAX_GAUGE);
 
 	proportion_		= std::min(std::max(0.1f, (gauge_ / MAX_GAUGE)), 1.0f);
 
 	gauge_rect_x_	= MAX_GAUGE * proportion_;
 
-	color_ = (GtoO <= proportion_) ? COLOR::GREEN  :
-			 (OtoR <= proportion_) ? COLOR::ORANGE :
-									 COLOR::RED;
+	color_ = (GtoO <= proportion_) ? GAUGECOLOR::GREEN  :
+			 (OtoR <= proportion_) ? GAUGECOLOR::ORANGE :
+									 GAUGECOLOR::RED;
 }
 
 void Gauge::Render() {
@@ -44,17 +47,9 @@ void Gauge::Render() {
 		return;
 
 	position_ = DXTK->Direct3D9->WorldToScreenPoint(position_, Camera.GetCamera());
-	position_ += SimpleMath::Vector3(-35.0f, -60.0f, 0.0f);
+	position_ += DISPLAY_POSITION;
 
-	DX9::SpriteBatch->DrawSimple(sp_gauge_L_[color_].Get(), SimpleMath::Vector3(position_.x, position_.y, -999.0f), RECT(0.0f, 0.0f, gauge_rect_x_, RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_gauge_R_[color_].Get(), SimpleMath::Vector3(position_.x - MAX_GAUGE + gauge_rect_x_, position_.y, -998.0f));
-	DX9::SpriteBatch->DrawSimple(sp_flame_			.Get(), SimpleMath::Vector3(position_.x, position_.y, -997.0f), nullptr, DX9::Colors::RGBA(255, 255, 255, 255));  // GBÇ20Ç≠ÇÁÇ¢Ç…Ç∑ÇÈÇ∆ê‘îwåiÇ…Ç»ÇÈ
-}
-
-void Gauge::IsDecrease(const float deltaTime) {
-	gauge_ = std::max(0.0f, gauge_ - movement_decrease_ * deltaTime);
-}
-
-void Gauge::IsRecovery(const float deltaTime) {
-	gauge_ = std::min(gauge_ + movement_recovery_ * deltaTime, MAX_GAUGE);
+	DX9::SpriteBatch->DrawSimple(sp_gauge_L_[color_].Get(), DirectX::XMFLOAT3(position_.x, position_.y, -999.0f), RECT(0.0f, 0.0f, gauge_rect_x_, RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_gauge_R_[color_].Get(), DirectX::XMFLOAT3(position_.x - MAX_GAUGE + gauge_rect_x_, position_.y, -998.0f));
+	DX9::SpriteBatch->DrawSimple(sp_flame_			.Get(), DirectX::XMFLOAT3(position_.x, position_.y, -997.0f), nullptr, DX9::Colors::RGBA(255, 255, 255, 255));  // GBÇ20Ç≠ÇÁÇ¢Ç…Ç∑ÇÈÇ∆ê‘îwåiÇ…Ç»ÇÈ
 }

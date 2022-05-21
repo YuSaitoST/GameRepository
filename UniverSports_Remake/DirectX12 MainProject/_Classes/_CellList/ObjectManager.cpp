@@ -54,7 +54,6 @@ void ObjectManager::Initialize() {
 }
 
 void ObjectManager::LoadAssets() {
-	mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, 13.75f, 2.35f, 1.0f);
 	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, USFN_MOD::BALL.c_str());
 	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
 	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
@@ -160,8 +159,8 @@ Vector2 ObjectManager::PlayerHandsPos(int index) {
 ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, float& comparison) {
 	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
-	float _new_comparison;  // 現在調べている距離
-	float _min_comparison = 99.0f;  // 一番近い距離
+	float _new_distance;  // 現在調べている距離
+	float _min_distance = 99.0f;  // 一番近い距離
 
 	for (ObjectBase* obj : obj_player_) {
 		if ((90.0f <= obj->myPosition().x) && (90.0f <= obj->myPosition().y))
@@ -170,15 +169,15 @@ ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, flo
 		if (obj->myObjectID() == id)
 			continue;
 
-		_new_comparison = _new_comparison = Comparison2Vector(pos, obj->myPosition());
+		_new_distance = _new_distance = Distance2Vector(pos, obj->myPosition());
 
-		if (_new_comparison < _min_comparison) {
-			_min_comparison = _new_comparison;
+		if (_new_distance < _min_distance) {
+			_min_distance = _new_distance;
 			_obj = obj;
 		}
 	}
 
-	comparison = _min_comparison;
+	comparison = _min_distance;
 
 	return _obj;
 }
@@ -186,27 +185,27 @@ ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, flo
 ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) {
 	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
-	float _new_comparison;  // 現在調べている距離
-	float _min_comparison = 99.0f;  // 一番近い距離
+	float _new_distance;  // 現在調べている距離
+	float _min_distance = 99.0f;  // 一番近い距離
 
 	for (ObjectBase* obj : obj_ball_) {
 		// 自分だったら無視
 		if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
 			continue;
 
-		_new_comparison = Comparison2Vector(pos, obj->myPosition());
-
-		if (_new_comparison < _min_comparison) {
-			_min_comparison = _new_comparison;
+		_new_distance = Distance2Vector(pos, obj->myPosition());
+		
+		if (_new_distance < _min_distance) {
+			_min_distance = _new_distance;
 			_obj = obj;
 		}
 	}
 
-	comparison = _min_comparison;
+	comparison = _min_distance;
 
 	return _obj;
 }
 
-float ObjectManager::Comparison2Vector(const Vector2 p1, const Vector2 p2) {
+float ObjectManager::Distance2Vector(const Vector2 p1, const Vector2 p2) {
 	return std::sqrtf(std::powf(p1.x - p2.x, 2) + std::powf(p1.y - p2.y, 2));
 }

@@ -2,16 +2,13 @@
 
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_Classes/_CellList/_Object/_Player/_MyLife/MyLife.h"
+#include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_CellList/_TeamID/TeamID.h"
-#include "_State/CharaState.h"
 #include "_Strategy/CharaStrategy.h"
 #include "_Strategy/_ManualChara/ManualChara.h"
 #include "_Strategy/_ComputerChara/ComputerChara.h"
 #include "_Barrier/Barrier.h"
-
 #include "_EffDown/EffDown.h"
-
-#include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 
 class ObjPlayer final : public ObjectBase {
 private:

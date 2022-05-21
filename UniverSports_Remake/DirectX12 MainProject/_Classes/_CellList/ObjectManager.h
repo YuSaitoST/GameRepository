@@ -1,5 +1,15 @@
+/**
+ * @file ObjectManager.h
+ * @brief 物体の統括クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_Field/Field.h"
 #include "_Classes/_CellList/CellList.h"
@@ -8,7 +18,8 @@
 #include "_Object/_Ball/ObjBall.h"
 #include "_Object/_Wire/ObjWire.h"
 
-extern CellList cellList;  // 空間リスト
+//! 空間リスト
+extern CellList cellList;
 
 class ObjectManager {
 private:
@@ -61,14 +72,20 @@ public:
 	static ObjBall* Access(const int ballID) { return obj_ball_[ballID]; }
 
 private:
-	static float Comparison2Vector(const Vector2 p1, const Vector2 p2);
+	static float Distance2Vector(const Vector2 p1, const Vector2 p2);
 
+	//! プレイヤーリスト
 	static ObjPlayer* obj_player_[N_PLAYER];
+	
+	//! ボールリスト
 	static std::vector<ObjBall*> obj_ball_;
+	
+	//! ワイヤーリスト
 	static ObjWire* obj_wire_[N_WIRE];
 
+	//! ゲーム内で使用するボールの数
 	int N_BALL;
 
-	DX9::MODEL mod_wire_;
+	//! ボールのモデル
 	DX9::MODEL mod_ball_;
 };

@@ -33,6 +33,9 @@ void Barrier::Render() {
 	}
 }
 
+/**
+* @brief バリアのマテリアルを登録する
+*/
 void Barrier::SetMaterial() {
 	D3DMATERIAL9 _mate{};
 	_mate.Diffuse	= DX9::Colors::Value(1.0f, 1.0f, 1.0f, 0.25f);

@@ -1,5 +1,15 @@
+/**
+ * @file ComputerChara.h
+ * @brief コンピューター操作クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "_Classes/_CellList/_Object/_Player/_Strategy/CharaStrategy.h"
 #include "_Classes/_CellList/_Object/_Player/_BehaviorTree/ActionBase.h"
 
@@ -11,6 +21,4 @@ public:
 	virtual void Initialize(int id, ObjPlayer* player);
 	virtual void LoadAssets();
 	virtual void Update(const float deltaTime);
-
-	virtual void SeekRotate(const float deltaTime, int index);
 };

@@ -79,7 +79,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 
 	CreateModel(file_name.c_str());
 	rotate_		= Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
-	forward_	= strategy_->GetForward();
+	forward_ = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 	r_			= model_->GetBoundingSphere().Radius;
 	
 	barrier_->LoadAsset(r_);
@@ -224,7 +224,7 @@ void ObjPlayer::CautchedBall(const int ballID) {
 }
 
 Vector2 ObjPlayer::Get_HandPos() {
-	const Vector2 _dir = strategy_->GetForward();
+	const Vector2 _dir = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 	const int _dir_x = std::roundf(_dir.x), _dir_y = std::roundf(_dir.y);
 
 	handForward_.x = std::cosf(6) * std::cosf(strategy_->GetRotateX()) - std::sinf(6) * std::sinf(strategy_->GetRotateX());
@@ -241,7 +241,7 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 	AssignPosition();
 	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
-	forward_ = strategy_->GetForward();
+	forward_ = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 
 	FIELD::ClampLoop(pos_);
 

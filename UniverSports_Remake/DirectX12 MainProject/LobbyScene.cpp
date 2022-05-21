@@ -45,7 +45,6 @@ LobbyScene::LobbyScene()
 	bg_movie_					= new MoviePlayer();
 	bgm_						= new SoundPlayer();
 
-	// ループ回数を削減するため、1度のループ内で2つずつ処理する
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		player_[_i]				= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
 		charaSelect_[_i]		= new CharaSelect();
@@ -267,7 +266,7 @@ void LobbyScene::Render()
 	Render_String();
 	bg_movie_->Render(MV_POS, MV_SCALE);
 	blackOut_->Render();
-	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), Vector3(0.0f, 0.0f, 1100.0f));
+	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), XMFLOAT3(0.0f, 0.0f, 1100.0f));
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		charaSelect_[_i		]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i		]], sp_decisions[charaSelect_[_i	]->IsDecision()], sp_entry, _i		);
@@ -277,8 +276,8 @@ void LobbyScene::Render()
 	// チームカラーの表示
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
 		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
-			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), Vector3(TEAM_COL_X[_i		], TEAM_COL_Y, 100.0f));
-			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), Vector3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, 100.0f));
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), XMFLOAT3(TEAM_COL_X[_i		], TEAM_COL_Y, 100.0f));
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), XMFLOAT3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, 100.0f));
 		}
 	}
 
@@ -311,12 +310,12 @@ void LobbyScene::ChangeStrategy(const int plIndex) {
 
 void LobbyScene::Render_String() {
 	if (allSet_) {
-		DX9::SpriteBatch->DrawString(font_count_.Get(), SimpleMath::Vector2(50.0f, 100.0f), DX9::Colors::Black, L"開始まで...");
-		DX9::SpriteBatch->DrawString(font_count_.Get(), SimpleMath::Vector2(50.0f, 140.0f), DX9::Colors::Black, L"%i 秒", (int)timer_goNext_->NowTime());
+		DX9::SpriteBatch->DrawString(font_count_.Get(), XMFLOAT2(50.0f, 100.0f), DX9::Colors::Black, L"開始まで...");
+		DX9::SpriteBatch->DrawString(font_count_.Get(), XMFLOAT2(50.0f, 140.0f), DX9::Colors::Black, L"%i 秒", (int)timer_goNext_->NowTime());
 	}
 
-	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すと残りのプレイヤーを");
-	DX9::SpriteBatch->DrawString(font_message_.Get(), SimpleMath::Vector2(50.0f, 360.0f), DX9::Colors::Black, L"決定にすることができます");
+	DX9::SpriteBatch->DrawString(font_message_.Get(), XMFLOAT2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すと他のプレイヤーを");
+	DX9::SpriteBatch->DrawString(font_message_.Get(), XMFLOAT2(50.0f, 360.0f), DX9::Colors::Black, L"決定にすることができます");
 }
 
 void LobbyScene::GiveTeamID(int myID) {

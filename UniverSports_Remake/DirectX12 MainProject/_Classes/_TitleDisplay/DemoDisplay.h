@@ -11,7 +11,6 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include "DisplayBase.h"
-#include "_Classes/_DemoPlay/DemoPlay.h"
 
 class DemoDisplay final : public DisplayBase {
 public:

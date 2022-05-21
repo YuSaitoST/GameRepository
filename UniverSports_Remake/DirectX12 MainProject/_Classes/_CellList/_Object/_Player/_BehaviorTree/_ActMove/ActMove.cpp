@@ -17,8 +17,8 @@ void ActMove::Update(const float deltaTime, ObjPlayer& player) {
 bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
 
-	ObjectBase* _targetPlayer = ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
-	ObjectBase* _targetBall = ObjectManager::TheClosestBall(my.myPosition(), _comparison);
+	ObjectBase* _targetPlayer	= ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
+	ObjectBase* _targetBall		= ObjectManager::TheClosestBall(my.myPosition(), _comparison);
 
 	if (_targetPlayer != nullptr) {
 		if (((ObjPlayer*)_targetPlayer)->HasBall()) {
@@ -48,28 +48,19 @@ bool ActMove::Think(ObjPlayer& my) {
 	}
 }
 
-
+/**
+* @brief 垂直方向を返す
+* @param targetDirection 相手の方向
+* @return 垂直方向ベクトル
+*/
 Vector2 ActMove::GetVerticalDirection(Vector2 targetsDirection) {
 	return Vector2(-targetsDirection.y, targetsDirection.x);
 }
 
-float ActMove::GetVectorLenght(Vector2 v) {
-	return std::pow((v.x * v.x) + (v.y * v.y), 0.5f);
-}
-
-float ActMove::DotProduct(Vector2 v1, Vector2 v2) {
-	return (v1.x * v2.x) + (v2.y * v1.y);
-}
-
-float ActMove::RadianOf2Vector(Vector2 a, Vector2 b) {
-	const float _lenght_a = GetVectorLenght(a);
-	const float _lenght_b = GetVectorLenght(b);
-
-	float _cos_sita = DotProduct(a, b) / (_lenght_a * _lenght_b);
-
-	return  std::acosf(_cos_sita);  // ラジアン
-}
-
+/**
+* @brief 逃げる方向ベクトルを算出する
+* @param targetPosition 相手の座標
+*/
 void ActMove::SeekEscapeDirection(Vector2 targetsDirection) {
 	direction_ = GetVerticalDirection(targetsDirection);
 	const bool _ImOnTop = (0.0f < direction_.y) && (targetsDirection.y < 0.0f);
@@ -77,10 +68,13 @@ void ActMove::SeekEscapeDirection(Vector2 targetsDirection) {
 	direction_.y *= (_ImOnTop || _TargetOnTop) ? 1 : -1;
 	direction_.Normalize();
 }
-void ActMove::SeekForwardDirection(Vector2 myPosition, Vector2 targetPosition) {
-	//if (my.myDirection() == Vector2::Zero)
-	//	my.AssignDirection(Vector2(1.0f, 0.0f));
 
+/**
+* @brief 移動方向ベクトルを算出する
+* @param myPosition 自身の座標
+* @param targetPosition 相手の座標
+*/
+void ActMove::SeekForwardDirection(Vector2 myPosition, Vector2 targetPosition) {
 	direction_ = targetPosition - myPosition;
 	direction_.Normalize();
 }
