@@ -1,5 +1,15 @@
+/**
+ * @file ObjWire.h
+ * @brief ワイヤークラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_Strategy/WireStrategy.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"

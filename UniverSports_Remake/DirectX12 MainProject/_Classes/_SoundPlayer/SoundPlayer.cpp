@@ -1,8 +1,6 @@
 #include"SoundPlayer.h"
 
-SoundPlayer::SoundPlayer() {
-	sound_			= nullptr;
-	bgm_instance_	= nullptr;
+SoundPlayer::SoundPlayer() : sound_(XAudio::SOUNDEFFECT()), bgm_instance_(XAudio::SOUNDEFFECTINSTANCE()) {
 	timer_			= nullptr;
 }
 

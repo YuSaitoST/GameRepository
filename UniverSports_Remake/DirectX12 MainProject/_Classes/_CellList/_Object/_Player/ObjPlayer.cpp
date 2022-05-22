@@ -12,14 +12,12 @@ ObjPlayer::ObjPlayer() {
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	physics_		= new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
-	handForward_	= Vector2::Zero;
 	life_			= nullptr;
 	teamID_			= nullptr;
 	ti_respone_		= nullptr;
 	eff_down_		= nullptr;
 	strategy_		= nullptr;
 	barrier_		= nullptr;
-	targetObj_		= nullptr;
 	myBallID_		= -1;
 	hasBall_		= false;
 	isDown_			= false;
@@ -31,8 +29,6 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 
 	physics_		= new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	rotate_			= Vector2(0.0f, GAME_CONST.Player_FacingRight);
-	handForward_	= Vector2::Zero;
-	targetObj_		= nullptr;
 	myBallID_		= -1;
 	hasBall_		= false;
 	isDown_			= false;
@@ -77,7 +73,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	strategy_->LoadAssets();
 	eff_down_->LoadAsset(L"_Effects\\_Down\\HITeffect.efk");
 
-	CreateModel(file_name.c_str());
+	CreateModel(file_name);
 	rotate_		= Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
 	forward_ = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 	r_			= model_->GetBoundingSphere().Radius;
@@ -109,6 +105,21 @@ void ObjPlayer::Render() {
 	model_->Draw();
 }
 
+void ObjPlayer::UIRender() {
+	if (life_->NowLifePoint() <= 0)
+		return;
+
+	strategy_->UIRender();
+}
+
+void ObjPlayer::AlphaRender() {
+	barrier_->Render();
+}
+
+/**
+* @brief 衝突時の処理
+* @param hitObject 衝突した物体
+*/
 void ObjPlayer::HitAction(ObjectBase* hitObject) {
 	// 衝突したものがないなら早期リターン
 	if (hitObject == nullptr)
@@ -170,17 +181,11 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 	}
 }
 
-void ObjPlayer::UIRender() {
-	if (life_->NowLifePoint() <= 0)
-		return;
-
-	strategy_->UIRender();
-}
-
-void ObjPlayer::AlphaRender() {
-	barrier_->Render();
-}
-
+/**
+* @brief 座標と回転をセットする
+* @param pos 座標
+* @param rotate 回転
+*/
 void ObjPlayer::SetTransforms(const Vector2 pos, const Vector2 rotate) {
 	model_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
 	model_->SetRotation(Vector3(rotate.x, rotate.y, 0.0f));
@@ -189,6 +194,9 @@ void ObjPlayer::SetTransforms(const Vector2 pos, const Vector2 rotate) {
 	physics_->SetTransform(Vector3(pos.x, pos.y, 0.0f), Vector3(rotate.x, rotate.y, 0.0f));
 }
 
+/**
+* @brief アニメーションをリセットする
+*/
 void ObjPlayer::AnimReset() {
 	const int _limit = (int)(6 * 0.5f);
 	for (int _i = 0; _i <= _limit; _i += 3) {
@@ -198,40 +206,59 @@ void ObjPlayer::AnimReset() {
 	}
 }
 
+/**
+* @brief アニメーションをセットする
+* @param motion アニメーション
+* @param deltaTime フレームごとの経過時間
+*/
 void ObjPlayer::AnimSet(MOTION motion, float deltaTime) {
 	model_->SetTrackEnable(motion, true);
 	model_->AdvanceTime(deltaTime);
 }
 
+/**
+* @brief 自身の状態に合ったアニメーションを返す
+* @return アニメーション
+*/
 ObjPlayer::MOTION ObjPlayer::AnimChange() {
 	return hasBall_ ? MOTION::HAND : MOTION::STAND;
 }
 
-void ObjPlayer::AsjustmentForward() {
-	forward_ *= 1.5f;
-}
-
+/**
+* @brief 発射処理
+* @brief ballID ボールのID
+*/
 void ObjPlayer::Shoting(const int ballID) {
 	hasBall_ = false;
 	myBallID_ = -1;
 	BallsInstructor::BallShot(ballID, forward_);
 }
 
+/**
+* @brief ボールをキャッチする処理
+* @param ballID ボールのID
+*/
 void ObjPlayer::CautchedBall(const int ballID) {
 	hasBall_ = true;
 	myBallID_ = ballID;
 	BallsInstructor::BallCautch(id_my_, myBallID_);
 }
 
+/**
+* @brief 手元の座標を返す
+* @return 手元の座標
+*/
 Vector2 ObjPlayer::Get_HandPos() {
-	const Vector2 _dir = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
-	const int _dir_x = std::roundf(_dir.x), _dir_y = std::roundf(_dir.y);
-
-	handForward_.x = std::cosf(6) * std::cosf(strategy_->GetRotateX()) - std::sinf(6) * std::sinf(strategy_->GetRotateX());
-	handForward_.y = std::sinf(6) * std::cosf(strategy_->GetRotateX()) + std::cosf(6) * std::sinf(strategy_->GetRotateX());
-	return (pos_ + handForward_ * POS_HAND);
+	XMFLOAT2 _handForward;
+	_handForward.x = std::cosf(6) * std::cosf(strategy_->GetRotateX()) - std::sinf(6) * std::sinf(strategy_->GetRotateX());
+	_handForward.y = std::sinf(6) * std::cosf(strategy_->GetRotateX()) + std::cosf(6) * std::sinf(strategy_->GetRotateX());
+	return (pos_ + POS_HAND * _handForward);
 }
 
+/**
+* @brief 戦闘状態の処理
+* @param deltaTime フレームごとの経過時間
+*/
 void ObjPlayer::Playing(const float deltaTime) {
 	AnimReset();
 	AnimSet(AnimChange(), deltaTime);
@@ -252,6 +279,10 @@ void ObjPlayer::Playing(const float deltaTime) {
 	HitAction(GetHitObject());
 }
 
+/**
+* @brief やられた状態の処理
+* @param deltaTime フレームごとの経過時間
+*/
 void ObjPlayer::Beaten(const float deltaTime) {
 	ti_respone_->Update(deltaTime);
 

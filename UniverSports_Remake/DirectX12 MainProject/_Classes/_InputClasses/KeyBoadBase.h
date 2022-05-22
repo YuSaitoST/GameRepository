@@ -33,7 +33,7 @@ enum KEY {
 
 class KeyBoadBase {
 public:
-	KeyBoadBase() : flag_(0) {}
+	KeyBoadBase() : flag_(0), direct_(DirectX::XMFLOAT2()) {}
 	virtual ~KeyBoadBase() {}
 
 	virtual void Accepts() = 0;

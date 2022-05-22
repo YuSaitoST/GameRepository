@@ -17,8 +17,8 @@ class OperateUI;
 
 class OP_StateBase {
 public:
-	OP_StateBase() { pos_ope_key_ = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); };
-	virtual ~OP_StateBase() = default;
+	OP_StateBase() : pos_ope_pad_(DirectX::XMFLOAT3()), pos_ope_key_(DirectX::XMFLOAT3()) {};
+	virtual ~OP_StateBase() {};
 
 	virtual void Initialize() = 0;
 	virtual void Update(const float deltaTime, OperateUI* operate) = 0;

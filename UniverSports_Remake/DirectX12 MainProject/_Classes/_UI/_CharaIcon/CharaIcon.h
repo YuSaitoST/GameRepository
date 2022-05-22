@@ -15,7 +15,7 @@
 
 class CharaIcon {
 public:
-	CharaIcon() {}
+	CharaIcon() : sprite_(DX9::SPRITE()) {}
 	virtual ~CharaIcon() {}
 
 	void LoadAssets(std::wstring file_name);

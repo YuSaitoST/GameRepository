@@ -2,9 +2,7 @@
 #include "_Classes/_UI/_Fade/Fade.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 
-Finish::Finish() {
-	sprite_			= nullptr;
-	position_		= DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
+Finish::Finish() : sprite_(DX9::SPRITE()), position_(DirectX::XMFLOAT3()) {
 	movement_move_	= 0.0f;
 	movement_alpha_ = 0.0f;
 	time_display_	= 0.0f;

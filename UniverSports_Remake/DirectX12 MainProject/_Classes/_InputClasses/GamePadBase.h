@@ -44,7 +44,7 @@ enum PAD {
 
 class GamePadBase {
 public:
-	GamePadBase() : flag_(0) {};
+	GamePadBase() : flag_(0), direct_(DirectX::XMFLOAT2()) {};
 	virtual ~GamePadBase() {}
 
 	virtual void Accepts(int index) = 0;

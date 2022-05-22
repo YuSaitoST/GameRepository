@@ -4,12 +4,9 @@
 
 class StShot : public BallState {
 public:
-	StShot() : pos_z_(0.0f) {};
+	StShot() {};
 	virtual ~StShot() {}
 
 	virtual void Initialize();
 	virtual void Update(ObjBall* ball);
-
-private:
-	float pos_z_;
 };

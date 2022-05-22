@@ -19,7 +19,7 @@
 class OperateUI {
 public:
 	OperateUI();
-	virtual ~OperateUI() = default;
+	virtual ~OperateUI() {};
 
 	void Initialize();
 	void LoadAsset();

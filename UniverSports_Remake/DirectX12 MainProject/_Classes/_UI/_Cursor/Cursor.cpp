@@ -3,10 +3,8 @@
 
 using namespace DirectX;
 
-Cursor::Cursor() {
+Cursor::Cursor() : sp_(DX9::SPRITE()), pos_(DirectX::XMFLOAT3()) {
 	choices_	= new Choices();
-	sp_			= nullptr;
-	pos_		= SimpleMath::Vector3::Zero;
 }
 
 Cursor::~Cursor() {

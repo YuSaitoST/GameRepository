@@ -2,9 +2,8 @@
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
-BlackOut::BlackOut() {
+BlackOut::BlackOut() : sprite_(DX9::SPRITE()) {
 	mode_			= BLACKOUT_MODE::NONE_ANIMATION;
-	sprite_			= nullptr;
 	alpha_			= 0.0f;
 }
 

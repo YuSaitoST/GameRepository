@@ -18,7 +18,7 @@ public:
 	ManualChara() {};
 	virtual ~ManualChara() {};
 
-	virtual void Initialize(int id, ObjPlayer* player);
-	virtual void LoadAssets();
-	virtual void Update(const float deltaTime);
+	virtual void Initialize(int id, ObjPlayer* player) override;
+	virtual void LoadAssets() override;
+	virtual void Update(const float deltaTime) override;
 };

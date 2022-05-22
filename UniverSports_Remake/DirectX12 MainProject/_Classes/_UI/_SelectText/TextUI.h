@@ -22,16 +22,16 @@ public:
 	 * @param modeID モードのID
 	 * @pos 画像の座標
 	*/
-	virtual void Initialize(int modeID, DirectX::XMFLOAT3 pos);
+	virtual void Initialize(int modeID, DirectX::XMFLOAT3 pos) override;
 
 	/**
 	 * @brief ファイルの読み込み
 	 * @param file_name ファイル名
 	*/
-	virtual void LoadAsset(std::wstring file_name);
+	virtual void LoadAsset(std::wstring file_name) override;
 
 	/**
 	 * @brief 描画
 	*/
-	virtual void Render(float alpha);
+	virtual void Render(float alpha) override;
 };

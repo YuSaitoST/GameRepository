@@ -9,6 +9,13 @@
 ObjWire::ObjWire() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
+
+	if (DontDestroy->GameMode_.isDODGEBALL_NOMAL())
+		strategy_ = new Wires();
+	else
+		strategy_ = new Goals();
+
+	se_goal_ = new SoundPlayer();
 }
 
 ObjWire::ObjWire(Vector3 pos, float r) {

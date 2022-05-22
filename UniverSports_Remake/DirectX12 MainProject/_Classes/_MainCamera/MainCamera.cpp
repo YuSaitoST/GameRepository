@@ -3,10 +3,6 @@
 
 using namespace DirectX;
 
-MainCamera::MainCamera() {
-	camera_ = DX9::CAMERA{};
-}
-
 /**
 * @brief ƒJƒƒ‰‚Ìİ’è
 */

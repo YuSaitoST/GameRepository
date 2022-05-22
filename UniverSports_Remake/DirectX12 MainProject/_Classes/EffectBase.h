@@ -19,12 +19,11 @@ using namespace DirectX;
 
 class EffectBase {
 public:
-	EffectBase() { SetMember(0.0f); }
+	EffectBase() : effect_(EFFECT()) { SetMember(0.0f); }
 	EffectBase(const float time) { SetMember(time); }
-	virtual ~EffectBase() = default;
+	virtual ~EffectBase() {};
 
-	virtual void SetMember(const float time) {
-		effect_ = EFFECT{}; 
+	inline void SetMember(const float time) {
 		timer_ = new CountTimer(time);
 	}
 

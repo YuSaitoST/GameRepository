@@ -3,16 +3,14 @@
 #include "_Classes/_Field/Field.h"
 #include "DontDestroyOnLoad.h"
 
-float ObjBall::pos_z_smallest_;
-
 ObjBall::ObjBall() {
 	cp_ = nullptr;
 	pos_ = Vector2::Zero;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
+	state_ = nullptr;
 	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
 	colorType_ = DEFAULT_COLOR;
-	state_ = nullptr;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
 	isInPlayerHands_ = false;
@@ -37,6 +35,10 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 
 ObjBall::~ObjBall() {
 	delete physics_;
+	if (state_ != nullptr) {
+		delete state_;
+		state_ = nullptr;
+	}
 }
 
 void ObjBall::Initialize(const int id) {
@@ -77,6 +79,10 @@ void ObjBall::Render(DX9::MODEL& model) {
 	model->Draw();
 }
 
+/**
+* @brief 状態の変化
+* @param state 状態
+*/
 void ObjBall::SwitchState(B_STATE state) {
 	switch (state) {
 		case B_STATE::STANDBY	:state_ = &st_standby_; break;
@@ -90,10 +96,19 @@ void ObjBall::SwitchState(B_STATE state) {
 	UpdateToMorton();
 }
 
+/**
+* @brief 色の変更
+* @param colorType 色のタイプ
+*/
 void ObjBall::SwitchColor(COLOR_TYPE colorType) {
 	colorType_ = colorType;
 }
 
+/**
+* @brief 色の変更
+* @param colorType 色のタイプ
+* @return マテリアル
+*/
 D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	D3DMATERIAL9 _mat{};
 
@@ -107,6 +122,11 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	return _mat;
 }
 
+/**
+* @brief 力を加え飛ばす処理
+* @param forwrad 正面ベクトル
+* @param speed 速度
+*/
 void ObjBall::AddPower(Vector3 forward, float speed) {
 	physics_->SetLinerVelocity(forward * speed);
 	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
@@ -115,29 +135,47 @@ void ObjBall::AddPower(Vector3 forward, float speed) {
 	SetTransforms();
 }
 
+/**
+* @brief 座標と回転を設定する
+*/
 void ObjBall::SetTransforms() {
 	collision_->SetPosition(Vector3(pos_.x, pos_.y, pos_z_));
 	physics_->SetTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3(rotate_.x, rotate_.y, 0.0f));
 }
 
+/**
+* @brief キャッチされた時の処理
+* @param ownerID 持ち主のID
+*/
 void ObjBall::WasCaught(const int ownerID) {
 	id_owner_ = ownerID;
 	isInPlayerHands_ = true;
+	pos_z_ = -3.0f;
 	ResetVelocity();
-	AssignTransform(Vector3(pos_.x, pos_.y, pos_z_smallest_), forward_);
+	AssignTransform(Vector3(pos_.x, pos_.y, pos_z_), forward_);
 }
 
+/**
+* @brief 投げられた時の処理
+* @param forward 正面ベクトル
+*/
 void ObjBall::WasThrown(Vector2 forward) {
 	forward_ = forward;
 	isInPlayerHands_ = false;
 	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_SHOT);
 }
 
+/**
+* @brief プレイヤーとの衝突による破壊時の処理
+*/
 void ObjBall::WasGuessed() {
 	DontDestroy->Score_[id_owner_] += 1;
 	BallBreak();
 }
 
+/**
+* @brief 破壊時の処理
+*/
 void ObjBall::BallBreak() {
 	id_owner_ = -1;
 	isBreak_ = true;

@@ -1,11 +1,8 @@
 #include "OperateUI.h"
 #include "_Classes/_FileNames/FileNames.h"
 
-OperateUI::OperateUI() {
+OperateUI::OperateUI() : sp_gamepad_(DX9::SPRITE()), sp_keybord_(DX9::SPRITE()), pos_pad_(DirectX::XMFLOAT3()), pos_key_(DirectX::XMFLOAT3()) {
 	state_		= &st_close_;
-	sp_gamepad_ = nullptr;
-	sp_keybord_	= nullptr;
-	pos_key_	= DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
 	num_state_	= 0;
 	isDisplay_	= false;
 }

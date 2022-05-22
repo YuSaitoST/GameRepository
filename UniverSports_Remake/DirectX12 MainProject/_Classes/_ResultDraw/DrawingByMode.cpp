@@ -1,6 +1,6 @@
 #include "DrawingByMode.h"
 
-DrawingByMode::DrawingByMode() {
+DrawingByMode::DrawingByMode() : sp_playerName_(DX9::SPRITE()), sp_number_(DX9::SPRITE()) {
 	//ƒƒ‚ƒŠŠm•Û
 	const int _numberOfWinner = DontDestroy->GameMode_.isSINGLES_GAME() ? 1 : 2;
 	sp_winPlayer_.reserve(_numberOfWinner);

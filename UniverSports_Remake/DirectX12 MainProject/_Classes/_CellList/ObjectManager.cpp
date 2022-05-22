@@ -118,6 +118,10 @@ void ObjectManager::RenderAlphas() {
 	}
 }
 
+/**
+* @brief ワールドに登録する
+* @param physics_world 物理演算のワールド
+*/
 void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 	const int _PLAYER = N_PLAYER * 0.5f;
 	for (int _i = 0; _i <= _PLAYER; _i += 2) {
@@ -135,6 +139,10 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 	}
 }
 
+/**
+* @brief ワールドから削除する
+* @param physics_world 物理演算のワールド
+*/
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
 	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_wire_[_i]->myRigidbody());
@@ -146,16 +154,32 @@ void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
 		physics_world_->removeRigidBody(obj_player_[_i]->myRigidbody());
 }
 
+/**
+* @brief プレイヤーの残機を返す
+* @param index プレイヤーの番号
+* @return プレイヤーの残機
+*/
 int ObjectManager::PlayerLife(int index) {
 	assert((0 <= index) && "ObjectManager::PlayerLife() : 指定したindexが不正です(負の値になっている)");
 	return obj_player_[index]->myLife();
 }
 
+/**
+* @brief プレイヤーの手元の座標を返す
+* @param index プレイヤーの番号
+* @return 手元の座標
+*/
 Vector2 ObjectManager::PlayerHandsPos(int index) {
 	assert((0 <= index) && "ObjectManager::PlayerHandPos() : 指定したindexが不正です(負の値になっている)");
 	return obj_player_[index]->Get_HandPos();
 }
 
+/**
+* @brief 一番近いプレイヤーを探す
+* @param pos 自身の座標
+* @param comparison 距離
+* @return 一番近いプレイヤー
+*/
 ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, float& comparison) {
 	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
@@ -182,6 +206,12 @@ ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, flo
 	return _obj;
 }
 
+/**
+* @brief 一番近いボールを探す
+* @param pos 自身の座標
+* @param comparison 距離
+* @return 一番近いボール
+*/
 ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) {
 	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
 	Vector2 _target;  // 現在調べている座標
@@ -206,6 +236,12 @@ ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) 
 	return _obj;
 }
 
+/**
+* @brief 2つの座標の距離を調べる
+* @param p1 自身の座標
+* @param p2 相手の座標
+* @return 距離
+*/
 float ObjectManager::Distance2Vector(const Vector2 p1, const Vector2 p2) {
 	return std::sqrtf(std::powf(p1.x - p2.x, 2) + std::powf(p1.y - p2.y, 2));
 }

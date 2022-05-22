@@ -17,6 +17,6 @@ public:
 	OpeOpen() {};
 	virtual ~OpeOpen() {};
 
-	virtual void Initialize();
-	virtual void Update(const float deltaTime, OperateUI* operate);
+	virtual void Initialize() override;
+	virtual void Update(const float deltaTime, OperateUI* operate) override;
 };

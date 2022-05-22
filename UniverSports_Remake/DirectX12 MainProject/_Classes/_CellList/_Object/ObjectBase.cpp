@@ -16,6 +16,13 @@ ObjectBase::~ObjectBase() {
 	}
 }
 
+/**
+* @brief メンバ変数の初期化
+* @param kind 物体の種類
+* @param collision　当たり判定の形状
+* @param pos 座標
+* @param r 半径
+*/
 void ObjectBase::SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r) {
 	this->obj_type_ = kind;
 	this->pos_.x = pos.x;
@@ -28,6 +35,11 @@ void ObjectBase::SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, flo
 	collision_ = new bdCollision(collision);
 }
 
+/**
+* @brief 衝突した物体を返す
+* @param m 物体
+* @return 衝突した物体(なければnullptr)
+*/
 ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
 	OBJ_TYPE type = m->myObjectType();
 	if (this->obj_type_ == type)
@@ -60,12 +72,18 @@ ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
 	return nullptr;
 }
 
+/**
+* @brief 所属空間の更新
+*/
 void ObjectBase::UpdateToMorton() {
-	// 存在するなら、所属空間の更新をする
 	if (cp_ != nullptr)
 		cp_->UpdateToMorton();
 }
 
+/**
+* @brief 衝突した物体を返す
+* @return 衝突した物体
+*/
 ObjectBase* ObjectBase::GetHitObject() {
 	return cp_->GetCollision();  // 上方、同レベル、下方の3方向を調べる(四分木探索)
 }

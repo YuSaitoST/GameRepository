@@ -15,7 +15,7 @@
 
 class MoviePlayer {
 public:
-	MoviePlayer() {}
+	MoviePlayer() : media_(DX9::MEDIARENDERER()) {}
 	virtual ~MoviePlayer() {}
 
 	void LoadAsset(std::wstring file_name);

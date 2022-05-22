@@ -18,7 +18,7 @@
 
 class MainCamera {
 public:
-	MainCamera();
+	MainCamera() : camera_(DX9::CAMERA()) {};
 	virtual ~MainCamera() {};
 
 	static MainCamera& GetInstance() {

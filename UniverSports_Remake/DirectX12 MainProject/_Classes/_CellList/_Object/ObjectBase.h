@@ -45,6 +45,10 @@ public:
 
 	virtual ObjectBase* GetCollision(ObjectBase* m);  // 衝突判定(Boundingを用いたもの)
 
+	/**
+	* @brief 通常のマテリアルを返す
+	* @return 通常のマテリアル
+	*/
 	static D3DMATERIAL9 GetNomMaterial() {
 		D3DMATERIAL9 _mate{};
 		_mate.Diffuse = DX9::Colors::Value(0.3f, 0.3f, 0.3f, 1.0f);
@@ -54,25 +58,59 @@ public:
 
 	ObjectBase* GetHitObject();
 
+	/**
+	* @brief 自分の物体の種類を返す
+	* @return 物体の種類
+	*/
 	OBJ_TYPE		myObjectType() { return obj_type_; }
+
+	/**
+	* @brief リジッドボディを返す
+	* @return リジッドボディ
+	*/
 	btRigidBody*	myRigidbody() { return physics_->Get_RigidBody(); }
+
+	/**
+	* @brief 座標を返す
+	* @return 座標
+	*/
 	Vector2&		myPosition() { return pos_; }
+
+	/**
+	* @brief 回転を返す
+	* @return 回転
+	*/
 	Vector2			myRotate() { return rotate_; };
+
+	/**
+	* @brief 正面ベクトルを返す
+	* @return 正面ベクトル
+	*/
 	Vector2&		myDirection() { return forward_; }
+
+	/**
+	* @brief 半径を返す
+	* @return 半径
+	*/
 	float			myRadian() { return r_; }
+
+	/**
+	* @brief 自分のIDを返す
+	* @return 自分のID
+	*/
 	int				myObjectID() { return id_my_; };
 
 protected:
 	virtual void SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r);
 	virtual void UpdateToMorton();
 
-	OBJ_TYPE obj_type_;		// オブジェクトの種類
-	bdCollision* collision_;// 当たり判定
-	btObject* physics_;		// 物理演算
-	Cell* cp_;				// 所属空間
-	Vector2 pos_;			// 座標
-	Vector2 rotate_;		// 回転
-	Vector2 forward_;       // 正面方向
-	float r_;               // 半径
-	int id_my_;			    // 自分のID
+	OBJ_TYPE obj_type_;		//! オブジェクトの種類
+	bdCollision* collision_;//! 当たり判定
+	btObject* physics_;		//! 物理演算
+	Cell* cp_;				//! 所属空間
+	Vector2 pos_;			//! 座標
+	Vector2 rotate_;		//! 回転
+	Vector2 forward_;       //! 正面方向
+	float r_;               //! 半径
+	int id_my_;			    //! 自分のID
 };
