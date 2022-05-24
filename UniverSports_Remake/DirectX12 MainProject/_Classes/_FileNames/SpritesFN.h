@@ -15,7 +15,6 @@ namespace USFN_SP {
 	};
 
 	const std::wstring GAMEPAD = L"_Images\\_Title\\_Operate\\operate_gamepad.png";
-	const std::wstring KEYBOAD = L"_Images\\_Title\\_Operate\\operate_keybord.png";
 
 	const std::wstring CHOICE_ICON[4] = {
 		L"_Images\\_Lobby\\_CharaIcon\\sl_icon_bear.png",

@@ -8,7 +8,7 @@ btObject::btObject(BULLET_TYPE type, SimpleMath::Vector3 pos, SimpleMath::Vector
 	btDefaultMotionState* _bt_state;
 
 
-	_bt_collision = (type == BT_SPHRER) ? (btCollisionShape*)(new btSphereShape(0.8f)) : (type == BT_BOX) ? (btCollisionShape*)(new btBoxShape(btVector3(scale.x, scale.y, scale.z))) : nullptr;
+	_bt_collision = (type == BT_SPHRER) ? (btCollisionShape*)(new btSphereShape(0.8f)) : (type == BT_BOX) ? (btCollisionShape*)(new btBoxShape(btVector3(scale.x, scale.y * 0.125f, scale.z))) : nullptr;
 	
 	btVector3    _pos(pos.x, pos.y, 0.0f);
 	btQuaternion _rot(0.0f, 0.0f, rotZ, 1.0f);

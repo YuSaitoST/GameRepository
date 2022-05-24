@@ -63,7 +63,7 @@ public:
 	* @return “ü—Í‚³‚ê‚Ä‚¢‚ê‚Îtrue@‚È‚¯‚ê‚Îfalse
 	*/
 	inline bool AnyKey() {
-		return (flag_ & 0xffffffff);
+		return (flag_ != 0);
 	}
 
 	/**

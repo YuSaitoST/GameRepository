@@ -92,7 +92,7 @@ bool UseKeyCheck::CancelKey(const int index) {
 bool UseKeyCheck::ThrasherKey(const int index) {
 	//プレイヤー0の場合、キーボード入力でも操作可能
 	if (index == 0)
-		return key_.StateOnOffKey(KEY::B) || pad_.StateOnOffKey(index, PAD::P_B);
+		return key_.StateOnOffKey(KEY::X) || pad_.StateOnOffKey(index, PAD::P_B);
 	else
 		return pad_.StateOnOffKey(index, PAD::P_B);
 }
@@ -132,7 +132,7 @@ bool UseKeyCheck::MiniGameFinedKey(const int index) {
 bool UseKeyCheck::KeyEventA(const int index) {
 	//プレイヤー0の場合、キーボード入力でも操作可能
 	if (index == 0)
-		return key_.EventOnOffKey(KEY::A) || pad_.EventOnOffKey(index, PAD::P_A);
+		return key_.EventOnOffKey(KEY::Z) || pad_.EventOnOffKey(index, PAD::P_A);
 	else
 		return pad_.EventOnOffKey(index, PAD::P_A);
 }
@@ -144,7 +144,7 @@ bool UseKeyCheck::KeyEventA(const int index) {
 bool UseKeyCheck::KeyEventB(const int index) {
 	//プレイヤー0の場合、キーボード入力でも操作可能
 	if (index == 0)
-		return key_.EventOnOffKey(KEY::B) || pad_.EventOnOffKey(index, PAD::P_B);
+		return key_.EventOnOffKey(KEY::X) || pad_.EventOnOffKey(index, PAD::P_B);
 	else
 		return pad_.EventOnOffKey(index, PAD::P_B);
 }

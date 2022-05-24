@@ -8,7 +8,8 @@ ObjBall::ObjBall() {
 	pos_ = Vector2::Zero;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
-	state_ = nullptr;
+	SwitchState(B_STATE::STANDBY);
+
 	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
 	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
@@ -92,6 +93,7 @@ void ObjBall::SwitchState(B_STATE state) {
 		case B_STATE::GOAL		:state_ = &st_goal_;	break;
 		default					:assert(!"ObjBall::SwitchState : •s³‚Èó‘Ô‚Å‚·");
 	}
+
 	state_->Initialize();
 	UpdateToMorton();
 }

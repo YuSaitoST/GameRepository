@@ -2,7 +2,7 @@
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include <cassert>
 
-bool GameController::gameStart_;
+bool GameController::gameStart_ = false;
 
 GameController::GameController() {
 	startTime_	= TIME_LIMIT[(int)DontDestroy->GameMode_.SelectionMode()] + TIME_COUNT;
@@ -26,6 +26,7 @@ void GameController::Initialize() {
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 	ui_finish_->Initialize();
 	se_whistle_->Initialize(L"_Sounds\\_SE\\_Main\\se_whistle.wav", SOUND_TYPE::SE, 1.0f);
+	gameStart_ = false;
 }
 
 void GameController::LoadAssets() {

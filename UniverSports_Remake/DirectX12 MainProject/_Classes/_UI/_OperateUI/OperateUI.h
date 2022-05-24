@@ -52,7 +52,7 @@ private:
 	void AnimateOff() { state_ = &st_close_; };
 
 private:
-	const int OPERATE_COUNT = 2;
+	const int OPERATE_COUNT = 1;
 
 	//!操作説明状態基底クラス
 	OP_StateBase*	state_;
@@ -63,14 +63,8 @@ private:
 	//! 操作説明を閉じる状態
 	OpeClose		st_close_;
 
-	//! キーボード操作説明画像
-	DX9::SPRITE sp_keybord_;
-
 	//! ゲームパッド操作説明画像
 	DX9::SPRITE sp_gamepad_;
-
-	//! キーボード操作説明画像の座標
-	DirectX::XMFLOAT3 pos_key_;
 
 	//! ゲームパッド操作説明画像の座標
 	DirectX::XMFLOAT3 pos_pad_;
