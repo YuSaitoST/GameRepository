@@ -10,9 +10,14 @@ ObjectBase::ObjectBase(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r
 }
 
 ObjectBase::~ObjectBase() {
+	if (collision_ != nullptr) {
+		delete collision_;
+		collision_ = nullptr;
+	}
 	if (cp_ != nullptr) {
 		cp_->Remove();
 		delete cp_;
+		cp_ = nullptr;
 	}
 }
 

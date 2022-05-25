@@ -49,6 +49,11 @@ void ObjBall::Initialize(const int id) {
 	forward_	= state_->GetForward();
 
 	id_my_		= id;
+
+	pos_z_ = 0.0f;
+	id_owner_ = -1;
+	isInPlayerHands_ = false;
+	isBreak_ = false;
 }
 
 void ObjBall::LoadAssets(DX9::MODEL& model) {

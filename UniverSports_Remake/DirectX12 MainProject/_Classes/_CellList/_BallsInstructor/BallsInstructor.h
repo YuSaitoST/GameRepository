@@ -13,13 +13,22 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
+//前方宣言
+class ObjBall;
+
 class BallsInstructor {
 public:
 	BallsInstructor() {}
 	virtual ~BallsInstructor() {}
 
-	static void BallCautch(const int playerID, const int ballID);
-	static void BallShot(const int ballID, DirectX::SimpleMath::Vector2 forward);
-	static void BallBreakOfThrower(const int ballID);
-	static void BallBreakOfTheHitter(const int ballID);
+	void SetList(const std::vector<ObjBall*>& balllist) { list_ = balllist; }
+
+	void Cautch(const int playerID, const int ballID);
+	void Shot(const int ballID, DirectX::SimpleMath::Vector2 forwrad);
+	void BreakOfThrower(const int ballID);
+	void BreakOfTheHitter(const int ballID);
+
+private:
+	//! ボールのリスト
+	std::vector<ObjBall*> list_;
 };

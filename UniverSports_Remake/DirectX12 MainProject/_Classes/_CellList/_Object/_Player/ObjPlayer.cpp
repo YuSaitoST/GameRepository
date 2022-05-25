@@ -170,10 +170,12 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 					DontDestroy->Survivor_[id_my_] = false;
 			}
 
-			BallsInstructor::BallBreakOfThrower(_ball->myObjectID());
+			//BallsInstructor::BallBreakOfThrower(_ball->myObjectID());
+			instructor_->BreakOfThrower(_ball->myObjectID());
 
 			if (hasBall_) {
-				BallsInstructor::BallBreakOfTheHitter(myBallID_);
+				//BallsInstructor::BallBreakOfTheHitter(myBallID_);
+				instructor_->BreakOfTheHitter(myBallID_);
 				myBallID_ = -1;
 				hasBall_ = false;
 			}
@@ -231,7 +233,8 @@ ObjPlayer::MOTION ObjPlayer::AnimChange() {
 void ObjPlayer::Shoting(const int ballID) {
 	hasBall_ = false;
 	myBallID_ = -1;
-	BallsInstructor::BallShot(ballID, forward_);
+	//BallsInstructor::BallShot(ballID, forward_);
+	instructor_->Shot(ballID, forward_);
 }
 
 /**
@@ -241,7 +244,8 @@ void ObjPlayer::Shoting(const int ballID) {
 void ObjPlayer::CautchedBall(const int ballID) {
 	hasBall_ = true;
 	myBallID_ = ballID;
-	BallsInstructor::BallCautch(id_my_, myBallID_);
+	//BallsInstructor::BallCautch(id_my_, myBallID_);
+	instructor_->Cautch(id_my_, myBallID_);
 }
 
 /**

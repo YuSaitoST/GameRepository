@@ -1,18 +1,14 @@
 #include "ObjectManager.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "DontDestroyOnLoad.h"
+#include "_BallsInstructor/BallsInstructor.h"
 
 CellList cellList = CellList{};
 
 ObjPlayer* ObjectManager::obj_player_[N_PLAYER];
-std::vector<ObjBall*> ObjectManager::obj_ball_;
 ObjWire* ObjectManager::obj_wire_[N_WIRE];
 
 ObjectManager::ObjectManager() {
-	N_BALL = BALLS[(int)DontDestroy->GameMode_.SelectionMode()];
-
-	obj_ball_.reserve(N_BALL);
-
 	const int _PLAYER = N_PLAYER * 0.5f;
 	for (int _i = 0; _i <= _PLAYER; _i += 2) {
 		obj_player_[_i]		= new ObjPlayer((OPERATE_TYPE)((int)DontDestroy->charaType_[_i]), POS_START[_i], 1.0f);
@@ -21,13 +17,11 @@ ObjectManager::ObjectManager() {
 		obj_wire_[_i + 1]	= new ObjWire(POS_WIRE[_i + 1], 1.0f);
 	}
 
-	for (int _i = 0; _i < N_BALL; ++_i)
-		obj_ball_.push_back(new ObjBall(Vector3(99.0f, 99.0f, 0.0f), 1.0f));
+	ballList_ = new BallList();
 }
 
 ObjectManager::~ObjectManager() {
-	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
-		obj_ball_.erase(obj_ball_.begin() + _i);
+	delete ballList_;
 
 	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		delete obj_wire_[_i];
@@ -37,14 +31,18 @@ ObjectManager::~ObjectManager() {
 }
 
 void ObjectManager::Initialize() {
+	ballList_->Initialize();
+
+	BallsInstructor* instructor = new BallsInstructor();
+	instructor->SetList(ballList_->GetList());
+
 	const int _PLAYER = N_PLAYER * 0.5f;
 	for (int _i = 0; _i <= _PLAYER; _i += 2) {
 		obj_player_[_i]->Initialize(_i);
+		obj_player_[_i]->SetInstructor(instructor);
 		obj_player_[_i + 1]->Initialize(_i + 1);
+		obj_player_[_i + 1]->SetInstructor(instructor);
 	}
-
-	for (int _i = 0; _i < N_BALL; ++_i)
-		obj_ball_[_i]->Initialize(_i);
 
 	const int _WIRE = N_WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
@@ -54,10 +52,6 @@ void ObjectManager::Initialize() {
 }
 
 void ObjectManager::LoadAssets() {
-	mod_ball_ = DX9::Model::CreateFromFile(DXTK->Device9, USFN_MOD::BALL.c_str());
-	mod_ball_->SetScale(GAME_CONST.BA_SCALE);
-	mod_ball_->SetMaterial(ObjectBase::GetNomMaterial());
-	
 	const int _PLAYER = N_PLAYER * 0.5f;
 	for (int _i = 0; _i <= _PLAYER; _i += 2) {
 		obj_player_[_i]->LoadAssets(USFN_MOD::PLAYER[DontDestroy->ChoseColor_[_i]]);
@@ -67,8 +61,7 @@ void ObjectManager::LoadAssets() {
 		obj_wire_[_i + 1]->LoadAssets(L"");
 	}
 
-	for (ObjectBase* obj : obj_ball_)
-		obj->LoadAssets(mod_ball_);
+	ballList_->LoadAssets();
 }
 
 void ObjectManager::Update(const float deltaTime) {
@@ -78,8 +71,7 @@ void ObjectManager::Update(const float deltaTime) {
 		obj_player_[_i + 1	]->Update(deltaTime);
 	}
 
-	for (ObjectBase* obj : obj_ball_)
-		obj->Update(deltaTime);
+	ballList_->Update(deltaTime);
 
 	const int _WIRE = N_WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
@@ -95,8 +87,7 @@ void ObjectManager::RenderModels() {
 		obj_player_[_i + 1	]->Render();
 	}
 
-	for (ObjectBase* obj : obj_ball_)
-		obj->Render(mod_ball_);
+	ballList_->Render();
 }
 
 void ObjectManager::RenderSprites() {
@@ -126,8 +117,7 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 		physics_world_->addRigidBody(obj_player_[_i + 1]->myRigidbody());
 	}
 
-	for (ObjectBase* obj : obj_ball_)
-		physics_world_->addRigidBody(obj->myRigidbody());
+	ballList_->AddWorld(physics_world_);
 
 	const int _WIRE = N_WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
@@ -144,8 +134,7 @@ void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
 	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_wire_[_i]->myRigidbody());
 	
-	for (int _i = N_BALL - 1; 0 <= _i; --_i)
-		physics_world_->removeRigidBody(obj_ball_[_i]->myRigidbody());
+	ballList_->RemoveWorld(physics_world_);
 
 	for (int _i = N_PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_player_[_i]->myRigidbody());
@@ -184,9 +173,6 @@ ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, flo
 	float _min_distance = 99.0f;  // ˆê”Ô‹ß‚¢‹——£
 
 	for (ObjectBase* obj : obj_player_) {
-		if ((90.0f <= obj->myPosition().x) && (90.0f <= obj->myPosition().y))
-			continue;
-
 		if (obj->myObjectID() == id)
 			continue;
 
@@ -215,20 +201,20 @@ ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) 
 	float _new_distance;  // Œ»Ý’²‚×‚Ä‚¢‚é‹——£
 	float _min_distance = 99.0f;  // ˆê”Ô‹ß‚¢‹——£
 
-	for (ObjectBase* obj : obj_ball_) {
-		// Ž©•ª‚¾‚Á‚½‚ç–³Ž‹
-		if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
-			continue;
+	//for (ObjectBase* obj : obj_ball_) {
+	//	// Ž©•ª‚¾‚Á‚½‚ç–³Ž‹
+	//	if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
+	//		continue;
 
-		_new_distance = Distance2Vector(pos, obj->myPosition());
-		
-		if (_new_distance < _min_distance) {
-			_min_distance = _new_distance;
-			_obj = obj;
-		}
-	}
+	//	_new_distance = Distance2Vector(pos, obj->myPosition());
+	//	
+	//	if (_new_distance < _min_distance) {
+	//		_min_distance = _new_distance;
+	//		_obj = obj;
+	//	}
+	//}
 
-	comparison = _min_distance;
+	//comparison = _min_distance;
 
 	return _obj;
 }

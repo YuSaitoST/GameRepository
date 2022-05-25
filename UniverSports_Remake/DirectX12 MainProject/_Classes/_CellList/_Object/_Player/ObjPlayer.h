@@ -20,6 +20,9 @@
 #include "_Barrier/Barrier.h"
 #include "_EffDown/EffDown.h"
 
+//前方宣言
+class BallsInstructor;
+
 class ObjPlayer final : public ObjectBase {
 private:
 	/**
@@ -50,6 +53,8 @@ public:
 	void AlphaRender();
 
 	virtual void HitAction(ObjectBase* hitObject);
+
+	void SetInstructor(BallsInstructor* instructor) { instructor_ = instructor; }
 
 	/**
 	* @brief モデル生成
@@ -157,4 +162,7 @@ private:
 	
 	//! 所持しているボールのID
 	int					myBallID_;
+
+
+	BallsInstructor* instructor_;
 };
