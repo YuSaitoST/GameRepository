@@ -39,9 +39,10 @@ void NormalDisplay::Initialize() {
 		選択肢のテキストを初期化
 		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
 	*/
-	for (int _u = 0; _u < MODE; ++_u) {
-		nowText_[0][_u].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[0], -10.0f));
-		nowText_[1][_u].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[1], -10.0f));
+	for (int _u = 0; _u < CHOICES; ++_u) {
+		nowText_[_u][0].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[_u], -10.0f));
+		nowText_[_u][1].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[_u], -10.0f));
+		nowText_[_u][2].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[_u], -10.0f));
 	}
 
 	// 最初に選択状態にする選択肢を代入
@@ -60,9 +61,10 @@ void NormalDisplay::LoadAssets() {
 		選択肢に使用する画像のパスを
 		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
 	*/
-	for (int _u = 0; _u < MODE; ++_u) {
-		nowText_[0][_u].LoadAsset(USFN_SP::UI_TEXT[0][_u]);
-		nowText_[1][_u].LoadAsset(USFN_SP::UI_TEXT[1][_u]);
+	for (int _u = 0; _u < CHOICES; ++_u) {
+		nowText_[_u][0].LoadAsset(USFN_SP::UI_TEXT[_u][0]);
+		nowText_[_u][1].LoadAsset(USFN_SP::UI_TEXT[_u][1]);
+		nowText_[_u][2].LoadAsset(USFN_SP::UI_TEXT[_u][2]);
 	}
 }
 
@@ -90,6 +92,11 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 	cursor_->Update(CHOICES);
 	time_demo_->Update(deltaTime);
 
+	// 何かしらのボタンが押されていたらタイマーをリセットする
+	if (Press.AnyKey())
+		time_demo_->Reset();
+
+	// モード選択
 	if (cursor_->SelectNum() == 0) {
 		mode_choices_->Update(MODE, Press.RightKey(0), Press.LeftKey(0));
 		mode_choices_->NextSelectOn(ui_arrows_->Update(0));
@@ -97,6 +104,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 
 	text_ = &nowText_[cursor_->SelectNum()][mode_choices_->SelectNum()];
 
+	// 選択肢UIの表示サイズの更新
 	for (int _t = 0; _t < CHOICES; ++_t) {
 		(_t == cursor_->SelectNum()) ?
 			nowText_[_t][mode_choices_->SelectNum()].GetBigger(deltaTime) :

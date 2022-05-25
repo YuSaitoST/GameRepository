@@ -20,9 +20,9 @@ void StGoal::Update(ObjBall* ball) {
 		//}
 
 	if (!FIELD::IsOut(position_, 1.0f)) {
-		position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
+		//position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
 	}
-	else if (ball->IsInPlayerHands()) {
-		ball->SwitchState(B_STATE::CAUTCH);
-	}
+	//else if (ball->IsInPlayerHands()) {
+	//	ball->SwitchState(B_STATE::CAUTCH);
+	//}
 }

@@ -18,6 +18,12 @@ public:
 	IconAnimator();
 	virtual ~IconAnimator();
 
+	IconAnimator(IconAnimator&&) = delete;
+	IconAnimator& operator= (IconAnimator&&) = delete;
+
+	IconAnimator(IconAnimator const&) = delete;
+	IconAnimator& operator= (IconAnimator const&) = delete;
+
 	void LoadAssets();
 	void Update(const float deltaTime);
 	void Render(const int lifeCount, int index);

@@ -3,12 +3,14 @@
 #include <string>
 
 namespace USFN_SP {
-	const std::wstring UI_TEXT[2][2] = {
+	const std::wstring UI_TEXT[2][3] = {
 		{
 			L"_Images\\_Title\\_SelectText\\tex_mode00.png"  ,
-			L"_Images\\_Title\\_SelectText\\tex_mode01.png"
+			L"_Images\\_Title\\_SelectText\\tex_mode01.png"	 ,
+			L"_Images\\_Title\\_SelectText\\tex_mode02.png"
 		},
 		{
+			L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
 			L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
 			L"_Images\\_Title\\_SelectText\\tex_operate.png"
 		}

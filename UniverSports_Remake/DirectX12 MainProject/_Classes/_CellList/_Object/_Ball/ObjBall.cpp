@@ -167,6 +167,14 @@ void ObjBall::WasThrown(Vector2 forward) {
 	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_SHOT);
 }
 
+void ObjBall::WasGoaled() {
+	pos_z_ = 3.0f;
+	id_owner_ = -1;
+	SwitchColor(COLOR_TYPE::DEFAULT_COLOR);
+	FlagResets();
+	ResetVelocity();
+}
+
 /**
 * @brief ƒvƒŒƒCƒ„[‚Æ‚ÌÕ“Ë‚É‚æ‚é”j‰ó‚Ìˆ—
 */
@@ -179,6 +187,7 @@ void ObjBall::WasGuessed() {
 * @brief ”j‰ó‚Ìˆ—
 */
 void ObjBall::BallBreak() {
+	pos_z_ = 0.0f;
 	id_owner_ = -1;
 	isBreak_ = true;
 	isInPlayerHands_ = false;

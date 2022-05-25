@@ -7,9 +7,6 @@ using namespace DirectX;
 SelectArrows::SelectArrows() : sp_right_(DX9::SPRITE()), sp_left_(DX9::SPRITE()) {
 	input_			= AL_NONE;
 
-	//sp_right_		= DX9::SPRITE{};
-	//sp_left_		= DX9::SPRITE{};
-
 	pos_right_x_	= 0.0f;
 	pos_left_x_		= 0.0f;
 	pos_y_			= 0.0f;

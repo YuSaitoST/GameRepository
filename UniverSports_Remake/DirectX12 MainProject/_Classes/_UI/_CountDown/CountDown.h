@@ -19,6 +19,12 @@ public:
 	CountDownUI();
 	virtual ~CountDownUI();
 
+	CountDownUI(CountDownUI&&) = delete;
+	CountDownUI& operator= (CountDownUI&&) = delete;
+
+	CountDownUI(CountDownUI const&) = delete;
+	CountDownUI& operator= (CountDownUI const&) = delete;
+
 	void Initialize();
 	void LoadAssets();
 	void Update(const float deltaTime, float nowCount);

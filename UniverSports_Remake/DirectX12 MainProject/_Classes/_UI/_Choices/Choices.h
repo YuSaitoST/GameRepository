@@ -17,6 +17,12 @@ public:
 	Choices();
 	virtual ~Choices() { delete se_choice_; };
 
+	Choices(Choices&&) = delete;
+	Choices& operator= (Choices&&) = delete;
+
+	Choices(Choices const&) = delete;
+	Choices& operator= (Choices const&) = delete;
+
 	void Initialize();
 	void Update(int choices, bool low, bool high);
 

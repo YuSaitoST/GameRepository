@@ -17,6 +17,12 @@ public:
 	GameField(float sp_z);
 	virtual ~GameField();
 	
+	GameField(GameField&&) = delete;
+	GameField& operator= (GameField&&) = delete;
+
+	GameField(GameField const&) = delete;
+	GameField& operator= (GameField const&) = delete;
+
 	void LoadAsset();
 	void Update();
 	void Render();

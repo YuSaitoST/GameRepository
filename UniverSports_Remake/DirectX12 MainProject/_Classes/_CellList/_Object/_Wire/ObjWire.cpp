@@ -45,7 +45,7 @@ void ObjWire::Initialize(const int id) {
 void ObjWire::LoadAssets(std::wstring file_name) {
 	const Vector3 _rotate = XMFLOAT3(0.0f,0.0f, ROT_TUNING_Z[id_my_ % 2] * 1.5f);
 	const Quaternion _qua = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, _rotate.z);
-	DX9::MODEL mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, SCALE.x, SCALE.y, 1.0f);
+	DX9::MODEL mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, SCALE.x, SCALE.y * 1.5f, 1.0f);
 
 	mod_wire_->SetRotation(_qua.x, _qua.y, _qua.z);
 	collision_->SetColli(mod_wire_->GetBoundingOrientedBox());
@@ -62,24 +62,23 @@ void ObjWire::HitAction(ObjectBase* object) {
 		return;
 
 	if (object->myObjectType() == OBJ_TYPE::PLAYER) {
-		ObjPlayer* player = dynamic_cast<ObjPlayer*>(object);
+		//ObjPlayer* player = dynamic_cast<ObjPlayer*>(object);
 
-		// 自分の陣地ではないのなら早期リターン
-		if (player->myObjectID() != id_my_)
-			return;
+		//// 自分の陣地ではないのなら早期リターン
+		//if (player->myObjectID() != id_my_)
+		//	return;
 
-		// ゴール内にボールが入っていなければ早期リターン
-		if (hasBalls_.size() <= 0)
-			return;
+		//// ゴール内にボールが入っていなければ早期リターン
+		//if (hasBalls_.size() <= 0)
+		//	return;
 
-		// ボールを持っているなら早期リターン
-		if (player->HasBall())
-			return;
+		//// ボールを持っているなら早期リターン
+		//if (player->HasBall())
+		//	return;
 
-		player->CautchedBall(hasBalls_.back()->myObjectID());
-		BallsInstructor::BallCautch(player->myObjectID(), hasBalls_.back()->myObjectID());
-		hasBalls_.pop_back();
-
+		//player->CautchedBall(hasBalls_.back()->myObjectID());
+		//BallsInstructor::BallCautch(player->myObjectID(), hasBalls_.back()->myObjectID());
+		//hasBalls_.pop_back();
 	}
 	else if (object->myObjectType() == OBJ_TYPE::BALL) {
 		ObjBall* ball = dynamic_cast<ObjBall*>(object);
@@ -89,7 +88,8 @@ void ObjWire::HitAction(ObjectBase* object) {
 			return;
 
 		ball->SwitchState(B_STATE::GOAL);
-		hasBalls_.push_back(ball);
-		se_goal_->PlayOneShot();
+		ball->WasGoaled();
+		//hasBalls_.push_back(ball);
+		//se_goal_->PlayOneShot();
 	}
 }

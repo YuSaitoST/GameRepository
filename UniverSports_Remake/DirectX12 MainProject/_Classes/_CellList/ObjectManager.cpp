@@ -81,13 +81,10 @@ void ObjectManager::Update(const float deltaTime) {
 	for (ObjectBase* obj : obj_ball_)
 		obj->Update(deltaTime);
 
-	// ゴールを用いるモードのみ回す
-	if (DontDestroy->GameMode_.isGAMES_WITH_GOALS()) {
-		const int _WIRE = N_WIRE * 0.5f;
-		for (int _i = 0; _i <= _WIRE; _i += 2) {
-			obj_wire_[_i	]->Update(deltaTime);
-			obj_wire_[_i + 1]->Update(deltaTime);
-		}
+	const int _WIRE = N_WIRE * 0.5f;
+	for (int _i = 0; _i <= _WIRE; _i += 2) {
+		obj_wire_[_i]->Update(deltaTime);
+		obj_wire_[_i + 1]->Update(deltaTime);
 	}
 }
 

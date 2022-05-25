@@ -55,6 +55,7 @@ public:
 
 	void WasCaught(const int ownerID);
 	void WasThrown(Vector2 forward);
+	void WasGoaled();
 	void WasGuessed();
 	void BallBreak();
 

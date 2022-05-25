@@ -25,6 +25,12 @@ public:
 	DisplayBase() { movie_ = new MoviePlayer(); }
 	virtual ~DisplayBase() { delete movie_; }
 
+	DisplayBase(DisplayBase&&) = delete;
+	DisplayBase& operator= (DisplayBase&&) = delete;
+
+	DisplayBase(DisplayBase const&) = delete;
+	DisplayBase& operator= (DisplayBase const&) = delete;
+
 	virtual void Initialize() = 0;
 	virtual void LoadAssets() = 0;
 	virtual NextScene Update(const float deltaTime) = 0;

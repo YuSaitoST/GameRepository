@@ -23,6 +23,9 @@ public:
 	GameController();
 	virtual ~GameController();
 
+	GameController(GameController const&) = delete;
+	GameController& operator= (GameController const&) = delete;
+
 	void Initialize();
 	void LoadAssets();
 	NextScene Update(const float deltaTime);

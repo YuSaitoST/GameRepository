@@ -19,6 +19,12 @@ public:
 	Cursor();
 	virtual ~Cursor();
 
+	Cursor(Cursor&&) = delete;
+	Cursor& operator= (Cursor&&) = delete;
+
+	Cursor(Cursor const&) = delete;
+	Cursor& operator= (Cursor const&) = delete;
+
 	void Initialize();
 	void LoadAsset(std::wstring file_name);
 	void Update(int choices);

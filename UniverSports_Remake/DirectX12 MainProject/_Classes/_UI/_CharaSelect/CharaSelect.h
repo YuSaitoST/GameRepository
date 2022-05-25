@@ -20,6 +20,12 @@ public:
 	CharaSelect();
 	virtual ~CharaSelect();
 
+	CharaSelect(CharaSelect&&) = delete;
+	CharaSelect& operator= (CharaSelect&&) = delete;
+
+	CharaSelect(CharaSelect const&) = delete;
+	CharaSelect& operator= (CharaSelect const&) = delete;
+
 	void Initialize(int index);
 	void LoadAssets(DX9::SPRITE right, DX9::SPRITE left);
 	void Update(const float deltaTime, const int index);
