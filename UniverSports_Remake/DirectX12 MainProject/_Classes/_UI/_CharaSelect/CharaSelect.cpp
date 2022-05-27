@@ -5,20 +5,12 @@
 #include "_Classes/_StandardCalculation/StandardCalculation.h"
 
 CharaSelect::CharaSelect() {
-	choices_		= new Choices();
-	ui_arrows_		= new SelectArrows();
-	se_decision_	= new SoundPlayer();
-	se_cancel_		= new SoundPlayer();
-	se_warning_		= new SoundPlayer();
+	choices_		= std::make_unique<Choices>();
+	ui_arrows_		= std::make_unique<SelectArrows>();
+	se_decision_	= std::make_unique<SoundPlayer>();
+	se_cancel_		= std::make_unique<SoundPlayer>();
+	se_warning_		= std::make_unique<SoundPlayer>();
 	isDecision_		= false;
-}
-
-CharaSelect::~CharaSelect() {
-	delete se_warning_;
-	delete se_cancel_;
-	delete se_decision_;
-	delete ui_arrows_;
-	delete choices_;
 }
 
 void CharaSelect::Initialize(int index) {

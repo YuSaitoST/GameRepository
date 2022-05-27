@@ -78,6 +78,16 @@ ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
 }
 
 /**
+* @brief 座標・回転の設定
+* @param position 座標
+* @param rotate 回転
+*/
+void ObjectBase::SetTransform(DirectX::XMFLOAT3 position, DirectX::XMFLOAT2 rotate) {
+	collision_->SetPosition(Vector3(position.x, position.y, position.z));
+	physics_->SetTransform(Vector3(position.x, position.y, position.z), Vector3(rotate.x, rotate.y, 0.0f));
+}
+
+/**
 * @brief 所属空間の更新
 */
 void ObjectBase::UpdateToMorton() {

@@ -33,8 +33,10 @@ ObjectManager::~ObjectManager() {
 void ObjectManager::Initialize() {
 	ballList_->Initialize();
 
+	//インストラクターの初期化
 	BallsInstructor* instructor = new BallsInstructor();
-	instructor->SetList(ballList_->GetList());
+	instructor->SetBallList(ballList_->GetList());
+	instructor->Initialize();
 
 	const int _PLAYER = N_PLAYER * 0.5f;
 	for (int _i = 0; _i <= _PLAYER; _i += 2) {
@@ -176,7 +178,7 @@ ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, flo
 		if (obj->myObjectID() == id)
 			continue;
 
-		_new_distance = _new_distance = Distance2Vector(pos, obj->myPosition());
+		_new_distance = Distance2Vector(pos, obj->myPosition());
 
 		if (_new_distance < _min_distance) {
 			_min_distance = _new_distance;

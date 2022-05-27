@@ -7,18 +7,11 @@ bool IconAnimator::display_(false);
 
 IconAnimator::IconAnimator() : alpha_(0) {
 	for (int _i = 0; _i <= 2; _i += 2) {
-		icon_[_i]		= new CharaIcon();
-		icon_[_i + 1]	= new CharaIcon();
+		icon_[_i]		= std::make_unique<CharaIcon>();
+		icon_[_i + 1]	= std::make_unique<CharaIcon>();
 	}
 
-	display_time_ = new CountTimer(3);
-}
-
-IconAnimator::~IconAnimator() {
-	delete display_time_;
-
-	for (int _i = 3; 0 <= _i; --_i)
-		delete icon_[_i];
+	display_time_ = std::make_unique<CountTimer>(3);
 }
 
 void IconAnimator::LoadAssets() {

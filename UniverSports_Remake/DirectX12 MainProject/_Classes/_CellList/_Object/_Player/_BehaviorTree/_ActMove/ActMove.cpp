@@ -1,15 +1,17 @@
 #include "ActMove.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 #include "_Classes/_CellList/ObjectManager.h"
+#include "_Classes/_NearestPosition/NearestPosition.h"
+#include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
 
 void ActMove::Update(const float deltaTime, Vector2 direction, ObjPlayer& player) {
-	const Vector2 power = direction * GAME_CONST.Move_FirSpeed * deltaTime;
+	const Vector2 power = direction * PLAYER_PARAM.SPEED_MOVE * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
 	player.AssignPosition();
 }
 
 void ActMove::Update(const float deltaTime, ObjPlayer& player) {
-	const Vector2 power = direction_ * GAME_CONST.Move_FirSpeed * deltaTime;
+	const Vector2 power = direction_ * PLAYER_PARAM.SPEED_MOVE * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
 	player.AssignPosition();
 }
@@ -18,7 +20,9 @@ bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
 
 	ObjectBase* _targetPlayer	= ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
-	ObjectBase* _targetBall		= ObjectManager::TheClosestBall(my.myPosition(), _comparison);
+	//ObjectBase* _targetBall		= ObjectManager::TheClosestBall(my.myPosition(), _comparison);
+	BallsInstructor* _instructor = my.GetInstructor();
+	ObjectBase* _targetBall = _instructor->Access(Position::Nearest(_instructor->GetPosList(), my.myPosition()));
 
 	if (_targetPlayer != nullptr) {
 		if (((ObjPlayer*)_targetPlayer)->HasBall()) {

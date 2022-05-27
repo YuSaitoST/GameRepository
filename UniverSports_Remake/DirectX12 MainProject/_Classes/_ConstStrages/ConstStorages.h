@@ -1,19 +1,37 @@
 #pragma once
 
-
-#include <cstdio>
-#include <cassert>
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 
 #define GAME_CONST ConstStorageC::GetInstance()
+#define GAMES_PARAM ConstStorageC::GetInstance().GetGameProgression()
+#define PLAYER_PARAM ConstStorageC::GetInstance().GetPlayerParam()
 
 using namespace DirectX::SimpleMath;
 
 class ConstStorageC {
+private:
+	struct GameProgression {
+		const float TL_DEMO_PLAYBACK = 10.0f;
+		float LB_TIME_AFTER_PREPARATION;
+		float MN_TIME_HANDBALL;
+		float FN_TIME_MOVE;
+		float FN_TIME_DISPLAY;
+		float FN_TIME_FADEOUT;
+	};
+	struct Player {
+		float SCALE;
+		float SPEED_MAX_NORMAL;
+		float SPEED_MAX_BOOST;
+		float SPEED_MOVE;
+		float POWER_THRUSTER;
+		float TIME_RESPONE;
+		float TIME_INVINCIBLE;
+	};
+
 public:
-	ConstStorageC() = default;
-	virtual ~ConstStorageC() = default;
+	ConstStorageC() {};
+	virtual ~ConstStorageC() {};
 
 	static ConstStorageC& GetInstance()
 	{
@@ -22,16 +40,16 @@ public:
 	}
 
 	void Initialize();
+	GameProgression GetGameProgression() const { return gameParams_; }
+	Player GetPlayerParam() const { return playerParam_; }
 
-	float LB_GONEXT;
-
-	float PL_SCALE;
-	float PL_SPEED_MAX;
-	float PL_SPEED_TURN;
-	float PL_JET_MAX;
-	float PL_POWER_JET;
-	float PL_ReSponeTime;
-	float PL_InvincibleTime;
+	//float PL_SCALE;
+	//float PL_SPEED_MAX;
+	//float PL_SPEED_TURN;
+	//float PL_JET_MAX;
+	//float PL_POWER_JET;
+	//float PL_ReSponeTime;
+	//float PL_InvincibleTime;
 
 	float JT_SCALE[2];
 	float JT_MOVEMENT_NOMAL;
@@ -43,30 +61,16 @@ public:
 	float BA_SPEED_FLOAT;
 	float BA_SPEED_SHOT;
 
-	float FN_TIME_MOVE;
-	float FN_TIME_DISPLAY;
-	float FN_TIME_ALPHA;
-	
-	const int MODE_1_TIME = 120;
+	const float TITLE_UI_DISPLAY = 0.5f;
+	const float	TITLE_TIME_LOGO_DISPLAY = 2.5f;
 
 	const float PL_POS_X = 13.0f;
 	const float PL_POS_Y = 6.0f;
-
-	const float PL_AIMING_DISTANCE = 25.0f;  // ŽË’ö‹——£
-	const float PL_AIMING_CORRECTION = 1.5f;  // “G‚ÌˆÚ“®—\‘z•ª
 
 	const float Move_FirSpeed = 7.5;
 	
 	const int Player_MAX = 4;
 	const int Player_FacingRight = -90;
-	const int Player_FacingLeft = 90;
-	const int Player_BlowPower = 50;
-
-	const int Ball_Radius = 2;
-
-
-	const int BallMax_ = 5;
-	const int BallMax_Hand = 10;
 
 	const int BALLMAX[4] = { 5,10,5,6 };
 
@@ -76,4 +80,8 @@ public:
 		Vector3(-13.0f,-6.0f,0.f),
 		Vector3(13.0f,-6.0f,0.f)
 	};
+
+private:
+	GameProgression gameParams_;
+	Player playerParam_;
 };

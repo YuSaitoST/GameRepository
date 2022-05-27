@@ -26,7 +26,7 @@ void BallList::Initialize() {
 void BallList::LoadAssets() {
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, USFN_MOD::BALL.c_str());
 	model_->SetScale(GAME_CONST.BA_SCALE);
-	model_->SetMaterial(ObjectBase::GetNomMaterial());
+	model_->SetMaterial(list_.at(0)->GetNomMaterial());
 
 	for (ObjectBase* obj : list_)
 		obj->LoadAssets(model_);

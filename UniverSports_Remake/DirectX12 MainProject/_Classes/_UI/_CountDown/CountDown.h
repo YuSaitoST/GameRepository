@@ -17,7 +17,7 @@
 class CountDownUI {
 public:
 	CountDownUI();
-	virtual ~CountDownUI();
+	virtual ~CountDownUI() {}
 
 	CountDownUI(CountDownUI&&) = delete;
 	CountDownUI& operator= (CountDownUI&&) = delete;
@@ -37,17 +37,17 @@ private:
 	const float			POS_Y	 = 325.0f + CENTER_Y;
 
 	//! カウントダウンSE
-	SoundPlayer*		se_count_;
+	std::unique_ptr<SoundPlayer> se_count_;
 	
 	//! カウントダウン画像
-	DX9::SPRITE			sprite_[4];
+	DX9::SPRITE	sprite_[4];
 	
 	//! 画像のα値
-	float				alpha_;
+	float alpha_;
 	
 	//! 画像サイズ
-	float				scale_;
+	float scale_;
 
 	//! SE再生フラグ
-	bool				soundPlay_;
+	bool soundPlay_;
 };

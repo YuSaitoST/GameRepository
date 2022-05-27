@@ -4,11 +4,7 @@
 using namespace DirectX;
 
 Cursor::Cursor() : sp_(DX9::SPRITE()), pos_(DirectX::XMFLOAT3()) {
-	choices_	= new Choices();
-}
-
-Cursor::~Cursor() {
-	delete choices_;
+	choices_	= std::make_unique<Choices>();
 }
 
 void Cursor::Initialize() {

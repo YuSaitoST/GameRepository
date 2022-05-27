@@ -3,11 +3,7 @@
 #include "_Classes/_UI/_Fade/Fade.h"
 
 CountDownUI::CountDownUI() : alpha_(0.0f), scale_(0.0f), soundPlay_(false) {
-	se_count_ = new SoundPlayer();
-}
-
-CountDownUI::~CountDownUI() {
-	delete se_count_;
+	se_count_ = std::make_unique<SoundPlayer>();
 }
 
 void CountDownUI::Initialize() {

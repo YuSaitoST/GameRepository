@@ -18,7 +18,7 @@
 class Gauge {
 public:
 	Gauge();
-	virtual ~Gauge() = default;
+	virtual ~Gauge() {}
 
 	void Initialize();
 	void LoadAssets();
@@ -30,6 +30,11 @@ public:
 	* @param position 座標
 	*/
 	void SetPosition(DirectX::XMFLOAT3 position) { position_ = position; };
+
+	/**
+	* @brieef ゲージのリセット
+	*/
+	void Reset() { proportion_ = MAX_GAUGE; }
 
 	/**
 	* @brief 現在の値を返す

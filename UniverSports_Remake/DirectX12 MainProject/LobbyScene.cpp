@@ -53,7 +53,7 @@ LobbyScene::LobbyScene()
 		charaSelect_[_i + 1]	= new CharaSelect();
 	}
 
-	timer_goNext_				= new CountTimer(GAME_CONST.LB_GONEXT + 1.0f);
+	timer_goNext_				= new CountTimer(GAMES_PARAM.LB_TIME_AFTER_PREPARATION);
 	blackOut_					= new BlackOut();
 
 	allSet_						= false;

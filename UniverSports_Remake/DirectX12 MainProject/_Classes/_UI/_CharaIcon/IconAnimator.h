@@ -16,7 +16,7 @@
 class IconAnimator {
 public:
 	IconAnimator();
-	virtual ~IconAnimator();
+	virtual ~IconAnimator() {}
 
 	IconAnimator(IconAnimator&&) = delete;
 	IconAnimator& operator= (IconAnimator&&) = delete;
@@ -52,10 +52,10 @@ private:
 	};
 
 	//! アイコン
-	CharaIcon* icon_[4];
+	std::unique_ptr<CharaIcon> icon_[4];
 	
 	//! 表示時間のタイマー
-	CountTimer* display_time_;
+	std::unique_ptr<CountTimer> display_time_;
 	
 	//! 画像のα値
 	float alpha_;

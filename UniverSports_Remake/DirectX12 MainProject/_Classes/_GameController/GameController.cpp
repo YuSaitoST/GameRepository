@@ -6,19 +6,11 @@ bool GameController::gameStart_ = false;
 
 GameController::GameController() {
 	startTime_	= TIME_LIMIT[(int)DontDestroy->GameMode_.SelectionMode()] + TIME_COUNT;
-	timer_		= new CountTimer(startTime_);
-	countDown_	= new CountDownUI();
-	blackOut_	= new BlackOut();
-	ui_finish_	= new Finish();
-	se_whistle_ = new SoundPlayer();
-}
-
-GameController::~GameController() {
-	delete se_whistle_;
-	delete ui_finish_;
-	delete blackOut_;
-	delete countDown_;
-	delete timer_;
+	timer_		= std::make_unique<CountTimer>(startTime_);
+	countDown_	= std::make_unique<CountDownUI>();
+	blackOut_	= std::make_unique<BlackOut>();
+	ui_finish_	= std::make_unique<Finish>();
+	se_whistle_ = std::make_unique<SoundPlayer>();
 }
 
 void GameController::Initialize() {
@@ -66,7 +58,6 @@ void GameController::Render() {
 	countDown_->Render((TIME_COUNT - std::max(0.0f, (startTime_ - timer_->NowTime()))));
 	gameStart_ = TIME_COUNT <= (startTime_ - timer_->NowTime());  // カウントダウン(4.2f)より経過時間が長ければtrue
 }
-
 
 /**
 * @brief ゲームの終了状態を返す

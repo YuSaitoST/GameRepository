@@ -62,7 +62,7 @@ void ObjBall::LoadAssets(DX9::MODEL& model) {
 	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
 	
 	pos_ = physics_->GetCenterOfMassPosition();
-	SetTransforms();
+	SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
 
 	r_ = model->GetBoundingSphere().Radius;
 
@@ -73,7 +73,7 @@ void ObjBall::Update(const float deltaTime) {
 	state_->Update(this);
 
 	pos_ = physics_->GetCenterOfMassPosition();
-	SetTransforms();
+	SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
 
 	UpdateToMorton();
 }
@@ -139,15 +139,7 @@ void ObjBall::AddPower(Vector3 forward, float speed) {
 	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 
 	pos_ = physics_->GetCenterOfMassPosition();
-	SetTransforms();
-}
-
-/**
-* @brief À•W‚Æ‰ñ“]‚ðÝ’è‚·‚é
-*/
-void ObjBall::SetTransforms() {
-	collision_->SetPosition(Vector3(pos_.x, pos_.y, pos_z_));
-	physics_->SetTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3(rotate_.x, rotate_.y, 0.0f));
+	SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
 }
 
 /**

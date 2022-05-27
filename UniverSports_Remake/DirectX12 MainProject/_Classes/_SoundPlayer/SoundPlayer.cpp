@@ -4,17 +4,13 @@ SoundPlayer::SoundPlayer() : sound_(XAudio::SOUNDEFFECT()), bgm_instance_(XAudio
 	timer_			= nullptr;
 }
 
-SoundPlayer::~SoundPlayer() {
-	delete timer_;
-}
-
 /**
 * @brief ‰Šú‰»
 */
 void SoundPlayer::Initialize(std::wstring file_name, SOUND_TYPE sound_type, float playTime) {
 	sound_			= XAudio::CreateSoundEffect(DXTK->AudioEngine, file_name.c_str());
 	bgm_instance_	= (sound_type == SOUND_TYPE::BGM) ? sound_->CreateInstance() : nullptr;
-	timer_			= new CountTimer(playTime);
+	timer_			= std::make_unique<CountTimer>(playTime);
 }
 
 /**

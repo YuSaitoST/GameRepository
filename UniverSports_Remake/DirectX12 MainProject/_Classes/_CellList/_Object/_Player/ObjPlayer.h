@@ -56,15 +56,7 @@ public:
 
 	void SetInstructor(BallsInstructor* instructor) { instructor_ = instructor; }
 
-	/**
-	* @brief モデル生成
-	* @param fileName ファイル名
-	*/
-	void CreateModel(std::wstring fileName) {
-		model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, fileName.c_str());
-		model_->SetScale(0.018f);
-		model_->SetMaterial(GetNomMaterial());
-	}
+	void CreateModel(std::wstring fileName);
 
 	/**
 	* @brief モデルの変更
@@ -90,6 +82,7 @@ public:
 	* @brief 移動処理
 	*/
 	void Moving(Vector3 power) { physics_->Moving(power); };
+
 	void Shoting(const int ballID);
 	void CautchedBall(const int ballID);
 
@@ -117,11 +110,17 @@ public:
 	*/
 	int MyBallID() const { return myBallID_; }
 
+	/**
+	* @brief インストラクターを返す
+	* @return インストラクター
+	*/
+	BallsInstructor* GetInstructor() const { return instructor_; }
+
 private:
 	void Playing(const float deltaTime);
 	void Beaten(const float deltaTime);
 
-	void SetTransforms(const Vector2 pos, const Vector2 rotate);
+	void SetTransforms(XMFLOAT2 pos, XMFLOAT2 rotate);
 	void AnimReset();
 	void AnimSet(MOTION motion, float deltaTime);
 
@@ -151,6 +150,9 @@ private:
 	//" バリア
 	Barrier*			barrier_;
 	
+	//! ボールインストラクター
+	BallsInstructor* instructor_;
+
 	//! モデル
 	DX9::SKINNEDMODEL	model_;
 	
@@ -164,5 +166,4 @@ private:
 	int					myBallID_;
 
 
-	BallsInstructor* instructor_;
 };

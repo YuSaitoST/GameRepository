@@ -23,7 +23,7 @@ enum SOUND_TYPE { BGM, SE };
 class SoundPlayer {
 public:
 	SoundPlayer();
-	virtual ~SoundPlayer();
+	virtual ~SoundPlayer() {}
 
 	void Initialize(std::wstring file_name, SOUND_TYPE sound_type, float playTime);
 	void OnRestartSound();
@@ -39,5 +39,5 @@ private:
 	XAudio::SOUNDEFFECTINSTANCE bgm_instance_;
 
 	//! Ä¶ŠÔ•Ï”
-	CountTimer* timer_;
+	std::unique_ptr<CountTimer> timer_;
 };

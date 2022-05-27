@@ -138,7 +138,6 @@ public:
 	B_STATE NowState() const { return state_->GetMyState(); }
 
 private:
-	void SetTransforms();
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);
 
 	//! ƒ{[ƒ‹‚Ìó‘Ô

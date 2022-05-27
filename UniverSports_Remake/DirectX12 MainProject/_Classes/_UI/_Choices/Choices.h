@@ -15,7 +15,7 @@
 class Choices {
 public:
 	Choices();
-	virtual ~Choices() { delete se_choice_; };
+	virtual ~Choices() {};
 
 	Choices(Choices&&) = delete;
 	Choices& operator= (Choices&&) = delete;
@@ -40,7 +40,7 @@ public:
 
 private:
 	//! “ü—Í‚ÌSE
-	SoundPlayer* se_choice_;
+	std::unique_ptr<SoundPlayer> se_choice_;
 	
 	//! Œ»İ‘I‘ğ‚µ‚Ä‚¢‚é”Ô†
 	int isSelected;

@@ -35,7 +35,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 
 	life_			= new MyLife(3);
 	teamID_			= new TeamID();
-	ti_respone_		= new CountTimer(GAME_CONST.PL_ReSponeTime);
+	ti_respone_		= new CountTimer(PLAYER_PARAM.TIME_RESPONE);
 	eff_down_		= new EffDown();
 	barrier_		= new Barrier();
 	
@@ -188,12 +188,21 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 * @param pos 座標
 * @param rotate 回転
 */
-void ObjPlayer::SetTransforms(const Vector2 pos, const Vector2 rotate) {
+void ObjPlayer::SetTransforms(XMFLOAT2 pos, XMFLOAT2 rotate) {
 	model_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
 	model_->SetRotation(Vector3(rotate.x, rotate.y, 0.0f));
 	barrier_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
-	collision_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
-	physics_->SetTransform(Vector3(pos.x, pos.y, 0.0f), Vector3(rotate.x, rotate.y, 0.0f));
+	SetTransform(XMFLOAT3(pos.x, pos.y, 0.0f), rotate);
+}
+
+/**
+* @brief モデル生成
+* @param fileName ファイル名
+*/
+void ObjPlayer::CreateModel(std::wstring fileName) {
+	model_ = DX9::SkinnedModel::CreateFromFile(DXTK->Device9, fileName.c_str());
+	model_->SetScale(PLAYER_PARAM.SCALE);
+	model_->SetMaterial(GetNomMaterial());
 }
 
 /**

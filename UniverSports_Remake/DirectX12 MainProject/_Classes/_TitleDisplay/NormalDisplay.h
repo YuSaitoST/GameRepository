@@ -37,8 +37,6 @@ private:
 	static const int	CHOICES				= 2;						// 縦の選択肢数
 	static const int	MODE				= 3;						// モードの数
 	const float			SPEED_FADE[3]		= { 127.5f, 510.0f, 0.0f };	// シーン移行のフェード速度(2s, 0.5s、0.0s)
-	const float			UI_FADE_STARTTIME	= 2.5f;						// タイトル背景に合わせてUIをフェードインさせる時間
-	const float			DEMO_PLAYBACK		= 10.0f;					// DEMOプレイ再生までの時間
 	const float			UI_TEXT_Y[CHOICES]	= { 460.0f, 560.0f };		// 縦のUIのY座標
 	const float			SPEED_ALPHA			= 127.5f;					// UIのフェード速度
 	const float			ARROW_POS_R_X		= 917.5f;					// 右矢印X座標
@@ -47,16 +45,17 @@ private:
 	const float			TEXT_POS_X			= 640.0f;					// モードテキストX座標
 
 private:
-	SoundPlayer*		se_decision_;
-	CountTimer*			time_start_;
-	CountTimer*			time_demo_;
-	Cursor*				cursor_;
-	SelectArrows*		ui_arrows_;
-	Choices*			mode_choices_;
-	TextBase*			text_;
-	TextUI				nowText_[CHOICES][MODE];
-	OperateUI*			operate_;
-	BlackOut*			blackOut_;
+	SoundPlayer*	se_decision_;	//! 決定SE
+	CountTimer*		time_start_;	//! タイトルロゴが表示されるまでの計測
+	CountTimer*		time_demo_;		//! デモプレイ再生までのタイマー
+	Cursor*			cursor_;		//! カーソル
+	SelectArrows*	ui_arrows_;		//! モード選択の矢印アニメーション
+	Choices*		mode_choices_;	//! モード選択処理
+	OperateUI*		operate_;		//! 操作説明
+	BlackOut*		blackOut_;		//! ブラックアウト
 
-	float				ui_alpha_;
+	TextBase* text_;								//! 選択肢基底クラス
+	TextUI nowText_[CHOICES][MODE];					//! 選択肢配列
+
+	float ui_alpha_;  //! UIのα値
 };

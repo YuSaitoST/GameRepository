@@ -21,8 +21,11 @@ public:
 	BallsInstructor() {}
 	virtual ~BallsInstructor() {}
 
-	void SetList(const std::vector<ObjBall*>& balllist) { list_ = balllist; }
+	void SetBallList(const std::vector<ObjBall*> balllist) { list_ = balllist; }
+	void Initialize();
 
+	ObjBall* Access(const int ballID) const;
+	std::vector<DirectX::SimpleMath::Vector2*> GetPosList() const { return posList_; }
 	void Cautch(const int playerID, const int ballID);
 	void Shot(const int ballID, DirectX::SimpleMath::Vector2 forwrad);
 	void BreakOfThrower(const int ballID);
@@ -31,4 +34,5 @@ public:
 private:
 	//! ボールのリスト
 	std::vector<ObjBall*> list_;
+	std::vector<DirectX::SimpleMath::Vector2*> posList_;
 };

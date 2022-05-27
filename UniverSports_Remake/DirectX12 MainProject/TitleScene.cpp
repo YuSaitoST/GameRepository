@@ -29,11 +29,11 @@ void TitleScene::Initialize()
 	//使用するコア数を指定
 	omp_set_num_threads(4);
 
-	//FPS指定
-	DXTK->SetFixedFrameRate(60);
-
 	//パラメーターの読み込み
 	GAME_CONST.Initialize();
+
+	//FPS指定
+	DXTK->SetFixedFrameRate(60);
 	
 	//BGMの読み込み
 	bgm_->Initialize(USFN_SOUND::BGM::TITLE, SOUND_TYPE::BGM, 0.0f);

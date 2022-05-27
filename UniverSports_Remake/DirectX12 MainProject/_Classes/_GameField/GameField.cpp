@@ -4,12 +4,8 @@
 #include "DontDestroyOnLoad.h"
 
 GameField::GameField(float sp_z) {
-	movie_		= new MoviePlayer();
+	movie_		= std::make_unique<MoviePlayer>();
 	sprite_z_	= sp_z;
-}
-
-GameField::~GameField() {
-	delete movie_;
 }
 
 /**

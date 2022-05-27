@@ -17,7 +17,7 @@
 class Cursor {
 public:
 	Cursor();
-	virtual ~Cursor();
+	virtual ~Cursor() {}
 
 	Cursor(Cursor&&) = delete;
 	Cursor& operator= (Cursor&&) = delete;
@@ -43,7 +43,7 @@ private:
 
 private:
 	//! 選択クラス
-	Choices* choices_;
+	std::unique_ptr<Choices> choices_;
 
 	//! カーソルの画像
 	DX9::SPRITE	sp_;

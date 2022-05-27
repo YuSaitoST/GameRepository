@@ -6,8 +6,9 @@
  */
 
 namespace StandardCalculation {
-	template<typename Number>
-	void ValueLoop(Number& num, Number min, Number max);
+
+	template<typename Number> void ValueLoop(Number& num, Number min, Number max);
+
 }  //namespace StandardCalculation
 
 template<typename Number>

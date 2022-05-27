@@ -18,7 +18,7 @@
 class CharaSelect {
 public:
 	CharaSelect();
-	virtual ~CharaSelect();
+	virtual ~CharaSelect() {}
 
 	CharaSelect(CharaSelect&&) = delete;
 	CharaSelect& operator= (CharaSelect&&) = delete;
@@ -57,19 +57,19 @@ private:
 	const float PICON_X[4] = { ENTRY_X[0] - 5.0f, ENTRY_X[1] - 5.0f, ENTRY_X[2] - 5.0f, ENTRY_X[3] - 5.0f };
 
 	//! 選択クラス
-	Choices* choices_;
+	std::unique_ptr<Choices> choices_;
 	
 	//! 矢印
-	SelectArrows* ui_arrows_;
+	std::unique_ptr<SelectArrows> ui_arrows_;
 	
 	//! 決定SE
-	SoundPlayer* se_decision_;
+	std::unique_ptr<SoundPlayer> se_decision_;
 	
 	//! キャンセルSE
-	SoundPlayer* se_cancel_;
+	std::unique_ptr<SoundPlayer> se_cancel_;
 	
 	//! 警告SE
-	SoundPlayer* se_warning_;
+	std::unique_ptr<SoundPlayer> se_warning_;
 	
 	//! 決定フラグ
 	bool isDecision_;

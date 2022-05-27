@@ -22,8 +22,8 @@ enum DISPLAYMODE { DISPLAY_NORMAL, DISPLAY_DEMO };
 
 class DisplayBase {
 public:
-	DisplayBase() { movie_ = new MoviePlayer(); }
-	virtual ~DisplayBase() { delete movie_; }
+	DisplayBase() { movie_ = std::make_unique<MoviePlayer>(); }
+	virtual ~DisplayBase() {}
 
 	DisplayBase(DisplayBase&&) = delete;
 	DisplayBase& operator= (DisplayBase&&) = delete;
@@ -45,6 +45,6 @@ public:
 	virtual void MVPlay() { movie_->Play(); }
 
 protected:
-	//!”wŒi“®‰æ
-	MoviePlayer* movie_;
+	//! ”wŒi“®‰æ
+	std::unique_ptr<MoviePlayer> movie_;
 };

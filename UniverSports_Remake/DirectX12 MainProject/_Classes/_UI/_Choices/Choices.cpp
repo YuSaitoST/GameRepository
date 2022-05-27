@@ -3,7 +3,7 @@
 #include "_Classes/_StandardCalculation/StandardCalculation.h"
 
 Choices::Choices() {
-	se_choice_ = new SoundPlayer();
+	se_choice_ = std::make_unique<SoundPlayer>();
 	isSelected = 0;
 	putCount_ = 0;
 }

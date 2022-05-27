@@ -21,7 +21,7 @@
 class GameController {
 public:
 	GameController();
-	virtual ~GameController();
+	virtual ~GameController() {}
 
 	GameController(GameController const&) = delete;
 	GameController& operator= (GameController const&) = delete;
@@ -43,19 +43,19 @@ private:
 	const float	SPEED_FADE[3]	= { 51.0f, 510.0f, 0.0f };
 
 	//! タイマー
-	CountTimer*		timer_;
+	std::unique_ptr<CountTimer> timer_;
 
 	//! 開始前カウントダウン
-	CountDownUI*	countDown_;
+	std::unique_ptr<CountDownUI> countDown_;
 
 	//! ブラックアウト
-	BlackOut*		blackOut_;
+	std::unique_ptr<BlackOut> blackOut_;
 
 	//! 終了時テキスト
-	Finish*			ui_finish_;
+	std::unique_ptr<Finish> ui_finish_;
 
 	//! 終了時SE
-	SoundPlayer*	se_whistle_;
+	std::unique_ptr<SoundPlayer> se_whistle_;
 
 	//! ゲームの制限時間
 	float			startTime_;

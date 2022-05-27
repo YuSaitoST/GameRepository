@@ -41,9 +41,9 @@ void btObject::LimitSpeed() {
 	SimpleMath::Vector3 _velocity = (XMFLOAT3)bt_body_->getLinearVelocity();
 
 	// ë¨ìxêßå¿
-	if (GAME_CONST.PL_SPEED_MAX < _velocity.Length()) {
+	if (PLAYER_PARAM.SPEED_MAX_NORMAL < _velocity.Length()) {
 		_velocity.Normalize();
-		_velocity *= GAME_CONST.PL_SPEED_MAX;
+		_velocity *= PLAYER_PARAM.SPEED_MAX_NORMAL;
 	}
 
 	bt_body_->setLinearVelocity(*(btVector3*)&_velocity);

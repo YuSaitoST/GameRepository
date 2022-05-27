@@ -31,6 +31,11 @@ void ActThrasher::Update(const float deltaTime, SimpleMath::Vector2 direction, O
 
 	effect_->usedThrasher_ = _isUsed && (0.1f < gauge_->GetProportion());
 	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(direction.x, direction.y, 0.0f), gauge_->GetProportion());
+
+	//if (effect_->usedThrasher_) {
+	//	const Vector2 power = direction * PLAYER_PARAM.SPEED_MAX_BOOST;
+	//	player.Moving(XMFLOAT3(power.x, power.y, 0.0f));
+	//}
 }
 
 void ActThrasher::Update(const float deltaTime, ObjPlayer& player) {

@@ -15,7 +15,7 @@
 class GameField {
 public:
 	GameField(float sp_z);
-	virtual ~GameField();
+	virtual ~GameField() {}
 	
 	GameField(GameField&&) = delete;
 	GameField& operator= (GameField&&) = delete;
@@ -29,7 +29,7 @@ public:
 
 private:
 	//! 背景動画
-	MoviePlayer* movie_;
+	std::unique_ptr<MoviePlayer> movie_;
 	
 	//! ワープホール画像
 	DX9::SPRITE sp_hole_;
