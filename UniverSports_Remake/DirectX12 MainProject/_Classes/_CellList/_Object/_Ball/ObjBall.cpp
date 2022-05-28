@@ -79,8 +79,8 @@ void ObjBall::Render(DX9::MODEL& model) {
 }
 
 /**
-* @brief ó‘Ô‚Ì•Ï‰»
-* @param state ó‘Ô
+* @brief ï¿½ï¿½Ô‚Ì•Ï‰ï¿½
+* @param state ï¿½ï¿½ï¿½
 */
 void ObjBall::SwitchState(BallState* state) {
 	state_ = state;
@@ -88,9 +88,9 @@ void ObjBall::SwitchState(BallState* state) {
 }
 
 /**
-* @brief F‚Ì•ÏX
-* @param colorType F‚Ìƒ^ƒCƒv
-* @return ƒ}ƒeƒŠƒAƒ‹
+* @brief ï¿½Fï¿½Ì•ÏX
+* @param colorType ï¿½Fï¿½Ìƒ^ï¿½Cï¿½v
+* @return ï¿½}ï¿½eï¿½ï¿½ï¿½Aï¿½ï¿½
 */
 D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	D3DMATERIAL9 _mat{};
@@ -99,16 +99,16 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 		case DEFAULT_COLOR : _mat = GetNomMaterial(); break;
 		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[std::min(std::max(0, DontDestroy->ChoseColor_[id_owner_]), 4 - 1)]; _mat.Ambient = P_AMBIENT; break;
 		case TEAM_COLOR    : break;
-		default			   : assert(!"ObjBall_assert : •s³‚ÈFw’è"); break;
+		default			   : assert(!"ObjBall_assert : ï¿½sï¿½ï¿½ï¿½ÈFï¿½wï¿½ï¿½"); break;
 	}
 
 	return _mat;
 }
 
 /**
-* @brief —Í‚ğ‰Á‚¦”ò‚Î‚·ˆ—
-* @param forwrad ³–ÊƒxƒNƒgƒ‹
-* @param speed ‘¬“x
+* @brief ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î‚ï¿½ï¿½ï¿½ï¿½ï¿½
+* @param forwrad ï¿½ï¿½ï¿½Êƒxï¿½Nï¿½gï¿½ï¿½
+* @param speed ï¿½ï¿½ï¿½x
 */
 void ObjBall::AddPower(Vector3 forward, float speed) {
 	physics_->SetLinerVelocity(forward * speed);
@@ -119,8 +119,8 @@ void ObjBall::AddPower(Vector3 forward, float speed) {
 }
 
 /**
-* @brief ƒLƒƒƒbƒ`‚³‚ê‚½‚Ìˆ—
-* @param ownerID ‚¿å‚ÌID
+* @brief ï¿½Lï¿½ï¿½ï¿½bï¿½`ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
+* @param ownerID ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID
 */
 void ObjBall::WasCaught(const int ownerID) {
 	id_owner_ = ownerID;
@@ -131,8 +131,8 @@ void ObjBall::WasCaught(const int ownerID) {
 }
 
 /**
-* @brief “Š‚°‚ç‚ê‚½‚Ìˆ—
-* @param forward ³–ÊƒxƒNƒgƒ‹
+* @brief ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‚½ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½
+* @param forward ï¿½ï¿½ï¿½Êƒxï¿½Nï¿½gï¿½ï¿½
 */
 void ObjBall::WasThrown(Vector2 forward) {
 	forward_ = forward;
@@ -149,7 +149,7 @@ void ObjBall::WasGoaled() {
 }
 
 /**
-* @brief ƒvƒŒƒCƒ„[‚Æ‚ÌÕ“Ë‚É‚æ‚é”j‰ó‚Ìˆ—
+* @brief ï¿½vï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½Æ‚ÌÕ“Ë‚É‚ï¿½ï¿½jï¿½ó‚Ìï¿½ï¿½ï¿½
 */
 void ObjBall::WasGuessed() {
 	DontDestroy->Score_[id_owner_] += 1;
@@ -157,7 +157,7 @@ void ObjBall::WasGuessed() {
 }
 
 /**
-* @brief ”j‰ó‚Ìˆ—
+* @brief ï¿½jï¿½ó‚Ìï¿½ï¿½ï¿½
 */
 void ObjBall::BallBreak() {
 	pos_z_ = 0.0f;
