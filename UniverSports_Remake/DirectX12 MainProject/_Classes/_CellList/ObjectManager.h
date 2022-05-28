@@ -31,18 +31,30 @@ private:
 		Vector3(GAME_CONST.PL_POS_X,	GAME_CONST.PL_POS_Y, 0.0f),
 		Vector3(-GAME_CONST.PL_POS_X, -GAME_CONST.PL_POS_Y, 0.0f),
 		Vector3(GAME_CONST.PL_POS_X,  -GAME_CONST.PL_POS_Y, 0.0f)
+		//Vector3(19, 24, 0.0f),
+		//Vector3(45,	24, 0.0f),
+		//Vector3(19, 12, 0.0f),
+		//Vector3(45, 12, 0.0f)
 	};
 
 	const float FX = 32.0f;
 	const float FY = 18.0f;
 	const float X = FX - 5.25f + 1.25f;
 	const float Y = FY - 4.75f + 1.25f;
+	//const float FX = 64.0f;
+	//const float FY = 32.0f;
+	//const float X = 6.5f;
+	//const float Y = 6.0f;
 
 	const SimpleMath::Vector3 POS_WIRE[N_WIRE] = {
 		Vector3(-X, Y, 0.0f),
 		Vector3(X,Y,0.0f),
 		Vector3(X,-Y,0.0f),
 		Vector3(-X,-Y,0.0f)
+		//Vector3(	 X - 2.5f, FY - Y + 3.5f, 0.0f),		//L
+		//Vector3(FX - X + 2.5f, FY - Y + 3.5f, 0.0f),			//R
+		//Vector3(FX - X + 2.5f,		Y - 1.5f, 0.0f),		//L
+		//Vector3(	 X - 2.5f,		Y - 1.5f, 0.0f)				//R
 	};
 
 public:

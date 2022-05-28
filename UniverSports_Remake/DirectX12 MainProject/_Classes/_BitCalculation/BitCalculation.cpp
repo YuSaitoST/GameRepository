@@ -3,7 +3,7 @@
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 
 /**
-* @brief ビットを1つずつずらす
+* @brief ビットをずらす
 * @param bit 格子の座標
 * @return 変換したビット値
 */
@@ -56,8 +56,10 @@ int BitCalculation::GetIndex(int Level, int Index) {
 */
 void BitCalculation::MoverToMorton(DirectX::XMFLOAT2 m_pos, float radian, SpaceNumber& numbers) {
 	// 左上、右下の座標
-	DirectX::XMFLOAT2 _UL = DirectX::XMFLOAT2(m_pos.x - radian, m_pos.y + radian);
-	DirectX::XMFLOAT2 _UR = DirectX::XMFLOAT2(m_pos.x + radian, m_pos.y - radian);
+	//DirectX::XMFLOAT2 _UL = DirectX::XMFLOAT2(m_pos.x - radian, m_pos.y + radian);
+	//DirectX::XMFLOAT2 _UR = DirectX::XMFLOAT2(m_pos.x + radian, m_pos.y - radian);
+	DirectX::XMFLOAT2 _UL = DirectX::XMFLOAT2(m_pos.x, m_pos.y);
+	DirectX::XMFLOAT2 _UR = DirectX::XMFLOAT2(m_pos.x, m_pos.y);
 
 	// それぞれのモートンを代入
 	int _mUL = PointToMorton(_UL);

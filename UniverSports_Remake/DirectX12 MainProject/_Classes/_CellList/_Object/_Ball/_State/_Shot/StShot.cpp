@@ -13,7 +13,7 @@ void StShot::Update(ObjBall* ball) {
 	ball->AssignTransform(Vector3(_pos.x, _pos.y, _pos_z), forward_);
 
 	const bool _isFieldOut = FIELD::IsOut(_pos, GAME_CONST.BA_SCALE);
-	const bool _isGotStuck = std::abs(position_.x) == FIELD::SIDE_X;
+	const bool _isGotStuck = (std::abs(position_.x) == FIELD::SIDE_X)/* || (position_.x == 1.0f)*/;
 
 	if (_isFieldOut || _isGotStuck || ball->IsBreaked() || (ball->GetOwnerID() == -1)) {
 		ball->FlagResets();

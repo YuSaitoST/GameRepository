@@ -79,6 +79,10 @@ public:
 		Vector3(13.0f,6.0f,0.f),
 		Vector3(-13.0f,-6.0f,0.f),
 		Vector3(13.0f,-6.0f,0.f)
+		//Vector3(19, 24, 0.0f),
+		//Vector3(45,	24, 0.0f),
+		//Vector3(19, 12, 0.0f),
+		//Vector3(45, 12, 0.0f)
 	};
 
 private:

@@ -15,6 +15,11 @@ void StFloat::Initialize() {
 	pos_start_x		= std::uniform_int_distribution<>(-limit_pos_x, limit_pos_x);
 	direct_x		= std::uniform_real_distribution<float>(-limit_direct_x, limit_direct_x);
 	direct_y		= std::uniform_real_distribution<float>(-limit_direct_y, limit_direct_y);
+	//pos_start_x = std::uniform_int_distribution<>(1.0f, FIELD::SIDE_X - 1);
+	//direct_x = std::uniform_real_distribution<float>(27, 37);
+	//direct_y = std::uniform_real_distribution<float>(13, 23);
+	//limit_pos_x -= 1;
+	//limit_pos_y -= 1;
 
 	myState_		= B_STATE::FLOATING;
 
@@ -56,12 +61,14 @@ SimpleMath::Vector2 StFloat::RandomPosition() {
 
 	if (std::abs(_random_x) == limit_pos_x) {
 		pos_start_y = std::uniform_int_distribution<>(-limit_pos_y - GAME_CONST.BA_SCALE, limit_pos_y + GAME_CONST.BA_SCALE);
+		//pos_start_y = std::uniform_int_distribution<>(15.0f, 21.0f);
 		_random_y	= pos_start_y(randomEngine);
 	}
 	else {
 		pos_start_y = std::uniform_int_distribution<>(0, 1);
 		_random_y	= pos_start_y(randomEngine);
 		_random_y	= (_random_y == 0) ? -limit_pos_y - GAME_CONST.BA_SCALE : limit_pos_y + GAME_CONST.BA_SCALE;
+		//_random_y = (_random_y == 0) ? 1.0f : limit_pos_y;
 	}
 
 	return Vector2(_random_x, _random_y);
@@ -75,7 +82,7 @@ SimpleMath::Vector2 StFloat::RandomForward(const SimpleMath::Vector2 position) {
 }
 
 void StFloat::CheckFieldOut(ObjBall* ball) {
-	if (FIELD::IsOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == FIELD::SIDE_X)) {
+	if (FIELD::IsOut(ball->myPosition(), GAME_CONST.BA_SCALE) || (std::abs(position_.x) == FIELD::SIDE_X)/* || (position_.y == FIELD::SIDE_Y)*/) {
 		ReSpone(ball);
 	}
 }

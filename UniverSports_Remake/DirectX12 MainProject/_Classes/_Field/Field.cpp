@@ -1,6 +1,11 @@
 #include "Field.h"
 #include "_Classes/_StandardCalculation/StandardCalculation.h"
 
+//void FIELD::Clamp(DirectX::SimpleMath::Vector2& position) {
+//	position.x = std::max(0.0f + 1.0f, std::min(position.x, SIDE_X - 1.0f));
+//	position.y = std::max(0.0f + 1.0f, std::min(position.y, SIDE_Y - 1.0f));
+//}
+
 /**
 * @brief 画面外に出たら、反対方向から出す
 * @param position チェックする座標
@@ -17,8 +22,8 @@ void FIELD::ClampLoop(DirectX::SimpleMath::Vector2& position) {
 * @return 画面外に出たらtrue  内側ならfalse
 */
 bool FIELD::IsOut(DirectX::SimpleMath::Vector2 position, float raidus) {
-	const bool isOutX = (position.x + raidus < -SIDE_X) || (SIDE_X < position.x - raidus);
-	const bool isOutY = (position.y + raidus < -SIDE_Y) || (SIDE_Y < position.y - raidus);
+	const bool isOutX = (position.x < -SIDE_X) || (SIDE_X < position.x);
+	const bool isOutY = (position.y < -SIDE_Y) || (SIDE_Y < position.y);
 
 	return isOutX || isOutY;
 }

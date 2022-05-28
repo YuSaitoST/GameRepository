@@ -9,6 +9,7 @@ ObjBall::ObjBall() {
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	SwitchState(B_STATE::STANDBY);
+	//state_ = &st_standby_;
 
 	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
 	colorType_ = DEFAULT_COLOR;
@@ -24,6 +25,7 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
 	SwitchState(B_STATE::STANDBY);
+	//state_ = &st_standby_;
 
 	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
@@ -48,6 +50,8 @@ void ObjBall::Initialize(const int id) {
 	pos_		= state_->GetPosition();
 	forward_	= state_->GetForward();
 
+	state_->Initialize();
+
 	id_my_		= id;
 
 	pos_z_ = 0.0f;
@@ -61,18 +65,19 @@ void ObjBall::LoadAssets(DX9::MODEL& model) {
 
 	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
 	
-	pos_ = physics_->GetCenterOfMassPosition();
-	SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
+	//pos_ = physics_->GetCenterOfMassPosition();
+	//SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
 
 	r_ = model->GetBoundingSphere().Radius;
 
-	UpdateToMorton();
+	//UpdateToMorton();
 }
 
 void ObjBall::Update(const float deltaTime) {
 	state_->Update(this);
 
 	pos_ = physics_->GetCenterOfMassPosition();
+
 	SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
 
 	UpdateToMorton();
