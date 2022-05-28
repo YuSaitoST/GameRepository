@@ -76,8 +76,6 @@ public:
 		strategy_->Initialize(id_my_, this);
 	}
 
-	void AsjustmentForward();
-
 	/**
 	* @brief 移動処理
 	*/
@@ -132,38 +130,18 @@ private:
 
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
-	//! 残機
-	MyLife*				life_;
+	std::unique_ptr<MyLife>				life_;			//! 残機
+	std::unique_ptr<TeamID>				teamID_;		//! チームID
+	std::unique_ptr<CountTimer>			ti_respone_;	//! リスポーンタイマー
+	std::unique_ptr<EffDown>			eff_down_;		//! ダウン時エフェクト
+	std::unique_ptr<Barrier>			barrier_;		//! バリア
 	
-	//! チームID
-	TeamID*				teamID_;
-	
-	//! リスポーンタイマー
-	CountTimer*			ti_respone_;
-	
-	//! ダウン時エフェクト
-	EffDown*			eff_down_;
-	
-	//! 行動
-	CharaStrategy*		strategy_;
-	
-	//" バリア
-	Barrier*			barrier_;
-	
-	//! ボールインストラクター
-	BallsInstructor* instructor_;
+	CharaStrategy*		strategy_;		//! 行動
+	BallsInstructor*	instructor_;	//! ボールインストラクター
 
-	//! モデル
-	DX9::SKINNEDMODEL	model_;
-	
-	//! ボールの所持状態
-	bool				hasBall_;
-	
-	//! やられ状態
-	bool				isDown_;
-	
-	//! 所持しているボールのID
-	int					myBallID_;
+	DX9::SKINNEDMODEL	model_;			//! モデル
 
-
+	bool				hasBall_;		//! ボールの所持状態
+	bool				isDown_;		//! やられ状態
+	int					myBallID_;		//! 所持しているボールのID
 };

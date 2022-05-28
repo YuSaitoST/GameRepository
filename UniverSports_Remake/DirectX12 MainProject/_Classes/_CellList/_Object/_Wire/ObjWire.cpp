@@ -87,7 +87,7 @@ void ObjWire::HitAction(ObjectBase* object) {
 		if (ball->NowState() != B_STATE::SHOT)
 			return;
 
-		ball->SwitchState(B_STATE::GOAL);
+		//ball->SwitchState(B_STATE::GOAL);	
 		ball->WasGoaled();
 		//hasBalls_.push_back(ball);
 		//se_goal_->PlayOneShot();

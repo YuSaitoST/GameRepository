@@ -1,4 +1,5 @@
 #include "ObjBall.h"
+#include "_State/_Standby/StStandby.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 #include "_Classes/_Field/Field.h"
 #include "DontDestroyOnLoad.h"
@@ -8,7 +9,8 @@ ObjBall::ObjBall() {
 	pos_ = Vector2::Zero;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
-	SwitchState(B_STATE::STANDBY);
+	StStandby* standby = new StStandby();
+	SwitchState(standby);
 
 	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
 	colorType_ = DEFAULT_COLOR;
@@ -23,7 +25,8 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	pos_ = Vector2::Zero;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
-	SwitchState(B_STATE::STANDBY);
+	StStandby* standby = new StStandby();
+	SwitchState(standby);
 
 	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
@@ -31,7 +34,6 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	id_owner_ = -1;
 	isInPlayerHands_ = false;
 	isBreak_ = false;
-
 }
 
 ObjBall::~ObjBall() {
@@ -45,9 +47,6 @@ ObjBall::~ObjBall() {
 void ObjBall::Initialize(const int id) {
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
-	pos_		= state_->GetPosition();
-	forward_	= state_->GetForward();
-
 	id_my_		= id;
 
 	pos_z_ = 0.0f;
@@ -58,15 +57,9 @@ void ObjBall::Initialize(const int id) {
 
 void ObjBall::LoadAssets(DX9::MODEL& model) {
 	collision_->SetColli(model->GetBoundingSphere());
-
-	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
-	
-	pos_ = physics_->GetCenterOfMassPosition();
-	SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
+	collision_->SetColliScale(2.1f);
 
 	r_ = model->GetBoundingSphere().Radius;
-
-	UpdateToMorton();
 }
 
 void ObjBall::Update(const float deltaTime) {
@@ -89,26 +82,9 @@ void ObjBall::Render(DX9::MODEL& model) {
 * @brief 状態の変化
 * @param state 状態
 */
-void ObjBall::SwitchState(B_STATE state) {
-	switch (state) {
-		case B_STATE::STANDBY	:state_ = &st_standby_; break;
-		case B_STATE::FLOATING	:state_ = &st_float_;	break;
-		case B_STATE::CAUTCH	:state_ = &st_cautch_;	break;
-		case B_STATE::SHOT		:state_ = &st_shot_;	break;
-		case B_STATE::GOAL		:state_ = &st_goal_;	break;
-		default					:assert(!"ObjBall::SwitchState : 不正な状態です");
-	}
-
+void ObjBall::SwitchState(BallState* state) {
+	state_ = state;
 	state_->Initialize();
-	UpdateToMorton();
-}
-
-/**
-* @brief 色の変更
-* @param colorType 色のタイプ
-*/
-void ObjBall::SwitchColor(COLOR_TYPE colorType) {
-	colorType_ = colorType;
 }
 
 /**
@@ -149,7 +125,7 @@ void ObjBall::AddPower(Vector3 forward, float speed) {
 void ObjBall::WasCaught(const int ownerID) {
 	id_owner_ = ownerID;
 	isInPlayerHands_ = true;
-	pos_z_ = -3.0f;
+	pos_z_ = -6.0f;
 	ResetVelocity();
 	AssignTransform(Vector3(pos_.x, pos_.y, pos_z_), forward_);
 }

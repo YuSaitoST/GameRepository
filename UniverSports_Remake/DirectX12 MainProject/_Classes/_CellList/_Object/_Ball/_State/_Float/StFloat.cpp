@@ -2,6 +2,7 @@
 #include "DontDestroyOnLoad.h"
 #include "_Classes/_Field/Field.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
+#include "_Classes/_CellList/_Object/_Ball/_State/_Cautch/StCautch.h"
 #include "_Classes/_GameController/GameController.h"
 
 void StFloat::Initialize() {
@@ -17,13 +18,12 @@ void StFloat::Initialize() {
 	direct_y		= std::uniform_real_distribution<float>(-limit_direct_y, limit_direct_y);
 
 	myState_		= B_STATE::FLOATING;
-
-	SetTransform();
 }
 
 void StFloat::Update(ObjBall* ball) {
 	if (ball->IsInPlayerHands()) {
-		ball->SwitchState(B_STATE::CAUTCH);
+		StCautch* cautch = new StCautch();
+		ball->SwitchState(cautch);
 		ball->SwitchColor(ObjBall::COLOR_TYPE::PLAYERS_COLOR);
 		return;
 	}
@@ -39,15 +39,16 @@ void StFloat::Update(ObjBall* ball) {
 }
 
 void StFloat::ReSpone(ObjBall* ball) {
-	SetTransform();
-	ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward_);
-	ball->AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
+	XMFLOAT2 forward;
+	SetTransform(position_, forward);
+	ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward);
+	ball->AddPower(Vector3(forward.x, forward.y, 0.0f), GAME_CONST.BA_SPEED_FLOAT);
 	ball->FlagResets();
 }
 
-void StFloat::SetTransform() {
-	position_	= RandomPosition();
-	forward_	= RandomForward(position_);
+void StFloat::SetTransform(XMFLOAT2& position, XMFLOAT2& forward) {
+	position	= RandomPosition();
+	forward		= RandomForward(position);
 }
 
 SimpleMath::Vector2 StFloat::RandomPosition() {

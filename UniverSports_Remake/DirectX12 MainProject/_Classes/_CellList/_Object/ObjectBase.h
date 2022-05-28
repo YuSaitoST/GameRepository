@@ -59,6 +59,11 @@ public:
 	}
 
 	/**
+	* @brief 速度をリセットする
+	*/
+	void ResetVelocity() { physics_->ResetVelocity(); }
+
+	/**
 	* @brief 自分の物体の種類を返す
 	* @return 物体の種類
 	*/

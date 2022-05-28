@@ -33,11 +33,11 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	hasBall_		= false;
 	isDown_			= false;
 
-	life_			= new MyLife(3);
-	teamID_			= new TeamID();
-	ti_respone_		= new CountTimer(PLAYER_PARAM.TIME_RESPONE);
-	eff_down_		= new EffDown();
-	barrier_		= new Barrier();
+	life_			= std::make_unique<MyLife>(3);
+	teamID_			= std::make_unique<TeamID>();
+	ti_respone_		= std::make_unique<CountTimer>(PLAYER_PARAM.TIME_RESPONE);
+	eff_down_		= std::make_unique<EffDown>();
+	barrier_		= std::make_unique<Barrier>();
 	
 	strategy_		=	(strategy == OPERATE_TYPE::MANUAL)	 ? static_cast<CharaStrategy*>(new ManualChara())   : 
 						(strategy == OPERATE_TYPE::COMPUTER) ? static_cast<CharaStrategy*>(new ComputerChara()) : nullptr;
@@ -47,11 +47,11 @@ ObjPlayer::~ObjPlayer() {
 	if (strategy_ != nullptr)
 		delete strategy_;
 
-	delete barrier_;
-	delete eff_down_;
-	delete ti_respone_;
-	delete teamID_;
-	delete life_;
+	//delete barrier_;
+	//delete eff_down_;
+	//delete ti_respone_;
+	//delete teamID_;
+	//delete life_;
 	delete physics_;
 }
 
@@ -166,15 +166,14 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			if (!DontDestroy->GameMode_.isGAMES_WITH_GOALS()) {
 				IconAnimator::DisplayOn();
 				life_->TakeDamage();
+				ResetVelocity();
 				if (life_->NowLifePoint() <= 0)
 					DontDestroy->Survivor_[id_my_] = false;
 			}
 
-			//BallsInstructor::BallBreakOfThrower(_ball->myObjectID());
 			instructor_->BreakOfThrower(_ball->myObjectID());
 
 			if (hasBall_) {
-				//BallsInstructor::BallBreakOfTheHitter(myBallID_);
 				instructor_->BreakOfTheHitter(myBallID_);
 				myBallID_ = -1;
 				hasBall_ = false;
@@ -242,7 +241,6 @@ ObjPlayer::MOTION ObjPlayer::AnimChange() {
 void ObjPlayer::Shoting(const int ballID) {
 	hasBall_ = false;
 	myBallID_ = -1;
-	//BallsInstructor::BallShot(ballID, forward_);
 	instructor_->Shot(ballID, forward_);
 }
 
@@ -253,7 +251,6 @@ void ObjPlayer::Shoting(const int ballID) {
 void ObjPlayer::CautchedBall(const int ballID) {
 	hasBall_ = true;
 	myBallID_ = ballID;
-	//BallsInstructor::BallCautch(id_my_, myBallID_);
 	instructor_->Cautch(id_my_, myBallID_);
 }
 

@@ -59,9 +59,13 @@ public:
 	void WasGuessed();
 	void BallBreak();
 
-	void SwitchState(B_STATE state);
-	void SwitchColor(COLOR_TYPE colorType);
+	/**
+	* @brief 色の変更
+	* @param colorType 色のタイプ
+	*/
+	inline void SwitchColor(COLOR_TYPE colorType) { colorType_ = colorType; }
 
+	void SwitchState(BallState* state);
 
 	void Moving(Vector3 power) { physics_->Moving(power); }
 	void AddPower(Vector3 forward, float speed);
@@ -86,56 +90,51 @@ public:
 		AssignTransform(position, Vector2::Zero);
 		physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 	}
-
-	/**
-	* @brief 速度をリセットする
-	*/
-	void ResetVelocity() { physics_->ResetVelocity(); }
 	
 	/**
 	* @brief 持ち主のIDをセットする
 	*/
-	void SetOwnerID(int id_player) { id_owner_ = id_player; }
+	inline void SetOwnerID(int id_player) { id_owner_ = id_player; }
 	
 	/**
 	* @brief ボールを破壊された状態にする
 	*/
-	void SetBallBreak(bool flag) { isBreak_ = flag; }
+	inline void SetBallBreak(bool flag) { isBreak_ = flag; }
 	
 	/**
 	* @brief 状態フラグを全てリセットする
 	*/
-	void FlagResets() { isInPlayerHands_ = isBreak_ = false; }
+	inline void FlagResets() { isInPlayerHands_ = isBreak_ = false; }
 	
 	/**
 	* @brief 持ち主のIDを返す
 	* @return 持ち主のID
 	*/
-	int GetOwnerID() const { return id_owner_; }
+	inline int GetOwnerID() const { return id_owner_; }
 
 	/**
 	* @brieff Z座標を返す
 	* @return Z座標
 	*/
-	float myPosZ() const { return pos_z_; }
+	inline float myPosZ() const { return pos_z_; }
 
 	/**
 	* @brief 持ち主の手元にあるかを返す
 	* @return 持ち主の手元にあればtrue
 	*/
-	bool IsInPlayerHands() const { return isInPlayerHands_; }
+	inline bool IsInPlayerHands() const { return isInPlayerHands_; }
 
 	/**
 	* @brief 破壊されたかを返す
 	* @return 破壊されていればtrue
 	*/
-	bool IsBreaked() const { return isBreak_; }
+	inline bool IsBreaked() const { return isBreak_; }
 
 	/**
 	* @brief 現在の状態を返す
 	* @return 現在の状態
 	*/
-	B_STATE NowState() const { return state_->GetMyState(); }
+	inline B_STATE NowState() const { return state_->GetMyState(); }
 
 private:
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);

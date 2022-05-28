@@ -50,10 +50,10 @@ ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
 	if (this->obj_type_ == type)
 		return nullptr;
 
-	if (this->obj_type_ != OBJ_TYPE::WIRE) {
+	if (this->obj_type_ == OBJ_TYPE::PLAYER) {
 		//自分がプレイヤー
 
-		if (m->myObjectType() != OBJ_TYPE::WIRE) {
+		if (m->myObjectType() == OBJ_TYPE::BALL) {
 			//球体同士の衝突判定(ボールとプレイヤー)
 			if (this->collision_->GetBoundingSph().Intersects(m->collision_->GetBoundingSph())) {
 				return m;
@@ -67,8 +67,8 @@ ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
 		}
 	}
 	else {
-		//自分がワイヤー
-		//相手が球体と確定している
+		//自分がワイヤー(ボール側では衝突判定しないため確定)
+		//相手が球体
 		if (this->collision_->GetBoundingBox().Intersects(m->collision_->GetBoundingSph())) {
 			return m;
 		}
