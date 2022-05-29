@@ -8,7 +8,6 @@
 #pragma once
 
 struct SpaceNumber {
-	//演算子オーバーロード
 	SpaceNumber operator =(int n) {
 		SpaceNumber num;
 		num.Level_		= n;

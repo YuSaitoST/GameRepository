@@ -1,6 +1,6 @@
 /**
  * @file BallsInstructor.h
- * @brief ボールの状態変化の指示クラス
+ * @brief ボール統括クラス
  * @author 齋藤優宇
  * @date 2021/05/14
  */
@@ -25,14 +25,13 @@ public:
 	void Initialize();
 
 	ObjBall* Access(const int ballID) const;
-	std::vector<DirectX::SimpleMath::Vector2*> GetPosList() const { return posList_; }
+	ObjBall* GetNearestBall(DirectX::XMFLOAT2 myPosition);
 	void Cautch(const int playerID, const int ballID);
 	void Shot(const int ballID, DirectX::SimpleMath::Vector2 forwrad);
 	void BreakOfThrower(const int ballID);
 	void BreakOfTheHitter(const int ballID);
 
 private:
-	//! ボールのリスト
-	std::vector<ObjBall*> list_;
-	std::vector<DirectX::SimpleMath::Vector2*> posList_;
+	std::vector<ObjBall*> list_;	//! ボールのリスト
+	std::vector<DirectX::SimpleMath::Vector2*> posList_;	//! ボールの座標リスト
 };

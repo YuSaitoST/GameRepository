@@ -40,23 +40,23 @@ public:
 
 
 private:
-	const float					SPEED_FADE[3] = { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
+	const float						SPEED_FADE[3] = { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
 
-	DX12::DESCRIPTORHEAP		descriptorHeap_;
-	DX12::SPRITEBATCH			spriteBatch_;
-	DX12::HGPUDESCRIPTOR		dx9GpuDescriptor_;
+	DX12::DESCRIPTORHEAP			descriptorHeap_;
+	DX12::SPRITEBATCH				spriteBatch_;
+	DX12::HGPUDESCRIPTOR			dx9GpuDescriptor_;
 
-	DX9::SPRITE					sp_bg_tile_;
-	DX9::SPRITE					sp_texWin_;
-	DX9::SPRITE					sp_texPressB_;
-	DX9::SPRITE					sp_texCrushing_;
+	DX9::SPRITE						sp_bg_tile_;
+	DX9::SPRITE						sp_texWin_;
+	DX9::SPRITE						sp_texPressB_;
+	DX9::SPRITE						sp_texCrushing_;
 
-	SoundPlayer*				bgm_;
-	SoundPlayer*				se_decision_;
-	MoviePlayer*				bg_movie_;
-	BlackOut*					blackOut_;
+	std::unique_ptr<SoundPlayer>	bgm_;
+	std::unique_ptr<SoundPlayer>	se_decision_;
+	std::unique_ptr<MoviePlayer>	bg_movie_;
+	std::unique_ptr<BlackOut>		blackOut_;
 
-	DrawingByMode*				drawingByMode_;
+	DrawingByMode*					drawingByMode_;
 
-	bool						goNext_;
+	bool							goNext_;
 };

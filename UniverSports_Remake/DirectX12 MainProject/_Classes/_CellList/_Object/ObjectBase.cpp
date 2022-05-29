@@ -10,10 +10,6 @@ ObjectBase::ObjectBase(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, float r
 }
 
 ObjectBase::~ObjectBase() {
-	if (collision_ != nullptr) {
-		delete collision_;
-		collision_ = nullptr;
-	}
 	if (cp_ != nullptr) {
 		cp_->Remove();
 		delete cp_;
@@ -37,7 +33,7 @@ void ObjectBase::SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, flo
 
 	rotate_ = Vector2::Zero;
 	forward_ = Vector2::Zero;
-	collision_ = new bdCollision(collision);
+	collision_ = std::make_unique<bdCollision>(collision);
 }
 
 /**

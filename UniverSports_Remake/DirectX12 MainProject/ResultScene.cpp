@@ -20,10 +20,10 @@ ResultScene::ResultScene()
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;
 
-	bgm_					= new SoundPlayer();
-	se_decision_			= new SoundPlayer();
-	bg_movie_				= new MoviePlayer();
-	blackOut_				= new BlackOut();
+	bgm_					= std::make_unique<SoundPlayer>();
+	se_decision_			= std::make_unique<SoundPlayer>();
+	bg_movie_				= std::make_unique<MoviePlayer>();
+	blackOut_				= std::make_unique<BlackOut>();
 
 	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		drawingByMode_		= new SinglesDraw();
@@ -88,11 +88,6 @@ void ResultScene::Terminate()
 	DXTK->WaitForGpu();
 
 	// TODO: Add your Termination logic here.
-
-	delete blackOut_;
-	delete bg_movie_;
-	delete se_decision_;
-	delete bgm_;
 }
 
 // Direct3D resource cleanup.

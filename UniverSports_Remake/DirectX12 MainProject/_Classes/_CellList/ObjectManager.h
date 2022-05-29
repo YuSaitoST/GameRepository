@@ -15,6 +15,7 @@
 #include "_Classes/_CellList/CellList.h"
 #include "_Object/ObjectBase.h"
 #include "_Object/_Player/ObjPlayer.h"
+#include "_Object/_Player/PlayerList.h"
 #include "_Object/_Ball/BallList.h"
 #include "_Object/_Wire/ObjWire.h"
 
@@ -60,17 +61,14 @@ public:
 	void RemoveWorld(btDynamicsWorld* physics_world_);
 
 	static int PlayerLife(int index);
-
 	static Vector2 PlayerHandsPos(int index);
-
-	static ObjectBase* TheClosestPlayer(const int id, const Vector2 pos, float& comparison);
-	static ObjectBase* TheClosestBall(const Vector2 pos, float& comparison);
 
 private:
 	static float Distance2Vector(const Vector2 p1, const Vector2 p2);
 
 	//! プレイヤーリスト
 	static ObjPlayer* obj_player_[N_PLAYER];
+	//PlayerList* playerList_;
 	
 	//! ボールリスト
 	BallList* ballList_;

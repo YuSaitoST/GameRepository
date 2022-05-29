@@ -16,7 +16,7 @@
 
 class ActShot final : public ActionBase {
 public:
-	ActShot() { timer_ = new CountTimer(1.5f);}
+	ActShot() { timer_ = std::make_unique<CountTimer>(1.5f);}
 	virtual ~ActShot() {}
 
 	virtual void Initialize(int id) {}
@@ -29,5 +29,5 @@ public:
 
 private:
 	//! 球を発射する最低限の間隔を計測するタイマー
-	CountTimer* timer_;
+	std::unique_ptr<CountTimer> timer_;
 };

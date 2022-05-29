@@ -1,11 +1,7 @@
 #include "Barrier.h"
 
 Barrier::Barrier() : mod_(nullptr), isInvincible_(false) {
-	timer_ = new CountTimer(PLAYER_PARAM.TIME_INVINCIBLE);
-}
-
-Barrier::~Barrier() {
-	delete timer_;
+	timer_ = std::make_unique<CountTimer>(PLAYER_PARAM.TIME_INVINCIBLE);
 }
 
 void Barrier::LoadAsset(float radius) {

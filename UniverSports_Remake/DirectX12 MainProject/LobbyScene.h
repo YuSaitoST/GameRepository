@@ -95,12 +95,12 @@ private:
 	btBroadphaseInterface*				broadphase_;
 	btConstraintSolver*					solver_;
 
-	MoviePlayer*						bg_movie_;
-	SoundPlayer*						bgm_;
+	std::unique_ptr<MoviePlayer>		bg_movie_;
+	std::unique_ptr<SoundPlayer>		bgm_;
 
-	CharaSelect*						charaSelect_[PLAYER];
-	CountTimer*							timer_goNext_;
-	BlackOut*							blackOut_;
+	std::unique_ptr<CharaSelect>		charaSelect_[PLAYER];
+	std::unique_ptr<CountTimer>			timer_goNext_;
+	std::unique_ptr<BlackOut>			blackOut_;
 
 	bool								allSet_;
 };

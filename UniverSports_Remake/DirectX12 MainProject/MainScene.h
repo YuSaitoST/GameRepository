@@ -58,11 +58,11 @@ private:
 	btBroadphaseInterface*				broadphase_;
 	btConstraintSolver*					solver_;
 
-	SoundPlayer*						bgm_;
-	IconAnimator*						icon_animator_;
-	GameField*							field_;
-	GameController*						gameController_;
-	ObjectManager*						m_object_;
+	std::unique_ptr<SoundPlayer>		bgm_;
+	std::unique_ptr<IconAnimator>		icon_animator_;
+	std::unique_ptr<GameField>			field_;
+	std::unique_ptr<GameController>		gameController_;
+	std::unique_ptr<ObjectManager>		m_object_;
 
 private:
 	enum POS_Z_2D {

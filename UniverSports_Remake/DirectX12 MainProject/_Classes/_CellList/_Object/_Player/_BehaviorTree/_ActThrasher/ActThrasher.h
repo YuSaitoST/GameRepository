@@ -25,7 +25,7 @@ class ObjPlayer;
 class ActThrasher : public ActionBase {
 public:
 	ActThrasher();
-	virtual ~ActThrasher();
+	virtual ~ActThrasher() {}
 
 	virtual void Initialize(int id);
 	virtual void LoadAssets();
@@ -36,9 +36,6 @@ public:
 	virtual bool Think(ObjPlayer& player);
 
 private:
-	//! スラスターエフェクト
-	EffThrasher* effect_;
-
-	//! スラスターゲージ
-	Gauge* gauge_;
+	std::unique_ptr<EffThrasher>	effect_;	//! スラスターエフェクト
+	std::unique_ptr<Gauge>			gauge_;		//! スラスターゲージ
 };

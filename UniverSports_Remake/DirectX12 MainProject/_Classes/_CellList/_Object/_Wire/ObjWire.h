@@ -21,7 +21,7 @@ class ObjWire final : public ObjectBase {
 public:
 	ObjWire();
 	ObjWire(Vector3 pos, float r);
-	virtual ~ObjWire();
+	virtual ~ObjWire() {}
 
 	virtual void Initialize(const int id);
 	virtual void LoadAssets(std::wstring file_name);
@@ -47,5 +47,5 @@ private:
 	WireStrategy* strategy_;
 
 	//! ÉSÅ[ÉãéûÇÃSE
-	SoundPlayer* se_goal_;
+	std::unique_ptr<SoundPlayer> se_goal_;
 };

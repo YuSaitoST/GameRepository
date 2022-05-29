@@ -5,26 +5,26 @@
 #include "_Classes/_UI/_Fade/Fade.h"
 
 NormalDisplay::NormalDisplay() : ui_alpha_(0.0f) {
-	se_decision_	= new SoundPlayer();
-	time_start_		= new CountTimer(GAME_CONST.TITLE_TIME_LOGO_DISPLAY);
-	time_demo_		= new CountTimer(GAMES_PARAM.TL_DEMO_PLAYBACK);
-	cursor_			= new Cursor();
-	mode_choices_	= new Choices();
-	ui_arrows_		= new SelectArrows();
-	operate_		= new OperateUI();
-	blackOut_		= new BlackOut();
+	se_decision_	= std::make_unique<SoundPlayer>();
+	time_start_		= std::make_unique<CountTimer>(GAME_CONST.TITLE_TIME_LOGO_DISPLAY);
+	time_demo_		= std::make_unique<CountTimer>(GAMES_PARAM.TL_DEMO_PLAYBACK);
+	cursor_			= std::make_unique<Cursor>();
+	mode_choices_	= std::make_unique<Choices>();
+	ui_arrows_		= std::make_unique<SelectArrows>();
+	operate_		= std::make_unique<OperateUI>();
+	blackOut_		= std::make_unique<BlackOut>();
 	text_			= nullptr;
 }
 
 NormalDisplay::~NormalDisplay() {
-	delete blackOut_;
-	delete operate_;
-	delete ui_arrows_;
-	delete mode_choices_;
-	delete cursor_;
-	delete time_demo_;
-	delete time_start_;
-	delete se_decision_;
+	//delete blackOut_;
+	//delete operate_;
+	//delete ui_arrows_;
+	//delete mode_choices_;
+	//delete cursor_;
+	//delete time_demo_;
+	//delete time_start_;
+	//delete se_decision_;
 }
 
 void NormalDisplay::Initialize() {

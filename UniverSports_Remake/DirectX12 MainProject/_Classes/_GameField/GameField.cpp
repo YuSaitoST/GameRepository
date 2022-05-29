@@ -29,16 +29,10 @@ void GameField::LoadAsset() {
 	movie_->Play();
 }
 
-/**
-* @brief XV
-*/
 void GameField::Update() {
 	movie_->Update();
 }
 
-/**
-* @brief •`‰æ
-*/
 void GameField::Render() {
 	for (DX9::SPRITE sp : sp_wireList_)
 		DX9::SpriteBatch->DrawSimple(sp.Get(), DirectX::XMFLOAT3(0.0f, 0.0f, -981.0f));

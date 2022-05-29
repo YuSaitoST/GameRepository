@@ -1,5 +1,6 @@
 #include "BallsInstructor.h"
 #include "_Classes/_CellList/_Object/_Ball/BallList.h"
+#include "_Classes/_NearestPosition/NearestPosition.h"
 
 void BallsInstructor::Initialize() {
 	for (ObjBall* ball : list_)
@@ -49,4 +50,13 @@ void BallsInstructor::BreakOfThrower(const int ballID) {
 */
 void BallsInstructor::BreakOfTheHitter(const int ballID) {
 	list_[ballID]->BallBreak();
+}
+
+/**
+* @brief 一番近いボールを返す
+* @param myPosition 自身の座標
+* @return 一番近いボール
+*/
+ObjBall* BallsInstructor::GetNearestBall(DirectX::XMFLOAT2 myPosition) {
+	return Access(PosCheck::GetNearestObjectID(posList_, myPosition));
 }

@@ -22,10 +22,10 @@ class ObjBall final : public ObjectBase {
 private:
 	//! プレイヤーのディフューズ色
 	const D3DCOLORVALUE P_DIFFUSE[5] = {
-		D3DCOLORVALUE(0.0f,0.65f,0.0f,1.0f),  // 緑(PL.1)
-		D3DCOLORVALUE(0.65f,0.0f,0.65f,1.0f),  // 紫(PL.2)
-		D3DCOLORVALUE(0.65f,0.0f,0.0f,1.0f),  // 赤(PL.3)
-		D3DCOLORVALUE(0.0f,0.0f,0.65f,1.0f),  // 青(PL.4)
+		D3DCOLORVALUE(0.0f,0.65f,0.0f,1.0f),	// 緑(PL.1)
+		D3DCOLORVALUE(0.65f,0.0f,0.65f,1.0f),	// 紫(PL.2)
+		D3DCOLORVALUE(0.65f,0.0f,0.0f,1.0f),	// 赤(PL.3)
+		D3DCOLORVALUE(0.0f,0.0f,0.65f,1.0f),	// 青(PL.4)
 		D3DCOLORVALUE(0.0f,0.0f,0.0f,0.0f)
 	};
 	//! アンビエント色

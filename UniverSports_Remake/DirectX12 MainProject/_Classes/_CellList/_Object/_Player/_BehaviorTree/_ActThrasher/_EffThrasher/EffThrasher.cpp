@@ -1,7 +1,7 @@
 #include "EffThrasher.h"
 
-EffThrasher::EffThrasher() : EffectBase(MOVE_TIME) {  // ‚±‚ÌŠÔ‚ª•Ğ“¹‚ÌÄ¶ŠÔ
-	timer_roop_		= new CountTimer(0.2f);  // ‰Á‘¬‚ÌÀ•WXVŠÔ
+EffThrasher::EffThrasher() : EffectBase(MOVE_TIME) {
+	timer_roop_		= std::make_unique<CountTimer>(0.2f);
 	usedThrasher_	= false;
 }
 

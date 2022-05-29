@@ -110,10 +110,10 @@ protected:
 	virtual void SetTransform(DirectX::XMFLOAT3 position, DirectX::XMFLOAT2 rotate);
 	virtual void UpdateToMorton();
 
-	OBJ_TYPE obj_type_;		//! オブジェクトの種類
-	bdCollision* collision_;//! 当たり判定
-	btObject* physics_;		//! 物理演算
+	std::unique_ptr<bdCollision> collision_;//! 当たり判定
+	std::unique_ptr<btObject> physics_;		//! 物理演算
 	Cell* cp_;				//! 所属空間
+	OBJ_TYPE obj_type_;		//! オブジェクトの種類
 	Vector2 pos_;			//! 座標
 	Vector2 rotate_;		//! 回転
 	Vector2 forward_;       //! 正面方向

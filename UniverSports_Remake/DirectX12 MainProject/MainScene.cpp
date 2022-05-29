@@ -32,12 +32,11 @@ MainScene::MainScene()
 	solver_					= new btSequentialImpulseConstraintSolver();
 	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
-	bgm_					= new SoundPlayer();
-	icon_animator_			= new IconAnimator();
-	field_					= new GameField(HOLE_FLONT);
-	gameController_			= new GameController();
-
-	m_object_				= new ObjectManager();
+	bgm_					= std::make_unique<SoundPlayer>();
+	icon_animator_			= std::make_unique<IconAnimator>();
+	field_					= std::make_unique<GameField>(HOLE_FLONT);
+	gameController_			= std::make_unique<GameController>();
+	m_object_				= std::make_unique<ObjectManager>();
 }
 
 // Initialize a variable and audio resources.
@@ -96,11 +95,11 @@ void MainScene::Terminate()
 
 	m_object_->RemoveWorld(physics_world_);
 
-	delete m_object_;
+	//delete m_object_;
 
-	delete field_;
-	delete icon_animator_;
-	delete bgm_;
+	//delete field_;
+	//delete icon_animator_;
+	//delete bgm_;
 
 	delete physics_world_;
 	delete solver_;
@@ -129,14 +128,23 @@ NextScene MainScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
-	physics_world_->stepSimulation(deltaTime, 10);
-
-	DX12Effect.Update(deltaTime);
+	//入力状態を調べる
 	Press.Accepts();
 
+	//物体の更新
 	m_object_->Update(deltaTime);
+	
+	//残機アニメーションの更新
 	icon_animator_->Update(deltaTime);
+	
+	//背景の更新
 	field_->Update();
+
+	//物理演算の更新
+	physics_world_->stepSimulation(deltaTime, 10);
+	
+	//エフェクトの更新
+	DX12Effect.Update(deltaTime);
 
 	return (NextScene)gameController_->Update(deltaTime);
 }

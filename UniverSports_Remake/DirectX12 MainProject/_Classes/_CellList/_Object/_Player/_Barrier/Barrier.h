@@ -18,7 +18,7 @@
 class Barrier {
 public:
 	Barrier();
-	virtual ~Barrier();
+	virtual ~Barrier() {}
 
 	void LoadAsset(float radius);
 	void Update(const float deltaTime);
@@ -45,7 +45,7 @@ private:
 	void SetMaterial();
 
 	//! 表示時間のタイマー
-	CountTimer* timer_;
+	std::unique_ptr<CountTimer> timer_;
 
 	//! バリアモデル
 	DX9::MODEL mod_;

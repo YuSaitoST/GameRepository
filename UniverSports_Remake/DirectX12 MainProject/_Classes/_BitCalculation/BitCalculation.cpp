@@ -30,6 +30,10 @@ int BitCalculation::PointToMorton(DirectX::XMFLOAT2 pos) {
 	const int _kx = (int)(pos.x / _sx);
 	const int _ky = (int)(pos.y / _sy);
 
+	////右端をエリア内にする(NOR)
+	//int _norx = _kx | (1 << _CN); _norx = ~_norx;
+	//int _nory = _ky | (1 << _CN); _nory = ~_nory;
+
 	//bit操作
 	const int _bx = BitSlide(_kx);
 	const int _by = BitSlide(_ky);
@@ -55,18 +59,19 @@ int BitCalculation::GetIndex(int Level, int Index) {
 * @param numbers 空間番号セット
 */
 void BitCalculation::MoverToMorton(DirectX::XMFLOAT2 m_pos, float radian, SpaceNumber& numbers) {
-	// 左上、右下の座標
+	//左上、右下の座標
 	DirectX::XMFLOAT2 _UL = DirectX::XMFLOAT2(m_pos.x - radian, m_pos.y + radian);
 	DirectX::XMFLOAT2 _UR = DirectX::XMFLOAT2(m_pos.x + radian, m_pos.y - radian);
 
-	// それぞれのモートンを代入
+	//それぞれのモートンを代入
 	int _mUL = PointToMorton(_UL);
 	int _mUR = PointToMorton(_UR);
 
+	//XOR
 	const int _XOR = _mUL ^ _mUR;
 
 	int _k = 0;
-	// XORを00が出てくるまでループして、その回った数をKに保存する
+	//XORを00が出てくるまでループして、その回った数をKに保存する
 	for (int _b = _XOR; _b != 0; _b >>= 2, _k++);
 
 	numbers.Level_		= DivisionLevel - _k;

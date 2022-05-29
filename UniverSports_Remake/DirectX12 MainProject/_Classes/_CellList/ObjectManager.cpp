@@ -163,65 +163,6 @@ Vector2 ObjectManager::PlayerHandsPos(int index) {
 }
 
 /**
-* @brief 一番近いプレイヤーを探す
-* @param pos 自身の座標
-* @param comparison 距離
-* @return 一番近いプレイヤー
-*/
-ObjectBase* ObjectManager::TheClosestPlayer(const int id, const Vector2 pos, float& comparison) {
-	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
-	Vector2 _target;  // 現在調べている座標
-	float _new_distance;  // 現在調べている距離
-	float _min_distance = 99.0f;  // 一番近い距離
-
-	for (ObjectBase* obj : obj_player_) {
-		if (obj->myObjectID() == id)
-			continue;
-
-		_new_distance = Distance2Vector(pos, obj->myPosition());
-
-		if (_new_distance < _min_distance) {
-			_min_distance = _new_distance;
-			_obj = obj;
-		}
-	}
-
-	comparison = _min_distance;
-
-	return _obj;
-}
-
-/**
-* @brief 一番近いボールを探す
-* @param pos 自身の座標
-* @param comparison 距離
-* @return 一番近いボール
-*/
-ObjectBase* ObjectManager::TheClosestBall(const Vector2 pos, float& comparison) {
-	ObjectBase* _obj = nullptr;  // 一番近いオブジェクト
-	Vector2 _target;  // 現在調べている座標
-	float _new_distance;  // 現在調べている距離
-	float _min_distance = 99.0f;  // 一番近い距離
-
-	//for (ObjectBase* obj : obj_ball_) {
-	//	// 自分だったら無視
-	//	if ((obj->myPosition().x == pos.x) && (obj->myPosition().y == pos.y))
-	//		continue;
-
-	//	_new_distance = Distance2Vector(pos, obj->myPosition());
-	//	
-	//	if (_new_distance < _min_distance) {
-	//		_min_distance = _new_distance;
-	//		_obj = obj;
-	//	}
-	//}
-
-	//comparison = _min_distance;
-
-	return _obj;
-}
-
-/**
 * @brief 2つの座標の距離を調べる
 * @param p1 自身の座標
 * @param p2 相手の座標

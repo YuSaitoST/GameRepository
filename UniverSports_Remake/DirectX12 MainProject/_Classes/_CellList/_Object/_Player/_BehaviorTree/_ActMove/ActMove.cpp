@@ -19,10 +19,9 @@ void ActMove::Update(const float deltaTime, ObjPlayer& player) {
 bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
 
-	ObjectBase* _targetPlayer	= ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), _comparison);
-	//ObjectBase* _targetBall		= ObjectManager::TheClosestBall(my.myPosition(), _comparison);
-	BallsInstructor* _instructor = my.GetInstructor();
-	ObjectBase* _targetBall = _instructor->Access(Position::Nearest(_instructor->GetPosList(), my.myPosition()));
+	DirectX::XMFLOAT2 _myPosition = my.myPosition();
+	ObjectBase* _targetPlayer	= ObjectManager::TheClosestPlayer(my.myObjectID(), _myPosition, _comparison);
+	ObjectBase* _targetBall		= my.GetInstructor()->GetNearestBall(_myPosition);
 
 	if (_targetPlayer != nullptr) {
 		if (((ObjPlayer*)_targetPlayer)->HasBall()) {
@@ -37,7 +36,8 @@ bool ActMove::Think(ObjPlayer& my) {
 			return true;
 		}
 	}
-	else if (_targetBall != nullptr) {
+	
+	if (_targetBall != nullptr) {
 		if (((ObjBall*)_targetBall)->GetOwnerID() != -1) {
 			// 対象のボールが「投げられたボール」なら
 			// 方向ベクトルの向きを決める
@@ -50,6 +50,8 @@ bool ActMove::Think(ObjPlayer& my) {
 			return true;
 		}
 	}
+
+	return false;
 }
 
 /**

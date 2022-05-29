@@ -42,19 +42,19 @@ LobbyScene::LobbyScene()
 	solver_						= new btSequentialImpulseConstraintSolver();
 	physics_world_				= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
-	bg_movie_					= new MoviePlayer();
-	bgm_						= new SoundPlayer();
+	bg_movie_					= std::make_unique<MoviePlayer>();
+	bgm_						= std::make_unique<SoundPlayer>();
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		player_[_i]				= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
-		charaSelect_[_i]		= new CharaSelect();
+		charaSelect_[_i]		= std::make_unique<CharaSelect>();
 
 		player_[_i + 1]			= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i + 1], 1.0f);
-		charaSelect_[_i + 1]	= new CharaSelect();
+		charaSelect_[_i + 1]	= std::make_unique<CharaSelect>();
 	}
 
-	timer_goNext_				= new CountTimer(GAMES_PARAM.LB_TIME_AFTER_PREPARATION);
-	blackOut_					= new BlackOut();
+	timer_goNext_				= std::make_unique<CountTimer>(GAMES_PARAM.LB_TIME_AFTER_PREPARATION);
+	blackOut_					= std::make_unique<BlackOut>();
 
 	allSet_						= false;
 }
@@ -160,15 +160,6 @@ void LobbyScene::Terminate()
 
 	for (int _i = PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(player_[_i]->myRigidbody());
-
-	delete blackOut_;
-	delete timer_goNext_;
-
-	for (int _i = PLAYER - 1; 0 <= _i; --_i)
-		delete charaSelect_[_i];
-
-	delete bgm_;
-	delete bg_movie_;
 
 	delete physics_world_;
 	delete solver_;

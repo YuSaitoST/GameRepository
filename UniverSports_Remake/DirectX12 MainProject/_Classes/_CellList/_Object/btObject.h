@@ -25,7 +25,7 @@ enum BULLET_TYPE { BT_SPHRER, BT_BOX, NONE_BULLET_TYPE };
 class btObject {
 public:
 	btObject(BULLET_TYPE type, SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass);
-	virtual ~btObject();
+	virtual ~btObject() {}
 
 	void SetTransform(SimpleMath::Vector3 pos, SimpleMath::Vector3 rotate);
 	void Moving(SimpleMath::Vector3 power);
@@ -35,7 +35,7 @@ public:
 	* @brief 物体のRigidBodyを返す
 	* @return RigitBody
 	*/
-	inline btRigidBody* Get_RigidBody() const { return bt_body_; };
+	inline btRigidBody* Get_RigidBody() { return bt_body_.get(); };
 
 	/**
 	* @brief 物体の中心座標を返す
@@ -78,12 +78,5 @@ public:
 	}
 
 private:
-	////! 球体形状
-	//btCollisionShape*		bt_collision_;
-	//
-	////! 位置・姿勢
-	//btDefaultMotionState*	bt_state_;
-
-	//! 剛体オブジェクト
-	btRigidBody*			bt_body_;
+	std::unique_ptr<btRigidBody> bt_body_;	//! 剛体オブジェクト
 };

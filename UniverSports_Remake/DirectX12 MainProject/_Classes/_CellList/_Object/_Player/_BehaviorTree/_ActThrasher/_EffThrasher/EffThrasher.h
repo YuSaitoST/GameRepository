@@ -30,5 +30,5 @@ private:
 	const float MOVE_TIME = 0.575f;
 
 	//! スラスターの加速のペース
-	CountTimer* timer_roop_;
+	std::unique_ptr<CountTimer> timer_roop_;
 };

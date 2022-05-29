@@ -10,12 +10,9 @@ ObjWire::ObjWire() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
-	if (DontDestroy->GameMode_.isDODGEBALL_NOMAL())
-		strategy_ = new Wires();
-	else
-		strategy_ = new Goals();
-
-	se_goal_ = new SoundPlayer();
+	physics_ = nullptr;
+	strategy_ = nullptr;
+	se_goal_ = nullptr;
 }
 
 ObjWire::ObjWire(Vector3 pos, float r) {
@@ -27,16 +24,12 @@ ObjWire::ObjWire(Vector3 pos, float r) {
 	else
 		strategy_ = new Goals();
 
-	se_goal_ = new SoundPlayer();
-}
-
-ObjWire::~ObjWire() {
-	delete physics_;
+	se_goal_ = std::make_unique<SoundPlayer>();
 }
 
 void ObjWire::Initialize(const int id) {
 	id_my_ = id;
-	physics_ = new btObject(BT_BOX, Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
+	physics_ = std::make_unique<btObject>(BT_BOX, Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
 	se_goal_->Initialize(L"_Sounds\\_SE\\_Main\\se_goal.wav", SOUND_TYPE::SE, 0.0f);
 
 	UpdateToMorton();

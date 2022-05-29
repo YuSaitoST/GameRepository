@@ -43,15 +43,15 @@ public:
 private:
 	void SwitchState(DISPLAYMODE mode);
 
-	DX12::DESCRIPTORHEAP	descriptorHeap_;
-	DX12::SPRITEBATCH		spriteBatch_;
-	DX12::HGPUDESCRIPTOR	dx9GpuDescriptor_;
+	DX12::DESCRIPTORHEAP			descriptorHeap_;
+	DX12::SPRITEBATCH				spriteBatch_;
+	DX12::HGPUDESCRIPTOR			dx9GpuDescriptor_;
 
-	SoundPlayer*			bgm_;
+	std::unique_ptr<SoundPlayer>	bgm_;
 
-	DisplayBase*			display_;
-	NormalDisplay			disp_normal_;
-	DemoDisplay				disp_demo_;
+	DisplayBase*					display_;
+	NormalDisplay					disp_normal_;
+	DemoDisplay						disp_demo_;
 
-	DISPLAYMODE				displayMode_;
+	DISPLAYMODE						displayMode_;
 };

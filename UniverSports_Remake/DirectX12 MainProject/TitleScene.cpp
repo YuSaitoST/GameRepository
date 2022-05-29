@@ -17,7 +17,7 @@ TitleScene::TitleScene()
 	descriptorHeap_ = nullptr;
 	spriteBatch_	= nullptr;
 
-	bgm_			= new SoundPlayer();
+	bgm_			= std::make_unique<SoundPlayer>();
 
 	display_		= nullptr;
 	displayMode_	= DISPLAYMODE::DISPLAY_NORMAL;
@@ -86,8 +86,6 @@ void TitleScene::Terminate()
 	DXTK->WaitForGpu();
 
 	// TODO: Add your Termination logic here.
-
-	delete bgm_;
 }
 
 // Direct3D resource cleanup.

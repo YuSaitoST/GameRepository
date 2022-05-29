@@ -9,10 +9,7 @@ ObjBall::ObjBall() {
 	pos_ = Vector2::Zero;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
-	StStandby* standby = new StStandby();
-	SwitchState(standby);
-
-	physics_ = new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
+	physics_ = nullptr;
 	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
@@ -28,7 +25,7 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	StStandby* standby = new StStandby();
 	SwitchState(standby);
 
-	physics_ = new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
+	physics_ = std::make_unique<btObject>(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
@@ -37,7 +34,6 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 }
 
 ObjBall::~ObjBall() {
-	delete physics_;
 	if (state_ != nullptr) {
 		delete state_;
 		state_ = nullptr;
@@ -47,7 +43,7 @@ ObjBall::~ObjBall() {
 void ObjBall::Initialize(const int id) {
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
-	id_my_		= id;
+	id_my_ = id;
 
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
@@ -57,7 +53,7 @@ void ObjBall::Initialize(const int id) {
 
 void ObjBall::LoadAssets(DX9::MODEL& model) {
 	collision_->SetColli(model->GetBoundingSphere());
-	collision_->SetColliScale(2.1f);
+	collision_->SetColliScale(1.8f);
 
 	r_ = model->GetBoundingSphere().Radius;
 }
@@ -79,8 +75,8 @@ void ObjBall::Render(DX9::MODEL& model) {
 }
 
 /**
-* @brief ��Ԃ̕ω�
-* @param state ���
+* @brief 状態変更
+* @param state 状態
 */
 void ObjBall::SwitchState(BallState* state) {
 	state_ = state;
@@ -88,9 +84,9 @@ void ObjBall::SwitchState(BallState* state) {
 }
 
 /**
-* @brief �F�̕ύX
-* @param colorType �F�̃^�C�v
-* @return �}�e���A��
+* @brief 状態に応じたマテリアルを返す
+* @param colorType 色の形式
+* @return マテリアル
 */
 D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	D3DMATERIAL9 _mat{};
@@ -106,9 +102,9 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 }
 
 /**
-* @brief �͂�������΂�����
-* @param forwrad ���ʃx�N�g��
-* @param speed ���x
+* @brief 力を加えて飛ばす
+* @param forwrad 正面ベクトル
+* @param speed 速度
 */
 void ObjBall::AddPower(Vector3 forward, float speed) {
 	physics_->SetLinerVelocity(forward * speed);
@@ -119,8 +115,8 @@ void ObjBall::AddPower(Vector3 forward, float speed) {
 }
 
 /**
-* @brief �L���b�`���ꂽ���̏���
-* @param ownerID �������ID
+* @brief キャッチされた際の処理
+* @param ownerID 持ち主のID
 */
 void ObjBall::WasCaught(const int ownerID) {
 	id_owner_ = ownerID;
@@ -131,8 +127,8 @@ void ObjBall::WasCaught(const int ownerID) {
 }
 
 /**
-* @brief ������ꂽ���̏���
-* @param forward ���ʃx�N�g��
+* @brief 投げられた際の処理
+* @param forward 正面ベクトル
 */
 void ObjBall::WasThrown(Vector2 forward) {
 	forward_ = forward;
@@ -140,6 +136,9 @@ void ObjBall::WasThrown(Vector2 forward) {
 	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_SHOT);
 }
 
+/**
+* @brief ゴールした際の処理
+*/
 void ObjBall::WasGoaled() {
 	pos_z_ = 3.0f;
 	id_owner_ = -1;
@@ -149,7 +148,7 @@ void ObjBall::WasGoaled() {
 }
 
 /**
-* @brief �v���C���[�Ƃ̏Փ˂ɂ��j�󎞂̏���
+* @brief 相手プレイヤーに衝突した際のリセット処理
 */
 void ObjBall::WasGuessed() {
 	DontDestroy->Score_[id_owner_] += 1;
@@ -157,7 +156,7 @@ void ObjBall::WasGuessed() {
 }
 
 /**
-* @brief �j�󎞂̏���
+* @brief 場外に出た際のリセット処理
 */
 void ObjBall::BallBreak() {
 	pos_z_ = 0.0f;

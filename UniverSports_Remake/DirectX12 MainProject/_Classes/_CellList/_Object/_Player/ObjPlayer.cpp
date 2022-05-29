@@ -11,7 +11,7 @@ ObjPlayer::ObjPlayer() {
 	cp_ = nullptr;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
-	physics_		= new btObject(NONE_BULLET_TYPE, Vector3::Zero, Vector3::Zero, 0.0f, 0.0f);
+	physics_		= nullptr;
 	life_			= nullptr;
 	teamID_			= nullptr;
 	ti_respone_		= nullptr;
@@ -27,7 +27,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(PLAYER, COLLI_TYPE::SPHRER, pos, r);
 
-	physics_		= new btObject(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
+	physics_		= std::make_unique<btObject>(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
 	rotate_			= Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	myBallID_		= -1;
 	hasBall_		= false;
@@ -39,20 +39,19 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	eff_down_		= std::make_unique<EffDown>();
 	barrier_		= std::make_unique<Barrier>();
 	
-	strategy_		=	(strategy == OPERATE_TYPE::MANUAL)	 ? static_cast<CharaStrategy*>(new ManualChara())   : 
-						(strategy == OPERATE_TYPE::COMPUTER) ? static_cast<CharaStrategy*>(new ComputerChara()) : nullptr;
+	if (strategy == OPERATE_TYPE::MANUAL)
+		strategy_ = new ManualChara();
+	else if (strategy == OPERATE_TYPE::COMPUTER)
+		strategy_ = new ComputerChara();
+	else
+		strategy_ = nullptr;
 }
 
 ObjPlayer::~ObjPlayer() {
 	if (strategy_ != nullptr)
 		delete strategy_;
 
-	//delete barrier_;
-	//delete eff_down_;
-	//delete ti_respone_;
-	//delete teamID_;
-	//delete life_;
-	delete physics_;
+	//delete physics_;
 }
 
 void ObjPlayer::Initialize(const int id) {
@@ -171,12 +170,14 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 					DontDestroy->Survivor_[id_my_] = false;
 			}
 
-			instructor_->BreakOfThrower(_ball->myObjectID());
-
+			//ボールをリセット
 			if (hasBall_) {
 				instructor_->BreakOfTheHitter(myBallID_);
 				myBallID_ = -1;
 				hasBall_ = false;
+			}
+			else {
+				instructor_->BreakOfThrower(_ball->myObjectID());
 			}
 		}
 	}
