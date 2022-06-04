@@ -8,7 +8,12 @@
 
 // Include Files.
 #include "_Classes/_GameModes/GameModes.h"
+#include "_Classes/_Survivor/survivor.h"
 
+/**
+* @enum CHARATYPE
+* キャラクターの入力タイプ
+*/
 enum CHARATYPE { TYPE_PLAYER, TYPE_COM };
 
 class DontDestroyOnLoad final
@@ -33,10 +38,12 @@ public:
 
 public:
 	GameModes GameMode_;
+	Survivor Survivor_;
+
 	CHARATYPE charaType_[4];
+	
 	int NowScene_;
 	int ChoseColor_[4];
 	int TeamID[4];
 	int Score_[4];
-	bool Survivor_[4];
 };

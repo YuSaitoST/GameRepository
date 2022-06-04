@@ -17,6 +17,7 @@
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
 #include "_Classes/_UI/_Finish/Finish.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
+#include "_AtEndCondition/AtEndCondition.h"
 
 class GameController {
 public:
@@ -35,9 +36,6 @@ public:
 	static bool GamePlay() { return gameStart_; }
 
 private:
-	int RemainingNumberOfPlayer();
-	int RemainingOfTeam();
-
 	const float TIME_COUNT		= 4.2f;
 	const float TIME_LIMIT[4]	= { 0.0f, 0.0f, 120.0f, 0.0f };
 	const float	SPEED_FADE[3]	= { 51.0f, 510.0f, 0.0f };
@@ -56,6 +54,9 @@ private:
 
 	//! I—¹SE
 	std::unique_ptr<SoundPlayer> se_whistle_;
+
+	//! I—¹ğŒ
+	AtEndCondition* atEndCondition_;
 
 	//! ƒQ[ƒ€‚Ì§ŒÀŠÔ
 	float			startTime_;

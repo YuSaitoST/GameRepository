@@ -13,8 +13,7 @@ ObjPlayer::ObjPlayer() {
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	physics_		= nullptr;
-	life_			= nullptr;
-	teamID_			= nullptr;
+	life_			= nullptr;\
 	ti_respone_		= nullptr;
 	eff_down_		= nullptr;
 	strategy_		= nullptr;
@@ -40,7 +39,6 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	targetPlayer_	= nullptr;
 
 	life_			= std::make_unique<MyLife>(3);
-	teamID_			= std::make_unique<TeamID>();
 	ti_respone_		= std::make_unique<CountTimer>(PLAYER_PARAM.TIME_RESPONE);
 	eff_down_		= std::make_unique<EffDown>();
 	barrier_		= std::make_unique<Barrier>();
@@ -76,8 +74,6 @@ void ObjPlayer::Initialize(const int id) {
 
 	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		DontDestroy->TeamID[id_my_] = id_my_;
-
-	teamID_->Set(DontDestroy->TeamID[id_my_]);
 }
 
 void ObjPlayer::LoadAssets(std::wstring file_name) {
@@ -162,7 +158,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 				return;
 
 			// 同じチームのメンバーが投げたボールはヒットしない
-			if (teamID_->Get(_ball->GetOwnerID()) == teamID_->Get())
+			if (DontDestroy->TeamID[_ball->GetOwnerID()] == DontDestroy->TeamID[id_my_])
 				return;
 
 			eff_down_->PlayOneShot();
@@ -182,7 +178,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 				life_->TakeDamage();
 				ResetVelocity();
 				if (life_->NowLifePoint() <= 0)
-					DontDestroy->Survivor_[id_my_] = false;
+					DontDestroy->Survivor_.DownSurvivor(id_my_);
 			}
 
 			//ボールをリセット

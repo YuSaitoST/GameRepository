@@ -43,10 +43,10 @@ void TitleScene::Initialize()
 	disp_demo_.Initialize();
 
 	//ゲーム進行関連の変数の初期化
+	DontDestroy->Survivor_.Reset();
 	std::fill(std::begin(DontDestroy->ChoseColor_), std::end(DontDestroy->ChoseColor_), 0	);
 	std::fill(std::begin(DontDestroy->TeamID),		std::end(DontDestroy->TeamID),		-1	);
 	std::fill(std::begin(DontDestroy->Score_),		std::end(DontDestroy->Score_),		0	);
-	std::fill(std::begin(DontDestroy->Survivor_),	std::end(DontDestroy->Survivor_),	true);
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.

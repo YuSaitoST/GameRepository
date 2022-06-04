@@ -13,7 +13,6 @@
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_Classes/_CellList/_Object/_Player/_MyLife/MyLife.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
-#include "_Classes/_CellList/_TeamID/TeamID.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
 #include "_Strategy/CharaStrategy.h"
 #include "_Strategy/_ManualChara/ManualChara.h"
@@ -152,7 +151,6 @@ private:
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
 	std::unique_ptr<MyLife>			life_;			//! 残機
-	std::unique_ptr<TeamID>			teamID_;		//! チームID
 	std::unique_ptr<CountTimer>		ti_respone_;	//! リスポーンタイマー
 	std::unique_ptr<EffDown>		eff_down_;		//! ダウン時エフェクト
 	std::unique_ptr<Barrier>		barrier_;		//! バリア

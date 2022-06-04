@@ -55,7 +55,7 @@ void ObjBall::Initialize(const int id) {
 
 void ObjBall::LoadAssets(DX9::MODEL& model) {
 	collision_->SetColli(model->GetBoundingSphere());
-	collision_->SetColliScale(2.2f);
+	collision_->SetColliScale(2.1f);
 	
 	r_ = model->GetBoundingSphere().Radius;
 }
