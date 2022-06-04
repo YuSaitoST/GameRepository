@@ -1,4 +1,5 @@
 #include "DemoDisplay.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_FileNames/FileNames.h"
 
 void DemoDisplay::Initialize() {
@@ -16,7 +17,7 @@ NextScene DemoDisplay::Update(const float deltaTime) {
 }
 
 void DemoDisplay::Render() {
-	movie_->Render();
+	movie_->Render(DirectX::XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::TITLE::BG_DEMO));
 }
 
 /**

@@ -1,6 +1,6 @@
 #include "GameField.h"
-#include "_Classes/_FileNames/MoviesFN.h"
-#include "_Classes/_FileNames/SpritesFN.h"
+#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "DontDestroyOnLoad.h"
 
 GameField::GameField(float sp_z) {
@@ -35,9 +35,9 @@ void GameField::Update() {
 
 void GameField::Render() {
 	for (DX9::SPRITE sp : sp_wireList_)
-		DX9::SpriteBatch->DrawSimple(sp.Get(), DirectX::XMFLOAT3(0.0f, 0.0f, -981.0f));
+		DX9::SpriteBatch->DrawSimple(sp.Get(), DirectX::XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::MAIN::UI_WIRE));
 
 	DX9::SpriteBatch->DrawSimple(sp_hole_.Get(), DirectX::XMFLOAT3(0.0f, 0.0f, sprite_z_));
 
-	movie_->Render();
+	movie_->Render(DirectX::XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::MAIN::BG_MOVIE));
 }

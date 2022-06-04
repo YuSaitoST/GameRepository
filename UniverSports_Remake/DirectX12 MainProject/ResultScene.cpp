@@ -5,10 +5,10 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
-#include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_UI/_Serials/Serials.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
-
+#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
+#include "_Classes/_UI/_Serials/Serials.h"
 #include "_Classes/_ResultDraw/SinglesDraw.h"
 #include "_Classes/_ResultDraw/DoublesDraw.h"
 
@@ -26,9 +26,9 @@ ResultScene::ResultScene()
 	blackOut_				= std::make_unique<BlackOut>();
 
 	if (DontDestroy->GameMode_.isSINGLES_GAME())
-		drawingByMode_		= new SinglesDraw();
+		drawingByMode_		= std::make_unique<SinglesDraw>();
 	else
-		drawingByMode_		= new DoublesDraw();
+		drawingByMode_		= std::make_unique<DoublesDraw>();
 
 	goNext_					= false;
 }
@@ -138,12 +138,12 @@ void ResultScene::Render()
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
 	blackOut_->Render();
-	bg_movie_->Render();
+	bg_movie_->Render(XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::RESULT::BG_MOVIE));
 
-	DX9::SpriteBatch->DrawSimple(sp_bg_tile_.Get(), Vector3(0.0f, 0.0f, -1.0f));
-	DX9::SpriteBatch->DrawSimple(sp_texWin_.Get(), Vector3(0.0f, 0.0f, -3.0f));
-	DX9::SpriteBatch->DrawSimple(sp_texCrushing_.Get(), Vector3(0.0f, 0.0f, -3.0f));
-	DX9::SpriteBatch->DrawSimple(sp_texPressB_.Get(), Vector3(0.0f, 0.0f, -3.0f));
+	DX9::SpriteBatch->DrawSimple(sp_bg_tile_.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::RESULT::BG_SPRITE));
+	DX9::SpriteBatch->DrawSimple(sp_texWin_.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::RESULT::UI_WINNERTEXT));
+	DX9::SpriteBatch->DrawSimple(sp_texCrushing_.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::RESULT::UI_SCORETEXT));
+	DX9::SpriteBatch->DrawSimple(sp_texPressB_.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::RESULT::UI_GO_TITLE));
 
 	drawingByMode_->Render();
 

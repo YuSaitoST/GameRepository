@@ -3,6 +3,7 @@
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_CellList/_Object/_Ball/_State/_Shot/StShot.h"
 #include "_Classes/_CellList/_Object/_Ball/_State/_Float/StFloat.h"
+#include "_Classes/_CellList/_PlayersInstructor/PlayersInstructor.h"
 #include "DontDestroyOnLoad.h"
 
 void StCautch::Initialize() {
@@ -18,12 +19,12 @@ void StCautch::Update(ObjBall* ball) {
 	else if (ball->IsBreaked()) {
 		ball->FlagResets();
 		ball->SetOwnerID(-1);
-		StFloat* flo = new StFloat();
-		ball->SwitchState(flo);
+		std::unique_ptr<StFloat> flo = std::make_unique<StFloat>();
+		ball->SwitchState(std::move(flo).get());
 		ball->SwitchColor(ObjBall::COLOR_TYPE::DEFAULT_COLOR);
 		return;
 	}
 
-	position_ = ObjectManager::PlayerHandsPos(ball->GetOwnerID());
-	ball->PhysicsControll(Vector3(position_.x, position_.y, Z_MIN));
+	//’Ç”ö
+	ball->Following(Z_MIN);
 }

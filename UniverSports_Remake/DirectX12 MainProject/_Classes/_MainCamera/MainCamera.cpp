@@ -13,7 +13,7 @@ void MainCamera::Register()
 
 	//ˆÊ’uEŽ‹“_‚ðÝ’è
 	camera_->SetViewLookAt(
-		SimpleMath::Vector3(0.0f, 0.0f, -10.0f),
+		SimpleMath::Vector3(0.0f, 0.0f, -10.5f),
 		SimpleMath::Vector3(0.0f, 0.0f, 0.0f),
 		SimpleMath::Vector3::Up
 	);

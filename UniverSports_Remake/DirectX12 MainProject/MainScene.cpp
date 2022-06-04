@@ -5,6 +5,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_MainLight/MainLight.h"
 #include "_Classes/_FileNames/FileNames.h"
 
@@ -33,8 +34,7 @@ MainScene::MainScene()
 	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
 
 	bgm_					= std::make_unique<SoundPlayer>();
-	icon_animator_			= std::make_unique<IconAnimator>();
-	field_					= std::make_unique<GameField>(HOLE_FLONT);
+	field_					= std::make_unique<GameField>((int)US2D::Layer::MAIN::UI_HOLE);
 	gameController_			= std::make_unique<GameController>();
 	m_object_				= std::make_unique<ObjectManager>();
 }
@@ -79,7 +79,6 @@ void MainScene::LoadAssets()
 	DXTK->Direct3D9->SetRenderState(NormalizeNormals_Enable);
 
 	m_object_->LoadAssets();
-	icon_animator_->LoadAssets();
 	field_->LoadAsset();
 	gameController_->LoadAssets();
 	bgm_->Play();
@@ -134,9 +133,6 @@ NextScene MainScene::Update(const float deltaTime)
 	//物体の更新
 	m_object_->Update(deltaTime);
 	
-	//残機アニメーションの更新
-	icon_animator_->Update(deltaTime);
-	
 	//背景の更新
 	field_->Update();
 
@@ -158,13 +154,6 @@ void MainScene::Render()
 	m_object_->RenderModels();
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
-
-	if (!DontDestroy->GameMode_.isGAMES_WITH_GOALS()) {
-		for (int _i = 0; _i <= 2; _i += 2) {
-			icon_animator_->Render(m_object_->PlayerLife(_i), _i);
-			icon_animator_->Render(m_object_->PlayerLife(_i + 1), _i + 1);
-		}
-	}
 	
 	field_->Render();
 	gameController_->Render();

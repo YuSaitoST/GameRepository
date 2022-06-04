@@ -1,5 +1,6 @@
 #include "BlackOut.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
 BlackOut::BlackOut() : sprite_(DX9::SPRITE()) {
@@ -38,7 +39,7 @@ void BlackOut::Update(float speed) {
 void BlackOut::Render() {
 	DX9::SpriteBatch->DrawSimple(
 		sprite_.Get(),
-		DirectX::XMFLOAT3(0.0f, 0.0f, -9999.0f),
+		DirectX::XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::GENERIC::BLACKOUT),
 		nullptr,
 		DX9::Colors::RGBA(0.0f, 0.0f, 0.0f, alpha_)
 	);

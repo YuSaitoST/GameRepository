@@ -36,7 +36,7 @@ public:
 	virtual void UIRender() {}
 
 private:
-	const SimpleMath::Vector3 SCALE = SimpleMath::Vector3(13.75f, 2.35f, 0.0f);
+	const SimpleMath::Vector3 SCALE = SimpleMath::Vector3(13.75f, 2.35f, 10.0f);
 	const float ROT_TUNING_Z[2] = { 1.1f, -1.1f };
 	const float ROT_Z[2] = { 0.415f, -0.415f };
 
@@ -44,7 +44,7 @@ private:
 	std::vector<ObjBall*> hasBalls_;
 
 	//! ƒƒCƒ„[‚ÌU‚é•‘‚¢
-	WireStrategy* strategy_;
+	std::unique_ptr<WireStrategy> strategy_;
 
 	//! ƒS[ƒ‹‚ÌSE
 	std::unique_ptr<SoundPlayer> se_goal_;

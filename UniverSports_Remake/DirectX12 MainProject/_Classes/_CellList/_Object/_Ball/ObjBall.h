@@ -67,8 +67,13 @@ public:
 
 	void SwitchState(BallState* state);
 
+	/**
+	* @brief 力を加えて飛ばす処理
+	* @param power 加える力
+	*/
 	void Moving(Vector3 power) { physics_->Moving(power); }
-	void AddPower(Vector3 forward, float speed);
+	void Following(float pos_z);
+	void AddPower(XMFLOAT3 forward, float speed);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 
 	/**
@@ -101,6 +106,12 @@ public:
 	*/
 	inline void SetBallBreak(bool flag) { isBreak_ = flag; }
 	
+	/**
+	* @brief 持ち主の手元の座標を保存する
+	* @param handPos 手元の座標
+	*/
+	inline void SetOwnerHandPos(XMFLOAT2* handPos) { ownerHandPos_ = handPos; }
+
 	/**
 	* @brief 状態フラグを全てリセットする
 	*/
@@ -138,6 +149,9 @@ public:
 
 private:
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);
+
+	//! 持ち主の手元の座標
+	XMFLOAT2* ownerHandPos_;
 
 	//! ボールの状態
 	BallState* state_;

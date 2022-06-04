@@ -56,7 +56,7 @@ private:
 	std::unique_ptr<MoviePlayer>	bg_movie_;
 	std::unique_ptr<BlackOut>		blackOut_;
 
-	DrawingByMode*					drawingByMode_;
+	std::unique_ptr<DrawingByMode>	drawingByMode_;
 
 	bool							goNext_;
 };

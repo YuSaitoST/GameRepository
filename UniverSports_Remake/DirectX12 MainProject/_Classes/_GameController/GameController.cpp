@@ -1,4 +1,5 @@
 #include "GameController.h"
+#include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include <cassert>
 
@@ -17,7 +18,7 @@ void GameController::Initialize() {
 	countDown_->Initialize();
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 	ui_finish_->Initialize();
-	se_whistle_->Initialize(L"_Sounds\\_SE\\_Main\\se_whistle.wav", SOUND_TYPE::SE, 1.0f);
+	se_whistle_->Initialize(USFN_SOUND::SE::WHISTLE, SOUND_TYPE::SE, 1.0f);
 	gameStart_ = false;
 }
 

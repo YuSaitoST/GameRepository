@@ -8,13 +8,9 @@
 #include "DontDestroyOnLoad.h"
 #include "Base/DX12Effekseer.h"
 #include <btBulletDynamicsCommon.h>
-
 #include "_Classes/_ConstStrages/ConstStorages.h"
-
-#include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_GameField/GameField.h"
 #include "_Classes/_GameController/GameController.h"
-
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
 #include "_Classes/_CellList/ObjectManager.h"
@@ -59,15 +55,7 @@ private:
 	btConstraintSolver*					solver_;
 
 	std::unique_ptr<SoundPlayer>		bgm_;
-	std::unique_ptr<IconAnimator>		icon_animator_;
 	std::unique_ptr<GameField>			field_;
 	std::unique_ptr<GameController>		gameController_;
 	std::unique_ptr<ObjectManager>		m_object_;
-
-private:
-	enum POS_Z_2D {
-		PLAYER_UI  = -990,
-		HOLE_FLONT = -980,
-		BACKGROUND =  999
-	};
 };

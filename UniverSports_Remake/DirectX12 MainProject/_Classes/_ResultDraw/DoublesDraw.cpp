@@ -1,4 +1,5 @@
 #include "DoublesDraw.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 
 void DoublesDraw::Initialize() {
 	int _winPlayerID[2] = { -1,-1 };
@@ -57,8 +58,8 @@ void DoublesDraw::LoadAssets() {
 void DoublesDraw::Render() {
 	CommonDrawing();
 
-	DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), Vector3(100.0f, 0.0f, -3.0f));
-	DX9::SpriteBatch->DrawSimple(sp_winPlayer_[1].Get(), Vector3(-226.0f, 0.0f, -2.0f));
-	DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X - 50.0f, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), Vector3(SERIALS::PLAYER::POS_X + SERIALS::PLAYER::RECT_X - 50.0f, SERIALS::PLAYER::POS_Y, -3.0f), RECT(player_rect_x[1], 0, player_rect_x[1] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_winPlayer_[0].Get(), DirectX::XMFLOAT3(100.0f, 0.0f, (int)US2D::Layer::RESULT::UI_WINNER));
+	DX9::SpriteBatch->DrawSimple(sp_winPlayer_[1].Get(), DirectX::XMFLOAT3(-226.0f, 0.0f, (int)US2D::Layer::RESULT::UI_WINNER));
+	DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), DirectX::XMFLOAT3(SERIALS::PLAYER::POS_X - 50.0f, SERIALS::PLAYER::POS_Y, (int)US2D::Layer::RESULT::UI_WINNERTEXT), RECT(player_rect_x[0], 0, player_rect_x[0] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_playerName_.Get(), DirectX::XMFLOAT3(SERIALS::PLAYER::POS_X + SERIALS::PLAYER::RECT_X - 50.0f, SERIALS::PLAYER::POS_Y, (int)US2D::Layer::RESULT::UI_WINNERTEXT), RECT(player_rect_x[1], 0, player_rect_x[1] + SERIALS::PLAYER::RECT_X, SERIALS::PLAYER::RECT_Y));
 }

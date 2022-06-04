@@ -1,4 +1,5 @@
 #include "DrawingByMode.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 
 DrawingByMode::DrawingByMode() : sp_playerName_(DX9::SPRITE()), sp_number_(DX9::SPRITE()), maxScore_(0), player_rect_x{0, 0}, oneDigit_x(0), twoDigit_x(0) {
 	//ƒƒ‚ƒŠŠm•Û
@@ -35,6 +36,6 @@ void DrawingByMode::CommonLoadAssets() {
  * @brief ‹¤’Ê‚·‚é•`‰æ
 */
 void DrawingByMode::CommonDrawing() {
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIALS::NUMBER::POS_X, SERIALS::NUMBER::POS_Y, -3.0f), RECT(twoDigit_x, 0, twoDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), Vector3(SERIALS::NUMBER::POS_X + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::POS_Y, -3.0f), RECT(oneDigit_x, 0, oneDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), DirectX::XMFLOAT3(SERIALS::NUMBER::POS_X, SERIALS::NUMBER::POS_Y, (int)US2D::Layer::RESULT::UI_SCORE), RECT(twoDigit_x, 0, twoDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_number_.Get(), DirectX::XMFLOAT3(SERIALS::NUMBER::POS_X + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::POS_Y, (int)US2D::Layer::RESULT::UI_SCORE), RECT(oneDigit_x, 0, oneDigit_x + SERIALS::NUMBER::RECT_X, SERIALS::NUMBER::RECT_Y));
 }

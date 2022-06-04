@@ -52,33 +52,16 @@ private:
 	*/
 	enum INPUT_SELECT { AL_RIGHT, AL_LEFT, AL_NONE };
 
-	//! 入力状態
-	INPUT_SELECT input_;
+	INPUT_SELECT	input_;			//! 入力状態
 
-	//! 右矢印の画像
-	DX9::SPRITE sp_right_;
-	
-	//! 左矢印の画像
-	DX9::SPRITE sp_left_;
+	DX9::SPRITE		sp_right_;		//! 右矢印の画像
+	DX9::SPRITE		sp_left_;		//! 左矢印の画像
 
-	//! 右矢印のX座標
-	float pos_right_x_;
-
-	//! 左矢印のX座標
-	float pos_left_x_;
-
-	//! 矢印のY座標
-	float pos_y_;
-
-	//! 右矢印のサイズ
-	float scale_right_;
-
-	//! 左矢印のサイズ
-	float scale_left_;
-
-	//! 拡大の終了状態
-	bool isFinBigger;
-
-	//! 縮小の終了状態
-	bool isFinSmaller;
+	float			pos_right_x_;	//! 右矢印のX座標
+	float			pos_left_x_;	//! 左矢印のX座標
+	float			pos_y_;			//! 矢印のY座標
+	float			scale_right_;	//! 右矢印のサイズ
+	float			scale_left_;	//! 左矢印のサイズ
+	bool			isFinBigger;	//! 拡大の終了状態
+	bool			isFinSmaller;	//! 縮小の終了状態
 };

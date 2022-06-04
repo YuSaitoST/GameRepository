@@ -1,5 +1,6 @@
 #include "OperateUI.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 
 OperateUI::OperateUI() : sp_gamepad_(DX9::SPRITE()), pos_pad_(DirectX::XMFLOAT3()) {
 	state_		= &st_close_;
@@ -11,7 +12,7 @@ void OperateUI::Initialize() {
 	st_open_.Initialize();
 	st_close_.Initialize();
 
-	pos_pad_	= DirectX::XMFLOAT3(-1280.0f, 0.0f, -98.0f);
+	pos_pad_	= DirectX::XMFLOAT3(-1280.0f, 0.0f, (int)US2D::Layer::TITLE::UI_OPERATE);
 }
 
 void OperateUI::LoadAsset() {

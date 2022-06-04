@@ -1,6 +1,7 @@
 #include "Finish.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 
 Finish::Finish() : sprite_(DX9::SPRITE()), position_(DirectX::XMFLOAT3()) {
 	movement_move_	= 0.0f;
@@ -10,7 +11,7 @@ Finish::Finish() : sprite_(DX9::SPRITE()), position_(DirectX::XMFLOAT3()) {
 }
 
 void Finish::Initialize() {
-	position_		= DirectX::XMFLOAT3(1280.0f, 0.0f, -9999.0f);
+	position_		= DirectX::XMFLOAT3(1280.0f, 0.0f, (int)US2D::Layer::MAIN::UI_FINISH);
 	movement_move_	= MOVEMENT / GAMES_PARAM.FN_TIME_MOVE;
 	movement_alpha_ = FADE::COLORMAX / GAMES_PARAM.FN_TIME_FADEOUT;
 	time_display_	= GAMES_PARAM.FN_TIME_DISPLAY;

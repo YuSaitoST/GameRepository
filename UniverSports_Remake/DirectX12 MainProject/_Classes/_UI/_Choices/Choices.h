@@ -30,7 +30,7 @@ public:
 	 * @brief 現在選択している番号を返す
 	 * @return 選択している番号
 	*/
-	int SelectNum() const { return isSelected; };
+	int SelectNum() const { return isSelected_; };
 
 	/**
 	 * @brief 次の入力を受け付けられるようにする
@@ -43,7 +43,7 @@ private:
 	std::unique_ptr<SoundPlayer> se_choice_;
 	
 	//! 現在選択している番号
-	int isSelected;
+	int isSelected_;
 
 	//! 入力回数
 	int putCount_;

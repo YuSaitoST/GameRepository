@@ -1,14 +1,15 @@
 #include "Gauge.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 
-Gauge::Gauge() {
+Gauge::Gauge() :	position_(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)),
+					movement_decrease_(0.0f),
+					movement_recovery_(0.0f),
+					proportion_(0.0f),
+					gauge_(0.0f),
+					gauge_rect_x_(0.0f)
+{
 	color_				= GAUGECOLOR::GREEN;
-	position_			= DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f);
-	movement_decrease_	= 0.0f;
-	movement_recovery_	= 0.0f;
-	proportion_			= 0.0f;
-	gauge_				= 0.0f;
-	gauge_rect_x_		= 0.0f;
 }
 
 void Gauge::Initialize() {
@@ -49,7 +50,7 @@ void Gauge::Render() {
 	position_ = DXTK->Direct3D9->WorldToScreenPoint(position_, Camera.GetCamera());
 	position_ += DISPLAY_POSITION;
 
-	DX9::SpriteBatch->DrawSimple(sp_gauge_L_[color_].Get(), DirectX::XMFLOAT3(position_.x, position_.y, -999.0f), RECT(0.0f, 0.0f, gauge_rect_x_, RECT_Y));
-	DX9::SpriteBatch->DrawSimple(sp_gauge_R_[color_].Get(), DirectX::XMFLOAT3(position_.x - MAX_GAUGE + gauge_rect_x_, position_.y, -998.0f));
-	DX9::SpriteBatch->DrawSimple(sp_flame_			.Get(), DirectX::XMFLOAT3(position_.x, position_.y, -997.0f), nullptr, DX9::Colors::RGBA(255, 255, 255, 255));  // GBÇ20Ç≠ÇÁÇ¢Ç…Ç∑ÇÈÇ∆ê‘îwåiÇ…Ç»ÇÈ
+	DX9::SpriteBatch->DrawSimple(sp_gauge_L_[color_].Get(), DirectX::XMFLOAT3(position_.x, position_.y, (int)US2D::Layer::MAIN::UI_GAUGE), RECT(0.0f, 0.0f, gauge_rect_x_, RECT_Y));
+	DX9::SpriteBatch->DrawSimple(sp_gauge_R_[color_].Get(), DirectX::XMFLOAT3(position_.x - MAX_GAUGE + gauge_rect_x_, position_.y, (int)US2D::Layer::MAIN::UI_GAUGE));
+	DX9::SpriteBatch->DrawSimple(sp_flame_.Get(), DirectX::XMFLOAT3(position_.x, position_.y, (int)US2D::Layer::MAIN::UI_GAUGE_FRAME), nullptr, DX9::Colors::RGBA(255, 255, 255, 255));  // GBÇ20Ç≠ÇÁÇ¢Ç…Ç∑ÇÈÇ∆ê‘îwåiÇ…Ç»ÇÈ
 }

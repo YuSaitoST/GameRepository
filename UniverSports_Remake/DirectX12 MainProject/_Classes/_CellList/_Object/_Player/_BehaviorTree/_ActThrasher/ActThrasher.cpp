@@ -42,8 +42,7 @@ void ActThrasher::UIRender() {
 }
 
 bool ActThrasher::Think(ObjPlayer& my) {
-	float n;
-	const ObjectBase* _closestPlayer = (ObjPlayer*)ObjectManager::TheClosestPlayer(my.myObjectID(), my.myPosition(), n);
+	const ObjectBase* _closestPlayer = my.GetTargetPlayer();
 	if (_closestPlayer == nullptr)
 		return false;
 

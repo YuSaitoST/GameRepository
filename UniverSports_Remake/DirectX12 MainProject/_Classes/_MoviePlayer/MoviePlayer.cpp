@@ -20,8 +20,8 @@ void MoviePlayer::Update() {
 * @brief ウィンドウサイズで描画
 * @param pos_z 動画のz座標
 */
-void MoviePlayer::Render() const {
-	DX9::SpriteBatch->DrawSimple(media_->Get(), DirectX::SimpleMath::Vector3::Zero);
+void MoviePlayer::Render(DirectX::XMFLOAT3 pos) const {
+	DX9::SpriteBatch->DrawSimple(media_->Get(), pos);
 }
 
 /**
@@ -29,7 +29,7 @@ void MoviePlayer::Render() const {
 * @param pos 動画の表示座標
 * @param scale 動画の表示サイズ
 */
-void MoviePlayer::Render(DirectX::SimpleMath::Vector3 pos, float scale) const {
+void MoviePlayer::Render(DirectX::XMFLOAT3 pos, float scale) const {
 	DX9::SpriteBatch->Draw(
 		media_->Get(), pos, nullptr,
 		DX9::Colors::RGBA(255, 255, 255, 255),

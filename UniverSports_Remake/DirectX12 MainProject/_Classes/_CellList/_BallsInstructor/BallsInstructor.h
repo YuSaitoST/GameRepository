@@ -21,8 +21,7 @@ public:
 	BallsInstructor() {}
 	virtual ~BallsInstructor() {}
 
-	void SetBallList(const std::vector<ObjBall*> balllist) { list_ = balllist; }
-	void Initialize();
+	void Initialize(const std::vector<ObjBall*> balllist);
 
 	ObjBall* Access(const int ballID) const;
 	ObjBall* GetNearestBall(DirectX::XMFLOAT2 myPosition);

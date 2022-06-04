@@ -16,15 +16,10 @@
 
 using namespace DirectX;
 
-/**
-* @enum BULLET_TYPE
-* ï®ëÃÇÃå`èÛ
-*/
-enum BULLET_TYPE { BT_SPHRER, BT_BOX, NONE_BULLET_TYPE };
-
 class btObject {
 public:
-	btObject(BULLET_TYPE type, SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass);
+	btObject(SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass);
+	btObject(SimpleMath::Vector3 pos, float scale, float rotZ, float mass);
 	virtual ~btObject() {}
 
 	void SetTransform(SimpleMath::Vector3 pos, SimpleMath::Vector3 rotate);

@@ -1,6 +1,7 @@
 #include "NormalDisplay.h"
 #include "DontDestroyOnLoad.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
@@ -14,17 +15,6 @@ NormalDisplay::NormalDisplay() : ui_alpha_(0.0f) {
 	operate_		= std::make_unique<OperateUI>();
 	blackOut_		= std::make_unique<BlackOut>();
 	text_			= nullptr;
-}
-
-NormalDisplay::~NormalDisplay() {
-	//delete blackOut_;
-	//delete operate_;
-	//delete ui_arrows_;
-	//delete mode_choices_;
-	//delete cursor_;
-	//delete time_demo_;
-	//delete time_start_;
-	//delete se_decision_;
 }
 
 void NormalDisplay::Initialize() {
@@ -41,9 +31,8 @@ void NormalDisplay::Initialize() {
 		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
 	*/
 	for (int _u = 0; _u < CHOICES; ++_u) {
-		nowText_[_u][0].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[_u], -10.0f));
-		nowText_[_u][1].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[_u], -10.0f));
-		nowText_[_u][2].Initialize(_u, Vector3(TEXT_POS_X, UI_TEXT_Y[_u], -10.0f));
+		nowText_[_u][0].Initialize(_u, DirectX::XMFLOAT3(TEXT_POS_X, UI_TEXT_Y[_u], (int)US2D::Layer::TITLE::UI_TEXT));
+		nowText_[_u][1].Initialize(_u, DirectX::XMFLOAT3(TEXT_POS_X, UI_TEXT_Y[_u], (int)US2D::Layer::TITLE::UI_TEXT));
 	}
 
 	// 最初に選択状態にする選択肢を代入
@@ -65,7 +54,6 @@ void NormalDisplay::LoadAssets() {
 	for (int _u = 0; _u < CHOICES; ++_u) {
 		nowText_[_u][0].LoadAsset(USFN_SP::UI_TEXT[_u][0]);
 		nowText_[_u][1].LoadAsset(USFN_SP::UI_TEXT[_u][1]);
-		nowText_[_u][2].LoadAsset(USFN_SP::UI_TEXT[_u][2]);
 	}
 }
 
@@ -133,8 +121,8 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 }
 
 void NormalDisplay::Render() {
-	movie_->Render();
-	cursor_->Render(ui_alpha_);
+	movie_->Render(DirectX::XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::TITLE::BG_MOVIE));
+	//cursor_->Render(ui_alpha_);
 	ui_arrows_->Render(ui_alpha_);
 	operate_->Render();
 	blackOut_->Render();

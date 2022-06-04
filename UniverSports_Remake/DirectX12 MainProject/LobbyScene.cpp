@@ -8,6 +8,7 @@
 #include "SceneFactory.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 
 #ifndef _DEBUG
 #pragma comment (lib, "BulletDynamics.lib")
@@ -88,12 +89,15 @@ void LobbyScene::Initialize()
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		player_[_i]->Initialize(_i);
-		charaSelect_[_i]->Initialize(_i);
+		player_[_i]->SetInstructor(nullptr, nullptr);
 		physics_world_->addRigidBody(player_[_i]->myRigidbody());
 
 		player_[_i + 1]->Initialize(_i + 1);
-		charaSelect_[_i + 1]->Initialize(_i + 1);
+		player_[_i + 1]->SetInstructor(nullptr, nullptr);
 		physics_world_->addRigidBody(player_[_i + 1]->myRigidbody());
+
+		charaSelect_[_i]->Initialize(_i);
+		charaSelect_[_i + 1]->Initialize(_i + 1);
 	}
 
 	font_count_		= DX9::SpriteFont::CreateFromFontName(DXTK->Device9, L"MS ゴシック", 20);
@@ -255,9 +259,9 @@ void LobbyScene::Render()
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
 	Render_String();
-	bg_movie_->Render(MV_POS, MV_SCALE);
+	bg_movie_->Render(XMFLOAT3(MV_POS_X, MV_POS_Y, (int)US2D::Layer::LOBBY::BG_MOVIE), MV_SCALE);
 	blackOut_->Render();
-	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), XMFLOAT3(0.0f, 0.0f, 1100.0f));
+	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::LOBBY::BG_SPRITE));
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
 		charaSelect_[_i		]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i		]], sp_decisions[charaSelect_[_i	]->IsDecision()], sp_entry, _i		);
@@ -267,8 +271,8 @@ void LobbyScene::Render()
 	// チームカラーの表示
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
 		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
-			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), XMFLOAT3(TEAM_COL_X[_i		], TEAM_COL_Y, 100.0f));
-			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), XMFLOAT3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, 100.0f));
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), XMFLOAT3(TEAM_COL_X[_i		], TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), XMFLOAT3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
 		}
 	}
 

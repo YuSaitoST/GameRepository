@@ -4,6 +4,8 @@
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Strategy/_Wires/Wires.h"
 #include "_Strategy/_Goals/Goals.h"
+#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_CellList/_Object/_Ball/_State/_Goal/StGoal.h"
 #include "DontDestroyOnLoad.h"
 
 ObjWire::ObjWire() {
@@ -20,17 +22,17 @@ ObjWire::ObjWire(Vector3 pos, float r) {
 	SetMember(WIRE, ORIENTEDBOX, pos, r);
 
 	if (DontDestroy->GameMode_.isDODGEBALL_NOMAL())
-		strategy_ = new Wires();
+		strategy_ = std::make_unique<Wires>();
 	else
-		strategy_ = new Goals();
+		strategy_ = std::make_unique<Goals>();
 
 	se_goal_ = std::make_unique<SoundPlayer>();
 }
 
 void ObjWire::Initialize(const int id) {
 	id_my_ = id;
-	physics_ = std::make_unique<btObject>(BT_BOX, Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
-	se_goal_->Initialize(L"_Sounds\\_SE\\_Main\\se_goal.wav", SOUND_TYPE::SE, 0.0f);
+	physics_ = std::make_unique<btObject>(Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
+	se_goal_->Initialize(USFN_SOUND::SE::GOAL, SOUND_TYPE::SE, 0.0f);
 
 	UpdateToMorton();
 }
@@ -55,23 +57,22 @@ void ObjWire::HitAction(ObjectBase* object) {
 		return;
 
 	if (object->myObjectType() == OBJ_TYPE::PLAYER) {
-		//ObjPlayer* player = dynamic_cast<ObjPlayer*>(object);
+		ObjPlayer* player = dynamic_cast<ObjPlayer*>(object);
 
-		//// 自分の陣地ではないのなら早期リターン
-		//if (player->myObjectID() != id_my_)
-		//	return;
+		// 自分の陣地ではないのなら早期リターン
+		if (player->myObjectID() != id_my_)
+			return;
 
-		//// ゴール内にボールが入っていなければ早期リターン
-		//if (hasBalls_.size() <= 0)
-		//	return;
+		// ゴール内にボールが入っていなければ早期リターン
+		if (hasBalls_.size() <= 0)
+			return;
 
-		//// ボールを持っているなら早期リターン
-		//if (player->HasBall())
-		//	return;
+		// ボールを持っているなら早期リターン
+		if (player->HasBall())
+			return;
 
-		//player->CautchedBall(hasBalls_.back()->myObjectID());
-		//BallsInstructor::BallCautch(player->myObjectID(), hasBalls_.back()->myObjectID());
-		//hasBalls_.pop_back();
+		player->CautchedBall(hasBalls_.back()->myObjectID());
+		hasBalls_.pop_back();
 	}
 	else if (object->myObjectType() == OBJ_TYPE::BALL) {
 		ObjBall* ball = dynamic_cast<ObjBall*>(object);
@@ -80,9 +81,10 @@ void ObjWire::HitAction(ObjectBase* object) {
 		if (ball->NowState() != B_STATE::SHOT)
 			return;
 
-		//ball->SwitchState(B_STATE::GOAL);	
+		StGoal* goal = new StGoal();
+		ball->SwitchState(goal);	
 		ball->WasGoaled();
-		//hasBalls_.push_back(ball);
-		//se_goal_->PlayOneShot();
+		hasBalls_.push_back(ball);
+		se_goal_->PlayOneShot();
 	}
 }

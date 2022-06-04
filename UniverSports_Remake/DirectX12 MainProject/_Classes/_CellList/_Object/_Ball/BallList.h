@@ -25,6 +25,10 @@ public:
 	void AddWorld(btDynamicsWorld* physics_world_);
 	void RemoveWorld(btDynamicsWorld* physics_world_);
 
+	/**
+	* @brief ボールリストを返す
+	* @return ボールリスト
+	*/
 	std::vector<ObjBall*> GetList() const { return list_; }
 
 private:

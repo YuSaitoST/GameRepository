@@ -1,14 +1,34 @@
 #include "btObject.h"
 
-btObject::btObject(BULLET_TYPE type, SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass) {
+btObject::btObject(SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass) {
 	//! 球体形状
 	btCollisionShape* _bt_collision;
 
 	//! 位置・姿勢
 	btDefaultMotionState* _bt_state;
 
-	_bt_collision = (type == BT_SPHRER) ? (btCollisionShape*)(new btSphereShape(0.8f)) : (type == BT_BOX) ? (btCollisionShape*)(new btBoxShape(btVector3(scale.x, scale.y * 0.125f, scale.z))) : nullptr;
+	_bt_collision = new btBoxShape(btVector3(scale.x, scale.y, scale.z));
 	
+	btVector3    _pos(pos.x, pos.y, 0.0f);
+	btQuaternion _rot(0.0f, 0.0f, rotZ, 1.0f);
+	_bt_state = new btDefaultMotionState(btTransform(_rot, _pos));
+
+	btScalar	_mass = mass;
+	btVector3	_inertia(0.0f, 0.0f, 0.0f);
+	bt_body_ = std::make_unique<btRigidBody>(_mass, _bt_state, _bt_collision, _inertia);
+
+	bt_body_->setRestitution(0.9f);
+}
+
+btObject::btObject(SimpleMath::Vector3 pos, float scale, float rotZ, float mass) {
+	//! 球体形状
+	btCollisionShape* _bt_collision;
+
+	//! 位置・姿勢
+	btDefaultMotionState* _bt_state;
+
+	_bt_collision = new btSphereShape(scale);
+
 	btVector3    _pos(pos.x, pos.y, 0.0f);
 	btQuaternion _rot(0.0f, 0.0f, rotZ, 1.0f);
 	_bt_state = new btDefaultMotionState(btTransform(_rot, _pos));

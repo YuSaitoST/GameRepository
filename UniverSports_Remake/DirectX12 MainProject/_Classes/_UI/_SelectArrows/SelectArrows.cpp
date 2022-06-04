@@ -1,4 +1,5 @@
 #include "SelectArrows.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 
@@ -55,7 +56,7 @@ bool SelectArrows::Update(const int index) {
 void SelectArrows::Render(float alpha) {
 	DX9::SpriteBatch->Draw(
 		sp_right_.Get(),
-		DirectX::XMFLOAT3(pos_right_x_, pos_y_, -30.0f),
+		DirectX::XMFLOAT3(pos_right_x_, pos_y_, (int)US2D::Layer::GENERIC::UI_ARROW),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
 		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
@@ -65,7 +66,7 @@ void SelectArrows::Render(float alpha) {
 	
 	DX9::SpriteBatch->Draw(
 		sp_left_.Get(),
-		DirectX::XMFLOAT3(pos_left_x_, pos_y_, -30.0f),
+		DirectX::XMFLOAT3(pos_left_x_, pos_y_, (int)US2D::Layer::GENERIC::UI_ARROW),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
 		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),

@@ -14,6 +14,7 @@
 #include "_Classes/_CellList/_Object/_Player/_MyLife/MyLife.h"
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_CellList/_TeamID/TeamID.h"
+#include "_Classes/_SoundPlayer/SoundPlayer.h"
 #include "_Strategy/CharaStrategy.h"
 #include "_Strategy/_ManualChara/ManualChara.h"
 #include "_Strategy/_ComputerChara/ComputerChara.h"
@@ -22,6 +23,7 @@
 
 //前方宣言
 class BallsInstructor;
+class PlayersInstructor;
 
 class ObjPlayer final : public ObjectBase {
 private:
@@ -54,7 +56,7 @@ public:
 
 	virtual void HitAction(ObjectBase* hitObject);
 
-	void SetInstructor(BallsInstructor* instructor) { instructor_ = instructor; }
+	void SetInstructor(BallsInstructor* blInstructor, PlayersInstructor* plInstructor) { ballsInstructor_ = blInstructor; playersInstructor_ = plInstructor; }
 
 	void CreateModel(std::wstring fileName);
 
@@ -63,8 +65,8 @@ public:
 	*/
 	void ReDecision(const int plID, const std::wstring fileName) {
 		CreateModel(fileName);
-		pos_ = Vector2(GAME_CONST.S_POS[plID].x, GAME_CONST.S_POS[plID].y);
-		rotate_ = Vector2(0.0f, GAME_CONST.Player_FacingRight);
+		pos_ = XMFLOAT2(GAME_CONST.S_POS[plID].x, GAME_CONST.S_POS[plID].y);
+		rotate_ = XMFLOAT2(0.0f, GAME_CONST.Player_FacingRight);
 		SetTransforms(pos_, rotate_);
 	}
 
@@ -100,7 +102,12 @@ public:
 	* @return ボールの所持状態
 	*/
 	bool HasBall() const { return hasBall_; }
-	Vector2 Get_HandPos();
+
+	///**
+	//* @brief 手元の座標を返す
+	//* @return 手元の座標のアドレス
+	//*/
+	//XMFLOAT2* Get_HandPos() { return &handPos_; }
 
 	/**
 	* @brief 所持しているボールのIDを返す
@@ -109,18 +116,32 @@ public:
 	int MyBallID() const { return myBallID_; }
 
 	/**
-	* @brief インストラクターを返す
-	* @return インストラクター
+	* @brief ボールインストラクターを返す
+	* @return ボールインストラクター
 	*/
-	BallsInstructor* GetInstructor() const { return instructor_; }
+	BallsInstructor* GetBallsInstructor() const { return ballsInstructor_; }
+
+	/**
+	* @brief プレイヤーインストラクターを返す
+	* @return プレイヤーインストラクター
+	*/
+	PlayersInstructor* GetPlayersInstructor() const { return playersInstructor_; }
+
+	/**
+	* @brief ターゲットプレイヤーを変えす
+	* @return ターゲットプレイヤー
+	*/
+	ObjectBase* GetTargetPlayer() const { return targetPlayer_; }
 
 private:
 	void Playing(const float deltaTime);
 	void Beaten(const float deltaTime);
 
+	void CalculationHandPos();
 	void SetTransforms(XMFLOAT2 pos, XMFLOAT2 rotate);
 	void AnimReset();
 	void AnimSet(MOTION motion, float deltaTime);
+	void SertchTarget();
 
 	/**
 	* @brief 現状に合ったアニメーションを返す
@@ -130,18 +151,24 @@ private:
 
 	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
 
-	std::unique_ptr<MyLife>				life_;			//! 残機
-	std::unique_ptr<TeamID>				teamID_;		//! チームID
-	std::unique_ptr<CountTimer>			ti_respone_;	//! リスポーンタイマー
-	std::unique_ptr<EffDown>			eff_down_;		//! ダウン時エフェクト
-	std::unique_ptr<Barrier>			barrier_;		//! バリア
+	std::unique_ptr<MyLife>			life_;			//! 残機
+	std::unique_ptr<TeamID>			teamID_;		//! チームID
+	std::unique_ptr<CountTimer>		ti_respone_;	//! リスポーンタイマー
+	std::unique_ptr<EffDown>		eff_down_;		//! ダウン時エフェクト
+	std::unique_ptr<Barrier>		barrier_;		//! バリア
+	std::unique_ptr<SoundPlayer>	se_shot_;		//! ショット時SE
+	std::unique_ptr<SoundPlayer>	se_defeat_;		//! 爆破時SE
 	
-	CharaStrategy*		strategy_;		//! 行動
-	BallsInstructor*	instructor_;	//! ボールインストラクター
+	CharaStrategy*		strategy_;			//! 行動
+	ObjectBase*			targetPlayer_;			//! ターゲットのオブジェクト
+	BallsInstructor*	ballsInstructor_;	//! ボールインストラクター
+	PlayersInstructor*	playersInstructor_;	//! プレイヤーインストラクター
 
-	DX9::SKINNEDMODEL	model_;			//! モデル
+	XMFLOAT2			handPos_;			//! 手元の座標
 
-	bool				hasBall_;		//! ボールの所持状態
-	bool				isDown_;		//! やられ状態
-	int					myBallID_;		//! 所持しているボールのID
+	DX9::SKINNEDMODEL	model_;				//! モデル
+
+	bool				hasBall_;			//! ボールの所持状態
+	bool				isDown_;			//! やられ状態
+	int					myBallID_;			//! 所持しているボールのID
 };

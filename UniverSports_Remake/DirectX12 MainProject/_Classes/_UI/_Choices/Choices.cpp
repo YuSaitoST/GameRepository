@@ -2,10 +2,8 @@
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_StandardCalculation/StandardCalculation.h"
 
-Choices::Choices() {
+Choices::Choices() : isSelected_(0), putCount_(0) {
 	se_choice_ = std::make_unique<SoundPlayer>();
-	isSelected = 0;
-	putCount_ = 0;
 }
 
 void Choices::Initialize() {
@@ -23,17 +21,16 @@ void Choices::Update(int choices, bool low, bool high) {
 	if (putCount_ != 0)
 		return;
 
-	isSelected +=
+	isSelected_ +=
 		(high) ? 1 :
 		(low) ? -1 : 0;
 
 	//選択外の番号をループさせる
-	StandardCalculation::ValueLoop(isSelected, 0, choices - 1);
+	StandardCalculation::ValueLoop(isSelected_, 0, choices - 1);
 
 	//入力があったらSEを鳴らす
 	if (low || high) {
 		se_choice_->PlayOneShot();
 		putCount_ += 1;
 	}
-
 }

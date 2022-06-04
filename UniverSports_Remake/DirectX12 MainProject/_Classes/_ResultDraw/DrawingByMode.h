@@ -16,8 +16,6 @@
 #include "_Classes/_UI/_Serials/Serials.h"
 #include "_Classes/_FileNames/FileNames.h"
 
-using namespace DirectX::SimpleMath;
-
 class DrawingByMode {
 public:
 	DrawingByMode();

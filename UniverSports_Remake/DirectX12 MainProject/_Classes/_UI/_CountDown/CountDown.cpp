@@ -1,5 +1,6 @@
 #include "CountDown.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
 CountDownUI::CountDownUI() : alpha_(0.0f), scale_(0.0f), soundPlay_(false) {
@@ -38,7 +39,7 @@ void CountDownUI::Render(float count) const {
 
 	DX9::SpriteBatch->Draw(
 		sprite_[_count].Get(),
-		DirectX::XMFLOAT3(POS_X, POS_Y, 0.0f),
+		DirectX::XMFLOAT3(POS_X, POS_Y, (int)US2D::Layer::MAIN::UI_COUNTDOWN),
 		nullptr,
 		DX9::Colors::RGBA(FADE::COLORMAX, FADE::COLORMAX, FADE::COLORMAX, alpha_),
 		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),

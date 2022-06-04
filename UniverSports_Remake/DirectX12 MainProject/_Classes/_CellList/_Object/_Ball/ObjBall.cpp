@@ -9,6 +9,7 @@ ObjBall::ObjBall() {
 	pos_ = Vector2::Zero;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
+	ownerHandPos_ = nullptr;
 	physics_ = nullptr;
 	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
@@ -25,10 +26,11 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	StStandby* standby = new StStandby();
 	SwitchState(standby);
 
-	physics_ = std::make_unique<btObject>(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
+	physics_ = std::make_unique<btObject>(pos, 0.2f, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
+	ownerHandPos_ = nullptr;
 	isInPlayerHands_ = false;
 	isBreak_ = false;
 }
@@ -53,8 +55,8 @@ void ObjBall::Initialize(const int id) {
 
 void ObjBall::LoadAssets(DX9::MODEL& model) {
 	collision_->SetColli(model->GetBoundingSphere());
-	collision_->SetColliScale(1.8f);
-
+	collision_->SetColliScale(2.2f);
+	
 	r_ = model->GetBoundingSphere().Radius;
 }
 
@@ -95,10 +97,18 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 		case DEFAULT_COLOR : _mat = GetNomMaterial(); break;
 		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[std::min(std::max(0, DontDestroy->ChoseColor_[id_owner_]), 4 - 1)]; _mat.Ambient = P_AMBIENT; break;
 		case TEAM_COLOR    : break;
-		default			   : assert(!"ObjBall_assert : �s���ȐF�w��"); break;
+		//default			   : assert(!"ObjBall::ChangeMaterial : 不正な状態です");
 	}
 
 	return _mat;
+}
+
+/**
+* @brief 追尾処理
+*/
+void ObjBall::Following(float pos_z) {
+	pos_ = *ownerHandPos_;
+	PhysicsControll(XMFLOAT3(pos_.x, pos_.y, pos_z));
 }
 
 /**
@@ -106,7 +116,7 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 * @param forwrad 正面ベクトル
 * @param speed 速度
 */
-void ObjBall::AddPower(Vector3 forward, float speed) {
+void ObjBall::AddPower(XMFLOAT3 forward, float speed) {
 	physics_->SetLinerVelocity(forward * speed);
 	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 

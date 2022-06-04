@@ -2,7 +2,11 @@
 #include "_Classes/_CellList/_Object/_Ball/BallList.h"
 #include "_Classes/_NearestPosition/NearestPosition.h"
 
-void BallsInstructor::Initialize() {
+void BallsInstructor::Initialize(const std::vector<ObjBall*> balllist) {
+	list_ = balllist;
+
+	posList_.reserve(list_.size());
+
 	for (ObjBall* ball : list_)
 		posList_.push_back(&(ball->myPosition()));
 }

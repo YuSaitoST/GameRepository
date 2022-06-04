@@ -25,7 +25,7 @@ public:
 	void Remove();
 	ObjectBase* GetCollision();
 
-	//" ‘o•ûŒüƒŠƒXƒg(©•ª‚Ì‘OŒã‚Ì‹óŠÔ‚ğ“ü‚ê‚é)
+	//! ‘o•ûŒüƒŠƒXƒg
 	Cell* prev_;
 	Cell* next_;
 
@@ -36,6 +36,6 @@ public:
 	SpaceNumber numbers_;
 
 private:
-	ObjectBase* UpperSearch();		  // ãˆÊ’Tõ
-	ObjectBase* LowerSearch(int nr);  // ‰ºˆÊ’Tõ
+	ObjectBase* UpperSearch();
+	ObjectBase* LowerSearch(int nr);
 };

@@ -12,27 +12,20 @@
  //------------------------------------------------------------------------------
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_Field/Field.h"
+#include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_CellList/CellList.h"
 #include "_Object/ObjectBase.h"
-#include "_Object/_Player/ObjPlayer.h"
 #include "_Object/_Player/PlayerList.h"
 #include "_Object/_Ball/BallList.h"
 #include "_Object/_Wire/ObjWire.h"
+#include "_PlayersInstructor/PlayersInstructor.h"
 
 //! 空間リスト
 extern CellList cellList;
 
 class ObjectManager {
 private:
-	static const int N_PLAYER	= 4;
 	static const int N_WIRE		= 4;
-
-	const Vector3 POS_START[N_PLAYER] = {
-		Vector3(-GAME_CONST.PL_POS_X, GAME_CONST.PL_POS_Y, 0.0f),
-		Vector3(GAME_CONST.PL_POS_X,	GAME_CONST.PL_POS_Y, 0.0f),
-		Vector3(-GAME_CONST.PL_POS_X, -GAME_CONST.PL_POS_Y, 0.0f),
-		Vector3(GAME_CONST.PL_POS_X,  -GAME_CONST.PL_POS_Y, 0.0f)
-	};
 
 	const float FX = 32.0f;
 	const float FY = 18.0f;
@@ -60,21 +53,19 @@ public:
 	void AddWorld(btDynamicsWorld* physics_world_);
 	void RemoveWorld(btDynamicsWorld* physics_world_);
 
-	static int PlayerLife(int index);
-	static Vector2 PlayerHandsPos(int index);
-
 private:
-	static float Distance2Vector(const Vector2 p1, const Vector2 p2);
-
 	//! プレイヤーリスト
-	static ObjPlayer* obj_player_[N_PLAYER];
-	//PlayerList* playerList_;
+	PlayerList* playerList_;
 	
 	//! ボールリスト
 	BallList* ballList_;
 	
 	//! ワイヤーリスト
-	static ObjWire* obj_wire_[N_WIRE];
+	ObjWire* obj_wire_[N_WIRE];
+
+	//! プレイヤーのインストラクター
+	PlayersInstructor* plInstructor_;
+	std::unique_ptr<IconAnimator>		icon_animator_;
 
 	//! ボールのモデル
 	DX9::MODEL mod_ball_;

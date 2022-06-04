@@ -9,7 +9,7 @@ void StShot::Initialize() {
 }
 
 void StShot::Update(ObjBall* ball) {
-	const float _pos_z = std::min(0.0f, ball->myPosZ() + 0.016f);
+	const float _pos_z = std::min(0.0f, ball->myPosZ() + 0.064f);
 	const XMFLOAT2& _pos = ball->myPosition();
 	ball->AssignTransform(XMFLOAT3(_pos.x, _pos.y, _pos_z), XMFLOAT2(0.0f, 0.0f));
 

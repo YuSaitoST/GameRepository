@@ -24,7 +24,7 @@
 class NormalDisplay final : public DisplayBase {
 public:
 	NormalDisplay();
-	virtual ~NormalDisplay();
+	virtual ~NormalDisplay() {}
 
 	virtual void Initialize() override;
 	virtual void LoadAssets() override;
@@ -40,7 +40,7 @@ private:
 	const float			UI_TEXT_Y[CHOICES]	= { 460.0f, 560.0f };		// 縦のUIのY座標
 	const float			SPEED_ALPHA			= 127.5f;					// UIのフェード速度
 	const float			ARROW_POS_R_X		= 917.5f;					// 右矢印X座標
-	const float			ARROW_POS_L_X		= 328.5f;					// 左矢印X座標
+	const float			ARROW_POS_L_X		= 363.5f;					// 左矢印X座標
 	const float			ARROW_POS_Y			= 455.0f;					// 矢印Y座標
 	const float			TEXT_POS_X			= 640.0f;					// モードテキストX座標
 

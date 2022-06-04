@@ -28,17 +28,17 @@ void BallList::LoadAssets() {
 	model_->SetScale(GAME_CONST.BA_SCALE);
 	model_->SetMaterial(list_.at(0)->GetNomMaterial());
 
-	for (ObjectBase* obj : list_)
+	for (ObjBall* obj : list_)
 		obj->LoadAssets(model_);
 }
 
 void BallList::Update(const float deltaTime) {
-	for (ObjectBase* obj : list_)
+	for (ObjBall* obj : list_)
 		obj->Update(deltaTime);
 }
 
 void BallList::Render() {
-	for (ObjectBase* obj : list_)
+	for (ObjBall* obj : list_)
 		obj->Render(model_);
 }
 
@@ -47,7 +47,7 @@ void BallList::Render() {
 * @param physics_world •¨—‰‰ŽZ‚Ìƒ[ƒ‹ƒh
 */
 void BallList::AddWorld(btDynamicsWorld* physics_world_) {
-	for (ObjectBase* obj : list_)
+	for (ObjBall* obj : list_)
 		physics_world_->addRigidBody(obj->myRigidbody());
 }
 

@@ -11,5 +11,5 @@ public:
 	virtual void Update(ObjBall* ball);
 
 private:
-	const float Z_MIN = -6.0f;
+	const float Z_MIN = -8.0f;
 };

@@ -20,8 +20,8 @@ public:
 
 	void LoadAsset(std::wstring file_name);
 	void Update();
-	void Render() const;
-	void Render(DirectX::SimpleMath::Vector3 pos, const float scale) const;
+	void Render(DirectX::XMFLOAT3 pos) const;
+	void Render(DirectX::XMFLOAT3 pos, const float scale) const;
 
 	/**
 	* @brief çƒê∂

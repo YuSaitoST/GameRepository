@@ -3,6 +3,7 @@
 #include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Classes/_UI/_CharaIcon/IconAnimator.h"
 #include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
+#include "_Classes/_CellList/_PlayersInstructor/PlayersInstructor.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "DontDestroyOnLoad.h"
@@ -18,26 +19,33 @@ ObjPlayer::ObjPlayer() {
 	eff_down_		= nullptr;
 	strategy_		= nullptr;
 	barrier_		= nullptr;
+	se_shot_		= nullptr;
+	se_defeat_		= nullptr;
+	targetPlayer_	= nullptr;
 	myBallID_		= -1;
 	hasBall_		= false;
 	isDown_			= false;
+	handPos_		= XMFLOAT2(0.0f, 0.0f);
 }
 
 ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(PLAYER, COLLI_TYPE::SPHRER, pos, r);
 
-	physics_		= std::make_unique<btObject>(BULLET_TYPE::BT_SPHRER, pos, Vector3::Zero, 0.0f, 1.0f);
+	physics_		= std::make_unique<btObject>(pos, 0.8f, 0.0f, 1.0f);
 	rotate_			= Vector2(0.0f, GAME_CONST.Player_FacingRight);
 	myBallID_		= -1;
 	hasBall_		= false;
 	isDown_			= false;
+	targetPlayer_	= nullptr;
 
 	life_			= std::make_unique<MyLife>(3);
 	teamID_			= std::make_unique<TeamID>();
 	ti_respone_		= std::make_unique<CountTimer>(PLAYER_PARAM.TIME_RESPONE);
 	eff_down_		= std::make_unique<EffDown>();
 	barrier_		= std::make_unique<Barrier>();
+	se_shot_		= std::make_unique<SoundPlayer>();
+	se_defeat_		= std::make_unique<SoundPlayer>();
 	
 	if (strategy == OPERATE_TYPE::MANUAL)
 		strategy_ = new ManualChara();
@@ -45,25 +53,29 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 		strategy_ = new ComputerChara();
 	else
 		strategy_ = nullptr;
+	
+	CalculationHandPos();
 }
 
 ObjPlayer::~ObjPlayer() {
+	if (targetPlayer_ != nullptr)
+		delete targetPlayer_;
+
 	if (strategy_ != nullptr)
 		delete strategy_;
-
-	//delete physics_;
 }
 
 void ObjPlayer::Initialize(const int id) {
 	strategy_->Initialize(id, this);
 	eff_down_->Initialize("Down" + std::to_string(id));
+	se_shot_->Initialize(USFN_SOUND::SE::SHOT, SOUND_TYPE::SE, 1.0f);
+	se_defeat_->Initialize(USFN_SOUND::SE::DEFEAT, SOUND_TYPE::SE, 1.0f);
 	physics_->SetActivationState(DISABLE_DEACTIVATION);
 
 	id_my_ = id;
 
-	if (DontDestroy->GameMode_.isSINGLES_GAME()) {
+	if (DontDestroy->GameMode_.isSINGLES_GAME())
 		DontDestroy->TeamID[id_my_] = id_my_;
-	}
 
 	teamID_->Set(DontDestroy->TeamID[id_my_]);
 }
@@ -140,6 +152,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			if (hasBall_ && myBallID_ != -1)
 				return;
 
+			_ball->SetOwnerHandPos(&handPos_);
 			CautchedBall(_ball->myObjectID());
 		}
 		else if (_baleState == B_STATE::SHOT) {  // やられ処理
@@ -160,10 +173,12 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			pos_ = Vector2(GAME_CONST.S_POS[id_my_].x, GAME_CONST.S_POS[id_my_].y);
 
 			isDown_ = true;
+			targetPlayer_ = nullptr;
 
 			// ゴールを用いるモードではライフの処理はない
 			if (!DontDestroy->GameMode_.isGAMES_WITH_GOALS()) {
 				IconAnimator::DisplayOn();
+				se_defeat_->PlayOneShot();
 				life_->TakeDamage();
 				ResetVelocity();
 				if (life_->NowLifePoint() <= 0)
@@ -172,12 +187,12 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 
 			//ボールをリセット
 			if (hasBall_) {
-				instructor_->BreakOfTheHitter(myBallID_);
+				ballsInstructor_->BreakOfTheHitter(myBallID_);
 				myBallID_ = -1;
 				hasBall_ = false;
 			}
 			else {
-				instructor_->BreakOfThrower(_ball->myObjectID());
+				ballsInstructor_->BreakOfThrower(_ball->myObjectID());
 			}
 		}
 	}
@@ -189,9 +204,9 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 * @param rotate 回転
 */
 void ObjPlayer::SetTransforms(XMFLOAT2 pos, XMFLOAT2 rotate) {
-	model_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
-	model_->SetRotation(Vector3(rotate.x, rotate.y, 0.0f));
-	barrier_->SetPosition(Vector3(pos.x, pos.y, 0.0f));
+	model_->SetPosition(XMFLOAT3(pos.x, pos.y, 0.0f));
+	model_->SetRotation(XMFLOAT3(rotate.x, rotate.y, 0.0f));
+	barrier_->SetPosition(XMFLOAT3(pos.x, pos.y, 0.0f));
 	SetTransform(XMFLOAT3(pos.x, pos.y, 0.0f), rotate);
 }
 
@@ -241,8 +256,10 @@ ObjPlayer::MOTION ObjPlayer::AnimChange() {
 */
 void ObjPlayer::Shoting(const int ballID) {
 	hasBall_ = false;
+	targetPlayer_ = nullptr;
 	myBallID_ = -1;
-	instructor_->Shot(ballID, forward_);
+	se_shot_->PlayOneShot();
+	ballsInstructor_->Shot(ballID, forward_);
 }
 
 /**
@@ -252,18 +269,30 @@ void ObjPlayer::Shoting(const int ballID) {
 void ObjPlayer::CautchedBall(const int ballID) {
 	hasBall_ = true;
 	myBallID_ = ballID;
-	instructor_->Cautch(id_my_, myBallID_);
+	ballsInstructor_->Cautch(id_my_, myBallID_);
 }
 
 /**
-* @brief 手元の座標を返す
-* @return 手元の座標
+* @brief 手元の座標を計算する
 */
-Vector2 ObjPlayer::Get_HandPos() {
-	XMFLOAT2 _handForward;
-	_handForward.x = std::cosf(6) * std::cosf(strategy_->GetRotateX()) - std::sinf(6) * std::sinf(strategy_->GetRotateX());
-	_handForward.y = std::sinf(6) * std::cosf(strategy_->GetRotateX()) + std::cosf(6) * std::sinf(strategy_->GetRotateX());
-	return (pos_ + POS_HAND * _handForward);
+void ObjPlayer::CalculationHandPos() {
+	float _rotateX = strategy_->GetRotateX();
+	handPos_.x = std::cosf(XM_2PI) * std::cosf(_rotateX) - std::sinf(XM_2PI) * std::sinf(_rotateX);
+	handPos_.y = std::sinf(XM_2PI) * std::cosf(_rotateX) + std::cosf(XM_2PI) * std::sinf(_rotateX);
+	handPos_ = pos_ + POS_HAND * handPos_;
+}
+
+/**
+* @brief ターゲットを探す
+*/
+void ObjPlayer::SertchTarget() {
+	if (targetPlayer_ != nullptr)
+		return;
+
+	if (playersInstructor_ == nullptr)
+		return;
+
+	targetPlayer_ = playersInstructor_->GetNearestPlayer(pos_);
 }
 
 /**
@@ -274,16 +303,19 @@ void ObjPlayer::Playing(const float deltaTime) {
 	AnimReset();
 	AnimSet(AnimChange(), deltaTime);
 
+	SertchTarget();
+
 	strategy_->Update(deltaTime);
 	barrier_->Update(deltaTime);
 
 	AssignPosition();
-	rotate_ = Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
-	forward_ = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
+	rotate_ = XMFLOAT2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
+	forward_ = XMFLOAT2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 
 	FIELD::ClampLoop(pos_);
 
 	SetTransforms(pos_, rotate_);
+	CalculationHandPos();
 
 	UpdateToMorton();
 
@@ -305,5 +337,6 @@ void ObjPlayer::Beaten(const float deltaTime) {
 		AssignPosition();
 		UpdateToMorton();
 		isDown_ = false;
+		targetPlayer_ = nullptr;
 	}
 }

@@ -20,13 +20,12 @@ bool ActMove::Think(ObjPlayer& my) {
 	float _comparison = 99.0f;
 
 	DirectX::XMFLOAT2 _myPosition = my.myPosition();
-	ObjectBase* _targetPlayer	= ObjectManager::TheClosestPlayer(my.myObjectID(), _myPosition, _comparison);
-	ObjectBase* _targetBall		= my.GetInstructor()->GetNearestBall(_myPosition);
+	ObjectBase* _targetPlayer	= my.GetTargetPlayer();
+	ObjectBase* _targetBall		= my.GetBallsInstructor()->GetNearestBall(_myPosition);
 
 	if (_targetPlayer != nullptr) {
 		if (((ObjPlayer*)_targetPlayer)->HasBall()) {
-			// 相手がボールを持っているなら
-			// 逃げる方向を決める
+			// 相手がボールを持っているなら、逃げる方向を決める
 			SeekEscapeDirection(_targetPlayer->myDirection());
 			return true;
 		}
@@ -39,8 +38,7 @@ bool ActMove::Think(ObjPlayer& my) {
 	
 	if (_targetBall != nullptr) {
 		if (((ObjBall*)_targetBall)->GetOwnerID() != -1) {
-			// 対象のボールが「投げられたボール」なら
-			// 方向ベクトルの向きを決める
+			// 対象のボールが「投げられたボール」なら、逃げる方向を決める
 			SeekEscapeDirection(_targetBall->myDirection());
 			return true;
 		}
