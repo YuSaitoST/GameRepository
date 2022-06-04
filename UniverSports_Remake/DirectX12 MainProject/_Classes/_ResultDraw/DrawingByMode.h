@@ -13,7 +13,6 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "DontDestroyOnLoad.h"
-#include "_Classes/_UI/_Serials/Serials.h"
 #include "_Classes/_FileNames/FileNames.h"
 
 class DrawingByMode {

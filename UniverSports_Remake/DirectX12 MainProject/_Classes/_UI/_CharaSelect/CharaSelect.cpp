@@ -2,7 +2,7 @@
 #include "LobbyScene.h"
 #include "DontDestroyOnLoad.h"
 #include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_ConstStrages/US2DLayer.h"
+#include "_Classes/_ConstStrages/UIPosition.h"
 #include "_Classes/_StandardCalculation/StandardCalculation.h"
 
 CharaSelect::CharaSelect() {
@@ -16,7 +16,7 @@ CharaSelect::CharaSelect() {
 
 void CharaSelect::Initialize(int index) {
 	choices_->Initialize();
-	ui_arrows_->Initialize(ARROW_R_X[index], ARROW_L_X[index], ARROW_Y);
+	ui_arrows_->Initialize(US2D::Pos::Get().LobbyParam().ARROW_R_X[index], US2D::Pos::Get().LobbyParam().ARROW_L_X[index], US2D::Pos::Get().LobbyParam().ARROW_Y);
 	se_decision_->Initialize(USFN_SOUND::SE::DECISION, SOUND_TYPE::SE, 0.0f);
 	se_cancel_->Initialize(USFN_SOUND::SE::CANCEL, SOUND_TYPE::SE, 0.0f);
 	se_warning_->Initialize(USFN_SOUND::SE::WARNING, SOUND_TYPE::SE, 0.0f);
@@ -70,11 +70,11 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 
 void CharaSelect::Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE entry, int index) {
 	ui_arrows_->Render(255);
-	DX9::SpriteBatch->DrawSimple(icon.Get(), XMFLOAT3(PICON_X[index], PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
-	DX9::SpriteBatch->DrawSimple(decisions.Get(), XMFLOAT3(INPUT_X[index], INPUT_Y, (int)US2D::Layer::LOBBY::UI_DECISIONS));
+	DX9::SpriteBatch->DrawSimple(icon.Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().PICON_X[index], US2D::Pos::Get().LobbyParam().PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
+	DX9::SpriteBatch->DrawSimple(decisions.Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().INPUT_X[index], US2D::Pos::Get().LobbyParam().INPUT_Y, (int)US2D::Layer::LOBBY::UI_DECISIONS));
 
 	if (isDecision_)
-		DX9::SpriteBatch->DrawSimple(entry.Get(), XMFLOAT3(ENTRY_X[index], ENTRY_Y, (int)US2D::Layer::LOBBY::UI_ENTRY));
+		DX9::SpriteBatch->DrawSimple(entry.Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().ENTRY_X[index], US2D::Pos::Get().LobbyParam().ENTRY_Y, (int)US2D::Layer::LOBBY::UI_ENTRY));
 }
 
 /**

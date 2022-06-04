@@ -11,7 +11,6 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include "NextScene.h"
-#include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_MoviePlayer/MoviePlayer.h"
 
 /***

@@ -1,6 +1,7 @@
 #include "IconAnimator.h"
 #include "DontDestroyOnLoad.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/UIPosition.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
 bool IconAnimator::display_(false);
@@ -35,5 +36,5 @@ void IconAnimator::Update(const float deltaTime) {
 }
 
 void IconAnimator::Render(const int lifeCount, int index) {
-	icon_[index]->Render(lifeCount, alpha_, POS_LEFTICON[index]);
+	icon_[index]->Render(lifeCount, alpha_, US2D::Pos::Get().MainParam().LIFEICON_LPOS[index]);
 }

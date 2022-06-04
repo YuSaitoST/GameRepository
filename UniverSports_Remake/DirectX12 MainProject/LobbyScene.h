@@ -59,13 +59,7 @@ private:
 
 private:
 	static const int	PLAYER			= 4;
-	const int			VIEW_X			= 288;
-	const int			VIEW_Y			= 98;
-	const int			VIEW_W			= 720;
-	const int			VIEW_H			= 403;
 	const float			SPEED_FADE[3]	= { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
-	const float			TEAM_COL_X[4]	= { 84.0f, 375.0f, 676.0f, 969.0f };
-	const float			TEAM_COL_Y		= 493.5f;
 	const float			MV_SCALE		= 0.5625f;
 	const float			MV_POS_X		= 288.0f;
 	const float			MV_POS_Y		= 96.0;

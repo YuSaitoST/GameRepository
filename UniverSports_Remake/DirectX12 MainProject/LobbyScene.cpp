@@ -8,7 +8,7 @@
 #include "SceneFactory.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
-#include "_Classes/_ConstStrages/US2DLayer.h"
+#include "_Classes/_ConstStrages/UIPosition.h"
 
 #ifndef _DEBUG
 #pragma comment (lib, "BulletDynamics.lib")
@@ -125,7 +125,10 @@ void LobbyScene::LoadAssets()
 
 	DXTK->Direct3D9->SetRenderState(NormalizeNormals_Enable);
 
-	D3DVIEWPORT9 _view{ VIEW_X, VIEW_Y, VIEW_W, VIEW_H, 0.0f, 1.0f };
+	D3DVIEWPORT9 _view{ 
+		US2D::Pos::Get().LobbyParam().VIEW_X, US2D::Pos::Get().LobbyParam().VIEW_Y,
+		US2D::Pos::Get().LobbyParam().VIEW_W, US2D::Pos::Get().LobbyParam().VIEW_H,
+		0.0f, 1.0f };
 	DXTK->Device9->SetViewport(&_view);
 
 	sp_bg			= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::LOBBY_BG.c_str());
@@ -237,7 +240,11 @@ void LobbyScene::Render()
 	DXTK->Direct3D9->Clear(DX9::Colors::RGBA(0, 0, 0, 255));  // 画面をクリア
 	DXTK->Direct3D9->BeginScene();  // シーンの開始を宣言
 
-	D3DVIEWPORT9 _view{ VIEW_X,VIEW_Y,VIEW_W,VIEW_H, 0.0f,1.0f };
+	D3DVIEWPORT9 _view{ 
+		US2D::Pos::Get().LobbyParam().VIEW_X, US2D::Pos::Get().LobbyParam().VIEW_Y,
+		US2D::Pos::Get().LobbyParam().VIEW_W, US2D::Pos::Get().LobbyParam().VIEW_H,
+		0.0f,1.0f 
+	};
 	DXTK->Device9->SetViewport(&_view);
 
 	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
@@ -259,7 +266,7 @@ void LobbyScene::Render()
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
 	Render_String();
-	bg_movie_->Render(XMFLOAT3(MV_POS_X, MV_POS_Y, (int)US2D::Layer::LOBBY::BG_MOVIE), MV_SCALE);
+	bg_movie_->Render(XMFLOAT3(US2D::Pos::Get().LobbyParam().VIEW_X, US2D::Pos::Get().LobbyParam().VIEW_Y, (int)US2D::Layer::LOBBY::BG_MOVIE), MV_SCALE);
 	blackOut_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::LOBBY::BG_SPRITE));
 
@@ -271,8 +278,8 @@ void LobbyScene::Render()
 	// チームカラーの表示
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
 		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
-			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), XMFLOAT3(TEAM_COL_X[_i		], TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
-			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), XMFLOAT3(TEAM_COL_X[_i + 1	], TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().TEAM_COL_X[_i		], US2D::Pos::Get().LobbyParam().TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
+			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().TEAM_COL_X[_i + 1	], US2D::Pos::Get().LobbyParam().TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
 		}
 	}
 

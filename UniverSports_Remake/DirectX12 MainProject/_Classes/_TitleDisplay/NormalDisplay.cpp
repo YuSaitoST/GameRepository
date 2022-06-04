@@ -1,7 +1,8 @@
 #include "NormalDisplay.h"
 #include "DontDestroyOnLoad.h"
+#include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_ConstStrages/US2DLayer.h"
+#include "_Classes/_ConstStrages/UIPosition.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
@@ -22,17 +23,13 @@ void NormalDisplay::Initialize() {
 
 	mode_choices_->Initialize();
 	cursor_->Initialize();
-	ui_arrows_->Initialize(ARROW_POS_R_X, ARROW_POS_L_X, ARROW_POS_Y);
+	ui_arrows_->Initialize(US2D::Pos::Get().TitleParam().RightArrowX, US2D::Pos::Get().TitleParam().LeftArrowX, US2D::Pos::Get().TitleParam().ArrowY);
 	operate_->Initialize();
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
 
-	/*
-		選択肢のテキストを初期化
-		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
-	*/
 	for (int _u = 0; _u < CHOICES; ++_u) {
-		nowText_[_u][0].Initialize(_u, DirectX::XMFLOAT3(TEXT_POS_X, UI_TEXT_Y[_u], (int)US2D::Layer::TITLE::UI_TEXT));
-		nowText_[_u][1].Initialize(_u, DirectX::XMFLOAT3(TEXT_POS_X, UI_TEXT_Y[_u], (int)US2D::Layer::TITLE::UI_TEXT));
+		nowText_[_u][0].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
+		nowText_[_u][1].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
 	}
 
 	// 最初に選択状態にする選択肢を代入

@@ -23,6 +23,4 @@ public:
 
 private:
 	DX9::SPRITE sprite_;
-
-	const int SIZE = 40;
 };

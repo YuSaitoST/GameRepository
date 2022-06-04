@@ -31,12 +31,13 @@ private:
 	//! 背景動画
 	std::unique_ptr<MoviePlayer> movie_;
 	
+	//! ワイヤーの画像リスト
+	std::vector<DX9::SPRITE> sp_wireList_;
+
 	//! ワープホール画像
 	DX9::SPRITE sp_hole_;
 
 	//! 座標
 	float sprite_z_;
 
-	//! ワイヤーの画像リスト
-	std::vector<DX9::SPRITE> sp_wireList_;
 };

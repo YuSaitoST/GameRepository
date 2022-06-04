@@ -43,14 +43,6 @@ public:
 	GameProgression GetGameProgression() const { return gameParams_; }
 	Player GetPlayerParam() const { return playerParam_; }
 
-	//float PL_SCALE;
-	//float PL_SPEED_MAX;
-	//float PL_SPEED_TURN;
-	//float PL_JET_MAX;
-	//float PL_POWER_JET;
-	//float PL_ReSponeTime;
-	//float PL_InvincibleTime;
-
 	float JT_SCALE[2];
 	float JT_MOVEMENT_NOMAL;
 	float JT_MOVEMENT_ACCEL;
