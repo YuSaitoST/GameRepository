@@ -32,7 +32,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	SetMember(PLAYER, COLLI_TYPE::SPHRER, pos, r);
 
 	physics_		= std::make_unique<btObject>(pos, 0.8f, 0.0f, 1.0f);
-	rotate_			= Vector2(0.0f, GAME_CONST.Player_FacingRight);
+	rotate_			= Vector2(0.0f, PLAYER_PARAM.Player_FacingRight);
 	myBallID_		= -1;
 	hasBall_		= false;
 	isDown_			= false;
@@ -81,7 +81,7 @@ void ObjPlayer::LoadAssets(std::wstring file_name) {
 	eff_down_->LoadAsset(L"_Effects\\_Down\\HITeffect.efk");
 
 	CreateModel(file_name);
-	rotate_		= Vector2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
+	rotate_		= Vector2(strategy_->GetRotateX(), PLAYER_PARAM.Player_FacingRight);
 	forward_ = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 	r_			= model_->GetBoundingSphere().Radius;
 	
@@ -166,7 +166,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 
 			// “–‚½‚è”»’è‚ðÁ‚·‚½‚ß‚ÉAˆê’U–¾‚ç‚©‚ÉêŠO‚ÈˆÊ’u‚ÖˆÚ“®‚³‚¹‚é
 			SetTransforms(Vector2(99.0f, 99.0f), rotate_);
-			pos_ = Vector2(GAME_CONST.S_POS[id_my_].x, GAME_CONST.S_POS[id_my_].y);
+			pos_ = Vector2(PLAYER_PARAM.START_POS[id_my_].x, PLAYER_PARAM.START_POS[id_my_].y);
 
 			isDown_ = true;
 			targetPlayer_ = nullptr;
@@ -305,7 +305,7 @@ void ObjPlayer::Playing(const float deltaTime) {
 	barrier_->Update(deltaTime);
 
 	AssignPosition();
-	rotate_ = XMFLOAT2(strategy_->GetRotateX(), GAME_CONST.Player_FacingRight);
+	rotate_ = XMFLOAT2(strategy_->GetRotateX(), PLAYER_PARAM.Player_FacingRight);
 	forward_ = XMFLOAT2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 
 	FIELD::ClampLoop(pos_);

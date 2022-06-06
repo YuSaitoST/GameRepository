@@ -11,6 +11,9 @@
 // Initialize member variables.
 TitleScene::TitleScene()
 {
+	//パラメーターの読み込み
+	GAME_CONST.Initialize();
+
 	DontDestroy->NowScene_ = (int)NextScene::TitleScene;
 	DontDestroy->GameMode_.SelectMode(GAMEMODE::NONE_GAMEMODE);
 
@@ -20,6 +23,8 @@ TitleScene::TitleScene()
 	bgm_			= std::make_unique<SoundPlayer>();
 
 	display_		= nullptr;
+	disp_normal_	= new NormalDisplay();
+	disp_demo_		= new DemoDisplay();
 	displayMode_	= DISPLAYMODE::DISPLAY_NORMAL;
 }
 
@@ -29,9 +34,6 @@ void TitleScene::Initialize()
 	//使用するコア数を指定
 	omp_set_num_threads(4);
 
-	//パラメーターの読み込み
-	GAME_CONST.Initialize();
-
 	//FPS指定
 	DXTK->SetFixedFrameRate(60);
 	
@@ -39,8 +41,8 @@ void TitleScene::Initialize()
 	bgm_->Initialize(USFN_SOUND::BGM::TITLE, SOUND_TYPE::BGM, 0.0f);
 
 	//画面表示の初期化
-	disp_normal_.Initialize();
-	disp_demo_.Initialize();
+	disp_normal_->Initialize();
+	disp_demo_->Initialize();
 
 	//ゲーム進行関連の変数の初期化
 	DontDestroy->Survivor_.Reset();
@@ -69,8 +71,8 @@ void TitleScene::LoadAssets()
 	uploadResourcesFinished.wait();
 
 	//画面表示に使用するファイルの読み込み
-	disp_normal_.LoadAssets();
-	disp_demo_.LoadAssets();
+	disp_normal_->LoadAssets();
+	disp_demo_->LoadAssets();
 
 	//画面表示の設定
 	SwitchState(displayMode_);
@@ -112,16 +114,16 @@ NextScene TitleScene::Update(const float deltaTime)
 	//入力状態を調べる
 	Press.Accepts();
 
-	//画面上の更新
-	NextScene _next = display_->Update(deltaTime);
-
 	//表示の変更条件を満たしていれば、表示状態を変更する
 	if (display_->IsChange()) {
 		display_->Reset();
 		displayMode_ = (displayMode_ == DISPLAYMODE::DISPLAY_NORMAL) ? DISPLAYMODE::DISPLAY_DEMO : DISPLAYMODE::DISPLAY_NORMAL;
 		SwitchState(displayMode_);
 	}
-	
+
+	//画面上の更新
+	NextScene _next = display_->Update(deltaTime);
+
 	return _next;
 }
 
@@ -158,8 +160,8 @@ void TitleScene::Render()
 
 void TitleScene::SwitchState(DISPLAYMODE mode) {
 	switch (mode) {
-		case DISPLAYMODE::DISPLAY_NORMAL: display_ = &disp_normal_; break;
-		case DISPLAYMODE::DISPLAY_DEMO	: display_ = &disp_demo_;	break;
+		case DISPLAYMODE::DISPLAY_NORMAL: display_ = disp_normal_;	break;
+		case DISPLAYMODE::DISPLAY_DEMO	: display_ = disp_demo_;	break;
 		default							: assert(!"TitleScene::SwitchState : 不正な状態です");
 	}
 

@@ -55,7 +55,7 @@ void ObjBall::Initialize(const int id) {
 
 void ObjBall::LoadAssets(DX9::MODEL& model) {
 	collision_->SetColli(model->GetBoundingSphere());
-	collision_->SetColliScale(2.1f);
+	collision_->SetColliScale(BALL_PARAM.COL_SCALE);
 	
 	r_ = model->GetBoundingSphere().Radius;
 }
@@ -143,7 +143,7 @@ void ObjBall::WasCaught(const int ownerID) {
 void ObjBall::WasThrown(Vector2 forward) {
 	forward_ = forward;
 	isInPlayerHands_ = false;
-	AddPower(Vector3(forward_.x, forward_.y, 0.0f), GAME_CONST.BA_SPEED_SHOT);
+	AddPower(Vector3(forward_.x, forward_.y, 0.0f), BALL_PARAM.SPEED_SHOT);
 }
 
 /**
@@ -173,5 +173,5 @@ void ObjBall::BallBreak() {
 	id_owner_ = -1;
 	isBreak_ = true;
 	isInPlayerHands_ = false;
-	AssignTransform(Vector3(FIELD::SIDE_X, FIELD::SIDE_Y, 0.0f), Vector2::Zero);
+	AssignTransform(Vector3(FIELD::HALF_X, FIELD::HALF_Y, 0.0f), Vector2::Zero);
 }

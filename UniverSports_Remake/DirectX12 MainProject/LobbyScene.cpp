@@ -7,8 +7,6 @@
 #include "Base/DX12Effekseer.h"
 #include "SceneFactory.h"
 #include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_ConstStrages/ConstStorages.h"
-#include "_Classes/_ConstStrages/UIPosition.h"
 
 #ifndef _DEBUG
 #pragma comment (lib, "BulletDynamics.lib")
@@ -20,7 +18,7 @@
 #pragma comment (lib, "LinearMath_Debug.lib")
 #endif
 
-ObjPlayer* LobbyScene::player_[PLAYER];
+ObjPlayer* LobbyScene::player_[OBJECT_MAX::PLAYER];
 
 // Initialize member variables.
 LobbyScene::LobbyScene()
@@ -46,11 +44,12 @@ LobbyScene::LobbyScene()
 	bg_movie_					= std::make_unique<MoviePlayer>();
 	bgm_						= std::make_unique<SoundPlayer>();
 
-	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
-		player_[_i]				= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i], 1.0f);
+	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+	for (int _i = 0; _i <= _MAX; _i += 2) {
+		player_[_i]				= new ObjPlayer(OPERATE_TYPE::MANUAL, PLAYER_PARAM.START_POS[_i], 1.0f);
 		charaSelect_[_i]		= std::make_unique<CharaSelect>();
 
-		player_[_i + 1]			= new ObjPlayer(OPERATE_TYPE::MANUAL, GAME_CONST.S_POS[_i + 1], 1.0f);
+		player_[_i + 1]			= new ObjPlayer(OPERATE_TYPE::MANUAL, PLAYER_PARAM.START_POS[_i + 1], 1.0f);
 		charaSelect_[_i + 1]	= std::make_unique<CharaSelect>();
 	}
 
@@ -76,7 +75,8 @@ void LobbyScene::Initialize()
 	std::fill(std::begin(DontDestroy->TeamID),		std::end(DontDestroy->TeamID),		-1);
 
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
-		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+		const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+		for (int _i = 0; _i <= _MAX; _i += 2) {
 			GiveTeamID(_i);
 			GiveTeamID(_i + 1);
 		}
@@ -87,7 +87,8 @@ void LobbyScene::Initialize()
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 
-	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+	for (int _i = 0; _i <= _MAX; _i += 2) {
 		player_[_i]->Initialize(_i);
 		player_[_i]->SetInstructor(nullptr, nullptr);
 		physics_world_->addRigidBody(player_[_i]->myRigidbody());
@@ -140,7 +141,8 @@ void LobbyScene::LoadAssets()
 	sp_teamCol_[0]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEAM_A.c_str());
 	sp_teamCol_[1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::TEAM_B.c_str());
 
-	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+	for (int _i = 0; _i <= _MAX; _i += 2) {
 		sp_playerIcon[_i]		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i].c_str());
 		player_[_i]->LoadAssets(USFN_MOD::PLAYER[_i]);
 		charaSelect_[_i]->LoadAssets(sp_right, sp_left);
@@ -165,7 +167,7 @@ void LobbyScene::Terminate()
 
 	// TODO: Add your Termination logic here.
 
-	for (int _i = PLAYER - 1; 0 <= _i; --_i)
+	for (int _i = OBJECT_MAX::PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(player_[_i]->myRigidbody());
 
 	delete physics_world_;
@@ -202,7 +204,8 @@ NextScene LobbyScene::Update(const float deltaTime)
 	bg_movie_->Update();
 	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 
-	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+	for (int _i = 0; _i <= _MAX; _i += 2) {
 		if (charaSelect_[_i]->IsDecision())
 			player_[_i]->Update(deltaTime);
 
@@ -225,7 +228,8 @@ NextScene LobbyScene::Update(const float deltaTime)
 			return NextScene::Continue;
 	}
 	else {
-		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+		const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+		for (int _i = 0; _i <= _MAX; _i += 2) {
 			charaSelect_[_i]->Update(deltaTime, _i);
 			charaSelect_[_i + 1]->Update(deltaTime, _i + 1);
 		}
@@ -247,7 +251,8 @@ void LobbyScene::Render()
 	};
 	DXTK->Device9->SetViewport(&_view);
 
-	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+	for (int _i = 0; _i <= _MAX; _i += 2) {
 		if (charaSelect_[_i]->IsDecision())
 			player_[_i]->Render();
 
@@ -266,18 +271,18 @@ void LobbyScene::Render()
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
 
 	Render_String();
-	bg_movie_->Render(XMFLOAT3(US2D::Pos::Get().LobbyParam().VIEW_X, US2D::Pos::Get().LobbyParam().VIEW_Y, (int)US2D::Layer::LOBBY::BG_MOVIE), MV_SCALE);
+	bg_movie_->Render(XMFLOAT3(US2D::Pos::Get().LobbyParam().VIEW_X, US2D::Pos::Get().LobbyParam().VIEW_Y, (int)US2D::Layer::LOBBY::BG_MOVIE), GAMES_PARAM.LB_MV_SCALE);
 	blackOut_->Render();
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::LOBBY::BG_SPRITE));
 
-	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+	for (int _i = 0; _i <= _MAX; _i += 2) {
 		charaSelect_[_i		]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i		]], sp_decisions[charaSelect_[_i	]->IsDecision()], sp_entry, _i		);
 		charaSelect_[_i + 1	]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i + 1	]], sp_decisions[charaSelect_[_i + 1]->IsDecision()], sp_entry, _i + 1	);
 	}
 
 	// チームカラーの表示
 	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
-		for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+		for (int _i = 0; _i <= _MAX; _i += 2) {
 			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i		]].Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().TEAM_COL_X[_i		], US2D::Pos::Get().LobbyParam().TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
 			DX9::SpriteBatch->DrawSimple(sp_teamCol_[DontDestroy->TeamID[_i + 1	]].Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().TEAM_COL_X[_i + 1	], US2D::Pos::Get().LobbyParam().TEAM_COL_Y, (int)US2D::Layer::LOBBY::UI_TEAMCOLOR));
 		}
@@ -340,12 +345,13 @@ int LobbyScene::HowManyValuesIn(const int* list, int size, int findNum) {
 bool LobbyScene::AllDecision() {
 	int count = 0;
 
-	for (int _i = 0; _i <= PLAYER * 0.5f; _i += 2) {
+	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
+	for (int _i = 0; _i <= _MAX; _i += 2) {
 		count += charaSelect_[_i]->IsDecision();
 		count += charaSelect_[_i + 1]->IsDecision();
 	}
 
-	allSet_ = (count == PLAYER);
+	allSet_ = (count == OBJECT_MAX::PLAYER);
 
 	return allSet_;
 }

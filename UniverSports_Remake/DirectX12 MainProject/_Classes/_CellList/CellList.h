@@ -26,7 +26,9 @@ public:
 
 private:
 	//! 分割レベルの最大値
-	const int N = 3;
+	const int N = 2;
+
 	//! 線形空間リスト
 	Cell* cpList_;
+
 };

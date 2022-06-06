@@ -28,6 +28,7 @@ void ObjectBase::SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, flo
 	this->obj_type_ = kind;
 	this->pos_.x = pos.x;
 	this->pos_.y = pos.y;
+	this->r_ = r;
 	if (this->cp_ == nullptr)
 		this->cp_ = new Cell(this);  // Š‘®‚·‚é‹óŠÔ‚ðŠ„‚è“–‚Ä‚é‚½‚ß
 

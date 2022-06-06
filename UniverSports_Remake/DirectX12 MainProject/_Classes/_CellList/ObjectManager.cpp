@@ -11,7 +11,7 @@ ObjectManager::ObjectManager() {
 	plInstructor_	= new PlayersInstructor();
 	icon_animator_	= std::make_unique<IconAnimator>();
 
-	const int _WIRE = N_WIRE * 0.5f;
+	const int _WIRE = OBJECT_MAX::WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
 		obj_wire_[_i]		= new ObjWire(POS_WIRE[_i], 1.0f);
 		obj_wire_[_i + 1]	= new ObjWire(POS_WIRE[_i + 1], 1.0f);
@@ -19,7 +19,7 @@ ObjectManager::ObjectManager() {
 }
 
 ObjectManager::~ObjectManager() {
-	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
+	for (int _i = OBJECT_MAX::WIRE - 1; 0 <= _i; --_i)
 		delete obj_wire_[_i];
 
 	delete plInstructor_;
@@ -38,7 +38,7 @@ void ObjectManager::Initialize() {
 
 	playerList_->SetInstructors(ballsInstructor.release(), plInstructor_);
 
-	const int _WIRE = N_WIRE * 0.5f;
+	const int _WIRE = OBJECT_MAX::WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
 		obj_wire_[_i]->Initialize(_i);
 		obj_wire_[_i + 1]->Initialize(_i + 1);
@@ -46,7 +46,7 @@ void ObjectManager::Initialize() {
 }
 
 void ObjectManager::LoadAssets() {
-	const int _WIRE = N_WIRE * 0.5f;
+	const int _WIRE = OBJECT_MAX::WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
 		obj_wire_[_i]->LoadAssets(L"");
 		obj_wire_[_i + 1]->LoadAssets(L"");
@@ -61,7 +61,7 @@ void ObjectManager::Update(const float deltaTime) {
 	playerList_->Update(deltaTime);
 	ballList_->Update(deltaTime);
 
-	const int _WIRE = N_WIRE * 0.5f;
+	const int _WIRE = OBJECT_MAX::WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
 		obj_wire_[_i]->Update(deltaTime);
 		obj_wire_[_i + 1]->Update(deltaTime);
@@ -99,7 +99,7 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 	playerList_->AddWorld(physics_world_);
 	ballList_->AddWorld(physics_world_);
 
-	const int _WIRE = N_WIRE * 0.5f;
+	const int _WIRE = OBJECT_MAX::WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
 		physics_world_->addRigidBody(obj_wire_[_i]->myRigidbody());
 		physics_world_->addRigidBody(obj_wire_[_i + 1]->myRigidbody());
@@ -111,7 +111,7 @@ void ObjectManager::AddWorld(btDynamicsWorld* physics_world_) {
 * @param physics_world ï®óùââéZÇÃÉèÅ[ÉãÉh
 */
 void ObjectManager::RemoveWorld(btDynamicsWorld* physics_world_) {
-	for (int _i = N_WIRE - 1; 0 <= _i; --_i)
+	for (int _i = OBJECT_MAX::WIRE - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(obj_wire_[_i]->myRigidbody());
 	
 	ballList_->RemoveWorld(physics_world_);

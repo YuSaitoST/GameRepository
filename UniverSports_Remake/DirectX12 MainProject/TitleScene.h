@@ -50,8 +50,8 @@ private:
 	std::unique_ptr<SoundPlayer>	bgm_;
 
 	DisplayBase*					display_;
-	NormalDisplay					disp_normal_;
-	DemoDisplay						disp_demo_;
+	NormalDisplay*					disp_normal_;
+	DemoDisplay*					disp_demo_;
 
 	DISPLAYMODE						displayMode_;
 };

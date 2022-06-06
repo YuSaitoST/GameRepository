@@ -31,6 +31,8 @@ private:
 	//! アンビエント色
 	const D3DCOLORVALUE P_AMBIENT = D3DCOLORVALUE(0.35f, 0.35f, 0.35f, 1.0f);
 
+	const float COLLIDER_SIZE = 1.8f;
+
 public:
 	/**
 	* @enum COLOR_TYPE

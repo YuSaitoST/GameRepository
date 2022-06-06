@@ -64,8 +64,8 @@ public:
 	*/
 	void ReDecision(const int plID, const std::wstring fileName) {
 		CreateModel(fileName);
-		pos_ = XMFLOAT2(GAME_CONST.S_POS[plID].x, GAME_CONST.S_POS[plID].y);
-		rotate_ = XMFLOAT2(0.0f, GAME_CONST.Player_FacingRight);
+		pos_ = XMFLOAT2(PLAYER_PARAM.START_POS[plID].x, PLAYER_PARAM.START_POS[plID].y);
+		rotate_ = XMFLOAT2(0.0f, PLAYER_PARAM.Player_FacingRight);
 		SetTransforms(pos_, rotate_);
 	}
 

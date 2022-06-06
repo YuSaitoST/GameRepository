@@ -23,20 +23,21 @@ int BitCalculation::PointToMorton(DirectX::XMFLOAT2 pos) {
 	const int _CN = (int)std::pow(2, BitCalculation::DivisionLevel);
 
 	//格子の一辺の長さ
-	const float _sx = 1280.0f / _CN;
-	const float _sy = 720.0f / _CN;
+	const float _sx = FIELD::SIZE_X / _CN;
+	const float _sy = FIELD::SIZE_Y / _CN;
 
 	//格子の座標
-	const int _kx = (int)(pos.x / _sx);
-	const int _ky = (int)(pos.y / _sy);
+	const int _kx = (int)(std::min((pos.x + FIELD::HALF_X), FIELD::SIZE_X) / _sx);
+	const int _ky = (int)(std::min((pos.y + FIELD::HALF_Y), FIELD::SIZE_Y) / _sy);
 
-	////右端をエリア内にする(NOR)
-	//int _norx = _kx | (1 << _CN); _norx = ~_norx;
-	//int _nory = _ky | (1 << _CN); _nory = ~_nory;
+	////右端をエリア内にする
+	const int _offSideBits = (1 << BitCalculation::DivisionLevel);
+	int _clampx = (_kx | _offSideBits); _clampx -= _offSideBits;
+	int _clampy = (_ky | _offSideBits); _clampy -= _offSideBits;
 
 	//bit操作
-	const int _bx = BitSlide(_kx);
-	const int _by = BitSlide(_ky);
+	const int _bx = BitSlide(_clampx);
+	const int _by = BitSlide(_clampy);
 
 	//OR演算して返す
 	return (_bx | (_by << 1));

@@ -6,16 +6,13 @@
 
 #include "Scene.h"
 #include <btBulletDynamicsCommon.h>
-
 #include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_MoviePlayer/MoviePlayer.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
-
 #include "_Classes/_MainCamera/MainCamera.h"
 #include "_Classes/_MainLight/MainLight.h"
-
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
-
 #include "_Classes/_UI/_CharaSelect/CharaSelect.h"
 #include "_Classes/_UI/_CountTimer/CountTimer.h"
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
@@ -58,13 +55,9 @@ private:
 	bool AllDecision();
 
 private:
-	static const int	PLAYER			= 4;
 	const float			SPEED_FADE[3]	= { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
-	const float			MV_SCALE		= 0.5625f;
-	const float			MV_POS_X		= 288.0f;
-	const float			MV_POS_Y		= 96.0;
 
-	static ObjPlayer* player_[PLAYER];
+	static ObjPlayer* player_[OBJECT_MAX::PLAYER];
 
 	std::mt19937						randomEngine_;
 	std::uniform_int_distribution<>		newTeamID_;
@@ -81,8 +74,8 @@ private:
 	DX9::SPRITE							sp_left;
 	DX9::SPRITE							sp_decisions[2];
 	DX9::SPRITE							sp_entry;
-	DX9::SPRITE							sp_playerIcon[PLAYER];
-	DX9::SPRITE							sp_teamCol_[PLAYER / 2];
+	DX9::SPRITE							sp_playerIcon[OBJECT_MAX::PLAYER];
+	DX9::SPRITE							sp_teamCol_[OBJECT_MAX::PLAYER / 2];
 
 	btDynamicsWorld*					physics_world_;
 	btDefaultCollisionConfiguration*	collision_config_;
@@ -93,7 +86,7 @@ private:
 	std::unique_ptr<MoviePlayer>		bg_movie_;
 	std::unique_ptr<SoundPlayer>		bgm_;
 
-	std::unique_ptr<CharaSelect>		charaSelect_[PLAYER];
+	std::unique_ptr<CharaSelect>		charaSelect_[OBJECT_MAX::PLAYER];
 	std::unique_ptr<CountTimer>			timer_goNext_;
 	std::unique_ptr<BlackOut>			blackOut_;
 

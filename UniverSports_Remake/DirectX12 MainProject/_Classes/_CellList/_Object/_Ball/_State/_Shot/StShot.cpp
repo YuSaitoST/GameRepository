@@ -13,8 +13,8 @@ void StShot::Update(ObjBall* ball) {
 	const XMFLOAT2& _pos = ball->myPosition();
 	ball->AssignTransform(XMFLOAT3(_pos.x, _pos.y, _pos_z), XMFLOAT2(0.0f, 0.0f));
 
-	const bool _isFieldOut = FIELD::IsOut(_pos, GAME_CONST.BA_SCALE);
-	const bool _isGotStuck = std::abs(position_.x) == FIELD::SIDE_X;
+	const bool _isFieldOut = FIELD::IsOut(_pos, BALL_PARAM.MOD_SCALE);
+	const bool _isGotStuck = std::abs(position_.x) == FIELD::HALF_X;
 
 	if (_isFieldOut || _isGotStuck || ball->IsBreaked() || (ball->GetOwnerID() == -1)) {
 		ball->FlagResets();

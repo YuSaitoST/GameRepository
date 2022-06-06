@@ -12,11 +12,13 @@ void StCautch::Initialize() {
 
 void StCautch::Update(ObjBall* ball) {
 	if (!ball->IsInPlayerHands()) {
+		//“Š‚°‚ç‚ê‚½‚ç
 		StShot* shot = new StShot();
 		ball->SwitchState(shot);
 		return;
 	}
 	else if (ball->IsBreaked()) {
+		//Ž‚¿Žå‚ª‚â‚ç‚ê‚½‚ç
 		ball->FlagResets();
 		ball->SetOwnerID(-1);
 		std::unique_ptr<StFloat> flo = std::make_unique<StFloat>();
@@ -26,5 +28,5 @@ void StCautch::Update(ObjBall* ball) {
 	}
 
 	//’Ç”ö
-	ball->Following(Z_MIN);
+	ball->Following(BALL_PARAM.Z_CAUTCH);
 }

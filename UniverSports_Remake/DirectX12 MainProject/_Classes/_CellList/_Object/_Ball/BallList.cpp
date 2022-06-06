@@ -1,10 +1,11 @@
 #include "BallList.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 #include "DontDestroyOnLoad.h"
 
 BallList::BallList() {
 	// 使用するボールの個数を決める
-	N_BALL = BALLS[(int)DontDestroy->GameMode_.SelectionMode()];
+	N_BALL = BALL_PARAM.MAX[(int)DontDestroy->GameMode_.SelectionMode()];
 
 	// メモリ確保
 	list_.reserve(N_BALL);
@@ -25,7 +26,7 @@ void BallList::Initialize() {
 
 void BallList::LoadAssets() {
 	model_ = DX9::Model::CreateFromFile(DXTK->Device9, USFN_MOD::BALL.c_str());
-	model_->SetScale(GAME_CONST.BA_SCALE);
+	model_->SetScale(BALL_PARAM.MOD_SCALE);
 	model_->SetMaterial(list_.at(0)->GetNomMaterial());
 
 	for (ObjBall* obj : list_)

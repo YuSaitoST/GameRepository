@@ -42,12 +42,12 @@ namespace US2D {
 		enum class MAIN {
 			UI_FINISH = -9999,
 			//BlackOut
+			UI_HOLE = -9997,
 			UI_COUNTDOWN = -1,
 			UI_LIFEICON = 1,
 			UI_GAUGE,
 			UI_GAUGE_FRAME,
 			UI_TIMER,
-			UI_HOLE,
 			UI_WIRE,
 			BG_MOVIE
 		};

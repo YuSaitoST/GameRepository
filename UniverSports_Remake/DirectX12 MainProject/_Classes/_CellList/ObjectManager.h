@@ -25,14 +25,12 @@ extern CellList cellList;
 
 class ObjectManager {
 private:
-	static const int N_WIRE		= 4;
-
 	const float FX = 32.0f;
 	const float FY = 18.0f;
 	const float X = FX - 5.25f + 1.25f;
 	const float Y = FY - 4.75f + 1.25f;
 
-	const SimpleMath::Vector3 POS_WIRE[N_WIRE] = {
+	const SimpleMath::Vector3 POS_WIRE[OBJECT_MAX::WIRE] = {
 		Vector3(-X, Y, 0.0f),
 		Vector3(X,Y,0.0f),
 		Vector3(X,-Y,0.0f),
@@ -61,11 +59,11 @@ private:
 	BallList* ballList_;
 	
 	//! ワイヤーリスト
-	ObjWire* obj_wire_[N_WIRE];
+	ObjWire* obj_wire_[OBJECT_MAX::WIRE];
 
 	//! プレイヤーのインストラクター
 	PlayersInstructor* plInstructor_;
-	std::unique_ptr<IconAnimator>		icon_animator_;
+	std::unique_ptr<IconAnimator> icon_animator_;
 
 	//! ボールのモデル
 	DX9::MODEL mod_ball_;

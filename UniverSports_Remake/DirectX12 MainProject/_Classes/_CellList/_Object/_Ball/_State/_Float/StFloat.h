@@ -1,5 +1,15 @@
+/**
+ * @file StFloat.h
+ * @brief ボールの浮遊状態クラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include <random>
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_CellList/_Object/_Ball/_State/BallState.h"
@@ -23,8 +33,8 @@ private:
 
 private:
 	std::mt19937							randomEngine;
-	std::uniform_int_distribution<>			pos_start_x;
-	std::uniform_int_distribution<>			pos_start_y;
+	std::uniform_real_distribution<float>	pos_start_x;
+	std::uniform_real_distribution<float>	pos_start_y;
 	std::uniform_real_distribution<float>	direct_x;
 	std::uniform_real_distribution<float>	direct_y;
 

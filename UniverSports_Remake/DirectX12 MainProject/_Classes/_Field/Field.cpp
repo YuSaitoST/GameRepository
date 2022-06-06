@@ -6,8 +6,8 @@
 * @param position チェックする座標
 */
 void FIELD::ClampLoop(DirectX::SimpleMath::Vector2& position) {
-	StandardCalculation::ValueLoop(position.x, -SIDE_X, SIDE_X);
-	StandardCalculation::ValueLoop(position.y, -SIDE_Y, SIDE_Y);
+	StandardCalculation::ValueLoop(position.x, -HALF_X, HALF_X);
+	StandardCalculation::ValueLoop(position.y, -HALF_Y, HALF_Y);
 }
 
 /**
@@ -17,8 +17,8 @@ void FIELD::ClampLoop(DirectX::SimpleMath::Vector2& position) {
 * @return 画面外に出たらtrue  内側ならfalse
 */
 bool FIELD::IsOut(DirectX::SimpleMath::Vector2 position, float raidus) {
-	const bool isOutX = (position.x + raidus < -SIDE_X) || (SIDE_X < position.x - raidus);
-	const bool isOutY = (position.y + raidus < -SIDE_Y) || (SIDE_Y < position.y - raidus);
+	const bool isOutX = (position.x + raidus < -HALF_X) || (HALF_X < position.x - raidus);
+	const bool isOutY = (position.y + raidus < -HALF_Y) || (HALF_Y < position.y - raidus);
 
 	return isOutX || isOutY;
 }

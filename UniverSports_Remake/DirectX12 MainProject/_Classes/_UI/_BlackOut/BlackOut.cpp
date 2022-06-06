@@ -1,6 +1,6 @@
 #include "BlackOut.h"
 #include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_ConstStrages/US2DLayer.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
 BlackOut::BlackOut() : sprite_(DX9::SPRITE()) {

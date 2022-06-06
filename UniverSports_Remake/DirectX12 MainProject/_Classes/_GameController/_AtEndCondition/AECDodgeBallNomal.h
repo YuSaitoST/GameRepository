@@ -18,5 +18,9 @@ public:
 	AECDodgeBallNomal() {}
 	virtual ~AECDodgeBallNomal() {}
 
+	/**
+	* @brief ƒQ[ƒ€‚ªI—¹‚µ‚½‚©‚ð•Ô‚·
+	* @return ƒQ[ƒ€‚ÌI—¹ó‘Ô
+	*/
 	virtual bool IsFined() override { return DontDestroy->Survivor_.RemainingNumberOfPlayer() <= 1; }
 };

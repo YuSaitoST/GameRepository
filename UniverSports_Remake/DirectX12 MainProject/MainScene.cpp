@@ -5,7 +5,6 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
-#include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_MainLight/MainLight.h"
 #include "_Classes/_FileNames/FileNames.h"
 

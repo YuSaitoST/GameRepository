@@ -1,18 +1,39 @@
+/**
+ * @file ConstStorage.h
+ * @brief パラメータークラス
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include "Base/pch.h"
 #include "Base/dxtk.h"
+#include "UIPosition.h"
 
+//マクロ
 #define GAME_CONST ConstStorageC::GetInstance()
 #define GAMES_PARAM ConstStorageC::GetInstance().GetGameProgression()
 #define PLAYER_PARAM ConstStorageC::GetInstance().GetPlayerParam()
+#define BALL_PARAM ConstStorageC::GetInstance().GetBallParam()
+#define THRUSTER_PARAM ConstStorageC::GetInstance().GetThrusterParam()
 
-using namespace DirectX::SimpleMath;
+namespace OBJECT_MAX {
+	const int PLAYER = 4;
+	const int WIRE = 4;
+
+}  //namespace OBJECT_MAX
 
 class ConstStorageC {
 private:
 	struct GameProgression {
-		const float TL_DEMO_PLAYBACK = 10.0f;
+		float TL_UI_DISPLAY;
+		float TL_TIME_LOGO_DISPLAY;
+		float TL_DEMO_PLAYBACK;
+		float LB_MV_SCALE;
 		float LB_TIME_AFTER_PREPARATION;
 		float MN_TIME_HANDBALL;
 		float FN_TIME_MOVE;
@@ -20,6 +41,9 @@ private:
 		float FN_TIME_FADEOUT;
 	};
 	struct Player {
+		float START_POS_X;
+		float START_POS_Y;
+		float Player_FacingRight;
 		float SCALE;
 		float SPEED_MAX_NORMAL;
 		float SPEED_MAX_BOOST;
@@ -27,10 +51,27 @@ private:
 		float POWER_THRUSTER;
 		float TIME_RESPONE;
 		float TIME_INVINCIBLE;
+
+		DirectX::XMFLOAT3 START_POS[OBJECT_MAX::PLAYER];
+	};
+	struct Thruster {
+		float SCALE[2];
+		float MOVEMENT_NOMAL;
+		float MOVEMENT_ACCEL;
+		float AMOUNT_OF_DECREASE;
+		float AMOUNT_OF_RECOVERY;
+	};
+	struct Ball {
+		float MAX[4];
+		float MOD_SCALE;
+		float COL_SCALE;
+		float SPEED_FLOAT;
+		float SPEED_SHOT;
+		float Z_CAUTCH;
 	};
 
 public:
-	ConstStorageC() {};
+	ConstStorageC() : gameParam_{ 0.0f }, playerParam_{ 0.0f }, ballParam_{ 0.0f }, thrusterParam_{ 0.0f } {};
 	virtual ~ConstStorageC() {};
 
 	static ConstStorageC& GetInstance()
@@ -40,40 +81,14 @@ public:
 	}
 
 	void Initialize();
-	GameProgression GetGameProgression() const { return gameParams_; }
+	GameProgression GetGameProgression() const { return gameParam_; }
 	Player GetPlayerParam() const { return playerParam_; }
-
-	float JT_SCALE[2];
-	float JT_MOVEMENT_NOMAL;
-	float JT_MOVEMENT_ACCEL;
-	float AMOUNT_OF_DECREASE;
-	float AMOUNT_OF_RECOVERY;
-
-	float BA_SCALE;
-	float BA_SPEED_FLOAT;
-	float BA_SPEED_SHOT;
-
-	const float TITLE_UI_DISPLAY = 0.5f;
-	const float	TITLE_TIME_LOGO_DISPLAY = 2.5f;
-
-	const float PL_POS_X = 13.0f;
-	const float PL_POS_Y = 6.0f;
-
-	const float Move_FirSpeed = 7.5;
-	
-	const int Player_MAX = 4;
-	const int Player_FacingRight = -90;
-
-	const int BALLMAX[4] = { 5,10,5,6 };
-
-	const Vector3 S_POS[4] = {
-		Vector3(-13.0f,6.0f,0.f),
-		Vector3(13.0f,6.0f,0.f),
-		Vector3(-13.0f,-6.0f,0.f),
-		Vector3(13.0f,-6.0f,0.f)
-	};
+	Ball GetBallParam() const { return ballParam_; }
+	Thruster GetThrusterParam() const { return thrusterParam_; }
 
 private:
-	GameProgression gameParams_;
+	GameProgression gameParam_;
 	Player playerParam_;
+	Ball ballParam_;
+	Thruster thrusterParam_;
 };

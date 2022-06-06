@@ -2,13 +2,12 @@
 #include "DontDestroyOnLoad.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_ConstStrages/UIPosition.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_UI/_Fade/Fade.h"
 
 NormalDisplay::NormalDisplay() : ui_alpha_(0.0f) {
 	se_decision_	= std::make_unique<SoundPlayer>();
-	time_start_		= std::make_unique<CountTimer>(GAME_CONST.TITLE_TIME_LOGO_DISPLAY);
+	time_start_		= std::make_unique<CountTimer>(GAMES_PARAM.TL_TIME_LOGO_DISPLAY);
 	time_demo_		= std::make_unique<CountTimer>(GAMES_PARAM.TL_DEMO_PLAYBACK);
 	cursor_			= std::make_unique<Cursor>();
 	mode_choices_	= std::make_unique<Choices>();
@@ -59,7 +58,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 
 	// タイトルの表示に合わせてUIをフェードインさせる
-	if (time_start_->NowTime() <= GAME_CONST.TITLE_UI_DISPLAY)
+	if (time_start_->NowTime() <= GAMES_PARAM.TL_UI_DISPLAY)
 		FADE::In(ui_alpha_, FADE::COLORMAX, deltaTime * SPEED_ALPHA);
 
 	// タイトルが表示されるまで操作不可

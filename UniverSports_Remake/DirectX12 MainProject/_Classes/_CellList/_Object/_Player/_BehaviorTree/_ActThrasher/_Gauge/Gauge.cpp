@@ -1,6 +1,6 @@
 #include "Gauge.h"
 #include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_ConstStrages/US2DLayer.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 
 Gauge::Gauge() :	position_(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)),
 					movement_decrease_(0.0f),
@@ -13,8 +13,8 @@ Gauge::Gauge() :	position_(DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f)),
 }
 
 void Gauge::Initialize() {
-	movement_decrease_	= MAX_GAUGE / GAME_CONST.AMOUNT_OF_DECREASE;
-	movement_recovery_	= MAX_GAUGE / GAME_CONST.AMOUNT_OF_RECOVERY;
+	movement_decrease_	= MAX_GAUGE / THRUSTER_PARAM.AMOUNT_OF_DECREASE;
+	movement_recovery_	= MAX_GAUGE / THRUSTER_PARAM.AMOUNT_OF_RECOVERY;
 	proportion_			= 1.0f;
 	gauge_				= MAX_GAUGE;
 	gauge_rect_x_		= MAX_GAUGE;

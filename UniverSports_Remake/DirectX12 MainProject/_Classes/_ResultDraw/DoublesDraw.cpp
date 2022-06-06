@@ -1,6 +1,5 @@
 #include "DoublesDraw.h"
 #include "_Classes/_ConstStrages/UIPosition.h"
-//#include "_Classes/_ConstStrages/US2DLayer.h"
 
 void DoublesDraw::Initialize() {
 	int _winPlayerID[2] = { -1,-1 };

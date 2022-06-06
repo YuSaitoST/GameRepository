@@ -42,15 +42,5 @@ public:
 	std::vector<ObjPlayer*> GetList() const { return list_; }
 
 private:
-	static const int N_PLAYER = 4;
-
-	const XMFLOAT3 POS_START[N_PLAYER] = {
-		XMFLOAT3(-GAME_CONST.PL_POS_X, GAME_CONST.PL_POS_Y, 0.0f),
-		XMFLOAT3(GAME_CONST.PL_POS_X,	GAME_CONST.PL_POS_Y, 0.0f),
-		XMFLOAT3(-GAME_CONST.PL_POS_X, -GAME_CONST.PL_POS_Y, 0.0f),
-		XMFLOAT3(GAME_CONST.PL_POS_X,  -GAME_CONST.PL_POS_Y, 0.0f)
-	};
-
-private:
 	std::vector<ObjPlayer*> list_;
 };
