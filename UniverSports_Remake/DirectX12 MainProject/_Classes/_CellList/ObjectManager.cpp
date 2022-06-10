@@ -6,25 +6,15 @@
 CellList cellList = CellList{};
 
 ObjectManager::ObjectManager() {
-	playerList_		= new PlayerList();
-	ballList_		= new BallList();
-	plInstructor_	= new PlayersInstructor();
+	playerList_		= std::make_unique<PlayerList>();
+	ballList_		= std::make_unique<BallList>();
 	icon_animator_	= std::make_unique<IconAnimator>();
 
 	const int _WIRE = OBJECT_MAX::WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {
-		obj_wire_[_i]		= new ObjWire(POS_WIRE[_i], 1.0f);
-		obj_wire_[_i + 1]	= new ObjWire(POS_WIRE[_i + 1], 1.0f);
+		obj_wire_[_i]		= std::make_unique<ObjWire>(WIRE_PARAM.POS[_i], 1.0f);
+		obj_wire_[_i + 1]	= std::make_unique<ObjWire>(WIRE_PARAM.POS[_i + 1], 1.0f);
 	}
-}
-
-ObjectManager::~ObjectManager() {
-	for (int _i = OBJECT_MAX::WIRE - 1; 0 <= _i; --_i)
-		delete obj_wire_[_i];
-
-	delete plInstructor_;
-	delete ballList_;
-	delete playerList_;
 }
 
 void ObjectManager::Initialize() {
@@ -32,11 +22,13 @@ void ObjectManager::Initialize() {
 	ballList_->Initialize();
 
 	//インストラクターの初期化
-	std::unique_ptr<BallsInstructor> ballsInstructor = std::make_unique<BallsInstructor>();
-	ballsInstructor->Initialize(ballList_->GetList());
-	plInstructor_->Initialize(playerList_->GetList());
+	std::unique_ptr<BallsInstructor> _ballsInstructor = std::make_unique<BallsInstructor>();
+	_ballsInstructor->Initialize(ballList_->GetList());
 
-	playerList_->SetInstructors(ballsInstructor.release(), plInstructor_);
+	std::unique_ptr<PlayersInstructor> _plInstructor = std::make_unique<PlayersInstructor>();
+	_plInstructor->Initialize(playerList_->GetList());
+
+	playerList_->SetInstructors(_ballsInstructor.release(), _plInstructor.release());
 
 	const int _WIRE = OBJECT_MAX::WIRE * 0.5f;
 	for (int _i = 0; _i <= _WIRE; _i += 2) {

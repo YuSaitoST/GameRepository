@@ -49,9 +49,9 @@ private:
 
 	std::unique_ptr<SoundPlayer>	bgm_;
 
-	DisplayBase*					display_;
-	NormalDisplay*					disp_normal_;
-	DemoDisplay*					disp_demo_;
+	std::unique_ptr<NormalDisplay>	disp_normal_;
+	std::unique_ptr<DemoDisplay>	disp_demo_;
+	DisplayBase*	display_;
 
 	DISPLAYMODE						displayMode_;
 };

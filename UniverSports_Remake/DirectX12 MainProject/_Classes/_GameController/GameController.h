@@ -40,27 +40,13 @@ private:
 	const float TIME_LIMIT[4]	= { 0.0f, 0.0f, 120.0f, 0.0f };
 	const float	SPEED_FADE[3]	= { 51.0f, 510.0f, 0.0f };
 
-	//! タイマー
-	std::unique_ptr<CountTimer> timer_;
+	std::unique_ptr<CountTimer>		timer_;				//! タイマー
+	std::unique_ptr<CountDownUI>	countDown_;			//! 開始前カウントダウン
+	std::unique_ptr<BlackOut>		blackOut_;			//! ブラックアウト
+	std::unique_ptr<Finish>			ui_finish_;			//! 終了時テキスト
+	std::unique_ptr<SoundPlayer>	se_whistle_;		//! 終了時SE
+	std::unique_ptr<AtEndCondition> atEndCondition_;	//! 終了条件
 
-	//! 開始前カウントダウン
-	std::unique_ptr<CountDownUI> countDown_;
-
-	//! ブラックアウト
-	std::unique_ptr<BlackOut> blackOut_;
-
-	//! 終了時テキスト
-	std::unique_ptr<Finish> ui_finish_;
-
-	//! 終了時SE
-	std::unique_ptr<SoundPlayer> se_whistle_;
-
-	//! 終了条件
-	AtEndCondition* atEndCondition_;
-
-	//! ゲームの制限時間
-	float			startTime_;
-
-	//! ゲームの進行状態フラグ
-	static bool		gameStart_;
+	float			startTime_;	//! ゲームの制限時間
+	static bool		gameStart_;	//! ゲームの進行状態フラグ
 };

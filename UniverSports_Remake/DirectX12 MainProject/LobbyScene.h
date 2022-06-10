@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Scene.h"
+#include <random>
 #include <btBulletDynamicsCommon.h>
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
@@ -46,7 +47,6 @@ public:
 	void Render() override;
 
 	static void ChangeModel(const int plIndex, const int selectID);
-	static void ChangeStrategy(const int plIndex);
 
 private:
 	void Render_String();
@@ -57,7 +57,7 @@ private:
 private:
 	const float			SPEED_FADE[3]	= { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
 
-	static ObjPlayer* player_[OBJECT_MAX::PLAYER];
+	static std::unique_ptr<ObjPlayer> player_[OBJECT_MAX::PLAYER];
 
 	std::mt19937						randomEngine_;
 	std::uniform_int_distribution<>		newTeamID_;
@@ -77,11 +77,8 @@ private:
 	DX9::SPRITE							sp_playerIcon[OBJECT_MAX::PLAYER];
 	DX9::SPRITE							sp_teamCol_[OBJECT_MAX::PLAYER / 2];
 
-	btDynamicsWorld*					physics_world_;
-	btDefaultCollisionConfiguration*	collision_config_;
-	btCollisionDispatcher*				collision_dispatcher_;
-	btBroadphaseInterface*				broadphase_;
-	btConstraintSolver*					solver_;
+	btDefaultCollisionConfiguration*	collision_config_;		//! 衝突検出方法(デフォルト)
+	std::unique_ptr<btDynamicsWorld>	physics_world_;
 
 	std::unique_ptr<MoviePlayer>		bg_movie_;
 	std::unique_ptr<SoundPlayer>		bgm_;

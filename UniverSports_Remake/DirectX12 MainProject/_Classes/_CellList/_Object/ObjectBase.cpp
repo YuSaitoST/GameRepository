@@ -43,8 +43,8 @@ void ObjectBase::SetMember(OBJ_TYPE kind, COLLI_TYPE collision, Vector3 pos, flo
 * @return 衝突した物体(なければnullptr)
 */
 ObjectBase* ObjectBase::GetCollision(ObjectBase* m) {
-	OBJ_TYPE type = m->myObjectType();
-	if (this->obj_type_ == type)
+	//同じ物体同士なら衝突判定にしない
+	if (this->obj_type_ == m->myObjectType())
 		return nullptr;
 
 	if (this->obj_type_ == OBJ_TYPE::PLAYER) {
@@ -98,4 +98,17 @@ void ObjectBase::UpdateToMorton() {
 */
 ObjectBase* ObjectBase::GetHitObject() {
 	return cp_->GetCollision();  // 上方、同レベル、下方の3方向を調べる(四分木探索)
+}
+
+/**
+* @brief 力を加えて飛ばす
+* @param forwrad 正面ベクトル
+* @param speed 速度
+*/
+void ObjectBase::AddPower(XMFLOAT3 position, XMFLOAT3 forward, float speed) {
+	physics_->SetLinerVelocity(forward * speed);
+	physics_->SetCenterOfMassTransform(position, Vector3::Zero);
+
+	pos_ = physics_->GetCenterOfMassPosition();
+	SetTransform(position, rotate_);
 }

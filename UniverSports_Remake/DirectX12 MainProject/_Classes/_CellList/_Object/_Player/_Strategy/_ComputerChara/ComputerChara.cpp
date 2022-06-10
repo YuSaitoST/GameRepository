@@ -24,5 +24,5 @@ void ComputerChara::Update(const float deltaTime) {
 		if (act->Think(*player_))
 			act->Update(deltaTime, *player_);
 
-	rotate_x_ = SeekRotateX(deltaTime, actList_[0]->GetDirection());
+	rotate_x_ = SeekRotateX(deltaTime, actList_[1]->GetDirection());
 }

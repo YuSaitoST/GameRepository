@@ -13,7 +13,7 @@ ObjPlayer::ObjPlayer() {
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	physics_		= nullptr;
-	life_			= nullptr;\
+	life_			= nullptr;
 	ti_respone_		= nullptr;
 	eff_down_		= nullptr;
 	strategy_		= nullptr;
@@ -46,9 +46,9 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	se_defeat_		= std::make_unique<SoundPlayer>();
 	
 	if (strategy == OPERATE_TYPE::MANUAL)
-		strategy_ = new ManualChara();
+		strategy_ = std::make_unique<ManualChara>();
 	else if (strategy == OPERATE_TYPE::COMPUTER)
-		strategy_ = new ComputerChara();
+		strategy_ = std::make_unique<ComputerChara>();
 	else
 		strategy_ = nullptr;
 	
@@ -58,9 +58,6 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 ObjPlayer::~ObjPlayer() {
 	if (targetPlayer_ != nullptr)
 		delete targetPlayer_;
-
-	if (strategy_ != nullptr)
-		delete strategy_;
 }
 
 void ObjPlayer::Initialize(const int id) {
@@ -78,11 +75,11 @@ void ObjPlayer::Initialize(const int id) {
 
 void ObjPlayer::LoadAssets(std::wstring file_name) {
 	strategy_->LoadAssets();
-	eff_down_->LoadAsset(L"_Effects\\_Down\\HITeffect.efk");
+	eff_down_->LoadAsset(USFN_EFF::HIT);
 
 	CreateModel(file_name);
 	rotate_		= Vector2(strategy_->GetRotateX(), PLAYER_PARAM.Player_FacingRight);
-	forward_ = Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
+	forward_	= Vector2(std::cosf(rotate_.x), std::sinf(rotate_.x));
 	r_			= model_->GetBoundingSphere().Radius;
 	
 	barrier_->LoadAsset(r_);
@@ -275,7 +272,7 @@ void ObjPlayer::CalculationHandPos() {
 	float _rotateX = strategy_->GetRotateX();
 	handPos_.x = std::cosf(XM_2PI) * std::cosf(_rotateX) - std::sinf(XM_2PI) * std::sinf(_rotateX);
 	handPos_.y = std::sinf(XM_2PI) * std::cosf(_rotateX) + std::cosf(XM_2PI) * std::sinf(_rotateX);
-	handPos_ = pos_ + POS_HAND * handPos_;
+	handPos_ = pos_ + PLAYER_PARAM.HAND_POS * handPos_;
 }
 
 /**

@@ -22,8 +22,8 @@ void StFloat::Initialize() {
 
 void StFloat::Update(ObjBall* ball) {
 	if (ball->IsInPlayerHands()) {
-		StCautch* cautch = new StCautch();
-		ball->SwitchState(cautch);
+		std::unique_ptr<StCautch> cautch = std::make_unique<StCautch>();
+		ball->SwitchState(cautch.release());
 		ball->SwitchColor(ObjBall::COLOR_TYPE::PLAYERS_COLOR);
 		return;
 	}
@@ -45,8 +45,8 @@ void StFloat::Update(ObjBall* ball) {
 void StFloat::ReSpone(ObjBall* ball) {
 	XMFLOAT2 forward;
 	SetTransform(position_, forward);
-	ball->AssignTransform(Vector3(position_.x, position_.y, 0.0f), forward);
-	ball->AddPower(Vector3(forward.x, forward.y, 0.0f), BALL_PARAM.SPEED_FLOAT);
+	ball->AssignTransform(XMFLOAT3(position_.x, position_.y, 0.0f), forward);
+	ball->AddPower(XMFLOAT3(position_.x, position_.y, 0.0f), XMFLOAT3(forward.x, forward.y, 0.0f), BALL_PARAM.SPEED_FLOAT);
 	ball->FlagResets();
 }
 
@@ -65,9 +65,9 @@ void StFloat::SetTransform(XMFLOAT2& position, XMFLOAT2& forward) {
 * @return ç¿ïW
 */
 SimpleMath::Vector2 StFloat::RandomPosition() {
-	const float _scale = BALL_PARAM.MOD_SCALE;
-	const float _random_x = std::min(pos_start_x(randomEngine), FIELD::HALF_X);
-	float _random_y		= 0;
+	const float _scale		= BALL_PARAM.MOD_SCALE;
+	const float _random_x	= std::min(pos_start_x(randomEngine), FIELD::HALF_X);
+	float _random_y			= 0;
 
 	if (std::abs(_random_x) == limit_pos_x) {
 		pos_start_y = std::uniform_real_distribution<float>(-limit_pos_y - _scale, limit_pos_y + _scale);

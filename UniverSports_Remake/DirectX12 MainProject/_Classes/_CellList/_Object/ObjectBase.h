@@ -46,6 +46,7 @@ public:
 	virtual ObjectBase* GetCollision(ObjectBase* m);
 
 	ObjectBase* GetHitObject();
+	void AddPower(XMFLOAT3 position, XMFLOAT3 forward, float speed);
 
 	/**
 	* @brief ’Êí‚Ìƒ}ƒeƒŠƒAƒ‹‚ğ•Ô‚·

@@ -93,12 +93,3 @@ void PlayerList::SetInstructors(BallsInstructor* blInstructor, PlayersInstructor
 int PlayerList::PlayerLife(int index) {
 	return list_[index]->myLife();
 }
-
-///**
-//* @brief プレイヤーの手元の座標を返す
-//* @param index プレイヤーの番号
-//* @return 手元の座標
-//*/
-//XMFLOAT2 PlayerList::PlayerHandsPos(int index) {
-//	return list_[index]->Get_HandPos();
-//}

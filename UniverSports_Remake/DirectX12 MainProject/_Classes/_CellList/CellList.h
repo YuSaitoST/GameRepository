@@ -30,5 +30,4 @@ private:
 
 	//! üŒ`‹óŠÔƒŠƒXƒg
 	Cell* cpList_;
-
 };

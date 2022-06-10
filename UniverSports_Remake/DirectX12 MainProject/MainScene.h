@@ -48,11 +48,8 @@ private:
 	DX12::SPRITEBATCH					spriteBatch_;
 	DX12::HGPUDESCRIPTOR				dx9GpuDescriptor_;
 
-	btDynamicsWorld*					physics_world_;
-	btDefaultCollisionConfiguration*	collision_config_;
-	btCollisionDispatcher*				collision_dispatcher_;
-	btBroadphaseInterface*				broadphase_;
-	btConstraintSolver*					solver_;
+	btDefaultCollisionConfiguration*	collision_config_;	//! 衝突検出方法(デフォルト)
+	std::shared_ptr<btDynamicsWorld>	physics_world_;
 
 	std::unique_ptr<SoundPlayer>		bgm_;
 	std::unique_ptr<GameField>			field_;

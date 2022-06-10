@@ -24,22 +24,9 @@
 extern CellList cellList;
 
 class ObjectManager {
-private:
-	const float FX = 32.0f;
-	const float FY = 18.0f;
-	const float X = FX - 5.25f + 1.25f;
-	const float Y = FY - 4.75f + 1.25f;
-
-	const SimpleMath::Vector3 POS_WIRE[OBJECT_MAX::WIRE] = {
-		Vector3(-X, Y, 0.0f),
-		Vector3(X,Y,0.0f),
-		Vector3(X,-Y,0.0f),
-		Vector3(-X,-Y,0.0f)
-	};
-
 public:
 	ObjectManager();
-	virtual ~ObjectManager();
+	virtual ~ObjectManager() {}
 
 	void Initialize();
 	void LoadAssets();
@@ -52,19 +39,10 @@ public:
 	void RemoveWorld(btDynamicsWorld* physics_world_);
 
 private:
-	//! プレイヤーリスト
-	PlayerList* playerList_;
-	
-	//! ボールリスト
-	BallList* ballList_;
-	
-	//! ワイヤーリスト
-	ObjWire* obj_wire_[OBJECT_MAX::WIRE];
+	std::unique_ptr<PlayerList>		playerList_;					//! プレイヤーリスト
+	std::unique_ptr<BallList>		ballList_;						//! ボールリスト
+	std::unique_ptr<ObjWire>		obj_wire_[OBJECT_MAX::WIRE];	//! ワイヤーリスト
+	std::unique_ptr<IconAnimator>	icon_animator_;					//! 残機アイコン
 
-	//! プレイヤーのインストラクター
-	PlayersInstructor* plInstructor_;
-	std::unique_ptr<IconAnimator> icon_animator_;
-
-	//! ボールのモデル
-	DX9::MODEL mod_ball_;
+	DX9::MODEL mod_ball_;	//! ボールのモデル
 };

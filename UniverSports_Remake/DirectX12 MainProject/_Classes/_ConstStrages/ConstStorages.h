@@ -15,15 +15,16 @@
 #include "UIPosition.h"
 
 //É}ÉNÉç
-#define GAME_CONST ConstStorageC::GetInstance()
-#define GAMES_PARAM ConstStorageC::GetInstance().GetGameProgression()
-#define PLAYER_PARAM ConstStorageC::GetInstance().GetPlayerParam()
-#define BALL_PARAM ConstStorageC::GetInstance().GetBallParam()
-#define THRUSTER_PARAM ConstStorageC::GetInstance().GetThrusterParam()
+#define GAME_CONST		ConstStorageC::GetInstance()
+#define GAMES_PARAM		ConstStorageC::GetInstance().GetGameProgression()
+#define PLAYER_PARAM	ConstStorageC::GetInstance().GetPlayerParam()
+#define BALL_PARAM		ConstStorageC::GetInstance().GetBallParam()
+#define THRUSTER_PARAM	ConstStorageC::GetInstance().GetThrusterParam()
+#define WIRE_PARAM		ConstStorageC::GetInstance().GetWireParam()
 
 namespace OBJECT_MAX {
-	const int PLAYER = 4;
-	const int WIRE = 4;
+	const int PLAYER	= 4;
+	const int WIRE		= 4;
 
 }  //namespace OBJECT_MAX
 
@@ -41,18 +42,16 @@ private:
 		float FN_TIME_FADEOUT;
 	};
 	struct Player {
-		float START_POS_X;
-		float START_POS_Y;
 		float Player_FacingRight;
 		float SCALE;
 		float SPEED_MAX_NORMAL;
 		float SPEED_MAX_BOOST;
-		float SPEED_MOVE;
-		float POWER_THRUSTER;
+		float SPEED[2];
 		float TIME_RESPONE;
 		float TIME_INVINCIBLE;
 
 		DirectX::XMFLOAT3 START_POS[OBJECT_MAX::PLAYER];
+		DirectX::XMFLOAT2 HAND_POS;
 	};
 	struct Thruster {
 		float SCALE[2];
@@ -65,14 +64,16 @@ private:
 		float MAX[4];
 		float MOD_SCALE;
 		float COL_SCALE;
+		float OBJ_SCALE;
 		float SPEED_FLOAT;
 		float SPEED_SHOT;
 		float Z_CAUTCH;
 	};
+	struct Wire {
+		DirectX::XMFLOAT3 POS[OBJECT_MAX::WIRE];
+	};
 
 public:
-	ConstStorageC() : gameParam_{ 0.0f }, playerParam_{ 0.0f }, ballParam_{ 0.0f }, thrusterParam_{ 0.0f } {};
-	virtual ~ConstStorageC() {};
 
 	static ConstStorageC& GetInstance()
 	{
@@ -81,14 +82,19 @@ public:
 	}
 
 	void Initialize();
-	GameProgression GetGameProgression() const { return gameParam_; }
-	Player GetPlayerParam() const { return playerParam_; }
-	Ball GetBallParam() const { return ballParam_; }
-	Thruster GetThrusterParam() const { return thrusterParam_; }
+	GameProgression	GetGameProgression	() const { return gameParam_;		}
+	Player			GetPlayerParam		() const { return playerParam_;		}
+	Ball			GetBallParam		() const { return ballParam_;		}
+	Thruster		GetThrusterParam	() const { return thrusterParam_;	}
+	Wire			GetWireParam		() const { return wireParam_;		}
 
 private:
-	GameProgression gameParam_;
-	Player playerParam_;
-	Ball ballParam_;
-	Thruster thrusterParam_;
+	ConstStorageC() : gameParam_{ 0.0f }, playerParam_{ 0.0f }, ballParam_{ 0.0f }, thrusterParam_{ 0.0f } {};
+	virtual ~ConstStorageC() {};
+
+	GameProgression	gameParam_;
+	Player			playerParam_;
+	Ball			ballParam_;
+	Thruster		thrusterParam_;
+	Wire			wireParam_;
 };

@@ -17,9 +17,9 @@ GameController::GameController() {
 
 	GameModes gameMode = DontDestroy->GameMode_;
 	if (gameMode.isDODGEBALL_NOMAL())
-		atEndCondition_ = new AECDodgeBallNomal();
+		atEndCondition_ = std::make_unique<AECDodgeBallNomal>();
 	else if (gameMode.isDODGEBALL_2ON2())
-		atEndCondition_ = new AECDodgeBall2on2();
+		atEndCondition_ = std::make_unique<AECDodgeBall2on2>();
 	else
 		assert(!"不正なゲームモードです");
 }

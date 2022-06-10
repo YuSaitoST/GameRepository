@@ -23,10 +23,10 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 	pos_ = Vector2::Zero;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
-	StStandby* standby = new StStandby();
-	SwitchState(standby);
+	std::unique_ptr<StStandby> standby = std::make_unique<StStandby>();
+	SwitchState(standby.release());
 
-	physics_ = std::make_unique<btObject>(pos, 0.2f, 0.0f, 1.0f);
+	physics_ = std::make_unique<btObject>(pos, BALL_PARAM.OBJ_SCALE, 0.0f, 1.0f);
 	colorType_ = DEFAULT_COLOR;
 	pos_z_ = 0.0f;
 	id_owner_ = -1;
@@ -36,6 +36,11 @@ ObjBall::ObjBall(Vector3 pos, float r) {
 }
 
 ObjBall::~ObjBall() {
+	if (ownerHandPos_ != nullptr) {
+		delete ownerHandPos_;
+		ownerHandPos_ = nullptr;
+	}
+
 	if (state_ != nullptr) {
 		delete state_;
 		state_ = nullptr;
@@ -112,19 +117,6 @@ void ObjBall::Following(float pos_z) {
 }
 
 /**
-* @brief 力を加えて飛ばす
-* @param forwrad 正面ベクトル
-* @param speed 速度
-*/
-void ObjBall::AddPower(XMFLOAT3 forward, float speed) {
-	physics_->SetLinerVelocity(forward * speed);
-	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
-
-	pos_ = physics_->GetCenterOfMassPosition();
-	SetTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), rotate_);
-}
-
-/**
 * @brief キャッチされた際の処理
 * @param ownerID 持ち主のID
 */
@@ -133,7 +125,7 @@ void ObjBall::WasCaught(const int ownerID) {
 	isInPlayerHands_ = true;
 	pos_z_ = -6.0f;
 	ResetVelocity();
-	AssignTransform(Vector3(pos_.x, pos_.y, pos_z_), forward_);
+	AssignTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), forward_);
 }
 
 /**
@@ -143,7 +135,7 @@ void ObjBall::WasCaught(const int ownerID) {
 void ObjBall::WasThrown(Vector2 forward) {
 	forward_ = forward;
 	isInPlayerHands_ = false;
-	AddPower(Vector3(forward_.x, forward_.y, 0.0f), BALL_PARAM.SPEED_SHOT);
+	AddPower(XMFLOAT3(pos_.x,pos_.y,pos_z_), XMFLOAT3(forward_.x, forward_.y, 0.0f), BALL_PARAM.SPEED_SHOT);
 }
 
 /**

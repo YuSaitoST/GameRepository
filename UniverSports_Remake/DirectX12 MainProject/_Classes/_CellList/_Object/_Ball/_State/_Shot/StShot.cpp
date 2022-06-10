@@ -19,8 +19,8 @@ void StShot::Update(ObjBall* ball) {
 	if (_isFieldOut || _isGotStuck || ball->IsBreaked() || (ball->GetOwnerID() == -1)) {
 		ball->FlagResets();
 		ball->SetOwnerID(-1);
-		StFloat* flo = new StFloat();
-		ball->SwitchState(flo);
+		std::unique_ptr<StFloat> flo = std::make_unique<StFloat>();
+		ball->SwitchState(flo.release());
 		ball->SwitchColor(ObjBall::COLOR_TYPE::DEFAULT_COLOR);
 	}
 }

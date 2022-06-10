@@ -12,11 +12,6 @@
  //------------------------------------------------------------------------------
 #include "_Classes/_CellList/_Object/ObjectBase.h"
 #include "_State/BallState.h"
-#include "_State/_Standby/StStandby.h"
-#include "_State/_Float/StFloat.h"
-#include "_State/_Cautch/StCautch.h"
-#include "_State/_Shot/StShot.h"
-#include "_State/_Goal/StGoal.h"
 
 class ObjBall final : public ObjectBase {
 private:
@@ -30,8 +25,6 @@ private:
 	};
 	//! アンビエント色
 	const D3DCOLORVALUE P_AMBIENT = D3DCOLORVALUE(0.35f, 0.35f, 0.35f, 1.0f);
-
-	const float COLLIDER_SIZE = 1.8f;
 
 public:
 	/**
@@ -75,7 +68,6 @@ public:
 	*/
 	void Moving(Vector3 power) { physics_->Moving(power); }
 	void Following(float pos_z);
-	void AddPower(XMFLOAT3 forward, float speed);
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
 
 	/**
@@ -157,21 +149,6 @@ private:
 
 	//! ボールの状態
 	BallState* state_;
-
-	//! 待機状態
-	StStandby st_standby_;
-	
-	//! 浮遊状態
-	StFloat st_float_;
-	
-	//! キャッチされている状態
-	StCautch st_cautch_;
-
-	//! 投げられた状態
-	StShot st_shot_;
-
-	//! ゴールに入った状態
-	StGoal st_goal_;
 
 	//! 現在の色の状態
 	COLOR_TYPE colorType_;

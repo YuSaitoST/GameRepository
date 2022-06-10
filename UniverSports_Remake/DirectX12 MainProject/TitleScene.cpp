@@ -23,8 +23,8 @@ TitleScene::TitleScene()
 	bgm_			= std::make_unique<SoundPlayer>();
 
 	display_		= nullptr;
-	disp_normal_	= new NormalDisplay();
-	disp_demo_		= new DemoDisplay();
+	disp_normal_	= std::make_unique<NormalDisplay>();
+	disp_demo_		= std::make_unique<DemoDisplay>();
 	displayMode_	= DISPLAYMODE::DISPLAY_NORMAL;
 }
 
@@ -114,15 +114,15 @@ NextScene TitleScene::Update(const float deltaTime)
 	//入力状態を調べる
 	Press.Accepts();
 
+	//画面上の更新
+	NextScene _next = display_->Update(deltaTime);
+
 	//表示の変更条件を満たしていれば、表示状態を変更する
 	if (display_->IsChange()) {
 		display_->Reset();
 		displayMode_ = (displayMode_ == DISPLAYMODE::DISPLAY_NORMAL) ? DISPLAYMODE::DISPLAY_DEMO : DISPLAYMODE::DISPLAY_NORMAL;
 		SwitchState(displayMode_);
 	}
-
-	//画面上の更新
-	NextScene _next = display_->Update(deltaTime);
 
 	return _next;
 }
@@ -160,8 +160,8 @@ void TitleScene::Render()
 
 void TitleScene::SwitchState(DISPLAYMODE mode) {
 	switch (mode) {
-		case DISPLAYMODE::DISPLAY_NORMAL: display_ = disp_normal_;	break;
-		case DISPLAYMODE::DISPLAY_DEMO	: display_ = disp_demo_;	break;
+		case DISPLAYMODE::DISPLAY_NORMAL: display_ = disp_normal_.get();	break;
+		case DISPLAYMODE::DISPLAY_DEMO	: display_ = disp_demo_.get();		break;
 		default							: assert(!"TitleScene::SwitchState : 不正な状態です");
 	}
 

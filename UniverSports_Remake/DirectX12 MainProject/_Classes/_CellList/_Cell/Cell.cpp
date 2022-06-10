@@ -24,7 +24,7 @@ ObjectBase* Cell::UpperSearch() {
 
 	// ƒ‹[ƒg‹óŠÔ‚Ü‚Å
 	for (int _i = (numbers_.Level_ - 1); 0 <= _i; _i--) {
-		_m = (_m - 1) / 4;  // Index‚ğæ“¾
+		_m = (_m - 1) >> 2;  // Index‚ğæ“¾
 
 		// _m‚Ì‹óŠÔ‚É‘Î‚µ‚ÄÕ“Ë”»’è
 		_mr = cellList.GetCollision(_m, this->mp_);

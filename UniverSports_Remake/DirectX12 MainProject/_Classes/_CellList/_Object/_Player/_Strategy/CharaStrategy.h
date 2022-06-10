@@ -26,7 +26,7 @@ class ObjPlayer;
 
 class CharaStrategy {
 public:
-	CharaStrategy() : rotate_x_(0.0f) { actList_ = { new ActMove(), new ActThrasher(), new ActShot() }; prevForward_ = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); }
+	CharaStrategy() : rotate_x_(0.0f) { actList_ = { new ActThrasher(), new ActMove(), new ActShot() }; prevForward_ = DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f); }
 	virtual ~CharaStrategy() {}
 
 	virtual void Initialize(int id, ObjPlayer* player) = 0;

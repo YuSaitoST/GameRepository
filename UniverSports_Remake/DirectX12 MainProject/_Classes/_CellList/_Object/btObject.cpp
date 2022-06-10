@@ -60,6 +60,6 @@ void btObject::LimitSpeed() {
 		_velocity.Normalize();
 		_velocity *= PLAYER_PARAM.SPEED_MAX_NORMAL;
 	}
-
+	
 	bt_body_->setLinearVelocity(*(btVector3*)&_velocity);
 }

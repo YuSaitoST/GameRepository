@@ -26,11 +26,12 @@ MainScene::MainScene()
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;
 
-	collision_config_		= new btDefaultCollisionConfiguration();
-	collision_dispatcher_	= new btCollisionDispatcher(collision_config_);
-	broadphase_				= new btDbvtBroadphase();
-	solver_					= new btSequentialImpulseConstraintSolver();
-	physics_world_			= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
+	collision_config_ = new btDefaultCollisionConfiguration();		//! 衝突検出方法(デフォルト)
+	btDefaultCollisionConfiguration*		_collision_config		= new btDefaultCollisionConfiguration();					//! 衝突検出方法(デフォルト)
+	std::unique_ptr<btCollisionDispatcher>	_collision_dispatcher	= std::make_unique<btCollisionDispatcher>(collision_config_);
+	std::unique_ptr<btBroadphaseInterface>	_broadphase				= std::make_unique<btDbvtBroadphase>();						//! ブロードフェーズ法の設定
+	std::unique_ptr<btConstraintSolver>		_solver					= std::make_unique<btSequentialImpulseConstraintSolver>();	//! 拘束のソルバ設定
+	physics_world_ = std::make_shared<btDiscreteDynamicsWorld>(_collision_dispatcher.release(), _broadphase.release(), _solver.release(), collision_config_);
 
 	bgm_					= std::make_unique<SoundPlayer>();
 	field_					= std::make_unique<GameField>((int)US2D::Layer::MAIN::UI_HOLE);
@@ -51,7 +52,7 @@ void MainScene::Initialize()
 	gameController_->Initialize();
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
-	m_object_->AddWorld(physics_world_);
+	m_object_->AddWorld(physics_world_.get());
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -91,18 +92,8 @@ void MainScene::Terminate()
 
 	// TODO: Add your Termination logic here.
 
-	m_object_->RemoveWorld(physics_world_);
+	m_object_->RemoveWorld(physics_world_.get());
 
-	//delete m_object_;
-
-	//delete field_;
-	//delete icon_animator_;
-	//delete bgm_;
-
-	delete physics_world_;
-	delete solver_;
-	delete broadphase_;
-	delete collision_dispatcher_;
 	delete collision_config_;
 }
 

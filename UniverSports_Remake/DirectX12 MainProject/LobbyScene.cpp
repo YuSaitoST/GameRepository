@@ -18,7 +18,7 @@
 #pragma comment (lib, "LinearMath_Debug.lib")
 #endif
 
-ObjPlayer* LobbyScene::player_[OBJECT_MAX::PLAYER];
+std::unique_ptr<ObjPlayer> LobbyScene::player_[OBJECT_MAX::PLAYER];
 
 // Initialize member variables.
 LobbyScene::LobbyScene()
@@ -35,21 +35,21 @@ LobbyScene::LobbyScene()
 	font_count_					= DX9::SPRITEFONT{};
 	font_message_				= DX9::SPRITEFONT{};
 
-	collision_config_			= new btDefaultCollisionConfiguration();
-	collision_dispatcher_		= new btCollisionDispatcher(collision_config_);
-	broadphase_					= new btDbvtBroadphase();
-	solver_						= new btSequentialImpulseConstraintSolver();
-	physics_world_				= new btDiscreteDynamicsWorld(collision_dispatcher_, broadphase_, solver_, collision_config_);
+	collision_config_ = new btDefaultCollisionConfiguration();
+	std::unique_ptr<btCollisionDispatcher>	_collision_dispatcher	= std::make_unique<btCollisionDispatcher>(collision_config_);
+	std::unique_ptr<btBroadphaseInterface>	_broadphase				= std::make_unique<btDbvtBroadphase>();						//! ブロードフェーズ法の設定
+	std::unique_ptr<btConstraintSolver>		_solver					= std::make_unique<btSequentialImpulseConstraintSolver>();	//! 拘束のソルバ設定
+	physics_world_	= std::make_unique<btDiscreteDynamicsWorld>(_collision_dispatcher.release(), _broadphase.release(), _solver.release(), collision_config_);
 
 	bg_movie_					= std::make_unique<MoviePlayer>();
 	bgm_						= std::make_unique<SoundPlayer>();
 
 	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
 	for (int _i = 0; _i <= _MAX; _i += 2) {
-		player_[_i]				= new ObjPlayer(OPERATE_TYPE::MANUAL, PLAYER_PARAM.START_POS[_i], 1.0f);
-		charaSelect_[_i]		= std::make_unique<CharaSelect>();
+		player_[_i]				= std::make_unique<ObjPlayer>(OPERATE_TYPE::MANUAL, PLAYER_PARAM.START_POS[_i], 1.0f);
+		player_[_i + 1]			= std::make_unique<ObjPlayer>(OPERATE_TYPE::MANUAL, PLAYER_PARAM.START_POS[_i + 1], 1.0f);
 
-		player_[_i + 1]			= new ObjPlayer(OPERATE_TYPE::MANUAL, PLAYER_PARAM.START_POS[_i + 1], 1.0f);
+		charaSelect_[_i]		= std::make_unique<CharaSelect>();
 		charaSelect_[_i + 1]	= std::make_unique<CharaSelect>();
 	}
 
@@ -170,10 +170,6 @@ void LobbyScene::Terminate()
 	for (int _i = OBJECT_MAX::PLAYER - 1; 0 <= _i; --_i)
 		physics_world_->removeRigidBody(player_[_i]->myRigidbody());
 
-	delete physics_world_;
-	delete solver_;
-	delete broadphase_;
-	delete collision_dispatcher_;
 	delete collision_config_;
 }
 
@@ -309,10 +305,6 @@ void LobbyScene::Render()
 
 void LobbyScene::ChangeModel(const int plIndex, const int selectID) {
 	player_[plIndex]->ReDecision(plIndex, USFN_MOD::PLAYER[selectID]);
-}
-
-void LobbyScene::ChangeStrategy(const int plIndex) {
-	player_[plIndex]->ChangeStrategy();
 }
 
 void LobbyScene::Render_String() {

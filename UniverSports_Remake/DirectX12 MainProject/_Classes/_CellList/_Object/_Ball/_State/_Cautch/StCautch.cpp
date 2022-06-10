@@ -13,8 +13,8 @@ void StCautch::Initialize() {
 void StCautch::Update(ObjBall* ball) {
 	if (!ball->IsInPlayerHands()) {
 		//“Š‚°‚ç‚ê‚½‚ç
-		StShot* shot = new StShot();
-		ball->SwitchState(shot);
+		std::unique_ptr<StShot> shot = std::make_unique<StShot>();
+		ball->SwitchState(shot.release());
 		return;
 	}
 	else if (ball->IsBreaked()) {

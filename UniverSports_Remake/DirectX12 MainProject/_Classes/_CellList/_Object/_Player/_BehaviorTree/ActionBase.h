@@ -26,7 +26,7 @@ class ObjPlayer;
 
 class ActionBase {
 public:
-	ActionBase() {};
+	ActionBase() : direction_(SimpleMath::Vector2::Zero) {};
 	virtual ~ActionBase() {};
 
 	virtual void Initialize(int id) = 0;

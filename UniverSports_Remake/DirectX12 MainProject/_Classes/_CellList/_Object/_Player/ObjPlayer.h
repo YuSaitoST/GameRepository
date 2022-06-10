@@ -70,14 +70,6 @@ public:
 	}
 
 	/**
-	* @brief 操作タイプの変更
-	*/
-	void ChangeStrategy() {
-		strategy_ = new ComputerChara();
-		strategy_->Initialize(id_my_, this);
-	}
-
-	/**
 	* @brief 移動処理
 	*/
 	void Moving(Vector3 power) { physics_->Moving(power); };
@@ -86,9 +78,15 @@ public:
 	void CautchedBall(const int ballID);
 
 	/**
-	* @brief 剛体オブジェクトの中心座標を取得する
+	* @brief 剛体オブジェクトの中心座標を代入する
 	*/
 	void AssignPosition() { pos_ = physics_->GetCenterOfMassPosition(); }
+
+	/**
+	* @brief スラスター使用状態を渡す
+	* @param use 使用状態
+	*/
+	void SetUseThrasher(bool use) { isUsethrasher_ = use; }
 
 	/**
 	* @brief 残機数を返す
@@ -97,22 +95,22 @@ public:
 	int myLife() const { return life_->NowLifePoint(); }
 	
 	/**
+	* @brief スラスター使用状態を返す
+	* @return 使用状態
+	*/
+	inline bool UseThrasher() const { return isUsethrasher_; }
+
+	/**
 	* @brief ボールの所持状態を返す
 	* @return ボールの所持状態
 	*/
-	bool HasBall() const { return hasBall_; }
-
-	///**
-	//* @brief 手元の座標を返す
-	//* @return 手元の座標のアドレス
-	//*/
-	//XMFLOAT2* Get_HandPos() { return &handPos_; }
+	inline bool HasBall() const { return hasBall_; }
 
 	/**
 	* @brief 所持しているボールのIDを返す
 	* @return 所持しているボールのID
 	*/
-	int MyBallID() const { return myBallID_; }
+	inline int MyBallID() const { return myBallID_; }
 
 	/**
 	* @brief ボールインストラクターを返す
@@ -148,17 +146,15 @@ private:
 	*/
 	MOTION AnimChange();
 
-	const SimpleMath::Vector2 POS_HAND = { -2.75f, -3.0f };
-
 	std::unique_ptr<MyLife>			life_;			//! 残機
 	std::unique_ptr<CountTimer>		ti_respone_;	//! リスポーンタイマー
 	std::unique_ptr<EffDown>		eff_down_;		//! ダウン時エフェクト
 	std::unique_ptr<Barrier>		barrier_;		//! バリア
 	std::unique_ptr<SoundPlayer>	se_shot_;		//! ショット時SE
 	std::unique_ptr<SoundPlayer>	se_defeat_;		//! 爆破時SE
-	
-	CharaStrategy*		strategy_;			//! 行動
-	ObjectBase*			targetPlayer_;			//! ターゲットのオブジェクト
+	std::unique_ptr<CharaStrategy>	strategy_;		//! 行動
+
+	ObjectBase*			targetPlayer_;		//! ターゲットのオブジェクト
 	BallsInstructor*	ballsInstructor_;	//! ボールインストラクター
 	PlayersInstructor*	playersInstructor_;	//! プレイヤーインストラクター
 
@@ -166,6 +162,7 @@ private:
 
 	DX9::SKINNEDMODEL	model_;				//! モデル
 
+	bool				isUsethrasher_;		//! スラスター使用状態
 	bool				hasBall_;			//! ボールの所持状態
 	bool				isDown_;			//! やられ状態
 	int					myBallID_;			//! 所持しているボールのID

@@ -1,5 +1,15 @@
+/**
+ * @file ModelsFN.h
+ * @brief モデル素材のファイル名
+ * @author 齋藤優宇
+ * @date 2021/05/14
+ */
+
 #pragma once
 
+ //------------------------------------------------------------------------------
+ //	インクルードファイル
+ //------------------------------------------------------------------------------
 #include <string>
 
 namespace USFN_MOD {
@@ -11,4 +21,5 @@ namespace USFN_MOD {
 	};
 
 	const std::wstring BALL = L"_Models\\_Ball\\ball.X";
+
 }  //namespace USFN_MOD

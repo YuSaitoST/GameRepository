@@ -1,8 +1,7 @@
 #include "EffThrasher.h"
 
-EffThrasher::EffThrasher() : EffectBase(MOVE_TIME) {
+EffThrasher::EffThrasher() : EffectBase(MOVE_TIME), usedThrasher_(false) {
 	timer_roop_		= std::make_unique<CountTimer>(0.2f);
-	usedThrasher_	= false;
 }
 
 void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position, Vector3 direction, float proportion) {

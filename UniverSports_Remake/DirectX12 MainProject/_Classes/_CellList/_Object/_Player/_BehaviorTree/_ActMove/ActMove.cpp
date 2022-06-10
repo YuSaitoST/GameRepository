@@ -5,13 +5,13 @@
 #include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
 
 void ActMove::Update(const float deltaTime, Vector2 direction, ObjPlayer& player) {
-	const Vector2 power = direction * PLAYER_PARAM.SPEED_MOVE * deltaTime;
+	const Vector2 power = direction * PLAYER_PARAM.SPEED[player.UseThrasher()] * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
 	player.AssignPosition();
 }
 
 void ActMove::Update(const float deltaTime, ObjPlayer& player) {
-	const Vector2 power = direction_ * PLAYER_PARAM.SPEED_MOVE * deltaTime;
+	const Vector2 power = direction_ * PLAYER_PARAM.SPEED[0] * deltaTime;
 	player.Moving(Vector3(power.x, power.y, 0.0f));
 	player.AssignPosition();
 }

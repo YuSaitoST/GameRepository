@@ -81,8 +81,8 @@ void ObjWire::HitAction(ObjectBase* object) {
 		if (ball->NowState() != B_STATE::SHOT)
 			return;
 
-		StGoal* goal = new StGoal();
-		ball->SwitchState(goal);	
+		std::unique_ptr<StGoal> goal = std::make_unique<StGoal>();
+		ball->SwitchState(goal.release());	
 		ball->WasGoaled();
 		hasBalls_.push_back(ball);
 		se_goal_->PlayOneShot();
