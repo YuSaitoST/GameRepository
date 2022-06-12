@@ -22,13 +22,10 @@ public:
 	
 	void Update(const float deltaTime, float rotate_x, Vector3 position, Vector3 direction, float proportion);
 
-
 	//! 加速使用
 	bool usedThrasher_;
 
 private:
-	const float MOVE_TIME = 0.575f;
-
 	//! スラスターの加速のペース
 	std::unique_ptr<CountTimer> timer_roop_;
 };

@@ -1,10 +1,14 @@
 #include "EffThrasher.h"
+#include "_Classes/_GameController/GameController.h"
 
-EffThrasher::EffThrasher() : EffectBase(MOVE_TIME), usedThrasher_(false) {
+EffThrasher::EffThrasher() : EffectBase(THRUSTER_PARAM.TIME_UPDATEPOSITION), usedThrasher_(false) {
 	timer_roop_		= std::make_unique<CountTimer>(0.2f);
 }
 
 void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position, Vector3 direction, float proportion) {
+	if (!GameController::GamePlay())
+		Stop();
+
 	Set_Position(position);
 
 	TimerCount(deltaTime);
@@ -16,8 +20,10 @@ void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position
 		Set_Position(position);
 	}
 	
+	const bool _isUsedThruster = usedThrasher_ && (THRUSTER_PARAM.GAUGE_STOP < proportion);
+
 	// ‹­o—Í
-	if (usedThrasher_) {
+	if (_isUsedThruster) {
 		timer_roop_->Update(deltaTime);
 		if (timer_roop_->TimeOut()) {
 			timer_roop_->Reset();
@@ -28,7 +34,6 @@ void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position
 	else
 		Move(-direction * THRUSTER_PARAM.MOVEMENT_ACCEL);
 
-	const bool _isUsedJet = usedThrasher_ && (0.3 < proportion);
-	Set_Rotate(Vector3(0.0f, 35.0f, -rotate_x));
-	Set_Scale(Vector3::One * THRUSTER_PARAM.SCALE[_isUsedJet]);
+	Set_Rotate(Vector3(0.0f, THRUSTER_PARAM.ROTATE_Y, -rotate_x));
+	Set_Scale(Vector3::One * THRUSTER_PARAM.SCALE[_isUsedThruster]);
 }

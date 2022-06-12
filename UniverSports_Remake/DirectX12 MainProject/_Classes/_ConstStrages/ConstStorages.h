@@ -57,8 +57,11 @@ private:
 		float SCALE[2];
 		float MOVEMENT_NOMAL;
 		float MOVEMENT_ACCEL;
+		float TIME_UPDATEPOSITION;
+		float GAUGE_STOP;
 		float AMOUNT_OF_DECREASE;
 		float AMOUNT_OF_RECOVERY;
+		float ROTATE_Y;
 	};
 	struct Ball {
 		float MAX[4];
@@ -71,6 +74,10 @@ private:
 	};
 	struct Wire {
 		DirectX::XMFLOAT3 POS[OBJECT_MAX::WIRE];
+		DirectX::XMFLOAT3 SCALE;
+		float COLLIDER_SCALE_Y_CORRECTIONVALUE;
+		float MOD_ROT_Z[2];
+		float BULLET_ROT_Z[2];
 	};
 
 public:

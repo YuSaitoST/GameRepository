@@ -38,7 +38,7 @@ void ActThrasher::Update(const float deltaTime, ObjPlayer& player) {
 	gauge_->SetPosition(Vector3(_pos.x, _pos.y, 0.0f));
 	gauge_->Update(deltaTime, effect_->usedThrasher_);
 
-	effect_->Update(deltaTime, player.myRotate().x, Vector3(_pos.x, _pos.y, 0.0f), Vector3(direction_.x, direction_.y, 0.0f), gauge_->GetProportion());
+	effect_->Update(deltaTime, player.myRotate().x, XMFLOAT3(_pos.x, _pos.y, 0.0f), XMFLOAT3(direction_.x, direction_.y, 0.0f), gauge_->GetProportion());
 }
 
 void ActThrasher::UIRender() {

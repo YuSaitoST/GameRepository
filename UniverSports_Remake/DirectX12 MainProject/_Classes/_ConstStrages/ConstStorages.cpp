@@ -34,13 +34,16 @@ void ConstStorageC::Initialize() {
 	);
 
 	CSV::Schan(L"_Parameters\\ThrusterParameter.csv",
-		"%f,%f,%f,%f,%f,%f",
+		"%f,%f,%f,%f,%f,%f,%f,%f,%f",
 		&thrusterParam_.SCALE[0],
 		&thrusterParam_.SCALE[1],
 		&thrusterParam_.MOVEMENT_NOMAL,
 		&thrusterParam_.MOVEMENT_ACCEL,
+		&thrusterParam_.TIME_UPDATEPOSITION,
+		&thrusterParam_.GAUGE_STOP,
 		&thrusterParam_.AMOUNT_OF_DECREASE,
-		&thrusterParam_.AMOUNT_OF_RECOVERY
+		&thrusterParam_.AMOUNT_OF_RECOVERY,
+		&thrusterParam_.ROTATE_Y
 	);
 	CSV::Schan(L"_Parameters\\BallParameter.csv",
 		"%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
@@ -57,7 +60,14 @@ void ConstStorageC::Initialize() {
 	);
 
 	float wx, wy;
-	CSV::Schan(L"_Parameters\\WireParameter.csv", "%f,%f", &wx, &wy);
+	float scx, scy, scz;
+	CSV::Schan(L"_Parameters\\WireParameter.csv", 
+		"%f,%f,&f,%f,&f,&f,&f,&f", 
+		&wx, &wy, &scx, &scy, &scz, 
+		&wireParam_.COLLIDER_SCALE_Y_CORRECTIONVALUE,
+		&wireParam_.MOD_ROT_Z[0],
+		&wireParam_.BULLET_ROT_Z[0]
+	);
 
 	playerParam_.START_POS[0] = DirectX::XMFLOAT3(-px, py, 0.0f);
 	playerParam_.START_POS[1] = DirectX::XMFLOAT3(px, py, 0.0f);
@@ -66,8 +76,11 @@ void ConstStorageC::Initialize() {
 
 	playerParam_.HAND_POS = DirectX::XMFLOAT2(hx, hy);
 
-	wireParam_.POS[0] = DirectX::XMFLOAT3(-wx, wy, 0.0f);
-	wireParam_.POS[1] = DirectX::XMFLOAT3(wx, wy, 0.0f);
-	wireParam_.POS[2] = DirectX::XMFLOAT3(wx, -wy, 0.0f);
-	wireParam_.POS[3] = DirectX::XMFLOAT3(-wx, -wy, 0.0f);
+	wireParam_.POS[0]	= DirectX::XMFLOAT3(-wx, wy, 0.0f);
+	wireParam_.POS[1]	= DirectX::XMFLOAT3(wx, wy, 0.0f);
+	wireParam_.POS[2]	= DirectX::XMFLOAT3(wx, -wy, 0.0f);
+	wireParam_.POS[3]	= DirectX::XMFLOAT3(-wx, -wy, 0.0f);
+	wireParam_.SCALE	= DirectX::XMFLOAT3(scx, scy, scz);
+	wireParam_.MOD_ROT_Z[1]		= wireParam_.MOD_ROT_Z[0];
+	wireParam_.BULLET_ROT_Z[1]	= wireParam_.BULLET_ROT_Z[1];
 }

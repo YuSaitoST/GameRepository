@@ -7,10 +7,13 @@
 
 #pragma once
 
+//‘O•ûéŒ¾
+class CountTimer;
+
 class AtEndCondition {
 public:
 	AtEndCondition() {}
 	virtual ~AtEndCondition() {}
 
-	virtual bool IsFined() = 0;
+	virtual bool IsFined(CountTimer* timer) = 0;
 };

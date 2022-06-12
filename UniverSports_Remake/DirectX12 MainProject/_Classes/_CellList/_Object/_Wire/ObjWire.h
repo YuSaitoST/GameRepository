@@ -15,7 +15,8 @@
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
 
 // 前方宣言
-class ObjBall;
+class BallsInstructor;
+class PlayersInstructor;
 
 class ObjWire final : public ObjectBase {
 public:
@@ -35,17 +36,18 @@ public:
 	virtual void Render(DX9::MODEL& model) {}
 	virtual void UIRender() {}
 
+	/**
+	* @brief インストラクターの設定
+	* @param blInstructor ボールインストラクター
+	* @param plInstructor プレイヤーインストラクター
+	*/
+	void SetInstructor(BallsInstructor* blInstructor, PlayersInstructor* plInstructor) { ballsInstructor_ = blInstructor; playersInstructor_ = plInstructor; }
+
 private:
-	const SimpleMath::Vector3 SCALE = SimpleMath::Vector3(13.75f, 2.35f, 10.0f);
-	const float ROT_TUNING_Z[2] = { 1.1f, -1.1f };
-	const float ROT_Z[2] = { 0.415f, -0.415f };
+	std::vector<int>				hasBallsID_;	//! ゴール内のボールリスト
+	std::unique_ptr<WireStrategy>	strategy_;		//! ワイヤーの振る舞い
+	std::unique_ptr<SoundPlayer>	se_goal_;		//! ゴール時のSE
 
-	//! ゴール内のボールリスト
-	std::vector<ObjBall*> hasBalls_;
-
-	//! ワイヤーの振る舞い
-	std::unique_ptr<WireStrategy> strategy_;
-
-	//! ゴール時のSE
-	std::unique_ptr<SoundPlayer> se_goal_;
+	BallsInstructor*	ballsInstructor_;	//! ボールインストラクター
+	PlayersInstructor*	playersInstructor_;	//! プレイヤーインストラクター
 };

@@ -1,6 +1,6 @@
 /**
- * @file PlayerList.h
- * @brief プレイヤーのリストクラス
+ * @file WireList.h
+ * @brief ボールのリストクラス
  * @author 齋藤優宇
  * @date 2021/05/14
  */
@@ -11,36 +11,31 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include <vector>
-#include "ObjPlayer.h"
+#include "ObjWire.h"
 
 //前方宣言
 class BallsInstructor;
+class PlayersInstructor;
 
-class PlayerList {
+class WireList {
 public:
-	PlayerList();
-	virtual ~PlayerList();
+	WireList();
+	virtual ~WireList();
 
 	void Initialize();
 	void LoadAssets();
 	void Update(const float deltaTime);
-	void RenderModel();
-	void RenderSprite();
-	void RenderTransparency();
-
 	void AddWorld(btDynamicsWorld* physics_world_);
 	void RemoveWorld(btDynamicsWorld* physics_world_);
 
 	void SetInstructors(BallsInstructor* blInstructor, PlayersInstructor* plInstuructor);
 
-	int PlayerLife(int index);
-
 	/**
-	* @brief プレイヤーリストを返す
-	* @return プレイヤーリスト
+	* @brief ワイヤーリストを返す
+	* @return ワイヤーリスト
 	*/
-	std::vector<ObjPlayer*> GetList() const { return list_; }
+	std::vector<ObjWire*> GetList() const { return list_; }
 
 private:
-	std::vector<ObjPlayer*> list_;
+	std::vector<ObjWire*> list_;
 };

@@ -55,9 +55,14 @@ public:
 
 	virtual void HitAction(ObjectBase* hitObject);
 
-	void SetInstructor(BallsInstructor* blInstructor, PlayersInstructor* plInstructor) { ballsInstructor_ = blInstructor; playersInstructor_ = plInstructor; }
-
 	void CreateModel(std::wstring fileName);
+
+	/**
+	* @brief インストラクターの設定
+	* @param blInstructor ボールインストラクター
+	* @param plInstructor プレイヤーインストラクター
+	*/
+	void SetInstructor(BallsInstructor* blInstructor, PlayersInstructor* plInstructor) { ballsInstructor_ = blInstructor; playersInstructor_ = plInstructor; }
 
 	/**
 	* @brief モデルの変更

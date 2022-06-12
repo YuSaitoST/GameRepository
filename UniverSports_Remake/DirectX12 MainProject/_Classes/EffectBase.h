@@ -23,9 +23,7 @@ public:
 	EffectBase(const float time) { SetMember(time); }
 	virtual ~EffectBase() {};
 
-	inline void SetMember(const float time) {
-		timer_ = new CountTimer(time);
-	}
+	inline void SetMember(const float time) { timer_ = new CountTimer(time); }
 
 	virtual void Initialize(std::string eff_name) { name_ = eff_name; }
 	virtual void LoadAsset(std::wstring file_name) { effect_ = DX12Effect.Create(file_name.c_str(), name_); }
@@ -67,6 +65,16 @@ public:
 	* @brief ’âŽ~
 	*/
 	virtual void Pause() { DX12Effect.Pause(name_); }
+
+	/**
+	* @brief ’âŽ~
+	*/
+	virtual void Stop() { DX12Effect.Stop(name_); }
+	
+	/**
+	* @breif ƒŠƒZƒbƒg
+	*/
+	virtual void Reset() { DX12Effect.Reset(); }
 
 	/**
 	* @brief ˆÚ“®

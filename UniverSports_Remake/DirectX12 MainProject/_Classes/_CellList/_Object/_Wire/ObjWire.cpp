@@ -1,11 +1,10 @@
 #include "ObjWire.h"
-#include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
-#include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
-#include "_Classes/_CellList/_Object/_Ball/ObjBall.h"
 #include "_Strategy/_Wires/Wires.h"
 #include "_Strategy/_Goals/Goals.h"
-#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_CellList/_BallsInstructor/BallsInstructor.h"
 #include "_Classes/_CellList/_Object/_Ball/_State/_Goal/StGoal.h"
+#include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
+#include "_Classes/_FileNames/FileNames.h"
 #include "DontDestroyOnLoad.h"
 
 ObjWire::ObjWire() {
@@ -31,16 +30,16 @@ ObjWire::ObjWire(Vector3 pos, float r) {
 
 void ObjWire::Initialize(const int id) {
 	id_my_ = id;
-	physics_ = std::make_unique<btObject>(Vector3(pos_.x, pos_.y, 0.0f), SCALE, ROT_Z[id_my_ % 2], 0.0f);
+	physics_ = std::make_unique<btObject>(Vector3(pos_.x, pos_.y, 0.0f), WIRE_PARAM.SCALE, WIRE_PARAM.BULLET_ROT_Z[id_my_ % 2], 0.0f);
 	se_goal_->Initialize(USFN_SOUND::SE::GOAL, SOUND_TYPE::SE, 0.0f);
 
 	UpdateToMorton();
 }
 
 void ObjWire::LoadAssets(std::wstring file_name) {
-	const Vector3 _rotate = XMFLOAT3(0.0f,0.0f, ROT_TUNING_Z[id_my_ % 2] * 1.5f);
+	const Vector3 _rotate = XMFLOAT3(0.0f,0.0f, WIRE_PARAM.MOD_ROT_Z[id_my_ % 2]);
 	const Quaternion _qua = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, _rotate.z);
-	DX9::MODEL mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, SCALE.x, SCALE.y * 1.5f, 1.0f);
+	DX9::MODEL mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, WIRE_PARAM.SCALE.x, WIRE_PARAM.SCALE.y * WIRE_PARAM.COLLIDER_SCALE_Y_CORRECTIONVALUE, 1.0f);
 
 	mod_wire_->SetRotation(_qua.x, _qua.y, _qua.z);
 	collision_->SetColli(mod_wire_->GetBoundingOrientedBox());
@@ -64,15 +63,15 @@ void ObjWire::HitAction(ObjectBase* object) {
 			return;
 
 		// ゴール内にボールが入っていなければ早期リターン
-		if (hasBalls_.size() <= 0)
+		if (hasBallsID_.size() <= 0)
 			return;
 
 		// ボールを持っているなら早期リターン
 		if (player->HasBall())
 			return;
 
-		player->CautchedBall(hasBalls_.back()->myObjectID());
-		hasBalls_.pop_back();
+		player->CautchedBall(hasBallsID_.back());
+		hasBallsID_.pop_back();
 	}
 	else if (object->myObjectType() == OBJ_TYPE::BALL) {
 		ObjBall* ball = dynamic_cast<ObjBall*>(object);
@@ -84,7 +83,7 @@ void ObjWire::HitAction(ObjectBase* object) {
 		std::unique_ptr<StGoal> goal = std::make_unique<StGoal>();
 		ball->SwitchState(goal.release());	
 		ball->WasGoaled();
-		hasBalls_.push_back(ball);
+		hasBallsID_.push_back(ball->myObjectID());
 		se_goal_->PlayOneShot();
 	}
 }

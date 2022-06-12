@@ -31,12 +31,12 @@ MainScene::MainScene()
 	std::unique_ptr<btCollisionDispatcher>	_collision_dispatcher	= std::make_unique<btCollisionDispatcher>(collision_config_);
 	std::unique_ptr<btBroadphaseInterface>	_broadphase				= std::make_unique<btDbvtBroadphase>();						//! ブロードフェーズ法の設定
 	std::unique_ptr<btConstraintSolver>		_solver					= std::make_unique<btSequentialImpulseConstraintSolver>();	//! 拘束のソルバ設定
-	physics_world_ = std::make_shared<btDiscreteDynamicsWorld>(_collision_dispatcher.release(), _broadphase.release(), _solver.release(), collision_config_);
+	physics_world_	= std::make_shared<btDiscreteDynamicsWorld>(_collision_dispatcher.release(), _broadphase.release(), _solver.release(), collision_config_);
 
-	bgm_					= std::make_unique<SoundPlayer>();
-	field_					= std::make_unique<GameField>((int)US2D::Layer::MAIN::UI_HOLE);
-	gameController_			= std::make_unique<GameController>();
-	m_object_				= std::make_unique<ObjectManager>();
+	bgm_			= std::make_unique<SoundPlayer>();
+	field_			= std::make_unique<GameField>((int)US2D::Layer::MAIN::UI_HOLE);
+	gameController_	= std::make_unique<GameController>();
+	m_object_		= std::make_unique<ObjectManager>();
 }
 
 // Initialize a variable and audio resources.
@@ -168,8 +168,7 @@ void MainScene::Render()
 
 	spriteBatch_->End();
 
-	if (!gameController_->GameFined())
-		DX12Effect.Renderer();
+	DX12Effect.Renderer();
 
 	DXTK->Direct3D9->WaitUpdate();
 	DXTK->ExecuteCommandList();

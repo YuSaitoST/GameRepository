@@ -3,6 +3,7 @@
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_AtEndCondition/AECDodgeBallNomal.h"
 #include "_AtEndCondition/AECDodgeBall2on2.h"
+#include "_AtEndCondition/AECHandBall.h"
 #include <cassert>
 
 bool GameController::gameStart_ = false;
@@ -20,6 +21,8 @@ GameController::GameController() {
 		atEndCondition_ = std::make_unique<AECDodgeBallNomal>();
 	else if (gameMode.isDODGEBALL_2ON2())
 		atEndCondition_ = std::make_unique<AECDodgeBall2on2>();
+	else if (gameMode.isHANDBALL())
+		atEndCondition_ = std::make_unique<AECHandBall>();
 	else
 		assert(!"不正なゲームモードです");
 }
@@ -66,6 +69,9 @@ void GameController::Render() {
 	if (gameStart_)
 		return;
 
+	if (GameFined())
+		return;
+
 	countDown_->Render((TIME_COUNT - std::max(0.0f, (startTime_ - timer_->NowTime()))));
 	gameStart_ = TIME_COUNT <= (startTime_ - timer_->NowTime());  // カウントダウン(4.2f)より経過時間が長ければtrue
 }
@@ -75,7 +81,7 @@ void GameController::Render() {
 * @return ゲームの終了状態
 */
 bool GameController::GameFined() {
-	return atEndCondition_->IsFined();
+	return atEndCondition_->IsFined(timer_.get());
 
 	assert(!"不正なゲームモードです__in GameController::GameFined()");
 	return false;

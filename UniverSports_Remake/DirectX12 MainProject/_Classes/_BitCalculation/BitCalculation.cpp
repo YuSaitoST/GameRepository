@@ -23,7 +23,7 @@ int BitCalculation::PointToMorton(DirectX::XMFLOAT2 pos) {
 	const float _sx = (int)FIELD::SIZE_X >> BitCalculation::DivisionLevel;
 	const float _sy = (int)FIELD::SIZE_Y >> BitCalculation::DivisionLevel;
 
-	//格子の座標(座標を 0<=pos<=FIELD::SIDE になるように調整後)
+	//格子の座標
 	const int _kx = (int)(std::min((pos.x + FIELD::HALF_X), FIELD::SIZE_X) / _sx);
 	const int _ky = (int)(std::min((pos.y + FIELD::HALF_Y), FIELD::SIZE_Y) / _sy);
 
@@ -32,12 +32,8 @@ int BitCalculation::PointToMorton(DirectX::XMFLOAT2 pos) {
 	const int _norx = _kx & _downBit;
 	const int _nory = _ky & _downBit;
 
-	//bit操作
-	const int _bx = BitSlide(_norx);
-	const int _by = BitSlide(_nory);
-
 	//OR演算して返す
-	return (_bx | (_by << 1));
+	return (BitSlide(_norx) | (BitSlide(_nory) << 1));
 }
 
 /**
@@ -55,13 +51,11 @@ void BitCalculation::MoverToMorton(DirectX::XMFLOAT2 m_pos, float radian, SpaceN
 	const int _mUL = PointToMorton(_UL);
 	const int _mUR = PointToMorton(_UR);
 
-	//XOR
-	const int _XOR = _mUL ^ _mUR;
-
-	int _k = 0;
 	//XORを00が出てくるまでループして、その回った数をKに保存する
-	for (int _b = _XOR; _b != 0; _b >>= 2, _k++);
+	int _k = 0;
+	for (int _XOR = _mUL ^ _mUR; _XOR != 0; _XOR >>= 2, _k++);
 
+	//各値の算出
 	numbers.Level_		= DivisionLevel - _k;
 	numbers.LsIndex_	= _mUR >> (2 * _k);
 	numbers.MsIndex_	= GetIndex(numbers.Level_, numbers.LsIndex_);

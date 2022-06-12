@@ -1,8 +1,8 @@
 /**
- * @file AECDodgeBall2on2.h
- * @brief ドッジボール2on2モードの終了条件クラス
+ * @file EffectBase.h
+ * @brief エフェクトの基底クラス
  * @author 齋藤優宇
- * @date 2021/06/04
+ * @date 2021/05/14
  */
 
 #pragma once
@@ -11,16 +11,16 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include "AtEndCondition.h"
-#include "DontDestroyOnLoad.h"
+#include "_Classes/_UI/_CountTimer/CountTimer.h"
 
-class AECDodgeBall2on2 : public AtEndCondition {
+class AECHandBall : public AtEndCondition {
 public:
-	AECDodgeBall2on2() {}
-	virtual ~AECDodgeBall2on2() {}
+	AECHandBall() {}
+	virtual ~AECHandBall() {}
 
 	/**
 	* @brief ゲームが終了したかを返す
 	* @return ゲームの終了状態
 	*/
-	virtual bool IsFined(CountTimer* timer) override { return DontDestroy->Survivor_.RemainingOfTeam() <= 1; }
+	virtual bool IsFined(CountTimer* timer) override { return timer->TimeOut(); }
 };
