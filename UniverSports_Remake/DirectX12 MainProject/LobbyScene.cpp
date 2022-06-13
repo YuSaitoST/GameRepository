@@ -7,6 +7,8 @@
 #include "Base/DX12Effekseer.h"
 #include "SceneFactory.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_UI/_UserInputRender/UnSelectedRender.h"
+#include "_Classes/_UI/_UserInputRender/SelectedRender.h"
 #include "_Classes/_UI/_TeamColor/UseTeamColor.h"
 #include "_Classes/_UI/_TeamColor/NullTeamColor.h"
 
@@ -30,10 +32,6 @@ LobbyScene::LobbyScene()
 	descriptorHeap_	= nullptr;
 	spriteBatch_	= nullptr;
 
-	std::random_device _seed;
-	randomEngine_	= std::mt19937(_seed());
-	newTeamID_		= std::uniform_int_distribution<>(0, 1);
-
 	font_count_		= DX9::SPRITEFONT{};
 	font_message_	= DX9::SPRITEFONT{};
 
@@ -41,12 +39,13 @@ LobbyScene::LobbyScene()
 	std::unique_ptr<btCollisionDispatcher>	_collision_dispatcher	= std::make_unique<btCollisionDispatcher>(collision_config_);
 	std::unique_ptr<btBroadphaseInterface>	_broadphase				= std::make_unique<btDbvtBroadphase>();						//! ブロードフェーズ法の設定
 	std::unique_ptr<btConstraintSolver>		_solver					= std::make_unique<btSequentialImpulseConstraintSolver>();	//! 拘束のソルバ設定
-	physics_world_	= std::make_unique<btDiscreteDynamicsWorld>(_collision_dispatcher.release(), _broadphase.release(), _solver.release(), collision_config_);
+	physics_world_		= std::make_unique<btDiscreteDynamicsWorld>(_collision_dispatcher.release(), _broadphase.release(), _solver.release(), collision_config_);
 
-	bg_movie_		= std::make_unique<MoviePlayer>();
-	bgm_			= std::make_unique<SoundPlayer>();
-	timer_goNext_	= std::make_unique<CountTimer>(GAMES_PARAM.LB_TIME_AFTER_PREPARATION);
-	blackOut_		= std::make_unique<BlackOut>();
+	bg_movie_			= std::make_unique<MoviePlayer>();
+	bgm_				= std::make_unique<SoundPlayer>();
+	timer_goNext_		= std::make_unique<CountTimer>(GAMES_PARAM.LB_TIME_AFTER_PREPARATION);
+	blackOut_			= std::make_unique<BlackOut>();
+	userInputRender_	= { std::make_unique<UnSelectedRender>(), std::make_unique<SelectedRender>() };
 
 	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
 	for (int _i = 0; _i <= _MAX; _i += 2) {
@@ -79,16 +78,9 @@ void LobbyScene::Initialize()
 	MainLight _light;
 	_light.Register();
 
-	if (DontDestroy->GameMode_.isDODGEBALL_2ON2()) {
-		const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
-		for (int _i = 0; _i <= _MAX; _i += 2) {
-			GiveTeamID(_i);
-			GiveTeamID(_i + 1);
-		}
-	}
-
 	bgm_->Initialize(USFN_SOUND::BGM::LOBBY, SOUND_TYPE::BGM, 0.0f);
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
+	teamColor_->Initialize();
 
 	physics_world_->setGravity(btVector3(0.0f, 0.0f, 0.0f));
 
@@ -102,18 +94,12 @@ void LobbyScene::Initialize()
 		player_[_i + 1]->SetInstructor(nullptr, nullptr);
 		physics_world_->addRigidBody(player_[_i + 1]->myRigidbody());
 
-		charaSelect_[_i]->Initialize(_i);
-		charaSelect_[_i + 1]->Initialize(_i + 1);
+		charaSelect_[_i		]->Initialize(_i);
+		charaSelect_[_i + 1	]->Initialize(_i + 1);
 	}
 
 	font_count_		= DX9::SpriteFont::CreateFromFontName(DXTK->Device9, L"MS ゴシック", 20);
 	font_message_	= DX9::SpriteFont::CreateFromFontName(DXTK->Device9, L"MS ゴシック", 10);
-
-
-	DontDestroy->TeamID[0] = 0;
-	DontDestroy->TeamID[1] = 0;
-	DontDestroy->TeamID[2] = 1;
-	DontDestroy->TeamID[3] = 1;
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -146,21 +132,21 @@ void LobbyScene::LoadAssets()
 	sp_bg			= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::LOBBY_BG.c_str());
 	sp_right		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_R.c_str());
 	sp_left			= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_L.c_str());
-	sp_decisions[0] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::DECISION.c_str());
-	sp_decisions[1] = DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CANCEL.c_str());
-	sp_entry		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ENTRY.c_str());
 
+	userInputRender_[0]->LoadAssets();
+	userInputRender_[1]->LoadAssets();
 	teamColor_->LoadAssets();
 
 	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
 	for (int _i = 0; _i <= _MAX; _i += 2) {
-		sp_playerIcon[_i]		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i].c_str());
-		player_[_i]->LoadAssets(USFN_MOD::PLAYER[_i]);
-		charaSelect_[_i]->LoadAssets(sp_right, sp_left);
-
+		sp_playerIcon[_i	]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i].c_str());
 		sp_playerIcon[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i + 1].c_str());
-		player_[_i + 1]->LoadAssets(USFN_MOD::PLAYER[_i + 1]);
-		charaSelect_[_i + 1]->LoadAssets(sp_right, sp_left);
+
+		player_[_i		]->LoadAssets(USFN_MOD::PLAYER[_i		]);
+		player_[_i + 1	]->LoadAssets(USFN_MOD::PLAYER[_i + 1	]);
+
+		charaSelect_[_i		]->LoadAssets(sp_right, sp_left);
+		charaSelect_[_i + 1	]->LoadAssets(sp_right, sp_left);
 	}
 
 	bg_movie_->LoadAsset(USFN_MV::MAIN_BG);
@@ -220,12 +206,14 @@ NextScene LobbyScene::Update(const float deltaTime)
 			player_[_i + 1]->Update(deltaTime);
 	}
 
+	//全員が選択したら、シーン移行まで待機
 	if (AllDecision()) {
 		timer_goNext_->Update(deltaTime);
 
 		if (timer_goNext_->TimeOut()) {
 			blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
 
+			//ブラックアウトが終了したら本編へ遷移
 			if (blackOut_->isDone())
 				return NextScene::MainScene;
 			else
@@ -237,8 +225,8 @@ NextScene LobbyScene::Update(const float deltaTime)
 	else {
 		const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
 		for (int _i = 0; _i <= _MAX; _i += 2) {
-			charaSelect_[_i]->Update(deltaTime, _i);
-			charaSelect_[_i + 1]->Update(deltaTime, _i + 1);
+			charaSelect_[_i		]->Update(deltaTime, _i		);
+			charaSelect_[_i + 1	]->Update(deltaTime, _i + 1	);
 		}
 	}
 
@@ -268,12 +256,12 @@ void LobbyScene::Render()
 			player_[_i + 1]->Render();
 	}
 
-	_view.X = 0.0f;
-	_view.Y = 0.0f;
-	_view.Width = DXTK->ScreenWidth;
-	_view.Height = DXTK->ScreenHeight;
-	_view.MinZ = 0.0f;
-	_view.MaxZ = 1.0f;
+	_view.X			= 0.0f;
+	_view.Y			= 0.0f;
+	_view.Width		= DXTK->ScreenWidth;
+	_view.Height	= DXTK->ScreenHeight;
+	_view.MinZ		= 0.0f;
+	_view.MaxZ		= 1.0f;
 	DXTK->Device9->SetViewport(&_view);
 
 	DX9::SpriteBatch->Begin();  // スプライトの描画を開始
@@ -284,8 +272,12 @@ void LobbyScene::Render()
 	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::LOBBY::BG_SPRITE));
 
 	for (int _i = 0; _i <= _MAX; _i += 2) {
-		charaSelect_[_i		]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i		]], sp_decisions[charaSelect_[_i	]->IsDecision()], sp_entry, _i		);
-		charaSelect_[_i + 1	]->Render(sp_playerIcon[DontDestroy->ChoseColor_[_i + 1	]], sp_decisions[charaSelect_[_i + 1]->IsDecision()], sp_entry, _i + 1	);
+		DX9::SpriteBatch->DrawSimple(sp_playerIcon[DontDestroy->ChoseColor_[_i		]].Get(), XMFLOAT3(_param.PICON_X[_i	], _param.PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
+		DX9::SpriteBatch->DrawSimple(sp_playerIcon[DontDestroy->ChoseColor_[_i + 1	]].Get(), XMFLOAT3(_param.PICON_X[_i + 1], _param.PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
+		charaSelect_[_i		]->Render();
+		charaSelect_[_i + 1	]->Render();
+		userInputRender_[charaSelect_[_i	]->IsDecision()]->Render(_i		);
+		userInputRender_[charaSelect_[_i + 1]->IsDecision()]->Render(_i + 1	);
 	}
 
 	// チームカラーの表示
@@ -325,23 +317,6 @@ void LobbyScene::Render_String() {
 
 	DX9::SpriteBatch->DrawString(font_message_.Get(), XMFLOAT2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すと他のプレイヤーを");
 	DX9::SpriteBatch->DrawString(font_message_.Get(), XMFLOAT2(50.0f, 360.0f), DX9::Colors::Black, L"決定にすることができます");
-}
-
-void LobbyScene::GiveTeamID(int myID) {
-	int _newID = -1;
-	do {
-		_newID = newTeamID_(randomEngine_);
-		DontDestroy->TeamID[myID] = _newID;
-	} while (2 < HowManyValuesIn(DontDestroy->TeamID, 4, _newID));
-}
-
-int LobbyScene::HowManyValuesIn(const int* list, int size, int findNum) {
-	int _count = 0;
-	for (int _i = 0; _i < size; ++_i)
-		if (list[_i] == findNum)
-			_count += 1;
-	
-	return _count;
 }
 
 bool LobbyScene::AllDecision() {

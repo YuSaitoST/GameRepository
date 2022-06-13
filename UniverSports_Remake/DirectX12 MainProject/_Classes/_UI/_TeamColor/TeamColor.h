@@ -12,6 +12,7 @@ public:
 	TeamColor() {}
 	virtual ~TeamColor() {}
 
+	virtual void Initialize() = 0;
 	virtual void LoadAssets() = 0;
 	virtual void Render(int playerID) = 0;
 };

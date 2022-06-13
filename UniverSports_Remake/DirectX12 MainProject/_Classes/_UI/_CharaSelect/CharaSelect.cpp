@@ -67,13 +67,8 @@ void CharaSelect::Update(const float deltaTime, const int index) {
 	}
 }
 
-void CharaSelect::Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE entry, int index) {
+void CharaSelect::Render() {
 	ui_arrows_->Render(255);
-	DX9::SpriteBatch->DrawSimple(icon.Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().PICON_X[index], US2D::Pos::Get().LobbyParam().PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
-	DX9::SpriteBatch->DrawSimple(decisions.Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().INPUT_X[index], US2D::Pos::Get().LobbyParam().INPUT_Y, (int)US2D::Layer::LOBBY::UI_DECISIONS));
-
-	if (isDecision_)
-		DX9::SpriteBatch->DrawSimple(entry.Get(), XMFLOAT3(US2D::Pos::Get().LobbyParam().ENTRY_X[index], US2D::Pos::Get().LobbyParam().ENTRY_Y, (int)US2D::Layer::LOBBY::UI_ENTRY));
 }
 
 /**

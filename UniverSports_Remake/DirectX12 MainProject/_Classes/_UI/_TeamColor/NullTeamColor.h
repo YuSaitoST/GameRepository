@@ -17,6 +17,7 @@ public:
 	NullTeamColor() {}
 	virtual ~NullTeamColor() {}
 
+	virtual void Initialize() override {}
 	virtual void LoadAssets() override {}
 	virtual void Render(int teamID) override {}
 };

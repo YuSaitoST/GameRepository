@@ -29,7 +29,7 @@ public:
 	void Initialize(int index);
 	void LoadAssets(DX9::SPRITE right, DX9::SPRITE left);
 	void Update(const float deltaTime, const int index);
-	void Render(DX9::SPRITE& icon, DX9::SPRITE& decisions, DX9::SPRITE entry, int index);
+	void Render();
 
 	/**
 	* @brief 決定状態を返す
@@ -41,21 +41,11 @@ private:
 	void SelectToAvoidDupLicates(int index);
 	bool haveSameValue(int index);
 
-	//! 選択クラス
-	std::unique_ptr<Choices> choices_;
+	std::unique_ptr<Choices>		choices_;		//! 選択クラス
+	std::unique_ptr<SelectArrows>	ui_arrows_;		//! 矢印
+	std::unique_ptr<SoundPlayer>	se_decision_;	//! 決定SE
+	std::unique_ptr<SoundPlayer>	se_cancel_;		//! キャンセルSE
+	std::unique_ptr<SoundPlayer>	se_warning_;	//! 警告SE
 	
-	//! 矢印
-	std::unique_ptr<SelectArrows> ui_arrows_;
-	
-	//! 決定SE
-	std::unique_ptr<SoundPlayer> se_decision_;
-	
-	//! キャンセルSE
-	std::unique_ptr<SoundPlayer> se_cancel_;
-	
-	//! 警告SE
-	std::unique_ptr<SoundPlayer> se_warning_;
-	
-	//! 決定フラグ
-	bool isDecision_;
+	bool isDecision_;	//! 決定フラグk
 };

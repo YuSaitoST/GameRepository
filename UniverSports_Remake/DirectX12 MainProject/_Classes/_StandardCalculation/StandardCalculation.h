@@ -15,4 +15,12 @@ namespace StandardCalculation {
 			num = min;
 	}
 
+	template<typename Number> int HowManyValuesIn(const Number* list, Number size, Number findNum) {
+		int _count = 0;
+		for (int _i = 0; _i < size; ++_i)
+			_count += (int)(list[_i] == findNum);
+
+		return _count;
+	}
+
 }  //namespace StandardCalculation

@@ -6,6 +6,7 @@
 
 #include "Scene.h"
 #include <random>
+#include <array>
 #include <btBulletDynamicsCommon.h>
 #include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
@@ -17,6 +18,7 @@
 #include "_Classes/_UI/_CharaSelect/CharaSelect.h"
 #include "_Classes/_UI/_CountTimer/CountTimer.h"
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
+#include "_Classes/_UI/_UserInputRender/UserInputRender.h"
 #include "_Classes/_UI/_TeamColor/TeamColor.h"
 
 using Microsoft::WRL::ComPtr;
@@ -51,17 +53,12 @@ public:
 
 private:
 	void Render_String();
-	void GiveTeamID(int myID);
-	int HowManyValuesIn(const int* list, int size, int findNum);
 	bool AllDecision();
 
 private:
-	const float			SPEED_FADE[3]	= { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
+	const float	SPEED_FADE[3]	= { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
 
 	static std::unique_ptr<ObjPlayer> player_[OBJECT_MAX::PLAYER];
-
-	std::mt19937						randomEngine_;
-	std::uniform_int_distribution<>		newTeamID_;
 
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
 	DX12::SPRITEBATCH					spriteBatch_;
@@ -73,21 +70,18 @@ private:
 	DX9::SPRITE							sp_bg;
 	DX9::SPRITE							sp_right;
 	DX9::SPRITE							sp_left;
-	DX9::SPRITE							sp_decisions[2];
-	DX9::SPRITE							sp_entry;
 	DX9::SPRITE							sp_playerIcon[OBJECT_MAX::PLAYER];
-	//DX9::SPRITE							sp_teamCol_[OBJECT_MAX::PLAYER / 2];
 
-	btDefaultCollisionConfiguration*	collision_config_;		//! 衝突検出方法(デフォルト)
-	std::unique_ptr<btDynamicsWorld>	physics_world_;
+	btDefaultCollisionConfiguration*	collision_config_;					//! 衝突検出方法(デフォルト)
+	std::unique_ptr<btDynamicsWorld>	physics_world_;						//! 物理演算ワールド
 
-	std::unique_ptr<MoviePlayer>		bg_movie_;
-	std::unique_ptr<SoundPlayer>		bgm_;
+	std::unique_ptr<MoviePlayer>		bg_movie_;							//! 背景
+	std::unique_ptr<SoundPlayer>		bgm_;								//! BGM
+	std::unique_ptr<CharaSelect>		charaSelect_[OBJECT_MAX::PLAYER];	//! キャラクター選択
+	std::unique_ptr<CountTimer>			timer_goNext_;						//! シーン遷移までのカウントダウン
+	std::unique_ptr<BlackOut>			blackOut_;							//! ブラックアウト
+	std::unique_ptr<TeamColor>			teamColor_;							//! チームカラー
+	std::array<std::unique_ptr<UserInputRender>, 2> userInputRender_;		//! 入力状態の表示
 
-	std::unique_ptr<CharaSelect>		charaSelect_[OBJECT_MAX::PLAYER];
-	std::unique_ptr<CountTimer>			timer_goNext_;
-	std::unique_ptr<BlackOut>			blackOut_;
-	std::unique_ptr<TeamColor>			teamColor_;
-
-	bool								allSet_;
+	bool								allSet_;							//! 全プレイヤー選択完了
 };
