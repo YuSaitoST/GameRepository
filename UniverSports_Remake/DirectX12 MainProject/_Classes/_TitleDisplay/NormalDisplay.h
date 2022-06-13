@@ -35,7 +35,7 @@ public:
 
 private:
 	static const int	CHOICES				= 2;						// 縦の選択肢数
-	static const int	MODE				= 2;						// モードの数
+	static const int	MODE				= 3;						// モードの数
 	const float			SPEED_FADE[3]		= { 127.5f, 510.0f, 0.0f };	// シーン移行のフェード速度(2s, 0.5s、0.0s)
 	const float			SPEED_ALPHA			= 127.5f;					// UIのフェード速度
 
@@ -49,8 +49,8 @@ private:
 	std::unique_ptr<OperateUI>		operate_;		//! 操作説明
 	std::unique_ptr<BlackOut>		blackOut_;		//! ブラックアウト
 
-	TextBase* text_;								//! 選択肢基底クラス
-	TextUI nowText_[CHOICES][MODE];					//! 選択肢配列
+	TextBase*	text_;						//! 選択肢基底クラス
+	TextUI		nowText_[CHOICES][MODE];	//! 選択肢配列
 
 	float ui_alpha_;  //! UIのα値
 };

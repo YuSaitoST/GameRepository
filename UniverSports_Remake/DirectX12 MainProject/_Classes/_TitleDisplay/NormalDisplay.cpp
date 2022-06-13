@@ -29,6 +29,7 @@ void NormalDisplay::Initialize() {
 	for (int _u = 0; _u < CHOICES; ++_u) {
 		nowText_[_u][0].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
 		nowText_[_u][1].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
+		nowText_[_u][2].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
 	}
 
 	// 最初に選択状態にする選択肢を代入
@@ -37,19 +38,15 @@ void NormalDisplay::Initialize() {
 
 void NormalDisplay::LoadAssets() {
 	movie_->LoadAsset(USFN_MV::TITLE_BG);
-	
 	cursor_->LoadAsset(USFN_SP::CURSOR);
 	ui_arrows_->LoadAssets();
 	operate_->LoadAsset();
 	blackOut_->LoadAsset();
 
-	/*
-		選択肢に使用する画像のパスを
-		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
-	*/
 	for (int _u = 0; _u < CHOICES; ++_u) {
 		nowText_[_u][0].LoadAsset(USFN_SP::UI_TEXT[_u][0]);
 		nowText_[_u][1].LoadAsset(USFN_SP::UI_TEXT[_u][1]);
+		nowText_[_u][2].LoadAsset(USFN_SP::UI_TEXT[_u][2]);
 	}
 }
 
@@ -83,7 +80,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 
 	// モード選択
 	if (cursor_->SelectNum() == 0) {
-		mode_choices_->Update(MODE, Press.RightKey(0), Press.LeftKey(0));
+		mode_choices_->Update(MODE, Press.LeftKey(0), Press.RightKey(0));
 		mode_choices_->NextSelectOn(ui_arrows_->Update(0));
 	}
 
@@ -118,7 +115,6 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 
 void NormalDisplay::Render() {
 	movie_->Render(DirectX::XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::TITLE::BG_MOVIE));
-	//cursor_->Render(ui_alpha_);
 	ui_arrows_->Render(ui_alpha_);
 	operate_->Render();
 	blackOut_->Render();

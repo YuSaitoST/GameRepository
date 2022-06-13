@@ -51,7 +51,7 @@ private:
 
 	std::unique_ptr<NormalDisplay>	disp_normal_;
 	std::unique_ptr<DemoDisplay>	disp_demo_;
-	DisplayBase*	display_;
+	DisplayBase*					display_;
 
 	DISPLAYMODE						displayMode_;
 };

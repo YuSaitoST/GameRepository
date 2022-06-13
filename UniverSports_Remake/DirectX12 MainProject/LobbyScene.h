@@ -17,6 +17,7 @@
 #include "_Classes/_UI/_CharaSelect/CharaSelect.h"
 #include "_Classes/_UI/_CountTimer/CountTimer.h"
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
+#include "_Classes/_UI/_TeamColor/TeamColor.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
@@ -75,7 +76,7 @@ private:
 	DX9::SPRITE							sp_decisions[2];
 	DX9::SPRITE							sp_entry;
 	DX9::SPRITE							sp_playerIcon[OBJECT_MAX::PLAYER];
-	DX9::SPRITE							sp_teamCol_[OBJECT_MAX::PLAYER / 2];
+	//DX9::SPRITE							sp_teamCol_[OBJECT_MAX::PLAYER / 2];
 
 	btDefaultCollisionConfiguration*	collision_config_;		//! 衝突検出方法(デフォルト)
 	std::unique_ptr<btDynamicsWorld>	physics_world_;
@@ -86,6 +87,7 @@ private:
 	std::unique_ptr<CharaSelect>		charaSelect_[OBJECT_MAX::PLAYER];
 	std::unique_ptr<CountTimer>			timer_goNext_;
 	std::unique_ptr<BlackOut>			blackOut_;
+	std::unique_ptr<TeamColor>			teamColor_;
 
 	bool								allSet_;
 };
