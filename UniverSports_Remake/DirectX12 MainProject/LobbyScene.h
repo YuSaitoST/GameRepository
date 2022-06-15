@@ -58,7 +58,7 @@ private:
 private:
 	const float	SPEED_FADE[3]	= { 127.5f, 510.0f, 0.0f };  // シーン移行のフェード速度(2s, 0.5s、0.0s)
 
-	static std::unique_ptr<ObjPlayer> player_[OBJECT_MAX::PLAYER];
+	static std::unique_ptr<ObjPlayer>	player_[OBJECT_MAX::PLAYER];
 
 	DX12::DESCRIPTORHEAP				descriptorHeap_;
 	DX12::SPRITEBATCH					spriteBatch_;

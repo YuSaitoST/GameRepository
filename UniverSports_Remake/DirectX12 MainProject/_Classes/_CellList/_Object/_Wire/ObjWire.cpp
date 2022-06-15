@@ -20,24 +20,24 @@ ObjWire::ObjWire(Vector3 pos, float r) {
 	cp_ = nullptr;
 	SetMember(WIRE, ORIENTEDBOX, pos, r);
 
-	if (DontDestroy->GameMode_.isDODGEBALL_NOMAL())
-		strategy_ = std::make_unique<Wires>();
-	else
+	if (DontDestroy->GameMode_.isHANDBALL())
 		strategy_ = std::make_unique<Goals>();
+	else
+		strategy_ = std::make_unique<Wires>();
 
 	se_goal_ = std::make_unique<SoundPlayer>();
 }
 
 void ObjWire::Initialize(const int id) {
 	id_my_ = id;
-	physics_ = std::make_unique<btObject>(Vector3(pos_.x, pos_.y, 0.0f), WIRE_PARAM.SCALE, WIRE_PARAM.BULLET_ROT_Z[id_my_ % 2], 0.0f);
+	physics_ = std::make_unique<btObject>(Vector3(pos_.x, pos_.y, 0.0f), WIRE_PARAM.SCALE, WIRE_PARAM.BULLET_ROT_Z[id_my_], 0.0f);
 	se_goal_->Initialize(USFN_SOUND::SE::GOAL, SOUND_TYPE::SE, 0.0f);
 
 	UpdateToMorton();
 }
 
 void ObjWire::LoadAssets(std::wstring file_name) {
-	const Vector3 _rotate = XMFLOAT3(0.0f,0.0f, WIRE_PARAM.MOD_ROT_Z[id_my_ % 2]);
+	const Vector3 _rotate = XMFLOAT3(0.0f,0.0f, WIRE_PARAM.MOD_ROT_Z[id_my_]);
 	const Quaternion _qua = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, _rotate.z);
 	DX9::MODEL mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, WIRE_PARAM.SCALE.x, WIRE_PARAM.SCALE.y * WIRE_PARAM.COLLIDER_SCALE_Y_CORRECTIONVALUE, 1.0f);
 
@@ -56,21 +56,25 @@ void ObjWire::HitAction(ObjectBase* object) {
 		return;
 
 	if (object->myObjectType() == OBJ_TYPE::PLAYER) {
+		// ゴール内にボールが入っていなければ早期リターン
+		if (hasBallsID_.size() <= 0)
+			return;
+
 		ObjPlayer* player = dynamic_cast<ObjPlayer*>(object);
 
 		// 自分の陣地ではないのなら早期リターン
 		if (player->myObjectID() != id_my_)
 			return;
 
-		// ゴール内にボールが入っていなければ早期リターン
-		if (hasBallsID_.size() <= 0)
-			return;
-
 		// ボールを持っているなら早期リターン
 		if (player->HasBall())
 			return;
 
+		const int ballID = hasBallsID_.back();
 		player->CautchedBall(hasBallsID_.back());
+		ObjBall* ball = ballsInstructor_->Access(ballID);
+		ball->WasCaught(id_my_, player->GetHandPos());
+		ball->SwitchColor(ObjBall::COLOR_TYPE::PLAYERS_COLOR);
 		hasBallsID_.pop_back();
 	}
 	else if (object->myObjectType() == OBJ_TYPE::BALL) {
@@ -80,10 +84,14 @@ void ObjWire::HitAction(ObjectBase* object) {
 		if (ball->NowState() != B_STATE::SHOT)
 			return;
 
-		std::unique_ptr<StGoal> goal = std::make_unique<StGoal>();
-		ball->SwitchState(goal.release());	
-		ball->WasGoaled();
-		hasBallsID_.push_back(ball->myObjectID());
+		// 自分のゴールにボールが入らないように早期リターン
+		if (ball->GetOwnerID() == id_my_)
+			return;
+
 		se_goal_->PlayOneShot();
+		hasBallsID_.push_back(ball->myObjectID());
+		std::unique_ptr<StGoal> goal = std::make_unique<StGoal>();
+		ball->SwitchState(goal.release());
+		ball->WasGoaled();
 	}
 }

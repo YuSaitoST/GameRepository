@@ -46,6 +46,7 @@ NextScene GameController::Update(const float deltaTime) {
 	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 	countDown_->Update(deltaTime, (TIME_COUNT - (startTime_ - timer_->NowTime())));
 
+	//ƒQ[ƒ€‚ªI—¹‚µ‚½‚ç
 	if (GameFined()) {
 		if (gameStart_)
 			blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
@@ -59,6 +60,7 @@ NextScene GameController::Update(const float deltaTime) {
 		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && _seFined)
 			return NextScene::ResultScene;
 	}
+
 	return NextScene::Continue;
 }
 

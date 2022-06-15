@@ -25,7 +25,7 @@ public:
 
 	ObjBall* Access(const int ballID) const;
 	ObjBall* GetNearestBall(DirectX::XMFLOAT2 myPosition);
-	void Cautch(const int playerID, const int ballID);
+	void Cautch(const int playerID, const int ballID, DirectX::XMFLOAT2* handPos);
 	void Shot(const int ballID, DirectX::SimpleMath::Vector2 forwrad);
 	void BreakOfThrower(const int ballID);
 	void BreakOfTheHitter(const int ballID);

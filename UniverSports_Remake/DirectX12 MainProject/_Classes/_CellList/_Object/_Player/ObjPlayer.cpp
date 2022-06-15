@@ -9,7 +9,7 @@
 #include "DontDestroyOnLoad.h"
 
 ObjPlayer::ObjPlayer() {
-	cp_ = nullptr;
+	cp_				= nullptr;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
 	physics_		= nullptr;
@@ -28,7 +28,7 @@ ObjPlayer::ObjPlayer() {
 }
 
 ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
-	cp_ = nullptr;
+	cp_				= nullptr;
 	SetMember(PLAYER, COLLI_TYPE::SPHRER, pos, r);
 
 	physics_		= std::make_unique<btObject>(pos, 0.8f, 0.0f, 1.0f);
@@ -144,8 +144,7 @@ void ObjPlayer::HitAction(ObjectBase* hitObject) {
 			// ボールを持っている且つ保持ボールのIDが存在する
 			if (hasBall_ && myBallID_ != -1)
 				return;
-
-			_ball->SetOwnerHandPos(&handPos_);
+			
 			CautchedBall(_ball->myObjectID());
 		}
 		else if (_baleState == B_STATE::SHOT) {  // やられ処理
@@ -217,7 +216,7 @@ void ObjPlayer::CreateModel(std::wstring fileName) {
 * @brief アニメーションをリセットする
 */
 void ObjPlayer::AnimReset() {
-	const int _limit = (int)(6 * 0.5f);
+	const int _limit = (int)(MOTION::COUNT * 0.5f);
 	for (int _i = 0; _i <= _limit; _i += 3) {
 		model_->SetTrackEnable(_i, false);
 		model_->SetTrackEnable(_i + 1, false);
@@ -256,13 +255,13 @@ void ObjPlayer::Shoting(const int ballID) {
 }
 
 /**
-* @brief ボールをキャッチする処理
+* @brief キャッチ処理
 * @param ballID ボールのID
 */
 void ObjPlayer::CautchedBall(const int ballID) {
-	hasBall_ = true;
-	myBallID_ = ballID;
-	ballsInstructor_->Cautch(id_my_, myBallID_);
+	hasBall_	= true;
+	myBallID_	= ballID;
+	ballsInstructor_->Cautch(id_my_, ballID, &handPos_);
 }
 
 /**

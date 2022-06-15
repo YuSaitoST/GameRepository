@@ -28,8 +28,8 @@ ObjBall* BallsInstructor::Access(const int ballID) const {
 * @param playerID プレイヤーのID
 * @param ballID ボールのID
 */
-void BallsInstructor::Cautch(const int playerID, const int ballID) {
-	list_[ballID]->WasCaught(playerID);
+void BallsInstructor::Cautch(const int playerID, const int ballID, DirectX::XMFLOAT2* handPos) {
+	list_[ballID]->WasCaught(playerID, handPos);
 }
 
 /**

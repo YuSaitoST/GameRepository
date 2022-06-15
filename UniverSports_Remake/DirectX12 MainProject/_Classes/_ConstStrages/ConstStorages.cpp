@@ -78,9 +78,13 @@ void ConstStorageC::Initialize() {
 
 	wireParam_.POS[0]	= DirectX::XMFLOAT3(-wx, wy, 0.0f);
 	wireParam_.POS[1]	= DirectX::XMFLOAT3(wx, wy, 0.0f);
-	wireParam_.POS[2]	= DirectX::XMFLOAT3(wx, -wy, 0.0f);
-	wireParam_.POS[3]	= DirectX::XMFLOAT3(-wx, -wy, 0.0f);
+	wireParam_.POS[2]	= DirectX::XMFLOAT3(-wx, -wy, 0.0f);
+	wireParam_.POS[3]	= DirectX::XMFLOAT3(wx, -wy, 0.0f);
 	wireParam_.SCALE	= DirectX::XMFLOAT3(scx, scy, scz);
-	wireParam_.MOD_ROT_Z[1]		= -wireParam_.MOD_ROT_Z[0];
-	wireParam_.BULLET_ROT_Z[1]	= -wireParam_.BULLET_ROT_Z[0];
+	wireParam_.MOD_ROT_Z[1]	= -wireParam_.MOD_ROT_Z[0];
+	wireParam_.MOD_ROT_Z[2] = -wireParam_.MOD_ROT_Z[0];
+	wireParam_.MOD_ROT_Z[3] = wireParam_.MOD_ROT_Z[0];
+	wireParam_.BULLET_ROT_Z[1] = -wireParam_.BULLET_ROT_Z[0];
+	wireParam_.BULLET_ROT_Z[2] = -wireParam_.BULLET_ROT_Z[0];
+	wireParam_.BULLET_ROT_Z[3] = wireParam_.BULLET_ROT_Z[0];
 }

@@ -19,7 +19,7 @@ using namespace DirectX;
 * @enum B_STATE
 * ƒ{[ƒ‹‚Ìó‘Ô
 */
-enum B_STATE { STANDBY, FLOATING, CAUTCH, SHOT, GOAL, NONE_STATE };
+enum class B_STATE { STANDBY, FLOATING, CAUTCH, SHOT, GOAL, NONE_STATE };
 
 //‘O•ûéŒ¾
 class ObjBall;

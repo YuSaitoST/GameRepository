@@ -36,7 +36,8 @@ private:
 		HAND,
 		HAND_TO_READY,
 		READY,
-		IS_SHOT
+		IS_SHOT,
+		COUNT
 	};
 
 public:
@@ -135,6 +136,12 @@ public:
 	*/
 	ObjectBase* GetTargetPlayer() const { return targetPlayer_; }
 
+	/**
+	* @brief 手元の座標
+	* @return 手元の座標
+	*/
+	XMFLOAT2* GetHandPos() { return &handPos_; }
+
 private:
 	void Playing(const float deltaTime);
 	void Beaten(const float deltaTime);
@@ -167,8 +174,8 @@ private:
 
 	DX9::SKINNEDMODEL	model_;				//! モデル
 
-	bool				isUsethrasher_;		//! スラスター使用状態
-	bool				hasBall_;			//! ボールの所持状態
-	bool				isDown_;			//! やられ状態
-	int					myBallID_;			//! 所持しているボールのID
+	bool	isUsethrasher_;		//! スラスター使用状態
+	bool	hasBall_;			//! ボールの所持状態
+	bool	isDown_;			//! やられ状態
+	int		myBallID_;			//! 所持しているボールのID
 };

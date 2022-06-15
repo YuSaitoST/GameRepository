@@ -49,7 +49,7 @@ namespace US2D {
 			UI_GAUGE_FRAME,
 			UI_TIMER,
 			UI_WIRE,
-			BG_MOVIE
+			BG_MOVIE = 9999
 		};
 
 		/**

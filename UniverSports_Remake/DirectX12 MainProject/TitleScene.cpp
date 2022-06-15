@@ -31,9 +31,6 @@ TitleScene::TitleScene()
 // Initialize a variable and audio resources.
 void TitleScene::Initialize()
 {
-	//使用するコア数を指定
-	omp_set_num_threads(4);
-
 	//FPS指定
 	DXTK->SetFixedFrameRate(60);
 	

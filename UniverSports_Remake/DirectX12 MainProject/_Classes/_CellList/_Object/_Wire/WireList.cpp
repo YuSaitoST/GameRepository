@@ -1,4 +1,5 @@
 #include "WireList.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 
 WireList::WireList() {
 	list_.reserve(OBJECT_MAX::WIRE);

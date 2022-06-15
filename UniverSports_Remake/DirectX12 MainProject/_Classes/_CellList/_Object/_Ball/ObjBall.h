@@ -14,18 +14,6 @@
 #include "_State/BallState.h"
 
 class ObjBall final : public ObjectBase {
-private:
-	//! プレイヤーのディフューズ色
-	const D3DCOLORVALUE P_DIFFUSE[5] = {
-		D3DCOLORVALUE(0.0f,0.65f,0.0f,1.0f),	// 緑(PL.1)
-		D3DCOLORVALUE(0.65f,0.0f,0.65f,1.0f),	// 紫(PL.2)
-		D3DCOLORVALUE(0.65f,0.0f,0.0f,1.0f),	// 赤(PL.3)
-		D3DCOLORVALUE(0.0f,0.0f,0.65f,1.0f),	// 青(PL.4)
-		D3DCOLORVALUE(0.0f,0.0f,0.0f,0.0f)
-	};
-	//! アンビエント色
-	const D3DCOLORVALUE P_AMBIENT = D3DCOLORVALUE(0.35f, 0.35f, 0.35f, 1.0f);
-
 public:
 	/**
 	* @enum COLOR_TYPE
@@ -48,7 +36,7 @@ public:
 
 	virtual void HitAction(ObjectBase* hitObject) {}
 
-	void WasCaught(const int ownerID);
+	void WasCaught(const int ownerID, DirectX::XMFLOAT2* handPos);
 	void WasThrown(Vector2 forward);
 	void WasGoaled();
 	void WasGuessed();
@@ -85,7 +73,7 @@ public:
 	* @brief 剛体オブジェクトに座標を設定する
 	* @param position 座標
 	*/
-	void PhysicsControll(Vector3 position) {
+	void SetPhysicsPosition(Vector3 position) {
 		AssignTransform(position, Vector2::Zero);
 		physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 	}
@@ -99,12 +87,6 @@ public:
 	* @brief ボールを破壊された状態にする
 	*/
 	inline void SetBallBreak(bool flag) { isBreak_ = flag; }
-	
-	/**
-	* @brief 持ち主の手元の座標を保存する
-	* @param handPos 手元の座標
-	*/
-	inline void SetOwnerHandPos(XMFLOAT2* handPos) { ownerHandPos_ = handPos; }
 
 	/**
 	* @brief 状態フラグを全てリセットする
@@ -144,24 +126,14 @@ public:
 private:
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);
 
-	//! 持ち主の手元の座標
-	XMFLOAT2* ownerHandPos_;
+	const float POS_Z_AT_GOAL = 1000.0f;
 
-	//! ボールの状態
-	BallState* state_;
+	XMFLOAT2*	ownerHandPos_;	//! 持ち主の手元の座標
+	BallState*	state_;			//! ボールの状態
+	COLOR_TYPE	colorType_;		//! 現在の色の状態
 
-	//! 現在の色の状態
-	COLOR_TYPE colorType_;
-
-	//! Z座標
-	float pos_z_;
-
-	//! 持ち主のID
-	int id_owner_;
-
-	//! プレイヤーの手元にあるか
-	bool isInPlayerHands_;
-
-	//! 破壊されたか
-	bool isBreak_;
+	float	pos_z_;				//! Z座標
+	int		id_owner_;			//! 持ち主のID
+	bool	isInPlayerHands_;	//! プレイヤーの手元にあるか
+	bool	isBreak_;			//! 破壊されたか
 };

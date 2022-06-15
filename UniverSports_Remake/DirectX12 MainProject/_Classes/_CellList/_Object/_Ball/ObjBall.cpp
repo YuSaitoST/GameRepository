@@ -2,6 +2,7 @@
 #include "_State/_Standby/StStandby.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 #include "_Classes/_Field/Field.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 #include "DontDestroyOnLoad.h"
 
 ObjBall::ObjBall() {
@@ -75,8 +76,8 @@ void ObjBall::Update(const float deltaTime) {
 }
 
 void ObjBall::Render(DX9::MODEL& model) {
-	model->SetPosition(Vector3(pos_.x, pos_.y, pos_z_));
-	model->SetRotation(Vector3(rotate_.x, rotate_.y, 0.0f));
+	model->SetPosition(XMFLOAT3(pos_.x, pos_.y, pos_z_));
+	model->SetRotation(XMFLOAT3(rotate_.x, rotate_.y, 0.0f));
 	model->SetMaterial(ChangeMaterial(colorType_));
 	model->Draw();
 }
@@ -97,14 +98,14 @@ void ObjBall::SwitchState(BallState* state) {
 */
 D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	D3DMATERIAL9 _mat{};
-
 	switch (colorType) {
-		case DEFAULT_COLOR : _mat = GetNomMaterial(); break;
-		case PLAYERS_COLOR : _mat.Diffuse = P_DIFFUSE[std::min(std::max(0, DontDestroy->ChoseColor_[id_owner_]), 4 - 1)]; _mat.Ambient = P_AMBIENT; break;
-		case TEAM_COLOR    : break;
-		//default			   : assert(!"ObjBall::ChangeMaterial : 不正な状態です");
+		case DEFAULT_COLOR	:	_mat = GetNomMaterial();
+								break;
+		case PLAYERS_COLOR	:	_mat.Diffuse = USMaterial::P_DIFFUSE[DontDestroy->ChoseColor_[id_owner_]];
+								_mat.Ambient = USMaterial::P_AMBIENT;
+								break;
+		case TEAM_COLOR		:	break;
 	}
-
 	return _mat;
 }
 
@@ -113,15 +114,16 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 */
 void ObjBall::Following(float pos_z) {
 	pos_ = *ownerHandPos_;
-	PhysicsControll(XMFLOAT3(pos_.x, pos_.y, pos_z));
+	SetPhysicsPosition(XMFLOAT3(pos_.x, pos_.y, pos_z));
 }
 
 /**
 * @brief キャッチされた際の処理
 * @param ownerID 持ち主のID
 */
-void ObjBall::WasCaught(const int ownerID) {
+void ObjBall::WasCaught(const int ownerID, XMFLOAT2* handPos) {
 	id_owner_ = ownerID;
+	ownerHandPos_ = handPos;
 	isInPlayerHands_ = true;
 	pos_z_ = -6.0f;
 	ResetVelocity();
@@ -142,8 +144,9 @@ void ObjBall::WasThrown(Vector2 forward) {
 * @brief ゴールした際の処理
 */
 void ObjBall::WasGoaled() {
-	pos_z_ = 3.0f;
+	pos_z_ = POS_Z_AT_GOAL;
 	id_owner_ = -1;
+	isInPlayerHands_ = false;
 	SwitchColor(COLOR_TYPE::DEFAULT_COLOR);
 	FlagResets();
 	ResetVelocity();
@@ -161,9 +164,10 @@ void ObjBall::WasGuessed() {
 * @brief 場外に出た際のリセット処理
 */
 void ObjBall::BallBreak() {
-	pos_z_ = 0.0f;
-	id_owner_ = -1;
-	isBreak_ = true;
-	isInPlayerHands_ = false;
+	pos_z_				= 0.0f;
+	id_owner_			= -1;
+	isBreak_			= true;
+	isInPlayerHands_	= false;
+	ownerHandPos_		= nullptr;
 	AssignTransform(Vector3(FIELD::HALF_X, FIELD::HALF_Y, 0.0f), Vector2::Zero);
 }

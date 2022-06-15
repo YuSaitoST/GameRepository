@@ -26,9 +26,6 @@ public:
 	void Moving(SimpleMath::Vector3 power);
 	void LimitSpeed();
 
-	// ‚Ä‚·‚Æ
-	btRigidBody* GetBody() { return bt_body_.get(); }
-
 	/**
 	* @brief •¨‘Ì‚ÌRigidBody‚ð•Ô‚·
 	* @return RigitBody

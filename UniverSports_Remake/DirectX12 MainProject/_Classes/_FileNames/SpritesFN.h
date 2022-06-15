@@ -43,10 +43,10 @@ namespace USFN_SP {
 	};
 
 	const std::wstring LEFT_ICON[4] = {
-		L"_Images\\_Main\\_Icon\\icon_g.png",
-		L"_Images\\_Main\\_Icon\\icon_p.png",
-		L"_Images\\_Main\\_Icon\\icon_r.png",
-		L"_Images\\_Main\\_Icon\\icon_b.png",
+		L"_Images\\_Main\\_Icon\\icon_bear.png",
+		L"_Images\\_Main\\_Icon\\icon_pig.png",
+		L"_Images\\_Main\\_Icon\\icon_dog.png",
+		L"_Images\\_Main\\_Icon\\icon_cat.png",
 	};
 
 	const std::wstring COLOR_WIRE[4][4] = {
@@ -110,7 +110,7 @@ namespace USFN_SP {
 	const std::wstring TEAM_A		= L"_Images\\_Lobby\\_TeamColor\\team_a.png";
 	const std::wstring TEAM_B		= L"_Images\\_Lobby\\_TeamColor\\team_b.png";
 
-	const std::wstring NOMAL_WIRE	= L"_Images\\_Main\\_Wire\\honeycomb_wire02.png";
+	const std::wstring NOMAL_WIRE	= L"_Images\\_Main\\_Wire\\honeycomb_wire.png";
 	const std::wstring HOLE			= L"_Images\\_Main\\holeFlont.png";
 
 	const std::wstring RESULT_BG	= L"_Images\\_Result\\bg_tile.png";

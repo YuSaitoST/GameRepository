@@ -13,6 +13,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "UIPosition.h"
+#include "USMaterial.h"
 
 //É}ÉNÉç
 #define GAME_CONST		ConstStorageC::GetInstance()
@@ -76,8 +77,8 @@ private:
 		DirectX::XMFLOAT3 POS[OBJECT_MAX::WIRE];
 		DirectX::XMFLOAT3 SCALE;
 		float COLLIDER_SCALE_Y_CORRECTIONVALUE;
-		float MOD_ROT_Z[2];
-		float BULLET_ROT_Z[2];
+		float MOD_ROT_Z[OBJECT_MAX::WIRE];
+		float BULLET_ROT_Z[OBJECT_MAX::WIRE];
 	};
 
 public:
