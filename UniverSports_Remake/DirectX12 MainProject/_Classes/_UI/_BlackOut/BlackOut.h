@@ -30,25 +30,20 @@ public:
 	void Render();
 
 	bool isDone();
-	int GetMode() { return (int)mode_; }
+	inline int GetMode() { return (int)mode_; }
 
 	/**
 	* @brief フェード状態の変更
 	*/
-	void ChangeMode(BLACKOUT_MODE mode) { mode_ = mode; }
+	inline void ChangeMode(BLACKOUT_MODE mode) { mode_ = mode; }
 
 private:
-	const float		RGBA_MAX		= 255.0f;
-	const float		TIME_FADEIN		= RGBA_MAX / 5.0f;
-	const float		TIME_FADEOUT	= RGBA_MAX / 0.5f;
+	const float	RGBA_MAX		= 255.0f;
+	const float	TIME_FADEIN		= RGBA_MAX / 5.0f;
+	const float	TIME_FADEOUT	= RGBA_MAX / 0.5f;
 
 private:
-	//! 開始状態
-	BLACKOUT_MODE	mode_;
-	
-	//! 画像
-	DX9::SPRITE		sprite_;
-	
-	//! α値
-	float			alpha_;
+	BLACKOUT_MODE	mode_;		//! 開始状態
+	DX9::SPRITE		sprite_;	//! 画像
+	float			alpha_;		//! α値
 };

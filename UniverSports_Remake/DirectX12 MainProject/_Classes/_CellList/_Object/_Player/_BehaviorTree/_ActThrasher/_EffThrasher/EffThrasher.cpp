@@ -6,7 +6,7 @@ EffThrasher::EffThrasher() : EffectBase(THRUSTER_PARAM.TIME_UPDATEPOSITION), use
 }
 
 void EffThrasher::Update(const float deltaTime, float rotate_x, Vector3 position, Vector3 direction, float proportion) {
-	if (!GameController::GamePlay())
+	if (!GameController::gamePlay_)
 		Stop();
 
 	Set_Position(position);

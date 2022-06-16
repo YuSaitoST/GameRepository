@@ -9,7 +9,7 @@ void StStandby::Initialize() {
 }
 
 void StStandby::Update(ObjBall* ball) {
-	if (GameController::GamePlay()) {
+	if (GameController::gamePlay_) {
 		std::unique_ptr<StFloat> flo = std::make_unique<StFloat>();
 		ball->SwitchState(flo.release());
 		ball->SwitchColor(ObjBall::COLOR_TYPE::DEFAULT_COLOR);

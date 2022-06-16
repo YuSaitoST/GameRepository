@@ -12,11 +12,7 @@
  //------------------------------------------------------------------------------
 #include "Scene.h"
 #include "DontDestroyOnLoad.h"
-#include "_Classes/_UI/_CountTimer/CountTimer.h"
-#include "_Classes/_UI/_CountDown/CountDown.h"
-#include "_Classes/_UI/_BlackOut/BlackOut.h"
-#include "_Classes/_UI/_Finish/Finish.h"
-#include "_Classes/_SoundPlayer/SoundPlayer.h"
+#include "_ControllerState/ControllerState.h"
 #include "_AtEndCondition/AtEndCondition.h"
 
 class GameController {
@@ -33,20 +29,10 @@ public:
 	void Render();
 	bool GameFined();
 
-	static bool GamePlay() { return gameStart_; }
+	static bool	gamePlay_;	//! ゲームの進行状態フラグ
 
 private:
-	const float TIME_COUNT		= 4.2f;
-	const float TIME_LIMIT[4]	= { 0.0f, 0.0f, 120.0f, 0.0f };
-	const float	SPEED_FADE[3]	= { 51.0f, 510.0f, 0.0f };
-
-	std::unique_ptr<CountTimer>		timer_;				//! タイマー
-	std::unique_ptr<CountDownUI>	countDown_;			//! 開始前カウントダウン
-	std::unique_ptr<BlackOut>		blackOut_;			//! ブラックアウト
-	std::unique_ptr<Finish>			ui_finish_;			//! 終了時テキスト
-	std::unique_ptr<SoundPlayer>	se_whistle_;		//! 終了時SE
-	std::unique_ptr<AtEndCondition> atEndCondition_;	//! 終了条件
-
-	float			startTime_;	//! ゲームの制限時間
-	static bool		gameStart_;	//! ゲームの進行状態フラグ
+	std::unique_ptr<AtEndCondition>		atEndCondition_;	//! 終了条件
+	std::unique_ptr<ControllerState>	progress_;			//! 現在のゲーム進行状態
+	std::vector<std::unique_ptr<ControllerState>> progressList_;	//! 進行内容のリスト
 };

@@ -22,5 +22,5 @@ public:
 	* @brief ƒQ[ƒ€‚ªI—¹‚µ‚½‚©‚ð•Ô‚·
 	* @return ƒQ[ƒ€‚ÌI—¹ó‘Ô
 	*/
-	virtual bool IsFined(CountTimer* timer) override { return timer->TimeOut(); }
+	virtual bool IsFined(CountTimer* timer) override { return (timer != nullptr) ? timer->TimeOut() : false; }
 };

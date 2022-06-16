@@ -1,20 +1,22 @@
 #include "GameController.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_ControllerState/StartState.h"
+#include "_ControllerState/PlayState.h"
+#include "_ControllerState/FinishState.h"
 #include "_AtEndCondition/AECDodgeBallNomal.h"
 #include "_AtEndCondition/AECDodgeBall2on2.h"
 #include "_AtEndCondition/AECHandBall.h"
 #include <cassert>
 
-bool GameController::gameStart_ = false;
+bool GameController::gamePlay_ = false;
 
 GameController::GameController() {
-	startTime_	= TIME_LIMIT[(int)DontDestroy->GameMode_.SelectionMode()] + TIME_COUNT;
-	timer_		= std::make_unique<CountTimer>(startTime_);
-	countDown_	= std::make_unique<CountDownUI>();
-	blackOut_	= std::make_unique<BlackOut>();
-	ui_finish_	= std::make_unique<Finish>();
-	se_whistle_ = std::make_unique<SoundPlayer>();
+	progress_	= std::make_unique<StartState>();
+	
+	progressList_.reserve(2);
+	progressList_.push_back(std::make_unique<PlayState>());
+	progressList_.push_back(std::make_unique<FinishState>());
 
 	GameModes gameMode = DontDestroy->GameMode_;
 	if (gameMode.isDODGEBALL_NOMAL())
@@ -28,54 +30,36 @@ GameController::GameController() {
 }
 
 void GameController::Initialize() {
-	countDown_->Initialize();
-	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
-	ui_finish_->Initialize();
-	se_whistle_->Initialize(USFN_SOUND::SE::WHISTLE, SOUND_TYPE::SE, 1.0f);
-	gameStart_ = false;
+	progress_->Initialize();
+	progressList_[0]->Initialize();
+	progressList_[1]->Initialize();
+
+	gamePlay_ = false;
 }
 
 void GameController::LoadAssets() {
-	countDown_->LoadAssets();
-	blackOut_->LoadAsset();
-	ui_finish_->LoadAssets();
+	progress_->LoadAsstes();
+	progressList_[0]->LoadAsstes();
+	progressList_[1]->LoadAsstes();
 }
 
 NextScene GameController::Update(const float deltaTime) {
-	timer_->Update(deltaTime);
-	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
-	countDown_->Update(deltaTime, (TIME_COUNT - (startTime_ - timer_->NowTime())));
+	progress_->Update(deltaTime);
 
-	//ゲームが終了したら
-	if (GameFined()) {
-		if (gameStart_)
-			blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
-
-		gameStart_ = false;
-		ui_finish_->Update(deltaTime);
-
-		const bool _seFined = se_whistle_->PlayOneShot(deltaTime);
-
-		//全てのアニメーションが終了したらリザルトへ遷移する
-		if (blackOut_->isDone() && ui_finish_->isAnimationFine() && _seFined)
+	if (progress_->ChangeDrawing(this)) {
+		if (progressList_.size() == 0) {
 			return NextScene::ResultScene;
+		}
+
+		progress_.reset(progressList_.front().release());
+		progressList_.erase(progressList_.begin() + 0);
 	}
 
 	return NextScene::Continue;
 }
 
 void GameController::Render() {
-	blackOut_->Render();
-	ui_finish_->Render();
-
-	if (gameStart_)
-		return;
-
-	if (GameFined())
-		return;
-
-	countDown_->Render((TIME_COUNT - std::max(0.0f, (startTime_ - timer_->NowTime()))));
-	gameStart_ = TIME_COUNT <= (startTime_ - timer_->NowTime());  // カウントダウン(4.2f)より経過時間が長ければtrue
+	progress_->Render();
 }
 
 /**
@@ -83,8 +67,5 @@ void GameController::Render() {
 * @return ゲームの終了状態
 */
 bool GameController::GameFined() {
-	return atEndCondition_->IsFined(timer_.get());
-
-	assert(!"不正なゲームモードです__in GameController::GameFined()");
-	return false;
+	return atEndCondition_->IsFined(progress_->GetTimer());
 }
