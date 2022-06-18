@@ -1,6 +1,7 @@
 #include "CellList.h"
 #include "_Cell/Cell.h"
-#include "_Classes/_BitCalculation/BitCalculation.h"
+#include "_Classes/_CellList/_BitCalculation/BitCalculation.h"
+#include <cassert>
 
 CellList::CellList() {
 	cpList_				= new Cell[BitCalculation::GetIndex(N + 1, 0)];

@@ -18,8 +18,8 @@ using namespace DirectX;
 
 class btObject {
 public:
-	btObject(SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass);
-	btObject(SimpleMath::Vector3 pos, float scale, float rotZ, float mass);
+	btObject(SimpleMath::Vector3 pos, SimpleMath::Vector3 scale, float rotZ, float mass);	//’¼•û‘Ì—p
+	btObject(SimpleMath::Vector3 pos, float scale, float rotZ, float mass);					//‹…‘Ì—p
 	virtual ~btObject() {}
 
 	void SetTransform(SimpleMath::Vector3 pos, SimpleMath::Vector3 rotate);

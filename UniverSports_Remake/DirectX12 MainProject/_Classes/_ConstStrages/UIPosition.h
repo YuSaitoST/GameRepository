@@ -48,6 +48,7 @@ namespace US2D {
 		struct MAIN {
 			DirectX::XMFLOAT3 LIFEICON_LPOS[4];
 			int LIFEICON_SIZE;
+			DirectX::XMFLOAT2 TIMER;
 		};
 
 		struct RESULT {
@@ -95,7 +96,9 @@ namespace US2D {
 				&lobby_.VIEW_X, &lobby_.VIEW_Y, &lobby_.VIEW_W, &lobby_.VIEW_H
 			);
 			int LeftX, RightX, UpY, DownY;
-			CSV::Schan(L"_Parameters\\_UI\\MainUIPosition.csv", "%i,%i,%i,%i,%i", &LeftX, &RightX, &UpY, &DownY, &main_.LIFEICON_SIZE);
+			CSV::Schan(L"_Parameters\\_UI\\MainUIPosition.csv", "%i,%i,%i,%i,%i,%i,%i", 
+				&LeftX, &RightX, &UpY, &DownY, &main_.LIFEICON_SIZE, &main_.TIMER.x, &main_.TIMER.y
+			);
 			main_.LIFEICON_LPOS[0] = DirectX::XMFLOAT3(LeftX, UpY, 0.0f);
 			main_.LIFEICON_LPOS[1] = DirectX::XMFLOAT3(RightX, UpY, 0.0f);
 			main_.LIFEICON_LPOS[2] = DirectX::XMFLOAT3(LeftX, DownY, 0.0f);

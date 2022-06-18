@@ -21,6 +21,7 @@ void StFloat::Initialize() {
 }
 
 void StFloat::Update(ObjBall* ball) {
+	// ó‘Ô•Ï‰»
 	if (ball->IsInPlayerHands()) {
 		std::unique_ptr<StCautch> cautch = std::make_unique<StCautch>();
 		ball->SwitchState(cautch.release());

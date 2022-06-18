@@ -27,8 +27,6 @@ public:
 	virtual CountTimer* GetTimer() override { return timer_.get(); }
 
 private:
-	const float TIME_LIMIT[4] = { 0.0f, 0.0f, 120.0f, 0.0f };
-
 	std::unique_ptr<CountTimer> timer_;	//! タイマー
 	DX9::SPRITEFONT				font_;	//! フォント
 };

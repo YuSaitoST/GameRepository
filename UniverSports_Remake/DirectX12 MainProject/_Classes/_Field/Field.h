@@ -13,6 +13,7 @@
 #include "Base/pch.h"
 
 namespace FIELD {
+	void Clamp(DirectX::SimpleMath::Vector2& position);
 	void ClampLoop(DirectX::SimpleMath::Vector2& position);
 	bool IsOut(DirectX::SimpleMath::Vector2 position, float raidus);
 

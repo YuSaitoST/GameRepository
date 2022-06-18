@@ -31,20 +31,25 @@ bool ActMove::Think(ObjPlayer& my) {
 		}
 		else if (my.HasBall()) {
 			// 投げる方向を決める
-			SeekForwardDirection(my.myPosition(), _targetPlayer->myPosition());
+			SeekForwardDirection(_myPosition, _targetPlayer->myPosition());
 			return true;
 		}
 	}
 	
 	if (_targetBall != nullptr) {
-		if (((ObjBall*)_targetBall)->GetOwnerID() != -1) {
+		ObjBall* _ball = (ObjBall*)_targetBall;
+		if (_ball->NowState() == B_STATE::SHOT) {
 			// 対象のボールが「投げられたボール」なら、逃げる方向を決める
 			SeekEscapeDirection(_targetBall->myDirection());
 			return true;
 		}
 		else if (my.HasBall() == 0) {
+			// ゴールしたボールは無視
+			if (_ball->NowState() == B_STATE::GOAL)
+				return false;
+			
 			// ボールを持っていないなら、ボールを取りに行く
-			SeekForwardDirection(my.myPosition(), _targetBall->myPosition());
+			SeekForwardDirection(_myPosition, _targetBall->myPosition());
 			return true;
 		}
 	}

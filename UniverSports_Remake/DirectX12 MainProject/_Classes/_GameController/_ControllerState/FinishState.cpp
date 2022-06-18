@@ -1,5 +1,6 @@
 #include "FinishState.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_ConstStrages/ConstStorages.h"
 
 FinishState::FinishState() {
 	ui_finish_	= std::make_unique<Finish>();
@@ -20,7 +21,7 @@ void FinishState::LoadAsstes() {
 
 void FinishState::Update(const float deltaTime) {
 	ui_finish_->Update(deltaTime);
-	blackOut_->Update(SPEED_FADE * deltaTime);
+	blackOut_->Update(GAMES_PARAM.FN_FADEIN * deltaTime);
 }
 
 void FinishState::Render() {

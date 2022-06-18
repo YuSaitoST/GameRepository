@@ -29,9 +29,6 @@ public:
 	virtual CountTimer* GetTimer() override { return nullptr; }
 
 private:
-	const float TIME_COUNT = 4.2f;
-	const float	SPEED_FADE = 510.0f;
-
 	std::unique_ptr<CountTimer>		timer_;		//! タイマー
 	std::unique_ptr<CountDownUI>	countDown_;	//! 開始前カウントダウンUI
 	std::unique_ptr<BlackOut>		blackOut_;	//! ブラックアウト

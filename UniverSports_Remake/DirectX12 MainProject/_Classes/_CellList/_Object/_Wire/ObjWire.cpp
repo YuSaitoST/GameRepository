@@ -30,20 +30,19 @@ ObjWire::ObjWire(Vector3 pos, float r) {
 
 void ObjWire::Initialize(const int id) {
 	id_my_ = id;
-	physics_ = std::make_unique<btObject>(Vector3(pos_.x, pos_.y, 0.0f), WIRE_PARAM.SCALE, WIRE_PARAM.BULLET_ROT_Z[id_my_], 0.0f);
+	physics_ = std::make_unique<btObject>(XMFLOAT3(pos_.x, pos_.y, 0.0f), XMFLOAT3(WIRE_PARAM.SCALE.x, WIRE_PARAM.SCALE.y, 1.0f), WIRE_PARAM.BULLET_ROT_Z[id_my_], 0.0f);
 	se_goal_->Initialize(USFN_SOUND::SE::GOAL, SOUND_TYPE::SE, 0.0f);
 
 	UpdateToMorton();
 }
 
 void ObjWire::LoadAssets(std::wstring file_name) {
-	const Vector3 _rotate = XMFLOAT3(0.0f,0.0f, WIRE_PARAM.MOD_ROT_Z[id_my_]);
-	const Quaternion _qua = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, _rotate.z);
+	const Quaternion _qua = Quaternion::CreateFromYawPitchRoll(0.0f, 0.0f, WIRE_PARAM.MOD_ROT_Z[id_my_]);
 	DX9::MODEL mod_wire_ = DX9::Model::CreateBox(DXTK->Device9, WIRE_PARAM.SCALE.x, WIRE_PARAM.SCALE.y * WIRE_PARAM.COLLIDER_SCALE_Y_CORRECTIONVALUE, 1.0f);
 
 	mod_wire_->SetRotation(_qua.x, _qua.y, _qua.z);
 	collision_->SetColli(mod_wire_->GetBoundingOrientedBox());
-	collision_->SetPosition(Vector3(pos_.x, pos_.y, 0.0f));
+	collision_->SetPosition(XMFLOAT3(pos_.x, pos_.y, 0.0f));
 }
 
 void ObjWire::Update(const float deltaTime) {

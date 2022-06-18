@@ -6,34 +6,34 @@
 #include "DontDestroyOnLoad.h"
 
 ObjBall::ObjBall() {
-	cp_ = nullptr;
-	pos_ = Vector2::Zero;
+	cp_					= nullptr;
+	pos_				= Vector2::Zero;
 	SetMember(NONE_OBJ_ID, NONE_COLLI_TYPE, Vector3::Zero, 0.0f);
 
-	ownerHandPos_ = nullptr;
-	physics_ = nullptr;
-	colorType_ = DEFAULT_COLOR;
-	pos_z_ = 0.0f;
-	id_owner_ = -1;
-	isInPlayerHands_ = false;
-	isBreak_ = false;
+	ownerHandPos_		= nullptr;
+	physics_			= nullptr;
+	colorType_			= DEFAULT_COLOR;
+	pos_z_				= 0.0f;
+	id_owner_			= -1;
+	isInPlayerHands_	= false;
+	isBreak_			= false;
 }
 
 ObjBall::ObjBall(Vector3 pos, float r) {
-	cp_ = nullptr;
-	pos_ = Vector2::Zero;
+	cp_					= nullptr;
+	pos_				= Vector2::Zero;
 	SetMember(BALL, COLLI_TYPE::SPHRER, pos, r);
 
 	std::unique_ptr<StStandby> standby = std::make_unique<StStandby>();
 	SwitchState(standby.release());
 
-	physics_ = std::make_unique<btObject>(pos, BALL_PARAM.OBJ_SCALE, 0.0f, 1.0f);
-	colorType_ = DEFAULT_COLOR;
-	pos_z_ = 0.0f;
-	id_owner_ = -1;
-	ownerHandPos_ = nullptr;
-	isInPlayerHands_ = false;
-	isBreak_ = false;
+	physics_			= std::make_unique<btObject>(pos, BALL_PARAM.OBJ_SCALE, 0.0f, 1.0f);
+	colorType_			= DEFAULT_COLOR;
+	pos_z_				= 0.0f;
+	id_owner_			= -1;
+	ownerHandPos_		= nullptr;
+	isInPlayerHands_	= false;
+	isBreak_			= false;
 }
 
 ObjBall::~ObjBall() {
@@ -99,10 +99,10 @@ void ObjBall::SwitchState(BallState* state) {
 D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 	D3DMATERIAL9 _mat{};
 	switch (colorType) {
-		case DEFAULT_COLOR	:	_mat = GetNomMaterial();
+		case DEFAULT_COLOR	:	_mat			= GetNomMaterial();
 								break;
-		case PLAYERS_COLOR	:	_mat.Diffuse = USMaterial::P_DIFFUSE[DontDestroy->ChoseColor_[id_owner_]];
-								_mat.Ambient = USMaterial::P_AMBIENT;
+		case PLAYERS_COLOR	:	_mat.Diffuse	= USMaterial::P_DIFFUSE[DontDestroy->ChoseColor_[id_owner_]];
+								_mat.Ambient	= USMaterial::P_AMBIENT;
 								break;
 		case TEAM_COLOR		:	break;
 	}
@@ -114,7 +114,7 @@ D3DMATERIAL9 ObjBall::ChangeMaterial(COLOR_TYPE colorType) {
 */
 void ObjBall::Following(float pos_z) {
 	pos_ = *ownerHandPos_;
-	SetPhysicsPosition(XMFLOAT3(pos_.x, pos_.y, pos_z));
+	SetPhysicsTransform(XMFLOAT3(pos_.x, pos_.y, pos_z), forward_);
 }
 
 /**
@@ -122,10 +122,10 @@ void ObjBall::Following(float pos_z) {
 * @param ownerID 持ち主のID
 */
 void ObjBall::WasCaught(const int ownerID, XMFLOAT2* handPos) {
-	id_owner_ = ownerID;
-	ownerHandPos_ = handPos;
-	isInPlayerHands_ = true;
-	pos_z_ = -6.0f;
+	id_owner_			= ownerID;
+	ownerHandPos_		= handPos;
+	isInPlayerHands_	= true;
+	pos_z_				= BALL_PARAM.Z_AT_CAUTCH;
 	ResetVelocity();
 	AssignTransform(XMFLOAT3(pos_.x, pos_.y, pos_z_), forward_);
 }
@@ -135,8 +135,8 @@ void ObjBall::WasCaught(const int ownerID, XMFLOAT2* handPos) {
 * @param forward 正面ベクトル
 */
 void ObjBall::WasThrown(Vector2 forward) {
-	forward_ = forward;
-	isInPlayerHands_ = false;
+	forward_			= forward;
+	isInPlayerHands_	= false;
 	AddPower(XMFLOAT3(pos_.x,pos_.y,pos_z_), XMFLOAT3(forward_.x, forward_.y, 0.0f), BALL_PARAM.SPEED_SHOT);
 }
 
@@ -144,12 +144,13 @@ void ObjBall::WasThrown(Vector2 forward) {
 * @brief ゴールした際の処理
 */
 void ObjBall::WasGoaled() {
-	pos_z_ = POS_Z_AT_GOAL;
-	id_owner_ = -1;
-	isInPlayerHands_ = false;
+	pos_z_				= BALL_PARAM.Z_AT_GOAL;
+	id_owner_			= -1;
+	isInPlayerHands_	= false;
 	SwitchColor(COLOR_TYPE::DEFAULT_COLOR);
 	FlagResets();
-	ResetVelocity();
+	physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
+	//ResetVelocity();
 }
 
 /**

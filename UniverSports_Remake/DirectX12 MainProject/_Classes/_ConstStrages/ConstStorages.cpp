@@ -3,16 +3,22 @@
 
 void ConstStorageC::Initialize() {
 	CSV::Schan(L"_Parameters\\GameProgressionParameter.csv",
-		"%f,%f,%f,%f,%f,%f,%f,%f,%f",
+		"%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
 		&gameParam_.TL_UI_DISPLAY,
 		&gameParam_.TL_TIME_LOGO_DISPLAY,
 		&gameParam_.TL_DEMO_PLAYBACK,
 		&gameParam_.LB_MV_SCALE,
 		&gameParam_.LB_TIME_AFTER_PREPARATION,
-		&gameParam_.MN_TIME_HANDBALL,
+		&gameParam_.MN_COUNTDOWN,
+		&gameParam_.MN_GAMETIMER[0],
+		&gameParam_.MN_GAMETIMER[1],
+		&gameParam_.MN_GAMETIMER[2],
+		&gameParam_.MN_GAMETIMER[3],
+		&gameParam_.MN_FADEOUT,
 		&gameParam_.FN_TIME_MOVE,
 		&gameParam_.FN_TIME_DISPLAY,
-		&gameParam_.FN_TIME_FADEOUT
+		&gameParam_.FN_TIME_FADEOUT,
+		&gameParam_.FN_FADEIN
 	);
 
 	float px, py;
@@ -46,7 +52,7 @@ void ConstStorageC::Initialize() {
 		&thrusterParam_.ROTATE_Y
 	);
 	CSV::Schan(L"_Parameters\\BallParameter.csv",
-		"%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
+		"%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
 		&ballParam_.MAX[0],
 		&ballParam_.MAX[1],
 		&ballParam_.MAX[2],
@@ -56,7 +62,9 @@ void ConstStorageC::Initialize() {
 		&ballParam_.OBJ_SCALE,
 		&ballParam_.SPEED_FLOAT,
 		&ballParam_.SPEED_SHOT,
-		&ballParam_.Z_CAUTCH
+		&ballParam_.SPEED_GOAL,
+		&ballParam_.Z_AT_CAUTCH,
+		&ballParam_.Z_AT_GOAL
 	);
 
 	float wx, wy;
@@ -69,22 +77,22 @@ void ConstStorageC::Initialize() {
 		&wireParam_.BULLET_ROT_Z[0]
 	);
 
-	playerParam_.START_POS[0] = DirectX::XMFLOAT3(-px, py, 0.0f);
-	playerParam_.START_POS[1] = DirectX::XMFLOAT3(px, py, 0.0f);
-	playerParam_.START_POS[2] = DirectX::XMFLOAT3(-px, -py, 0.0f);
-	playerParam_.START_POS[3] = DirectX::XMFLOAT3(px, -py, 0.0f);
+	playerParam_.START_POS[0]	= DirectX::XMFLOAT3(-px, py, 0.0f);
+	playerParam_.START_POS[1]	= DirectX::XMFLOAT3(px, py, 0.0f);
+	playerParam_.START_POS[2]	= DirectX::XMFLOAT3(-px, -py, 0.0f);
+	playerParam_.START_POS[3]	= DirectX::XMFLOAT3(px, -py, 0.0f);
 
-	playerParam_.HAND_POS = DirectX::XMFLOAT2(hx, hy);
+	playerParam_.HAND_POS		= DirectX::XMFLOAT2(hx, hy);
 
-	wireParam_.POS[0]	= DirectX::XMFLOAT3(-wx, wy, 0.0f);
-	wireParam_.POS[1]	= DirectX::XMFLOAT3(wx, wy, 0.0f);
-	wireParam_.POS[2]	= DirectX::XMFLOAT3(-wx, -wy, 0.0f);
-	wireParam_.POS[3]	= DirectX::XMFLOAT3(wx, -wy, 0.0f);
-	wireParam_.SCALE	= DirectX::XMFLOAT3(scx, scy, scz);
-	wireParam_.MOD_ROT_Z[1]	= -wireParam_.MOD_ROT_Z[0];
-	wireParam_.MOD_ROT_Z[2] = -wireParam_.MOD_ROT_Z[0];
-	wireParam_.MOD_ROT_Z[3] = wireParam_.MOD_ROT_Z[0];
-	wireParam_.BULLET_ROT_Z[1] = -wireParam_.BULLET_ROT_Z[0];
-	wireParam_.BULLET_ROT_Z[2] = -wireParam_.BULLET_ROT_Z[0];
-	wireParam_.BULLET_ROT_Z[3] = wireParam_.BULLET_ROT_Z[0];
+	wireParam_.POS[0]			= DirectX::XMFLOAT3(-wx, wy, 0.0f);
+	wireParam_.POS[1]			= DirectX::XMFLOAT3(wx, wy, 0.0f);
+	wireParam_.POS[2]			= DirectX::XMFLOAT3(-wx, -wy, 0.0f);
+	wireParam_.POS[3]			= DirectX::XMFLOAT3(wx, -wy, 0.0f);
+	wireParam_.SCALE			= DirectX::XMFLOAT3(scx, scy, scz);
+	wireParam_.MOD_ROT_Z[1]		= -wireParam_.MOD_ROT_Z[0];
+	wireParam_.MOD_ROT_Z[2]		= -wireParam_.MOD_ROT_Z[0];
+	wireParam_.MOD_ROT_Z[3]		= wireParam_.MOD_ROT_Z[0];
+	wireParam_.BULLET_ROT_Z[1]	= -wireParam_.BULLET_ROT_Z[0];
+	wireParam_.BULLET_ROT_Z[2]	= -wireParam_.BULLET_ROT_Z[0];
+	wireParam_.BULLET_ROT_Z[3]	= wireParam_.BULLET_ROT_Z[0];
 }

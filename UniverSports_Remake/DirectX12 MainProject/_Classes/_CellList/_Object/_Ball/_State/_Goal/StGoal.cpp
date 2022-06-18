@@ -8,28 +8,25 @@ void StGoal::Initialize() {
 }
 
 void StGoal::Update(ObjBall* ball) {
+	Vector2& _pos = ball->myPosition();
+	const Vector2 _direction = ball->myDirection();
+	const float _scale = ball->myRadian() * 2;
 
-	//if (ball->IsFieldOut(position_, 0.0f)) {
-	//	//forward_ = SimpleMath::Vector3::Zero;
-	//	//ball->SetForward(forward_);
-	//	////ball->SetOwnerID(-1);
+	//移動
+	_pos += _direction * BALL_PARAM.SPEED_GOAL;
 
-	//	//ball->SetBtPosition(SimpleMath::Vector3(99.0f, 99.0f, 0.0f));
-		//	// 移動処理
-		//	position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
-		//	//ball->SetBtPosition(position_);
-		//}
-
-	//if (!FIELD::IsOut(position_, 1.0f)) {
-	//	//position_ += forward_ * GAME_CONST.BA_SPEED_SHOT * 0.01f;
-	//}
-	//else 
+	//位置の調整（ゴールの角に合うように）
+	_pos += _direction * XMFLOAT2(_scale, _scale);
+	FIELD::Clamp(_pos);
+	_pos -= _direction * XMFLOAT2(_scale, _scale);
 	
-	const XMFLOAT2 pos = ball->myPosition();
-	ball->SetPhysicsPosition(XMFLOAT3(pos.x, pos.y, 1000.0f));
+	//座標の設定
+	ball->SetPhysicsTransform(XMFLOAT3(_pos.x, _pos.y, ball->myPosZ()), _direction);
 
+	//キャッチされたら状態変化
 	if (ball->IsInPlayerHands()) {
-		std::unique_ptr<StCautch> cautch = std::make_unique<StCautch>();
-		ball->SwitchState(cautch.release());
+		std::unique_ptr<StCautch> _cautch = std::make_unique<StCautch>();
+		ball->SwitchState(_cautch.release());
+		return;
 	}
 }

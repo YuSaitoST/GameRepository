@@ -37,10 +37,13 @@ private:
 		float TL_DEMO_PLAYBACK;
 		float LB_MV_SCALE;
 		float LB_TIME_AFTER_PREPARATION;
-		float MN_TIME_HANDBALL;
+		float MN_COUNTDOWN;
+		float MN_GAMETIMER[4];
+		float MN_FADEOUT;
 		float FN_TIME_MOVE;
 		float FN_TIME_DISPLAY;
 		float FN_TIME_FADEOUT;
+		float FN_FADEIN;
 	};
 	struct Player {
 		float Player_FacingRight;
@@ -50,7 +53,6 @@ private:
 		float SPEED[2];
 		float TIME_RESPONE;
 		float TIME_INVINCIBLE;
-
 		DirectX::XMFLOAT3 START_POS[OBJECT_MAX::PLAYER];
 		DirectX::XMFLOAT2 HAND_POS;
 	};
@@ -71,7 +73,9 @@ private:
 		float OBJ_SCALE;
 		float SPEED_FLOAT;
 		float SPEED_SHOT;
-		float Z_CAUTCH;
+		float SPEED_GOAL;
+		float Z_AT_CAUTCH;
+		float Z_AT_GOAL;
 	};
 	struct Wire {
 		DirectX::XMFLOAT3 POS[OBJECT_MAX::WIRE];

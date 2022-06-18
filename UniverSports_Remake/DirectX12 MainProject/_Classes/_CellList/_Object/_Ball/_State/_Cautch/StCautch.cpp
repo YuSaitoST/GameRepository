@@ -11,6 +11,7 @@ void StCautch::Initialize() {
 }
 
 void StCautch::Update(ObjBall* ball) {
+	//ó‘Ô•Ï‰»
 	if (!ball->IsInPlayerHands()) {
 		//“Š‚°‚ç‚ê‚½‚ç
 		std::unique_ptr<StShot> shot = std::make_unique<StShot>();
@@ -28,5 +29,5 @@ void StCautch::Update(ObjBall* ball) {
 	}
 
 	//’Ç”ö
-	ball->Following(BALL_PARAM.Z_CAUTCH);
+	ball->Following(BALL_PARAM.Z_AT_CAUTCH);
 }

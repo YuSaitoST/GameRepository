@@ -29,8 +29,6 @@ public:
 	virtual CountTimer* GetTimer()override { return nullptr; }
 
 private:
-	const float	SPEED_FADE = 51.0f;
-
 	std::unique_ptr<Finish>			ui_finish_;		//! 終了時テキスト
 	std::unique_ptr<BlackOut>		blackOut_;		//! ブラックアウト
 	std::unique_ptr<SoundPlayer>	se_whistle_;	//! 終了時SE

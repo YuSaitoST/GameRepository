@@ -63,8 +63,8 @@ public:
 	* @param position 座標
 	* @param forward 正面ベクトル
 	*/
-	void AssignTransform(Vector3 position, Vector2 forward) {
-		pos_ = Vector2(position.x, position.y);
+	void AssignTransform(XMFLOAT3 position, XMFLOAT2 forward) {
+		pos_ = XMFLOAT2(position.x, position.y);
 		pos_z_ = position.z;
 		forward_ = forward;
 	}
@@ -73,8 +73,8 @@ public:
 	* @brief 剛体オブジェクトに座標を設定する
 	* @param position 座標
 	*/
-	void SetPhysicsPosition(Vector3 position) {
-		AssignTransform(position, Vector2::Zero);
+	void SetPhysicsTransform(Vector3 position, Vector2 forward) {
+		AssignTransform(position, forward);
 		physics_->SetCenterOfMassTransform(Vector3(pos_.x, pos_.y, pos_z_), Vector3::Zero);
 	}
 	
@@ -125,8 +125,6 @@ public:
 
 private:
 	D3DMATERIAL9 ChangeMaterial(COLOR_TYPE colorType);
-
-	const float POS_Z_AT_GOAL = 1000.0f;
 
 	XMFLOAT2*	ownerHandPos_;	//! 持ち主の手元の座標
 	BallState*	state_;			//! ボールの状態

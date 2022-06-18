@@ -10,7 +10,7 @@
   //------------------------------------------------------------------------------
   //	インクルードファイル
   //------------------------------------------------------------------------------
-#include "_Classes/_BitCalculation/BitCalculation.h"
+#include "_Classes/_CellList/_BitCalculation/BitCalculation.h"
 
 //前方宣言
 class ObjectBase;
