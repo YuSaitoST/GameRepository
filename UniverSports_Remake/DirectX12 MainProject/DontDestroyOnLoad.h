@@ -9,6 +9,7 @@
 // Include Files.
 #include "_Classes/_GameModes/GameModes.h"
 #include "_Classes/_Survivor/survivor.h"
+#include "NextScene.h"
 
 /**
 * @enum CHARATYPE
@@ -42,7 +43,7 @@ public:
 
 	CHARATYPE charaType_[4];
 	
-	int NowScene_;
+	NextScene NowScene_;
 	int ChoseColor_[4];
 	int TeamID[4];
 	int Score_[4];

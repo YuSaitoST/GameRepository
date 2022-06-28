@@ -14,9 +14,9 @@ TitleScene::TitleScene()
 	//パラメーターの読み込み
 	GAME_CONST.Initialize();
 
-	DontDestroy->NowScene_ = (int)NextScene::TitleScene;
+	DontDestroy->NowScene_ = NextScene::TitleScene;
 	DontDestroy->GameMode_.SelectMode(GAMEMODE::NONE_GAMEMODE);
-
+	
 	descriptorHeap_ = nullptr;
 	spriteBatch_	= nullptr;
 
@@ -33,7 +33,7 @@ void TitleScene::Initialize()
 {
 	//FPS指定
 	DXTK->SetFixedFrameRate(60);
-	
+
 	//BGMの読み込み
 	bgm_->Initialize(USFN_SOUND::BGM::TITLE, SOUND_TYPE::BGM, 0.0f);
 

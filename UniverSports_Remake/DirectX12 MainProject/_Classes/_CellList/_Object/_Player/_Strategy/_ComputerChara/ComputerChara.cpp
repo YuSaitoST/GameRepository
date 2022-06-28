@@ -16,7 +16,7 @@ void ComputerChara::LoadAssets() {
 
 void ComputerChara::Update(const float deltaTime) {
 	//MainSceneˆÈŠO‚È‚çs“®‚µ‚È‚¢
-	if (DontDestroy->NowScene_ != 3)
+	if (DontDestroy->NowScene_ != NextScene::MainScene)
 		return;
 
 	//s“®

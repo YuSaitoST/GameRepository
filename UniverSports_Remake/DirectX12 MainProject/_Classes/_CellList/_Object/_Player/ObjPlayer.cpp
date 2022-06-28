@@ -56,8 +56,10 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 }
 
 ObjPlayer::~ObjPlayer() {
-	if (targetPlayer_ != nullptr)
+	if (targetPlayer_ != nullptr) {
 		delete targetPlayer_;
+		targetPlayer_ = nullptr;
+	}
 }
 
 void ObjPlayer::Initialize(const int id) {
@@ -311,7 +313,8 @@ void ObjPlayer::Playing(const float deltaTime) {
 
 	UpdateToMorton();
 
-	HitAction(GetHitObject());
+	if (DontDestroy->NowScene_ == NextScene::MainScene)
+		HitAction(GetHitObject());
 }
 
 /**

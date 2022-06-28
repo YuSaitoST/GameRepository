@@ -67,10 +67,11 @@ private:
 	DX9::SPRITEFONT						font_count_;
 	DX9::SPRITEFONT						font_message_;
 
-	DX9::SPRITE							sp_bg;
-	DX9::SPRITE							sp_right;
-	DX9::SPRITE							sp_left;
-	DX9::SPRITE							sp_playerIcon[OBJECT_MAX::PLAYER];
+	DX9::SPRITE							sp_bg_;
+	DX9::SPRITE							sp_hole_;
+	DX9::SPRITE							sp_right_;
+	DX9::SPRITE							sp_left_;
+	DX9::SPRITE							sp_playerIcon_[OBJECT_MAX::PLAYER];
 
 	btDefaultCollisionConfiguration*	collision_config_;					//! 衝突検出方法(デフォルト)
 	std::unique_ptr<btDynamicsWorld>	physics_world_;						//! 物理演算ワールド

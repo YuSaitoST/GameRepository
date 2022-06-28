@@ -44,6 +44,5 @@ public:
 	virtual void MVPlay() { movie_->Play(); }
 
 protected:
-	//! ”wŒi“®‰æ
-	std::unique_ptr<MoviePlayer> movie_;
+	std::unique_ptr<MoviePlayer> movie_;	//! ”wŒi“®‰æ
 };

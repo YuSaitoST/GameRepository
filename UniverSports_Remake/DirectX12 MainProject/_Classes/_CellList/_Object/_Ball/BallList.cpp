@@ -3,7 +3,7 @@
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "DontDestroyOnLoad.h"
 
-BallList::BallList() {
+BallList::BallList() : shader_(nullptr) {
 	// 使用するボールの個数を決める
 	N_BALL = BALL_PARAM.MAX[(int)DontDestroy->GameMode_.SelectionMode()];
 

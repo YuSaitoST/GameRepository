@@ -29,6 +29,9 @@ ObjBall* BallsInstructor::Access(const int ballID) const {
 * @param ballID ボールのID
 */
 void BallsInstructor::Cautch(const int playerID, const int ballID, DirectX::XMFLOAT2* handPos) {
+	if (ballID < 0)
+		return;
+
 	list_[ballID]->WasCaught(playerID, handPos);
 }
 
@@ -37,6 +40,9 @@ void BallsInstructor::Cautch(const int playerID, const int ballID, DirectX::XMFL
 * @param ballID ボールのID
 */
 void BallsInstructor::Shot(const int ballID, DirectX::SimpleMath::Vector2 forward) {
+	if (ballID < 0)
+		return;
+
 	list_[ballID]->WasThrown(forward);
 }
 
@@ -45,6 +51,9 @@ void BallsInstructor::Shot(const int ballID, DirectX::SimpleMath::Vector2 forwar
 * @param ballID ボールのID
 */
 void BallsInstructor::BreakOfThrower(const int ballID) {
+	if (ballID < 0)
+		return;
+
 	list_[ballID]->WasGuessed();
 }
 
@@ -53,6 +62,9 @@ void BallsInstructor::BreakOfThrower(const int ballID) {
 * @param ballID ボールのID
 */
 void BallsInstructor::BreakOfTheHitter(const int ballID) {
+	if (ballID < 0)
+		return;
+
 	list_[ballID]->BallBreak();
 }
 

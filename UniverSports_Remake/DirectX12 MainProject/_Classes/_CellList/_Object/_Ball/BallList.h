@@ -34,5 +34,6 @@ public:
 private:
 	std::vector<ObjBall*> list_;
 	DX9::MODEL model_;
+	DX9::SHADER shader_;
 	int N_BALL;
 };

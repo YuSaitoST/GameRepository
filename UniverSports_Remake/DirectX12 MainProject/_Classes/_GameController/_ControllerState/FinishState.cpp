@@ -30,5 +30,9 @@ void FinishState::Render() {
 }
 
 bool FinishState::ChangeDrawing(GameController* controller) {
-	return blackOut_->isDone() && ui_finish_->isAnimationFine() && se_whistle_->PlayOneShot(0.016f);
+	const bool _blackOutFine	= blackOut_->isDone();
+	const bool _finishUIFine	= ui_finish_->isAnimationFine();
+	const bool _seFine			= se_whistle_->PlayOneShot(0.016f);
+	return _blackOutFine && _finishUIFine && _seFine;
+	//return blackOut_->isDone() && ui_finish_->isAnimationFine() && se_whistle_->PlayOneShot(0.016f);
 }

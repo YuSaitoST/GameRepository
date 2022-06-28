@@ -24,17 +24,12 @@ void PlayState::Render() {
 	if (timer_->TimeOut())
 		return;
 
-	//テキストを一番前に描画するように調整
-	DirectX::XMMATRIX _matrix = DirectX::SimpleMath::Matrix::CreateTranslation(0.0f, 0.0f, (int)US2D::Layer::MAIN::UI_COUNTDOWN);
-	DXTK->Direct3D9->SetTransform(D3DTS_WORLD, *(D3DMATRIX*)&_matrix);
-	DX9::SpriteBatch->SetTransform(_matrix);
+	//テキストが一番前に描画されるように調整
+	DirectX::XMFLOAT2 _pos		= US2D::Pos::Get().MainParam().TIMER;
+	DirectX::XMMATRIX _matrix	= DirectX::SimpleMath::Matrix::CreateTranslation(_pos.x, _pos.y, (int)US2D::Layer::MAIN::UI_COUNTDOWN);
+	DX9::SpriteBatch->DrawString(font_.Get(), _pos, DX9::Colors::White, _matrix, L"残り : %i", (int)timer_->NowTime());
 
-	DX9::SpriteBatch->DrawString(font_.Get(), US2D::Pos::Get().MainParam().TIMER, DX9::Colors::White, L"残り : %i", (int)timer_->NowTime());
-
-	_matrix = DirectX::SimpleMath::Matrix::Identity;
-	DXTK->Direct3D9->SetTransform(D3DTS_WORLD, *(D3DMATRIX*)&_matrix);
 	DX9::SpriteBatch->ResetTransform();
-
 }
 
 bool PlayState::ChangeDrawing(GameController* controller) {

@@ -15,7 +15,7 @@
 // Initialize member variables.
 ResultScene::ResultScene()
 {
-	DontDestroy->NowScene_	= (int)NextScene::ResultScene;
+	DontDestroy->NowScene_	= NextScene::ResultScene;
 
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;

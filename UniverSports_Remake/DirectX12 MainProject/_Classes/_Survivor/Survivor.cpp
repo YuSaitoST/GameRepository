@@ -26,6 +26,7 @@ int Survivor::RemainingOfTeam() {
 
 	int index = 0;
 	int lastPlayersTeamID[2] = { 0,0 };
+
 	for (int _i = 0; (_i < 4) && (index < 2); ++_i) {
 		if (survivor_[_i]) {
 			lastPlayersTeamID[index] = DontDestroy->TeamID[_i];

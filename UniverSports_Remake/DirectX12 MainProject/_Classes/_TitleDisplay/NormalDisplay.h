@@ -40,17 +40,15 @@ private:
 	const float			SPEED_ALPHA			= 127.5f;					// UIのフェード速度
 
 private:
-	std::unique_ptr<SoundPlayer>	se_decision_;	//! 決定SE
-	std::unique_ptr<CountTimer>		time_start_;	//! タイトルロゴが表示されるまでの計測
-	std::unique_ptr<CountTimer>		time_demo_;		//! デモプレイ再生までのタイマー
-	std::unique_ptr<Cursor>			cursor_;		//! カーソル
-	std::unique_ptr<SelectArrows>	ui_arrows_;		//! モード選択の矢印アニメーション
-	std::unique_ptr<Choices>		mode_choices_;	//! モード選択処理
-	std::unique_ptr<OperateUI>		operate_;		//! 操作説明
-	std::unique_ptr<BlackOut>		blackOut_;		//! ブラックアウト
-
-	TextBase*	text_;						//! 選択肢基底クラス
-	TextUI		nowText_[CHOICES][MODE];	//! 選択肢配列
+	std::unique_ptr<SoundPlayer>	se_decision_;				//! 決定SE
+	std::unique_ptr<CountTimer>		time_start_;				//! タイトルロゴが表示されるまでの計測
+	std::unique_ptr<CountTimer>		time_demo_;					//! デモプレイ再生までのタイマー
+	std::unique_ptr<Cursor>			cursor_;					//! カーソル
+	std::unique_ptr<SelectArrows>	ui_arrows_;					//! モード選択の矢印アニメーション
+	std::unique_ptr<TextUI>			ui_text_[CHOICES][MODE];	//! 選択肢配列
+	std::unique_ptr<Choices>		mode_choices_;				//! モード選択処理
+	std::unique_ptr<OperateUI>		operate_;					//! 操作説明
+	std::unique_ptr<BlackOut>		blackOut_;					//! ブラックアウト
 
 	float ui_alpha_;  //! UIのα値
 };

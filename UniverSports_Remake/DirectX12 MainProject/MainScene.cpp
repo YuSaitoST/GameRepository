@@ -21,7 +21,7 @@
 // Initialize member variables.
 MainScene::MainScene()
 {
-	DontDestroy->NowScene_	= (int)NextScene::MainScene;
+	DontDestroy->NowScene_	= NextScene::MainScene;
 
 	descriptorHeap_			= nullptr;
 	spriteBatch_			= nullptr;
@@ -43,9 +43,8 @@ MainScene::MainScene()
 void MainScene::Initialize()
 {
 	DX12Effect.Initialize();
-
-	MainLight _light;
-	_light.Register();
+	std::unique_ptr<MainLight> _light = std::make_unique<MainLight>();
+	_light->Register();
 
 	bgm_->Initialize(USFN_SOUND::BGM::MAIN, SOUND_TYPE::BGM, 0.0f);
 	m_object_->Initialize();

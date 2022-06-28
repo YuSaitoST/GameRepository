@@ -27,7 +27,7 @@ std::unique_ptr<ObjPlayer> LobbyScene::player_[OBJECT_MAX::PLAYER];
 // Initialize member variables.
 LobbyScene::LobbyScene()
 {
-	DontDestroy->NowScene_	= (int)NextScene::LobbyScene;
+	DontDestroy->NowScene_	= NextScene::LobbyScene;
 
 	descriptorHeap_	= nullptr;
 	spriteBatch_	= nullptr;
@@ -75,8 +75,8 @@ void LobbyScene::Initialize()
 	DX12Effect.Initialize();
 	Camera.Register();
 
-	MainLight _light;
-	_light.Register();
+	std::unique_ptr<MainLight> _light = std::make_unique<MainLight>();
+	_light->Register();
 
 	bgm_->Initialize(USFN_SOUND::BGM::LOBBY, SOUND_TYPE::BGM, 0.0f);
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
@@ -126,12 +126,14 @@ void LobbyScene::LoadAssets()
 	D3DVIEWPORT9 _view{ 
 		US2D::Pos::Get().LobbyParam().VIEW_X, US2D::Pos::Get().LobbyParam().VIEW_Y,
 		US2D::Pos::Get().LobbyParam().VIEW_W, US2D::Pos::Get().LobbyParam().VIEW_H,
-		0.0f, 1.0f };
+		0.0f, 1.0f 
+	};
 	DXTK->Device9->SetViewport(&_view);
 
-	sp_bg			= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::LOBBY_BG.c_str());
-	sp_right		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_R.c_str());
-	sp_left			= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_L.c_str());
+	sp_bg_		= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::LOBBY_BG.c_str());
+	sp_hole_	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::HOLE.c_str());
+	sp_right_	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_R.c_str());
+	sp_left_	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::ARROW_L.c_str());
 
 	userInputRender_[0]->LoadAssets();
 	userInputRender_[1]->LoadAssets();
@@ -139,14 +141,14 @@ void LobbyScene::LoadAssets()
 
 	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
 	for (int _i = 0; _i <= _MAX; _i += 2) {
-		sp_playerIcon[_i	]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i].c_str());
-		sp_playerIcon[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i + 1].c_str());
+		sp_playerIcon_[_i	]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i].c_str());
+		sp_playerIcon_[_i + 1]	= DX9::Sprite::CreateFromFile(DXTK->Device9, USFN_SP::CHOICE_ICON[_i + 1].c_str());
 
 		player_[_i		]->LoadAssets(USFN_MOD::PLAYER[_i		]);
 		player_[_i + 1	]->LoadAssets(USFN_MOD::PLAYER[_i + 1	]);
 
-		charaSelect_[_i		]->LoadAssets(sp_right, sp_left);
-		charaSelect_[_i + 1	]->LoadAssets(sp_right, sp_left);
+		charaSelect_[_i		]->LoadAssets(sp_right_, sp_left_);
+		charaSelect_[_i + 1	]->LoadAssets(sp_right_, sp_left_);
 	}
 
 	bg_movie_->LoadAsset(USFN_MV::MAIN_BG);
@@ -225,8 +227,8 @@ NextScene LobbyScene::Update(const float deltaTime)
 	else {
 		const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
 		for (int _i = 0; _i <= _MAX; _i += 2) {
-			charaSelect_[_i		]->Update(deltaTime, _i		);
-			charaSelect_[_i + 1	]->Update(deltaTime, _i + 1	);
+			charaSelect_[_i]->Update(deltaTime, _i);
+			charaSelect_[_i + 1]->Update(deltaTime, _i + 1);
 		}
 	}
 
@@ -269,11 +271,19 @@ void LobbyScene::Render()
 	Render_String();
 	bg_movie_->Render(XMFLOAT3(_param.VIEW_X, _param.VIEW_Y, (int)US2D::Layer::LOBBY::BG_MOVIE), GAMES_PARAM.LB_MV_SCALE);
 	blackOut_->Render();
-	DX9::SpriteBatch->DrawSimple(sp_bg.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::LOBBY::BG_SPRITE));
+	DX9::SpriteBatch->DrawSimple(sp_bg_.Get(), XMFLOAT3(0.0f, 0.0f, (int)US2D::Layer::LOBBY::BG_SPRITE));
+	DX9::SpriteBatch->Draw(
+		sp_hole_.Get(), XMFLOAT3(_param.VIEW_X, _param.VIEW_Y, (int)US2D::Layer::MAIN::UI_HOLE), nullptr,
+		DX9::Colors::RGBA(255, 255, 255, 255),
+		DirectX::SimpleMath::Vector3::Zero,
+		DirectX::SimpleMath::Vector3::Zero,
+		DirectX::SimpleMath::Vector2::One * GAMES_PARAM.LB_MV_SCALE
+	);
+	DX9::SpriteBatch->ResetTransform();
 
 	for (int _i = 0; _i <= _MAX; _i += 2) {
-		DX9::SpriteBatch->DrawSimple(sp_playerIcon[DontDestroy->ChoseColor_[_i		]].Get(), XMFLOAT3(_param.PICON_X[_i	], _param.PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
-		DX9::SpriteBatch->DrawSimple(sp_playerIcon[DontDestroy->ChoseColor_[_i + 1	]].Get(), XMFLOAT3(_param.PICON_X[_i + 1], _param.PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
+		DX9::SpriteBatch->DrawSimple(sp_playerIcon_[DontDestroy->ChoseColor_[_i		]].Get(), XMFLOAT3(_param.PICON_X[_i	], _param.PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
+		DX9::SpriteBatch->DrawSimple(sp_playerIcon_[DontDestroy->ChoseColor_[_i + 1	]].Get(), XMFLOAT3(_param.PICON_X[_i + 1], _param.PICON_Y, (int)US2D::Layer::LOBBY::UI_PLAYERICON));
 		charaSelect_[_i		]->Render();
 		charaSelect_[_i + 1	]->Render();
 		userInputRender_[charaSelect_[_i	]->IsDecision()]->Render(_i		);

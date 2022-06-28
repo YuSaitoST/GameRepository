@@ -79,6 +79,7 @@ void ObjBall::Render(DX9::MODEL& model) {
 	model->SetPosition(XMFLOAT3(pos_.x, pos_.y, pos_z_));
 	model->SetRotation(XMFLOAT3(rotate_.x, rotate_.y, 0.0f));
 	model->SetMaterial(ChangeMaterial(colorType_));
+
 	model->Draw();
 }
 

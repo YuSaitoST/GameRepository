@@ -2,6 +2,7 @@
 #include "_Classes/_LoadCSV/LoadCSV.h"
 
 void ConstStorageC::Initialize() {
+	US2D::Pos::Get().Initialize();
 	CSV::Schan(L"_Parameters\\GameProgressionParameter.csv",
 		"%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f,%f",
 		&gameParam_.TL_UI_DISPLAY,

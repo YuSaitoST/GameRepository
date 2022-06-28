@@ -14,26 +14,29 @@ NormalDisplay::NormalDisplay() : ui_alpha_(0.0f) {
 	ui_arrows_		= std::make_unique<SelectArrows>();
 	operate_		= std::make_unique<OperateUI>();
 	blackOut_		= std::make_unique<BlackOut>();
-	text_			= nullptr;
+
+	for (int _u = 0; _u < CHOICES; ++_u) {
+		ui_text_[_u][0] = std::make_unique<TextUI>();
+		ui_text_[_u][1] = std::make_unique<TextUI>();
+		ui_text_[_u][2] = std::make_unique<TextUI>();
+	}
 }
 
 void NormalDisplay::Initialize() {
-	se_decision_->Initialize(USFN_SOUND::SE::DECISION_TITLE, SOUND_TYPE::SE, 2.0f);
+	auto _texPos = US2D::Pos::Get().TitleParam();
 
+	se_decision_->Initialize(USFN_SOUND::SE::DECISION_TITLE, SOUND_TYPE::SE, 2.0f);
 	mode_choices_->Initialize();
 	cursor_->Initialize();
-	ui_arrows_->Initialize(US2D::Pos::Get().TitleParam().RightArrowX, US2D::Pos::Get().TitleParam().LeftArrowX, US2D::Pos::Get().TitleParam().ArrowY);
+	ui_arrows_->Initialize(_texPos.RightArrowX, _texPos.LeftArrowX, _texPos.ArrowY);
 	operate_->Initialize();
 	blackOut_->Initialize(BLACKOUT_MODE::FADE_OUT);
-
+	
 	for (int _u = 0; _u < CHOICES; ++_u) {
-		nowText_[_u][0].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
-		nowText_[_u][1].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
-		nowText_[_u][2].Initialize(_u, DirectX::XMFLOAT3(US2D::Pos::Get().TitleParam().TextX, US2D::Pos::Get().TitleParam().TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
+		ui_text_[_u][0]->Initialize(_u, DirectX::XMFLOAT3(_texPos.TextX, _texPos.TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
+		ui_text_[_u][1]->Initialize(_u, DirectX::XMFLOAT3(_texPos.TextX, _texPos.TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
+		ui_text_[_u][2]->Initialize(_u, DirectX::XMFLOAT3(_texPos.TextX, _texPos.TextY[_u], (int)US2D::Layer::TITLE::UI_TEXT));
 	}
-
-	// 最初に選択状態にする選択肢を代入
-	text_ = &nowText_[0][0];
 }
 
 void NormalDisplay::LoadAssets() {
@@ -44,9 +47,9 @@ void NormalDisplay::LoadAssets() {
 	blackOut_->LoadAsset();
 
 	for (int _u = 0; _u < CHOICES; ++_u) {
-		nowText_[_u][0].LoadAsset(USFN_SP::UI_TEXT[_u][0]);
-		nowText_[_u][1].LoadAsset(USFN_SP::UI_TEXT[_u][1]);
-		nowText_[_u][2].LoadAsset(USFN_SP::UI_TEXT[_u][2]);
+		ui_text_[_u][0]->LoadAsset(USFN_SP::UI_TEXT[_u][0]);
+		ui_text_[_u][1]->LoadAsset(USFN_SP::UI_TEXT[_u][1]);
+		ui_text_[_u][2]->LoadAsset(USFN_SP::UI_TEXT[_u][2]);
 	}
 }
 
@@ -65,7 +68,7 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 	// 決定音がなり終わったらキャラ選択画面へ
 	if (!DontDestroy->GameMode_.isNotDecision()) {
 		if (se_decision_->PlayOneShot(deltaTime) && blackOut_->isDone())
-			return NextScene::LobbyScene;
+			return NextScene::TitleScene;
 		else
 			return NextScene::Continue;
 	}
@@ -84,18 +87,14 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 		mode_choices_->NextSelectOn(ui_arrows_->Update(0));
 	}
 
-	text_ = &nowText_[cursor_->SelectNum()][mode_choices_->SelectNum()];
-
 	// 選択肢UIの表示サイズの更新
 	for (int _t = 0; _t < CHOICES; ++_t) {
 		(_t == cursor_->SelectNum()) ?
-			nowText_[_t][mode_choices_->SelectNum()].GetBigger(deltaTime) :
-			nowText_[_t][mode_choices_->SelectNum()].GetSmaller(deltaTime);
+			ui_text_[_t][mode_choices_->SelectNum()]->GetBigger(deltaTime) :
+			ui_text_[_t][mode_choices_->SelectNum()]->GetSmaller(deltaTime);
 	}
 
-	/*
-		決定ボタンを押したら、選択した項目に合わせた処理を行う
-	*/
+	// 決定ボタンを押したら、選択した項目に合わせた処理を行う
 	if (Press.DecisionKey(0)) {
 		se_decision_->PlayOneShot();
 
@@ -109,7 +108,6 @@ NextScene NormalDisplay::Update(const float deltaTime) {
 
 	operate_->Update(deltaTime);
 
-
 	return NextScene::Continue;
 }
 
@@ -119,12 +117,9 @@ void NormalDisplay::Render() {
 	operate_->Render();
 	blackOut_->Render();
 
-	/*
-		選択肢のテキストを初期化
-		ループ回数を削減するために、選択肢の数が確定している上下の選択は並べて記述
-	*/
-	nowText_[0][mode_choices_->SelectNum()].Render(ui_alpha_);
-	nowText_[1][mode_choices_->SelectNum()].Render(ui_alpha_);
+	// 選択肢のテキストを初期化
+	ui_text_[0][mode_choices_->SelectNum()]->Render(ui_alpha_);
+	ui_text_[1][mode_choices_->SelectNum()]->Render(ui_alpha_);
 }
 
 /**
