@@ -5,8 +5,10 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_UI/_Fade/Fade.h"
+#include "_Classes/_MessageBox/OkMessageBox.h"
 
 // Initialize member variables.
 TitleScene::TitleScene()
@@ -25,7 +27,7 @@ TitleScene::TitleScene()
 	display_		= nullptr;
 	disp_normal_	= std::make_unique<NormalDisplay>();
 	disp_demo_		= std::make_unique<DemoDisplay>();
-	displayMode_	= DISPLAYMODE::DISPLAY_NORMAL;
+	disp_config_	= std::make_unique<ConfigDisplay>();
 }
 
 // Initialize a variable and audio resources.
@@ -40,12 +42,24 @@ void TitleScene::Initialize()
 	//画面表示の初期化
 	disp_normal_->Initialize();
 	disp_demo_->Initialize();
+	disp_config_->Initialize();
 
 	//ゲーム進行関連の変数の初期化
 	DontDestroy->Survivor_.Reset();
 	std::fill(std::begin(DontDestroy->ChoseColor_), std::end(DontDestroy->ChoseColor_), 0	);
 	std::fill(std::begin(DontDestroy->TeamID),		std::end(DontDestroy->TeamID),		-1	);
 	std::fill(std::begin(DontDestroy->Score_),		std::end(DontDestroy->Score_),		0	);
+
+	//例外検出テキストファイルがある場合に通知
+	std::wstring _str = GAME_TITLE;
+	std::wstring _message = _str + L"error_code.txt";
+	FILE* _file;
+	if (_wfopen_s(&_file, _message.c_str(), L"r") == 0) {
+		YUSTK::MessageBox_OK(
+			L"前回の起動中に例外が発生していました。Assetsフォルダ内のテキストファイルを開発者へ送っていただけると幸いです。",
+			L"例外通知"
+		);
+	}
 }
 
 // Allocate all memory the Direct3D and Direct2D resources.
@@ -70,9 +84,10 @@ void TitleScene::LoadAssets()
 	//画面表示に使用するファイルの読み込み
 	disp_normal_->LoadAssets();
 	disp_demo_->LoadAssets();
+	disp_config_->LoadAssets();
 
 	//画面表示の設定
-	SwitchState(displayMode_);
+	SwitchState(DISPLAYMODE::DISPLAY_NORMAL);
 	
 	//BGM再生
 	bgm_->Play();
@@ -109,16 +124,16 @@ NextScene TitleScene::Update(const float deltaTime)
 	// TODO: Add your game logic here.
 
 	//入力状態を調べる
-	Press.Accepts();
+	INPSystem.Accepts();
 
 	//画面上の更新
 	NextScene _next = display_->Update(deltaTime);
 
 	//表示の変更条件を満たしていれば、表示状態を変更する
-	if (display_->IsChange()) {
+	const DISPLAYMODE _nextDisplay = display_->IsChange();
+	if (_nextDisplay != DISPLAYMODE::DISPLAY_NONE) {
 		display_->Reset();
-		displayMode_ = (displayMode_ == DISPLAYMODE::DISPLAY_NORMAL) ? DISPLAYMODE::DISPLAY_DEMO : DISPLAYMODE::DISPLAY_NORMAL;
-		SwitchState(displayMode_);
+		SwitchState(_nextDisplay);
 	}
 
 	return _next;
@@ -159,9 +174,10 @@ void TitleScene::SwitchState(DISPLAYMODE mode) {
 	switch (mode) {
 		case DISPLAYMODE::DISPLAY_NORMAL: display_ = disp_normal_.get();	break;
 		case DISPLAYMODE::DISPLAY_DEMO	: display_ = disp_demo_.get();		break;
+		case DISPLAYMODE::DISPLAY_CONFIG: display_ = disp_config_.get();	break;
 		default							: assert(!"TitleScene::SwitchState : 不正な状態です");
 	}
 
 	//動画の再生
-	display_->MVPlay();
+	display_->ReDisplayInitialize();
 }

@@ -11,17 +11,23 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include "NextScene.h"
-#include "_Classes/_MoviePlayer/MoviePlayer.h"
+#include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 
 /***
  * @enum DISPLAYMODE
  * @brief 表示状態
 */
-enum DISPLAYMODE { DISPLAY_NORMAL, DISPLAY_DEMO };
+enum DISPLAYMODE { 
+	DISPLAY_NORMAL,		// 通常画面
+	DISPLAY_DEMO,		// デモプレイ
+	DISPLAY_CONFIG,		// 設定画面
+	DISPLAY_NONE
+};
 
 class DisplayBase {
 public:
-	DisplayBase() { movie_ = std::make_unique<MoviePlayer>(); }
+	DisplayBase() {}
 	virtual ~DisplayBase() {}
 
 	DisplayBase(DisplayBase&&) = delete;
@@ -36,13 +42,6 @@ public:
 	virtual void Render() = 0;
 	virtual void Reset() = 0;
 
-	virtual bool IsChange() = 0;
-
-	/**
-	 * @brief 動画を再生させる
-	*/
-	virtual void MVPlay() { movie_->Play(); }
-
-protected:
-	std::unique_ptr<MoviePlayer> movie_;	//! 背景動画
+	virtual DISPLAYMODE IsChange() = 0;
+	virtual void ReDisplayInitialize() = 0;
 };

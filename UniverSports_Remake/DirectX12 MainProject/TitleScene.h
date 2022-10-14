@@ -6,11 +6,11 @@
 
 #include "Scene.h"
 #include "DontDestroyOnLoad.h"
-#include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
 #include "_Classes/_TitleDisplay/DisplayBase.h"
 #include "_Classes/_TitleDisplay/NormalDisplay.h"
 #include "_Classes/_TitleDisplay/DemoDisplay.h"
+#include "_Classes/_TitleDisplay/ConfigDisplay.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
@@ -51,7 +51,6 @@ private:
 
 	std::unique_ptr<NormalDisplay>	disp_normal_;
 	std::unique_ptr<DemoDisplay>	disp_demo_;
+	std::unique_ptr<ConfigDisplay>  disp_config_;
 	DisplayBase*					display_;
-
-	DISPLAYMODE						displayMode_;
 };
