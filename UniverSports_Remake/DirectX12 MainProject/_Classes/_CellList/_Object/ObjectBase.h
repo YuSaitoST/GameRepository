@@ -121,3 +121,19 @@ protected:
 	float r_;               //! ”¼Œa
 	int id_my_;			    //! Ž©•ª‚ÌID
 };
+
+
+class EmptyObject : public ObjectBase {
+public:
+	EmptyObject() {}
+	virtual ~EmptyObject() {}
+
+	virtual void Initialize(const int id)			override {}
+	virtual void LoadAssets(std::wstring file_name) override {}
+	virtual void LoadAssets(DX9::MODEL& model)		override {}
+	virtual void Update(const float deltaTime)		override {}
+	virtual void Render()							override {}
+	virtual void Render(DX9::MODEL& model)			override {}
+	virtual void UIRender()							override {}
+	virtual void HitAction(ObjectBase* hitObject)	override {}
+};

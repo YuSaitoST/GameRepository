@@ -69,3 +69,19 @@ protected:
 	//! XŽ²‚ÌŠp“x
 	float rotate_x_;
 };
+
+
+class EmptyStrategy : public CharaStrategy {
+public:
+	EmptyStrategy() {
+		player_			= nullptr;
+		actList_.push_back(nullptr);
+		prevForward_	= Vector3::Zero;
+		rotate_x_		= 0;
+	};
+	virtual ~EmptyStrategy() {}
+
+	virtual void Initialize(int id, ObjPlayer* player) override {}
+	virtual void LoadAssets() override {}
+	virtual void Update(const float deltaTime) override {}
+};

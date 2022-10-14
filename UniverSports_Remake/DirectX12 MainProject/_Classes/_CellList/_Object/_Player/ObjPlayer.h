@@ -24,7 +24,7 @@
 class BallsInstructor;
 class PlayersInstructor;
 
-class ObjPlayer final : public ObjectBase {
+class ObjPlayer : public ObjectBase {
 private:
 	/**
 	* @enum MOTION

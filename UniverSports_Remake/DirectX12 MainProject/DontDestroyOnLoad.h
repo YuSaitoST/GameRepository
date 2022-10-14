@@ -15,7 +15,7 @@
 * @enum CHARATYPE
 * キャラクターの入力タイプ
 */
-enum CHARATYPE { TYPE_PLAYER, TYPE_COM };
+enum CHARATYPE { TYPE_PLAYER, TYPE_COM, TYPE_NONE };
 
 class DontDestroyOnLoad final
 {

@@ -11,7 +11,7 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include <algorithm>
-#include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/EffectBase.h"
 

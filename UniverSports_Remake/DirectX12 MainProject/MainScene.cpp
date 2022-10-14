@@ -5,6 +5,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 #include "_Classes/_MainLight/MainLight.h"
 #include "_Classes/_FileNames/FileNames.h"
 
@@ -117,7 +118,7 @@ NextScene MainScene::Update(const float deltaTime)
 	// TODO: Add your game logic here.
 
 	//“ü—Íó‘Ô‚ð’²‚×‚é
-	Press.Accepts();
+	INPSystem.Accepts();
 
 	//•¨‘Ì‚ÌXV
 	m_object_->Update(deltaTime);

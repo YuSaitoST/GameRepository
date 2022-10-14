@@ -50,7 +50,7 @@ ObjPlayer::ObjPlayer(OPERATE_TYPE strategy, Vector3 pos, float r) {
 	else if (strategy == OPERATE_TYPE::COMPUTER)
 		strategy_ = std::make_unique<ComputerChara>();
 	else
-		strategy_ = nullptr;
+		strategy_ = std::make_unique<EmptyStrategy>();
 	
 	CalculationHandPos();
 }

@@ -1,4 +1,5 @@
 #include "ManualChara.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 #include "_Classes/_CellList/_Object/_Player/ObjPlayer.h"
 
 void ManualChara::Initialize(int id, ObjPlayer* player) {
@@ -15,7 +16,7 @@ void ManualChara::LoadAssets() {
 
 void ManualChara::Update(const float deltaTime) {
 	for (int _i = 0; _i < actList_.size(); _i++)
-		actList_[_i]->Update(deltaTime, Press.MoveDirection(player_->myObjectID()), *player_);
+		actList_[_i]->Update(deltaTime, INPSystem.MoveDirection(player_->myObjectID()), *player_);
 	
-	rotate_x_ = SeekRotateX(deltaTime, Press.MoveDirection(player_->myObjectID()));
+	rotate_x_ = SeekRotateX(deltaTime, INPSystem.MoveDirection(player_->myObjectID()));
 }

@@ -10,7 +10,7 @@
  //------------------------------------------------------------------------------
  //	インクルードファイル
  //------------------------------------------------------------------------------
-#include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 #include "_Classes/_CellList/_Object/_Player/_BehaviorTree/ActionBase.h"
 #include "_Classes/_UI/_CountTimer/CountTimer.h"
 

@@ -5,7 +5,7 @@ void ActShot::Update(const float deltaTime, SimpleMath::Vector2 direction, ObjPl
 	if (!player.HasBall())
 		return;
 
-	if (Press.ShotKey(player.myObjectID()))
+	if (INPSystem.ShotKey(player.myObjectID()))
 		player.Shoting(player.MyBallID());
 }
 

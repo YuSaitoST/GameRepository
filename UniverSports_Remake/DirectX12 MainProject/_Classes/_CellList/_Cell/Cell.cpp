@@ -88,8 +88,12 @@ ObjectBase* Cell::GetCollision() {
 * @brief ‘o•ûŒüƒŠƒXƒg‚©‚ç”²‚¯‚é
 */
 void Cell::Remove() {
-	this->next_->prev_ = this->prev_;
-	this->prev_->next_ = this->next_;
+	try {
+		this->next_->prev_ = this->prev_;
+		this->prev_->next_ = this->next_;
+	}catch(std::exception e) {
+
+	}
 }
 
 /**
