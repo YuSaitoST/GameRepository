@@ -13,17 +13,16 @@
 #include <string>
 
 namespace USFN_SP {
-	const std::wstring UI_TEXT[2][3] = {
-		{
-			L"_Images\\_Title\\_SelectText\\tex_mode00.png"  ,
-			L"_Images\\_Title\\_SelectText\\tex_mode01.png"	 ,
-			L"_Images\\_Title\\_SelectText\\tex_mode02.png"
-		},
-		{
-			L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
-			L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
-			L"_Images\\_Title\\_SelectText\\tex_operate.png"
-		}
+	const std::wstring UI_TEXT_MODE[3] =
+	{
+		L"_Images\\_Title\\_SelectText\\tex_mode00.png"  ,
+		L"_Images\\_Title\\_SelectText\\tex_mode01.png"	 ,
+		L"_Images\\_Title\\_SelectText\\tex_mode02.png"
+	};
+	const std::wstring UI_TEXT_OTHER[2] =
+	{
+		L"_Images\\_Title\\_SelectText\\tex_operate.png" ,
+		L"_Images\\_Title\\_SelectText\\tex_config.png" 
 	};
 
 	const std::wstring GAMEPAD = L"_Images\\_Title\\_Operate\\operate_gamepad.png";
@@ -101,6 +100,7 @@ namespace USFN_SP {
 
 	const std::wstring CURSOR		= L"_Images\\_Title\\cursor.png";
 
+	const std::wstring CONFIG_BG	= L"_Images\\_Title\\_Config\\config_bg.png";
 	const std::wstring LOBBY_BG		= L"_Images\\_Lobby\\backGround.png";
 	const std::wstring ARROW_R		= L"_Images\\_Lobby\\_Arrow\\arrow_right.png";
 	const std::wstring ARROW_L		= L"_Images\\_Lobby\\_Arrow\\arrow_left.png";
@@ -109,6 +109,7 @@ namespace USFN_SP {
 	const std::wstring ENTRY		= L"_Images\\_Lobby\\_UIText\\tex_entry.png";
 	const std::wstring TEAM_A		= L"_Images\\_Lobby\\_TeamColor\\team_a.png";
 	const std::wstring TEAM_B		= L"_Images\\_Lobby\\_TeamColor\\team_b.png";
+	const std::wstring INFO_COM		= L"_Images\\_Lobby\\_Icon\\com.png";
 
 	const std::wstring NOMAL_WIRE	= L"_Images\\_Main\\_Wire\\honeycomb_wire.png";
 	const std::wstring HOLE			= L"_Images\\_Main\\holeFlont.png";

@@ -11,7 +11,7 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include <string>
-#include <map>
+//#include <map>
 
 namespace CSV {
 	void Schan(std::wstring fileName, const char* format, ...);

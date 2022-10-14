@@ -17,7 +17,7 @@ namespace US2D {
 			UI_OPERATE,
 			//Arrow
 			BG_DEMO = 4,
-			BG_MOVIE
+			BG_BACK
 		};
 
 		/**
@@ -29,7 +29,8 @@ namespace US2D {
 			UI_ENTRY = 1,
 			UI_DECISIONS,
 			//Arrow
-			UI_PLAYERICON = 4,
+			UI_INFO_ICON = 4,
+			UI_PLAYERICON,
 			UI_TEAMCOLOR,
 			BG_MOVIE,
 			BG_SPRITE

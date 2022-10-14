@@ -75,10 +75,10 @@ namespace US2D {
 
 		void Initialize();
 
-		inline TITLE TitleParam() const { return title_; }
-		inline LOBBY LobbyParam() const { return lobby_; }
-		inline MAIN	MainParam() const { return main_; }
-		inline RESULT ResultParam()	const { return result_; }
+		inline TITLE	TitleParam	() const { return title_;	}
+		inline LOBBY	LobbyParam	() const { return lobby_;	}
+		inline MAIN		MainParam	() const { return main_;	}
+		inline RESULT	ResultParam	() const { return result_;	}
 
 	private:
 		Pos() {}

@@ -2,7 +2,8 @@
 
 void US2D::Pos::Initialize() {
 	CSV::Schan(L"_Parameters\\_UI\\TitleUIPosition.csv", "%f,%f,%f,%f,%f,%f",
-		&title_.LeftArrowX, &title_.RightArrowX, &title_.ArrowY, &title_.TextX, &title_.TextY[0], &title_.TextY[1]
+		&title_.LeftArrowX,			&title_.RightArrowX,		&title_.ArrowY,	
+		&title_.TextX,				&title_.TextY[0],			&title_.TextY[1]
 	);
 	CSV::Schan(
 		L"_Parameters\\_UI\\LobbyUIPosition.csv",

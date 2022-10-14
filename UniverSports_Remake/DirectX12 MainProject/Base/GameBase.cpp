@@ -5,6 +5,8 @@
 #include "pch.h"
 #include "dxtk.h"
 #include "SceneFactory.h"
+#include "DontDestroyOnLoad.h"
+#include "_Classes/_ErrorDetection/ErrorDetection.h"
 
 #pragma comment(lib, "d3d9.lib")
 
@@ -141,12 +143,17 @@ void GameBase::Initialize(HWND window, int width, int height)
 // Executes the basic game loop.
 void GameBase::Tick()
 {
-    m_timer.Tick([&]()
-        {
-            Update(m_timer);
-        });
+    try {
+        m_timer.Tick([&]()
+            {
+                Update(m_timer);
+            });
 
-    Render();
+        Render();
+    }
+    catch (std::exception e) {
+        YUSTK::CreateTxt(GAME_TITLE, e, (int)DontDestroy->NowScene_);
+    }
 }
 
 // Updates the world.
