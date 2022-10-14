@@ -18,11 +18,11 @@ public:
 	SelectArrows();
 	virtual ~SelectArrows() {};
 
-	void Initialize(float x_right, float x_left, float y);
+	void Initialize(float x_right, float x_left);
 	void LoadAssets();
 	void LoadAssets(DX9::SPRITE right, DX9::SPRITE left);
 	bool Update(const int index);
-	void Render(float alpha);
+	void Render(float alpha, float posY);
 
 private:
 	void Animations(float& scale);
@@ -59,7 +59,6 @@ private:
 
 	float			pos_right_x_;	//! 右矢印のX座標
 	float			pos_left_x_;	//! 左矢印のX座標
-	float			pos_y_;			//! 矢印のY座標
 	float			scale_right_;	//! 右矢印のサイズ
 	float			scale_left_;	//! 左矢印のサイズ
 	bool			isFinBigger;	//! 拡大の終了状態

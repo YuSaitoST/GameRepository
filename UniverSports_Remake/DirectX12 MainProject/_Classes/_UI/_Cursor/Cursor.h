@@ -25,21 +25,22 @@ public:
 	Cursor(Cursor const&) = delete;
 	Cursor& operator= (Cursor const&) = delete;
 
-	void Initialize();
+	void Initialize(float posx, float posy, float moved);
 	void LoadAsset(std::wstring file_name);
-	void Update(int choices);
+	bool Update(int choices, bool up, bool down);
 	void Render(float alpha) const;
 
 	/**
 	 * @brief 現在選択している番号を返す
 	 * @return 選択している番号
 	*/
-	int SelectNum() const { return choices_->SelectNum(); };
+	inline int SelectNum() const { return choices_->SelectNum(); };
 
-private:
-	const float MOVE_Y	= 102.0f;
-	const float POS_X	= 360.0f;
-	const float POS_Y	= 415.0f;
+	/*
+	* @brief 選択肢を指定する
+	* @param 選択したい番号
+	*/
+	inline void SetSelectNum(int number) { choices_->SetSelectNum(number); }
 
 private:
 	//! 選択クラス
@@ -50,4 +51,10 @@ private:
 
 	//! カーソルの座標
 	DirectX::SimpleMath::Vector3 pos_;
+
+	//! 移動量
+	float moved_;
+
+	//! 開始Y座標
+	float startPos_Y_;
 };

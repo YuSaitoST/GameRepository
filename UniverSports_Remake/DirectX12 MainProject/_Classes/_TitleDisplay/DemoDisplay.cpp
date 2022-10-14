@@ -1,7 +1,5 @@
 #include "DemoDisplay.h"
-#include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_ConstStrages/US2DLayer.h"
-#include "_Classes/_FileNames/FileNames.h"
 
 void DemoDisplay::Initialize() {
 	//‰Šú‰»‚È‚µ
@@ -32,6 +30,12 @@ void DemoDisplay::Reset() {
  * @brief ‰æ–Ê•\Ž¦‚ðØ‚è‘Ö‚¦‚é‚©‚Ì”»’è
  * @return ‰½‚©‚µ‚ç‚Ìƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚çtrue
 */
-bool DemoDisplay::IsChange() {
-	return Press.AnyKey();
+DISPLAYMODE DemoDisplay::IsChange() {
+	return INPSystem.AnyKey() ?
+		DISPLAYMODE::DISPLAY_NORMAL :
+		DISPLAYMODE::DISPLAY_NONE;
+}
+
+void DemoDisplay::ReDisplayInitialize() {
+	movie_->Play();
 }

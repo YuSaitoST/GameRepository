@@ -10,7 +10,7 @@
  //------------------------------------------------------------------------------
  //	インクルードファイル
  //------------------------------------------------------------------------------
-#include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "DontDestroyOnLoad.h"
 #include "_Classes/_UI/_Choices/Choices.h"
 #include "_Classes/_UI/_SelectArrows/SelectArrows.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
@@ -38,6 +38,7 @@ public:
 	inline bool IsDecision() const { return isDecision_; }
 
 private:
+	void AutoSetter(int index, CHARATYPE type);
 	void SelectToAvoidDupLicates(int index);
 	bool haveSameValue(int index);
 
@@ -47,5 +48,5 @@ private:
 	std::unique_ptr<SoundPlayer>	se_cancel_;		//! キャンセルSE
 	std::unique_ptr<SoundPlayer>	se_warning_;	//! 警告SE
 	
-	bool isDecision_;	//! 決定フラグk
+	bool isDecision_;	//! 決定フラグ
 };

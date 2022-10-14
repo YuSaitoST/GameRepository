@@ -5,7 +5,7 @@
 #include "Base/pch.h"
 #include "Base/dxtk.h"
 #include "SceneFactory.h"
-#include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 #include "_Classes/_FileNames/FileNames.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_UI/_Serials/Serials.h"
@@ -110,13 +110,13 @@ NextScene ResultScene::Update(const float deltaTime)
 
 	// TODO: Add your game logic here.
 
-	Press.Accepts();
+	INPSystem.Accepts();
 
 	bg_movie_->Update();
 	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
 
 	if (!goNext_) {
-		if (Press.DecisionKey(0) || Press.DecisionKey(1) || Press.DecisionKey(2) || Press.DecisionKey(3)) {
+		if (INPSystem.DecisionKey(0) || INPSystem.DecisionKey(1) || INPSystem.DecisionKey(2) || INPSystem.DecisionKey(3)) {
 			blackOut_->ChangeMode(BLACKOUT_MODE::FADE_IN);
 			goNext_ = true;
 		}

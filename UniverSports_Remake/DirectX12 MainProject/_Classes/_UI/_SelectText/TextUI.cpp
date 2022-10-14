@@ -3,7 +3,6 @@
 void TextUI::Initialize(int modeID, DirectX::XMFLOAT3 pos) {
 	position_	= pos;
 	scale_		= 1.0f;
-	modeID_		= modeID;
 }
 
 void TextUI::LoadAsset(std::wstring file_name) {

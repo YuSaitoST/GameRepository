@@ -15,7 +15,7 @@
 
 class TextBase {
 public:
-	TextBase() : scale_(0.0f), modeID_(0) {};
+	TextBase() : scale_(0.0f) {};
 	virtual ~TextBase() {};
 
 	virtual void Initialize(int modeID, DirectX::XMFLOAT3 pos) = 0;
@@ -32,13 +32,6 @@ public:
 	*/
 	inline void GetSmaller(const float deltaTime) { scale_ = std::max(scale_ - deltaTime, SCALE_MIN); };
 
-
-	/**
-	 * @brief モードのIDを返す
-	 * @return 自身のID
-	*/
-	virtual int MyID() const { return modeID_; };
-
 protected:
 	const float SCALE_MAX = 1.35f;
 	const float SCALE_MIN = 1.0f;
@@ -54,7 +47,4 @@ protected:
 	
 	//! テキストサイズ
 	float scale_;
-
-	//! テキストが表すモードのID
-	int modeID_;
 };

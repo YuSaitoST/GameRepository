@@ -1,7 +1,7 @@
 #include "SelectArrows.h"
 #include "_Classes/_ConstStrages/US2DLayer.h"
 #include "_Classes/_FileNames/FileNames.h"
-#include "_Classes/_InputClasses/UseKeyCheck.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 
 using namespace DirectX;
 
@@ -10,7 +10,6 @@ SelectArrows::SelectArrows() : sp_right_(DX9::SPRITE()), sp_left_(DX9::SPRITE())
 
 	pos_right_x_	= 0.0f;
 	pos_left_x_		= 0.0f;
-	pos_y_			= 0.0f;
 
 	scale_right_	= 0.0f;
 	scale_left_		= 0.0f;
@@ -19,10 +18,9 @@ SelectArrows::SelectArrows() : sp_right_(DX9::SPRITE()), sp_left_(DX9::SPRITE())
 	isFinSmaller	= false;
 }
 
-void SelectArrows::Initialize(float x_right, float x_left, float y) {
+void SelectArrows::Initialize(float x_right, float x_left) {
 	pos_right_x_	= x_right	+ RECT;
 	pos_left_x_		= x_left	+ RECT;
-	pos_y_			= y			+ RECT;
 
 	scale_right_	= 1.0f;
 	scale_left_		= 1.0f;
@@ -41,8 +39,8 @@ void SelectArrows::LoadAssets(DX9::SPRITE right, DX9::SPRITE left) {
 }
 
 bool SelectArrows::Update(const int index) {
-	input_ =	Press.RightKey(index)	? AL_RIGHT	: 
-				Press.LeftKey(index)	? AL_LEFT	: input_;
+	input_ =	INPSystem.RightKey(index)	? AL_RIGHT	: 
+				INPSystem.LeftKey(index)	? AL_LEFT	: input_;
 
 	if (input_ == AL_NONE)
 		return false;
@@ -53,10 +51,12 @@ bool SelectArrows::Update(const int index) {
 	return true;
 }
 
-void SelectArrows::Render(float alpha) {
+void SelectArrows::Render(float alpha, float posY) {
+	const float _posY = posY + RECT;
+
 	DX9::SpriteBatch->Draw(
 		sp_right_.Get(),
-		DirectX::XMFLOAT3(pos_right_x_, pos_y_, (int)US2D::Layer::GENERIC::UI_ARROW),
+		DirectX::XMFLOAT3(pos_right_x_, _posY, (int)US2D::Layer::GENERIC::UI_ARROW),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
 		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),
@@ -66,7 +66,7 @@ void SelectArrows::Render(float alpha) {
 	
 	DX9::SpriteBatch->Draw(
 		sp_left_.Get(),
-		DirectX::XMFLOAT3(pos_left_x_, pos_y_, (int)US2D::Layer::GENERIC::UI_ARROW),
+		DirectX::XMFLOAT3(pos_left_x_, _posY, (int)US2D::Layer::GENERIC::UI_ARROW),
 		nullptr,
 		DX9::Colors::RGBA(255, 255, 255, alpha),
 		DirectX::XMFLOAT3(0.0f, 0.0f, 0.0f),

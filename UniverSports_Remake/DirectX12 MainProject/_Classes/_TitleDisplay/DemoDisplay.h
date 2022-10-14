@@ -11,10 +11,11 @@
  //	インクルードファイル
  //------------------------------------------------------------------------------
 #include "DisplayBase.h"
+#include "_Classes/_MoviePlayer/MoviePlayer.h"
 
 class DemoDisplay final : public DisplayBase {
 public:
-	DemoDisplay() {}
+	DemoDisplay() { movie_ = std::make_unique<MoviePlayer>(); }
 	virtual ~DemoDisplay() {}
 
 	virtual void Initialize() override;
@@ -22,5 +23,9 @@ public:
 	virtual NextScene Update(const float deltaTime) override;
 	virtual void Render() override;
 	virtual void Reset() override;
-	virtual bool IsChange() override;
+	virtual DISPLAYMODE IsChange() override;
+	virtual void ReDisplayInitialize() override;
+
+private:
+	std::unique_ptr<MoviePlayer> movie_;	//! 背景動画
 };

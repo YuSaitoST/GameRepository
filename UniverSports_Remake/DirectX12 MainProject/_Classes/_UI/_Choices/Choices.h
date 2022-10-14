@@ -30,13 +30,19 @@ public:
 	 * @brief 現在選択している番号を返す
 	 * @return 選択している番号
 	*/
-	int SelectNum() const { return isSelected_; };
+	inline int SelectNum() const { return isSelected_; };
+
+	/*
+	* @brifef 選択肢を指定する
+	* @param 選択したい番号
+	*/
+	inline void SetSelectNum(int number) { isSelected_ = number; }
 
 	/**
 	 * @brief 次の入力を受け付けられるようにする
 	 * @param on 次の選択が可能かの真偽
 	*/
-	void NextSelectOn(const bool on) { putCount_ = (int)on; }
+	inline void NextSelectOn(const bool on) { putCount_ = (int)on; }
 
 private:
 	//! 入力時のSE

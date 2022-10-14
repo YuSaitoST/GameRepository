@@ -8,7 +8,6 @@
 #include <random>
 #include <array>
 #include <btBulletDynamicsCommon.h>
-#include "_Classes/_InputClasses/UseKeyCheck.h"
 #include "_Classes/_ConstStrages/ConstStorages.h"
 #include "_Classes/_MoviePlayer/MoviePlayer.h"
 #include "_Classes/_SoundPlayer/SoundPlayer.h"
@@ -20,6 +19,7 @@
 #include "_Classes/_UI/_BlackOut/BlackOut.h"
 #include "_Classes/_UI/_UserInputRender/UserInputRender.h"
 #include "_Classes/_UI/_TeamColor/TeamColor.h"
+#include "_Classes/_UI/_LobbyIcons/InpSystemIcon.h"
 
 using Microsoft::WRL::ComPtr;
 using std::unique_ptr;
@@ -82,6 +82,7 @@ private:
 	std::unique_ptr<CountTimer>			timer_goNext_;						//! シーン遷移までのカウントダウン
 	std::unique_ptr<BlackOut>			blackOut_;							//! ブラックアウト
 	std::unique_ptr<TeamColor>			teamColor_;							//! チームカラー
+	std::array<std::unique_ptr<InpSystemIcon>, 4>	infoIcon_;				//! キャラクターの付加情報の表示
 	std::array<std::unique_ptr<UserInputRender>, 2> userInputRender_;		//! 入力状態の表示
 
 	bool								allSet_;							//! 全プレイヤー選択完了

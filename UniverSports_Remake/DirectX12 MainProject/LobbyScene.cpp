@@ -7,6 +7,7 @@
 #include "Base/DX12Effekseer.h"
 #include "SceneFactory.h"
 #include "_Classes/_FileNames/FileNames.h"
+#include "_Classes/_InputManager/UseKeyChecker.h"
 #include "_Classes/_UI/_UserInputRender/UnSelectedRender.h"
 #include "_Classes/_UI/_UserInputRender/SelectedRender.h"
 #include "_Classes/_UI/_TeamColor/UseTeamColor.h"
@@ -27,6 +28,8 @@ std::unique_ptr<ObjPlayer> LobbyScene::player_[OBJECT_MAX::PLAYER];
 // Initialize member variables.
 LobbyScene::LobbyScene()
 {
+	INPSystem.UDPStart();
+
 	DontDestroy->NowScene_	= NextScene::LobbyScene;
 
 	descriptorHeap_	= nullptr;
@@ -60,6 +63,23 @@ LobbyScene::LobbyScene()
 		teamColor_ = std::make_unique<UseTeamColor>();
 	else
 		teamColor_ = std::make_unique<NullTeamColor>();
+
+	std::vector<InputSystem> _inpSystem = INPSystem.GetNowInputSystem();
+	for (int _i = 0; _i <= _MAX; _i += 2) {
+		if (_inpSystem[_i] == InputSystem::COM) {
+			infoIcon_[_i] = std::make_unique<COMIcon>();
+		}
+		else {
+			infoIcon_[_i] = std::make_unique<EmptyIcon>();
+		}
+
+		if (_inpSystem[_i + 1] == InputSystem::COM) {
+			infoIcon_[_i + 1] = std::make_unique<COMIcon>();
+		}
+		else {
+			infoIcon_[_i + 1] = std::make_unique<EmptyIcon>();
+		}
+	}
 
 	allSet_	= false;
 	std::fill(std::begin(DontDestroy->ChoseColor_)	, std::end(DontDestroy->ChoseColor_), 0	);
@@ -149,6 +169,9 @@ void LobbyScene::LoadAssets()
 
 		charaSelect_[_i		]->LoadAssets(sp_right_, sp_left_);
 		charaSelect_[_i + 1	]->LoadAssets(sp_right_, sp_left_);
+
+		infoIcon_[_i	]->LoadAssets();
+		infoIcon_[_i + 1]->LoadAssets();
 	}
 
 	bg_movie_->LoadAsset(USFN_MV::MAIN_BG);
@@ -194,7 +217,7 @@ NextScene LobbyScene::Update(const float deltaTime)
 
 	physics_world_->stepSimulation(deltaTime, 10);  // 与えた値を10分割する(判定が細かくできる)
 
-	Press.Accepts();
+	INPSystem.Accepts();
 
 	bg_movie_->Update();
 	blackOut_->Update(SPEED_FADE[blackOut_->GetMode()] * deltaTime);
@@ -290,10 +313,14 @@ void LobbyScene::Render()
 		userInputRender_[charaSelect_[_i + 1]->IsDecision()]->Render(_i + 1	);
 	}
 
-	// チームカラーの表示
 	for (int _i = 0; _i <= _MAX; _i += 2) {
-		teamColor_->Render(_i);
+		// チームカラーの表示
+		teamColor_->Render(_i	 );
 		teamColor_->Render(_i + 1);
+		
+		// 付加情報の表示
+		infoIcon_[_i	]->Render(_i	);
+		infoIcon_[_i + 1]->Render(_i + 1);
 	}
 
 	DX9::SpriteBatch->End();  // スプライトの描画を終了
@@ -325,7 +352,7 @@ void LobbyScene::Render_String() {
 		DX9::SpriteBatch->DrawString(font_count_.Get(), XMFLOAT2(50.0f, 140.0f), DX9::Colors::Black, L"%i 秒", (int)timer_goNext_->NowTime());
 	}
 
-	DX9::SpriteBatch->DrawString(font_message_.Get(), XMFLOAT2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すと他のプレイヤーを");
+	DX9::SpriteBatch->DrawString(font_message_.Get(), XMFLOAT2(50.0f, 340.0f), DX9::Colors::Black, L"TABを押すと全てのプレイヤーを");
 	DX9::SpriteBatch->DrawString(font_message_.Get(), XMFLOAT2(50.0f, 360.0f), DX9::Colors::Black, L"決定にすることができます");
 }
 
@@ -334,11 +361,9 @@ bool LobbyScene::AllDecision() {
 
 	const int _MAX = OBJECT_MAX::PLAYER * 0.5f;
 	for (int _i = 0; _i <= _MAX; _i += 2) {
-		count += charaSelect_[_i]->IsDecision();
+		count += charaSelect_[_i	]->IsDecision();
 		count += charaSelect_[_i + 1]->IsDecision();
 	}
 
-	allSet_ = (count == OBJECT_MAX::PLAYER);
-
-	return allSet_;
+	return allSet_ = (count == OBJECT_MAX::PLAYER);
 }
